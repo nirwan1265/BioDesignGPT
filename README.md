@@ -1,1 +1,88 @@
-# BioDesignGPT
+# StudyForge
+
+An experimental-design agent for plant and biological research. You describe the experiment in plain language; StudyForge asks the questions that actually change the design, audits your experimental units for pseudoreplication, runs simulation-based power analysis, and writes a randomized layout plus metadata template.
+
+**The LLM only interprets and explains. Every number comes from deterministic R code** (`agricolae` for layouts, `lme4`/`simr` for mixed-model power), and every tool result records the seed and assumptions used.
+
+## Install
+
+```r
+install.packages(c("agricolae", "jsonlite", "lme4", "simr", "ellmer"))
+# from a local clone
+install.packages("path/to/studyforge", repos = NULL, type = "source")
+```
+
+## Run the agent
+
+```r
+Sys.setenv(ANTHROPIC_API_KEY = "...")
+library(studyforge)
+chat <- studyforge_chat()
+ellmer::live_console(chat)   # terminal
+ellmer::live_browser(chat)   # Shiny chat in the browser
+```
+
+Or from the shell: `Rscript inst/scripts/studyforge_cli.R [--browser]`.
+
+## Use the engine directly (no LLM)
+
+```r
+unit_audit("plant", "pot", "leaf", subsamples_per_unit = 3, units_per_group = 6)
+#> pseudoreplication_risk: "high"; n = 6 pots per group, not 18 leaves
+
+power_split_plot(n_main = 3, n_sub = 5, n_blocks = 4, delta = 1,
+                 effect = "main", sd_whole = 1, sd_sub = 1)   # irrigation (whole plot)
+power_split_plot(3, 5, 4, delta = 1, effect = "sub", sd_whole = 1, sd_sub = 1)  # cultivar
+
+power_alpha_lattice(n_trt = 120, block_size = 10, reps = 2,
+                    delta = 0.5, sd = 0.4, block_sd = 0.3)
+#> power for a pairwise entry contrast, plus power if analysed as RCBD
+
+book <- make_design("split", c("I0", "I1", "I2"), reps = 4,
+                    treatments2 = paste0("C", 1:5), seed = 42)
+write_design_package(book, new_spec(), "studyforge_run")
+```
+
+## What's inside
+
+| Component | Purpose |
+|---|---|
+| `R/unit_audit.R` | Biological / experimental / measurement unit check, before any power calc |
+| `R/power.R` | Simulation power: RCBD, split-plot (correct error strata), alpha-lattice (lme4), generic `simr` wrapper, sensitivity tables |
+| `R/designs.R` | CRD, RCBD, alpha-lattice, split-plot, factorial, augmented layouts with a standard schema |
+| `R/spec.R` | StudySpec with dotted paths, assumption tracking, schema validation |
+| `R/agent.R` | ellmer agent: system prompt + 10 tools |
+| `inst/registry/*.json` | Design catalog, pseudoreplication rules (each cited), experimental units, systems and their consequential questions, spec schema |
+| `inst/examples/study_examples.jsonl` | 21 prompt → expected-spec cases grounded in published studies |
+| `inst/scripts/eval_extraction.R` | Runs the agent over the examples and scores extraction |
+
+## Example set
+
+Each example pairs a user-style prompt with the spec the agent should extract, the fields it **must ask about** (and never fill in itself), the expected unit-audit verdict, and the designs it should recommend. The cases are built from published designs, including some that contain the mistakes StudyForge is meant to catch:
+
+- Alpha-lattice sorghum GWAS, 324 accessions, 3 sites, 2 reps (Enyew et al. 2022, doi:10.3389/fpls.2022.999692)
+- Unreplicated plots with five panicles treated as replicates (Chakrabarty et al. 2021, doi:10.3389/fpls.2021.772177)
+- Split-plot irrigation × forage cultivar (Bhattarai et al. 2020, doi:10.1002/csc2.20171)
+- Greenhouse blocking vs pot rotation (Hartung et al. 2019, doi:10.1186/s13007-019-0527-4)
+- RNA-seq replicate numbers (Schurch et al. 2016, doi:10.1261/rna.053959.115)
+- Field drought RNA-seq time course with pooled plants (Varoquaux et al. 2019, doi:10.1073/pnas.1907500116)
+- Litter effects (Lazic & Essioux 2013, doi:10.1186/1471-2202-14-37)
+- Diet and drinking-water antibiotics delivered per cage (Stapleton et al. 2024, doi:10.1186/s13293-023-00580-1)
+- Cells as replicates in single-cell DE (Squair et al. 2021, doi:10.1038/s41467-021-25960-2)
+- LC-MS pooled QC and batch layout (Broadhurst et al. 2018, doi:10.1007/s11306-018-1367-3)
+- p-rep designs (Cullis et al. 2006, doi:10.1198/108571106X154443), augmented designs (Federer 1956)
+- ARRIVE 2.0 experimental unit (doi:10.1371/journal.pbio.3000410), technical vs biological replicates (Vaux et al. 2012, doi:10.1038/embor.2012.36), pseudoreplication (Hurlbert 1984, doi:10.2307/1942661), image-based phenotyping (Neilson et al. 2015, doi:10.1093/jxb/eru526)
+
+Edit `data-raw/study_examples.json`, then rebuild with `Rscript data-raw/build_examples.R`. The tests check that every example cites a source, that must-ask fields aren't pre-filled, and that expected audit verdicts agree with `unit_audit()`.
+
+## Tests
+
+```r
+testthat::test_local()
+```
+
+## Scope and caveats
+
+- Animal-study output is a planning recommendation, not an ethics approval; final designs need statistician, veterinarian and IACUC review.
+- Power for split-plot and alpha-lattice is simulation-based; report the Monte Carlo SE (`mcse`) with it.
+- p-rep layouts are in the catalog but not generated yet (see FielDHub).

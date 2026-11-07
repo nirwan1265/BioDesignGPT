@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final.",
+  "consequential": [
+    "system",
+    "goal",
+    "primary_outcome.name",
+    "primary_outcome.type",
+    "experimental_unit",
+    "factors",
+    "design.candidates",
+    "power.minimum_detectable_difference",
+    "power.residual_sd"
+  ],
+  "optional": [
+    "organism",
+    "measurement_unit",
+    "subsamples_per_unit",
+    "blocking_factors",
+    "design.reps",
+    "design.locations",
+    "design.seasons",
+    "power.alpha",
+    "power.target_power",
+    "power.attrition",
+    "constraints.max_units",
+    "constraints.budget"
+  ],
+  "enums": {
+    "system": ["field", "greenhouse", "growth_chamber", "mouse", "bulk_rnaseq", "metabolomics_lipidomics", "single_cell", "cell_culture"],
+    "primary_outcome.type": ["continuous", "binary", "count", "ordinal", "survival", "compositional"],
+    "status": ["needs_clarification", "assumptions_flagged", "validated"]
+  }
+}

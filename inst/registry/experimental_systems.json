@@ -1,0 +1,85 @@
+{
+  "version": "0.1.0",
+  "systems": [
+    {
+      "id": "field",
+      "consequential_questions": [
+        "Primary outcome and its unit (per plot or per plant)?",
+        "Number of entries/genotypes and whether all fit in one homogeneous block?",
+        "Locations and seasons; are the same entries at every location?",
+        "Is the treatment (e.g., irrigation) applied to whole plots or randomizable per plot?",
+        "Plot size, seed per entry, maximum plots per location?",
+        "Expected difference to detect and residual SD (pilot data or literature)?"
+      ],
+      "default_blocking": ["location", "rep", "incomplete_block"],
+      "reporting_checklist": "MIAPPE"
+    },
+    {
+      "id": "greenhouse",
+      "consequential_questions": [
+        "What is a pot/tray, and how many plants per pot?",
+        "Bench layout and known gradients (light, temperature, door, edges)?",
+        "Is measurement destructive or repeated on the same plant?",
+        "How is the treatment applied (per pot, per bench, per tray)?",
+        "Number of runs/batches over time?"
+      ],
+      "default_blocking": ["bench", "run"],
+      "reporting_checklist": "MIAPPE"
+    },
+    {
+      "id": "growth_chamber",
+      "consequential_questions": [
+        "How many chambers, and is the treatment a chamber setting (temperature, CO2, photoperiod)?",
+        "Can runs be repeated with treatments swapped between chambers?",
+        "Shelf/position effects inside each chamber?"
+      ],
+      "default_blocking": ["chamber_run", "shelf"],
+      "reporting_checklist": "MIAPPE"
+    },
+    {
+      "id": "mouse",
+      "consequential_questions": [
+        "Primary endpoint, expected effect and SD?",
+        "How is the treatment delivered (individual vs cage vs dam)?",
+        "Sex: factorial interest, or sex as a blocking factor?",
+        "Litter and cage structure; acquisition batches?",
+        "Repeated measurements and expected attrition/humane endpoints?"
+      ],
+      "default_blocking": ["batch", "litter", "cage"],
+      "reporting_checklist": "ARRIVE 2.0",
+      "disclaimer": "Planning recommendation only; final designs require statistician, veterinarian and IACUC review."
+    },
+    {
+      "id": "bulk_rnaseq",
+      "consequential_questions": [
+        "What is a biological replicate (plant, pool of plants, animal, culture)?",
+        "Conditions and time points; is sampling destructive?",
+        "Expected fold change of interest and sequencing depth?",
+        "Library prep and sequencing batches; can conditions be balanced across them?"
+      ],
+      "default_blocking": ["library_batch", "sequencing_lane", "harvest_day"],
+      "reporting_checklist": "MINSEQE",
+      "guidance": "At least 6 biological replicates per condition; 12+ to capture most DE genes (Schurch et al. 2016, doi:10.1261/rna.053959.115)."
+    },
+    {
+      "id": "metabolomics_lipidomics",
+      "consequential_questions": [
+        "Biological replicate definition and how many per group?",
+        "Extraction and injection batches; can groups be balanced across batches?",
+        "Pooled QC frequency, blanks, and internal standards?"
+      ],
+      "default_blocking": ["extraction_batch", "injection_batch"],
+      "reporting_checklist": "MSI minimum reporting",
+      "guidance": "Pooled QC at least every 10th injection, conditioning QCs at batch start (Broadhurst et al. 2018, doi:10.1007/s11306-018-1367-3)."
+    },
+    {
+      "id": "single_cell",
+      "consequential_questions": [
+        "How many donors/animals per condition (the true n)?",
+        "Are conditions multiplexed or confounded with capture batch?"
+      ],
+      "default_blocking": ["capture_batch", "donor"],
+      "guidance": "Use pseudobulk per donor for differential expression (Squair et al. 2021, doi:10.1038/s41467-021-25960-2)."
+    }
+  ]
+}

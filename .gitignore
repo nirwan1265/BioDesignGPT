@@ -1,0 +1,6 @@
+.Rproj.user
+.Rhistory
+studyforge_run/
+eval_results.tsv
+*.Rcheck/
+*.tar.gz

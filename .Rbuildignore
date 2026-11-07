@@ -1,0 +1,7 @@
+^data-raw$
+^README\.Rmd$
+^\.github$
+^studyforge_run$
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$

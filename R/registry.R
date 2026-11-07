@@ -1,0 +1,68 @@
+#' Path to a bundled registry file
+#' @param name Registry name without extension (e.g. "design_catalog").
+#' @export
+registry_path <- function(name) {
+  f <- system.file("registry", paste0(name, ".json"), package = "studyforge")
+  if (!nzchar(f)) stop("Unknown registry: ", name, call. = FALSE)
+  f
+}
+
+#' Load a registry as a list
+#' @param name Registry name without extension.
+#' @export
+load_registry <- function(name) {
+  jsonlite::fromJSON(registry_path(name), simplifyVector = FALSE)
+}
+
+#' List registry names shipped with the package
+#' @export
+list_registries <- function() {
+  files <- list.files(system.file("registry", package = "studyforge"), pattern = "\\.json$")
+  sub("\\.json$", "", files)
+}
+
+#' Look up a design in the catalog
+#' @param id Design id (e.g. "alpha", "split").
+#' @export
+lookup_design <- function(id) {
+  designs <- load_registry("design_catalog")$designs
+  hit <- Filter(function(d) identical(d$id, id), designs)
+  if (!length(hit)) {
+    stop("Design '", id, "' not in catalog. Known: ",
+         paste(vapply(designs, `[[`, "", "id"), collapse = ", "), call. = FALSE)
+  }
+  hit[[1]]
+}
+
+#' Designs suitable for an experimental system
+#' @param system System id (e.g. "field", "greenhouse", "mouse").
+#' @export
+designs_for_system <- function(system) {
+  designs <- load_registry("design_catalog")$designs
+  keep <- vapply(designs, function(d) system %in% unlist(d$systems), logical(1))
+  vapply(designs[keep], `[[`, "", "id")
+}
+
+#' Consequential questions for a system
+#' @param system System id.
+#' @export
+system_questions <- function(system) {
+  sys <- load_registry("experimental_systems")$systems
+  hit <- Filter(function(s) identical(s$id, system), sys)
+  if (!length(hit)) stop("Unknown system: ", system, call. = FALSE)
+  unlist(hit[[1]]$consequential_questions)
+}
+
+#' Find pseudoreplication rules that match a unit pair
+#' @param measurement_unit What is measured (e.g. "leaf").
+#' @param experimental_unit What receives the treatment independently (e.g. "plant", "pot").
+#' @return A list of matching rules (possibly empty).
+#' @export
+match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
+  rules <- load_registry("pseudoreplication_rules")$rules
+  norm <- function(x) tolower(gsub("[^a-z]", "", tolower(x)))
+  m <- norm(measurement_unit)
+  e <- norm(experimental_unit)
+  Filter(function(r) norm(r$measurement_unit) == m &&
+           (norm(r$nested_in) == e || e == ""), rules)
+}

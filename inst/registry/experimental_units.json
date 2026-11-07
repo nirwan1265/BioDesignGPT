@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "units": [
+    {"id": "plot", "system": "field", "typical_parent": "block", "note": "Unit of randomization for genotype in field trials."},
+    {"id": "main_plot", "system": "field", "typical_parent": "block", "note": "Unit for hard-to-randomize factors (irrigation) in split-plot designs."},
+    {"id": "pot", "system": "greenhouse", "typical_parent": "bench", "note": "Usual experimental unit in greenhouse; may hold several plants."},
+    {"id": "plant", "system": "greenhouse", "typical_parent": "pot", "note": "Experimental unit only if each plant is individually randomized."},
+    {"id": "leaf", "system": "plant", "typical_parent": "plant", "note": "Almost always a subsample."},
+    {"id": "tray", "system": "growth_chamber", "typical_parent": "shelf", "note": "Unit when watering or treatment is per tray."},
+    {"id": "chamber", "system": "growth_chamber", "typical_parent": "run", "note": "Unit for temperature/CO2/light treatments; one chamber per treatment = no replication."},
+    {"id": "mouse", "system": "mouse", "typical_parent": "cage", "note": "Unit when treatment is given individually (injection, gavage)."},
+    {"id": "cage", "system": "mouse", "typical_parent": "rack", "note": "Unit when treatment is in diet/drinking water."},
+    {"id": "litter", "system": "mouse", "typical_parent": "dam", "note": "Unit for maternal/prenatal treatments."},
+    {"id": "donor", "system": "human_or_animal_tissue", "typical_parent": "cohort", "note": "Biological replicate for cells, organoids, single-cell data."},
+    {"id": "culture_passage", "system": "cell_culture", "typical_parent": "experiment_day", "note": "Independent experiments are the replicates."},
+    {"id": "library", "system": "sequencing", "typical_parent": "biological_sample", "note": "One per biological sample."},
+    {"id": "extract", "system": "metabolomics_lipidomics", "typical_parent": "biological_sample", "note": "Extraction batch should be randomized and recorded."}
+  ]
+}

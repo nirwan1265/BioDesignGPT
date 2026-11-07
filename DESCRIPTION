@@ -1,0 +1,26 @@
+Package: studyforge
+Title: Conversational Experimental Design with Deterministic Statistics
+Version: 0.1.0
+Authors@R: person("Nirwan", "Tandukar", email = "ntanduk@ncsu.edu", role = c("aut", "cre"))
+Description: An LLM agent that turns a researcher's description of an
+    experiment into a structured study specification, asks the questions that
+    change the design, and produces randomized layouts, unit audits and
+    simulation-based power analyses. The language model only interprets and
+    explains; all statistics come from deterministic R code built on
+    'agricolae', 'lme4' and 'simr'.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: R (>= 4.1.0)
+Imports:
+    agricolae,
+    jsonlite,
+    stats,
+    utils
+Suggests:
+    ellmer (>= 0.3.0),
+    lme4,
+    simr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

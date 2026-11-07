@@ -1,0 +1,85 @@
+{
+  "version": "0.1.0",
+  "rules": [
+    {
+      "id": "leaves_within_plant",
+      "measurement_unit": "leaf",
+      "nested_in": "plant",
+      "message": "Leaves from the same plant are subsamples, not replicates. Average within plant (or model plant as random).",
+      "source": "Hurlbert 1984, Ecol Monogr 54:187-211, doi:10.2307/1942661"
+    },
+    {
+      "id": "plants_within_pot",
+      "measurement_unit": "plant",
+      "nested_in": "pot",
+      "message": "Plants sharing a pot share the treatment application; the pot is the experimental unit.",
+      "source": "Hurlbert 1984, doi:10.2307/1942661"
+    },
+    {
+      "id": "plants_within_plot",
+      "measurement_unit": "plant",
+      "nested_in": "plot",
+      "message": "Plants sampled from one field plot are subsamples of that plot. Five plants from one unreplicated plot are NOT five biological replicates of the genotype x environment.",
+      "source": "Pattern observed in 10.3389/fpls.2021.772177 (unreplicated plots, 5 plants treated as replicates)"
+    },
+    {
+      "id": "plots_within_irrigation_mainplot",
+      "measurement_unit": "plot",
+      "nested_in": "main_plot",
+      "message": "When irrigation is applied to whole plots, the whole plot is the experimental unit for irrigation; genotype subplots are not replicates of irrigation.",
+      "source": "Split-plot logic; see 10.1002/csc2.20171"
+    },
+    {
+      "id": "mice_within_cage_cage_treatment",
+      "measurement_unit": "mouse",
+      "nested_in": "cage",
+      "applies_when": "treatment delivered to the whole cage (diet, drinking water, enrichment)",
+      "message": "Treatment delivered via cage diet or drinking water makes the cage the experimental unit; n = number of cages per group.",
+      "source": "ARRIVE 2.0 item 1b (Percie du Sert et al. 2020, PLoS Biol 18:e3000410)"
+    },
+    {
+      "id": "pups_within_litter",
+      "measurement_unit": "pup",
+      "nested_in": "litter",
+      "applies_when": "treatment given to the dam or whole litter",
+      "message": "For prenatal or maternal treatments the litter is the experimental unit. Add litters, not pups; use a mixed model with (1 | litter).",
+      "source": "Lazic & Essioux 2013, BMC Neurosci 14:37, doi:10.1186/1471-2202-14-37"
+    },
+    {
+      "id": "cells_within_donor",
+      "measurement_unit": "cell",
+      "nested_in": "donor",
+      "message": "Cells from one animal or donor are not biological replicates. Aggregate to pseudobulk per donor before differential expression.",
+      "source": "Squair et al. 2021, Nat Commun 12:5692, doi:10.1038/s41467-021-25960-2"
+    },
+    {
+      "id": "wells_within_culture",
+      "measurement_unit": "well",
+      "nested_in": "culture_passage",
+      "message": "Wells from one culture/passage are technical replicates. Independent experiments (different days/passages) are the replicates.",
+      "source": "Vaux, Fidler & Cumming 2012, EMBO Rep 13:291-296, doi:10.1038/embor.2012.36"
+    },
+    {
+      "id": "lanes_within_library",
+      "measurement_unit": "sequencing_lane",
+      "nested_in": "library",
+      "message": "Re-sequencing the same library is a technical replicate; biological replicates are independent samples.",
+      "source": "Schurch et al. 2016, RNA 22:839-851, doi:10.1261/rna.053959.115"
+    },
+    {
+      "id": "injections_within_extract",
+      "measurement_unit": "ms_injection",
+      "nested_in": "extract",
+      "message": "Repeated MS injections of one extract are technical replicates; pooled QCs measure precision, not biological variance.",
+      "source": "Broadhurst et al. 2018, Metabolomics 14:72, doi:10.1007/s11306-018-1367-3"
+    },
+    {
+      "id": "timepoints_destructive",
+      "measurement_unit": "timepoint",
+      "nested_in": "plant",
+      "applies_when": "destructive sampling",
+      "message": "Destructive sampling means different plants at each time point; this is not a repeated-measures design.",
+      "source": "Design logic; see 10.1073/pnas.1907500116 (weekly destructive sampling, 3 reps x 10 pooled plants)"
+    }
+  ]
+}
