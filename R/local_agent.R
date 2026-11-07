@@ -289,16 +289,21 @@ extract_spec_local <- function(question) {
 #'
 #' @param question Plain-language description of the planned experiment.
 #' @param provider "local" (default) or "ollama".
+#' @param engine How the prompt is read: "rules" (default, pure R), "hybrid" (rules +
+#'   the bundled trained tagger; needs Python with torch and transformers, set
+#'   STUDYFORGE_PYTHON), or "auto" (hybrid when STUDYFORGE_PYTHON is set, else rules).
 #' @param model Ollama model name.
 #' @param ollama_endpoint Ollama generate endpoint.
 #' @return An object of class `studyforge_answer`.
 #' @export
-studyforge_ask <- function(question, provider = c("local", "ollama"),
+studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c("rules", "hybrid", "auto"),
                            model = Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "llama3.2"),
                            ollama_endpoint = Sys.getenv("STUDYFORGE_OLLAMA_ENDPOINT",
                                                         "http://localhost:11434/api/generate")) {
   provider <- match.arg(provider)
-  spec <- extract_spec_local(question)
+  engine <- match.arg(engine)
+  if (engine == "auto") engine <- if (nzchar(Sys.getenv("STUDYFORGE_PYTHON"))) "hybrid" else "rules"
+  spec <- if (engine == "hybrid") extract_spec_hybrid(question) else extract_spec_local(question)
   v <- validate_spec(spec)
   system <- spec$system %||% NA_character_
 
@@ -328,7 +333,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"),
   }
 
   ans <- structure(list(
-    question = question, provider = provider, spec = spec, validation = v, audit = audit,
+    question = question, provider = provider, engine = engine, spec = spec, validation = v, audit = audit,
     candidates = candidates, designs = designs, hazards = hazards,
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
@@ -370,7 +375,7 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
     cat0("\n---- deterministic plan ----")
   }
   s <- x$spec
-  cat0("StudyForge (", x$provider, ", free)\n")
+  cat0("StudyForge (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger", ", free)\n")
   cat0("System: ", s$system %||% "unknown", if (!is.null(s$organism)) paste0(" | Organism: ", s$organism))
   if (length(s$factors)) {
     fx <- vapply(s$factors, function(f) paste0(f$name, if (!is.null(f$n_levels)) paste0(" (", f$n_levels, ")"),

@@ -31,6 +31,15 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 | `ollama` | free | [Ollama](https://ollama.com) installed locally | Same plan, rephrased by a local LLM that is told not to change any number |
 | `studyforge_chat()` | free with Ollama (default); paid if you pick `anthropic`/`openai` | `ellmer` + a tool-capable model (e.g. `qwen2.5`) | Multi-turn conversational agent calling the same 16 tools |
 
+### Optional: trained prompt tagger
+
+A small BERT-style model (7 MB, bundled) trained on synthetic, label-correct prompts. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On 20 fresh prompts never used for tuning: rules 76% → hybrid **92%** field recall, zero invented values. Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
+
+```r
+studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")
+studyforge_alias("milo")   # "Sorghum bicolor" -- 427 aliases, SimItAll-style
+```
+
 On the 49 paper-grounded examples the free `local` engine recovers **92% of expected spec fields**, suggests a matching design for **98%**, and fills **zero** must-ask values (it never invents effect sizes, variances or unit counts). Reproduce with `evaluate_extraction()` or `Rscript inst/scripts/eval_extraction.R`.
 
 ## Use the engine directly (no LLM)

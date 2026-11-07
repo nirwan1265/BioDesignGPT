@@ -18,6 +18,9 @@ ui <- fluidPage(
       radioButtons("provider", "Answer engine",
                    c("Local (free, offline, no AI)" = "local",
                      "Ollama (free local AI, must be installed)" = "ollama")),
+      radioButtons("engine", "Prompt reader",
+                   c("Rules (pure R)" = "rules",
+                     "Rules + trained tagger (needs Python + torch)" = "hybrid")),
       actionButton("go", "Design it", class = "btn-primary"),
       hr(),
       helpText("All numbers come from deterministic R code. StudyForge never assumes effect sizes or variances.")
@@ -37,7 +40,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   observeEvent(input$ex, if (nzchar(input$ex)) updateTextAreaInput(session, "q", value = input$ex))
-  ans <- eventReactive(input$go, studyforge_ask(input$q, provider = input$provider), ignoreNULL = FALSE)
+  ans <- eventReactive(input$go, studyforge_ask(input$q, provider = input$provider, engine = input$engine), ignoreNULL = FALSE)
   layout <- reactive({
     env <- new.env()
     tryCatch({

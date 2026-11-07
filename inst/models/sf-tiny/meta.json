@@ -1,0 +1,52 @@
+{
+  "labels": [
+    "O",
+    "B-ORG",
+    "I-ORG",
+    "B-GENO_N",
+    "I-GENO_N",
+    "B-CHECK_N",
+    "I-CHECK_N",
+    "B-REPS_N",
+    "I-REPS_N",
+    "B-LOC_N",
+    "I-LOC_N",
+    "B-SEASON_N",
+    "I-SEASON_N",
+    "B-SUB_N",
+    "I-SUB_N",
+    "B-MEAS",
+    "I-MEAS",
+    "B-EXP",
+    "I-EXP",
+    "B-FACTOR",
+    "I-FACTOR",
+    "B-LEVELS_N",
+    "I-LEVELS_N",
+    "B-APPLY",
+    "I-APPLY",
+    "B-OUTCOME",
+    "I-OUTCOME",
+    "B-BLOCK",
+    "I-BLOCK"
+  ],
+  "systems": [
+    "field",
+    "greenhouse",
+    "growth_chamber",
+    "mouse",
+    "drosophila",
+    "bulk_rnaseq",
+    "metabolomics_lipidomics",
+    "single_cell",
+    "cell_culture"
+  ],
+  "custom_tokenizer": true,
+  "lowercase": true,
+  "base": null,
+  "dev": {
+    "token_f1": 0.9950067217207604,
+    "system_acc": 1.0
+  },
+  "n_train": 8000
+}

@@ -7,6 +7,7 @@
 studyforge_ask(
   question,
   provider = c("local", "ollama"),
+  engine = c("rules", "hybrid", "auto"),
   model = Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "llama3.2"),
   ollama_endpoint = Sys.getenv("STUDYFORGE_OLLAMA_ENDPOINT",
     "http://localhost:11434/api/generate")
@@ -16,6 +17,10 @@ studyforge_ask(
 \item{question}{Plain-language description of the planned experiment.}
 
 \item{provider}{"local" (default) or "ollama".}
+
+\item{engine}{How the prompt is read: "rules" (default, pure R), "hybrid" (rules +
+the bundled trained tagger; needs Python with torch and transformers, set
+STUDYFORGE_PYTHON), or "auto" (hybrid when STUDYFORGE_PYTHON is set, else rules).}
 
 \item{model}{Ollama model name.}
 

@@ -4,3 +4,7 @@ studyforge_run/
 eval_results.tsv
 *.Rcheck/
 *.tar.gz
+training/data/train*.jsonl
+training/data/dev*.jsonl
+training/data/family_weights.json
+__pycache__/
