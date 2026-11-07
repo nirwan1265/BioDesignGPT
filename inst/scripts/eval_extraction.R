@@ -1,42 +1,28 @@
 #!/usr/bin/env Rscript
-# Regression eval: feed each example prompt to the agent (one turn, no
-# follow-up answers) and score how much of the expected StudySpec it captured,
-# whether it avoided filling must-ask fields, and whether it recommended a
-# matching design.
-#   Rscript eval_extraction.R [model]
-# Writes eval_results.tsv. Requires ANTHROPIC_API_KEY and ellmer.
+# Score StudyForge's spec extraction against the bundled paper-grounded examples.
+#   Rscript eval_extraction.R                 # free offline extractor (default)
+#   Rscript eval_extraction.R ollama qwen2.5  # conversational agent on a free local model
+# Writes eval_results.tsv.
 library(studyforge)
 
-model <- commandArgs(trailingOnly = TRUE)[1]
-if (is.na(model)) model <- "claude-sonnet-5-5"
+args <- commandArgs(trailingOnly = TRUE)
+provider <- if (length(args)) args[1] else "local"
 
-ex <- load_examples()
-rows <- lapply(ex, function(e) {
-  chat <- studyforge_chat(model = model, outdir = file.path(tempdir(), e$id))
-  reply <- tryCatch(
-    chat$chat(paste(e$prompt,
-                    "\n\n(Record everything I stated with spec_update, then ask your questions.)"),
-              echo = "none"),
-    error = function(err) paste("ERROR:", conditionMessage(err)))
-  spec <- attr(chat, "studyforge_state")$spec
+extractor <- if (provider == "local") {
+  extract_spec_local
+} else {
+  model <- if (length(args) > 1) args[2] else NULL
+  function(question) {
+    chat <- studyforge_chat(provider = provider, model = model, outdir = tempfile("sf_eval_"))
+    tryCatch(chat$chat(paste(question, "\n\n(Record everything I stated with spec_update, then ask your questions.)"),
+                       echo = "none"), error = function(e) NULL)
+    attr(chat, "studyforge_state")$spec
+  }
+}
 
-  sc <- score_extraction(spec, e$expected_spec)
-  leaked <- vapply(unlist(e$must_ask), function(p) {
-    v <- spec_get(spec, p)
-    !is.null(v) && is.null(spec$assumptions[[p]])
-  }, logical(1))
-  design_hit <- any(vapply(unlist(e$recommended_designs),
-                           function(d) grepl(d, reply, ignore.case = TRUE), logical(1)))
-
-  data.frame(id = e$id,
-             fields_matched = sum(sc$match), fields_expected = nrow(sc),
-             invented_must_ask = sum(leaked),
-             mentions_recommended_design = design_hit)
-})
-
-res <- do.call(rbind, rows)
-utils::write.table(res, "eval_results.tsv", sep = "\t", row.names = FALSE, quote = FALSE)
-print(res)
-cat(sprintf("\nField recall: %.1f%% | examples with invented values: %d / %d\n",
-            100 * sum(res$fields_matched) / sum(res$fields_expected),
-            sum(res$invented_must_ask > 0), nrow(res)))
+res <- evaluate_extraction(extractor)
+utils::write.table(res$by_example, "eval_results.tsv", sep = "\t", row.names = FALSE, quote = FALSE)
+print(res$by_example)
+cat(sprintf("\n[%s] field recall %.1f%% | examples with invented values: %d / %d | right design suggested: %.0f%%\n",
+            provider, 100 * res$field_recall, res$examples_with_invented_values,
+            nrow(res$by_example), 100 * res$design_hit_rate))

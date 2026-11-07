@@ -2,25 +2,31 @@
 % Please edit documentation in R/agent.R
 \name{studyforge_chat}
 \alias{studyforge_chat}
-\title{Build the StudyForge chat agent (requires ellmer)}
+\title{Build the conversational StudyForge agent (optional; requires ellmer)}
 \usage{
 studyforge_chat(
-  model = "claude-sonnet-5-5",
+  provider = c("ollama", "anthropic", "openai"),
+  model = NULL,
   outdir = "studyforge_run",
   chat = NULL
 )
 }
 \arguments{
-\item{model}{Model id for ellmer::chat_anthropic().}
+\item{provider}{"ollama" (default, free and local), "anthropic" or "openai" (paid API keys).}
 
-\item{outdir}{Where make_design writes the design package.}
+\item{model}{Model id; defaults depend on provider.}
 
-\item{chat}{Optional pre-built ellmer Chat object (e.g. another provider).}
+\item{outdir}{Where layouts and the design package are written.}
+
+\item{chat}{Optional pre-built ellmer Chat object (any provider).}
 }
 \value{
 An ellmer Chat with StudyForge tools registered. Run it with
 ellmer::live_console(chat) or ellmer::live_browser(chat).
 }
 \description{
-Build the StudyForge chat agent (requires ellmer)
+Most users do not need this: studyforge_ask() and launch_studyforge() are free
+and offline. This tool-calling agent defaults to a free local model through
+Ollama (https://ollama.com; pick a model with tool support, e.g. "qwen2.5" or
+"llama3.1"). Paid providers are available only if you choose them.
 }

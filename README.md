@@ -2,27 +2,36 @@
 
 An experimental-design agent for plant and biological research. You describe the experiment in plain language; StudyForge asks the questions that actually change the design, audits your experimental units for pseudoreplication, runs simulation-based power analysis, and writes a randomized layout plus metadata template.
 
-**The LLM only interprets and explains. Every number comes from deterministic R code** (`agricolae` for layouts, `lme4`/`simr` for mixed-model power), and every tool result records the seed and assumptions used.
+**Free for everyone. No API key, no account, works offline.** The default engine reads your description with transparent rules, and every number comes from deterministic R code (`agricolae` for layouts, `lme4`/`simr` for mixed-model power). A local AI model is optional, never required.
 
 ## Install
 
 ```r
-install.packages(c("agricolae", "jsonlite", "lme4", "simr", "ellmer"))
-# from a local clone
-install.packages("path/to/studyforge", repos = NULL, type = "source")
+install.packages(c("agricolae", "jsonlite", "lme4", "simr", "shiny", "remotes"))
+remotes::install_github("nirwan1265/BioDesignGPT")
 ```
 
-## Run the agent
+## Use it (free)
 
 ```r
-Sys.setenv(ANTHROPIC_API_KEY = "...")
 library(studyforge)
-chat <- studyforge_chat()
-ellmer::live_console(chat)   # terminal
-ellmer::live_browser(chat)   # Shiny chat in the browser
+
+# point-and-click app in your browser, runs on your own computer
+launch_studyforge()
+
+# or from R
+studyforge_ask("I have 200 Arabidopsis accessions for flowering time and only 48-cell trays (6 x 8).")
 ```
 
-Or from the shell: `Rscript inst/scripts/studyforge_cli.R [--browser]`.
+From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought, two locations, 3 reps"` (or `--app`).
+
+| Engine | Cost | Needs | What it does |
+|---|---|---|---|
+| `local` (default) | free | nothing | Rule-based extraction + the full deterministic engine: unit audit, candidate designs, setup checks, published-methods notes, starter layout code |
+| `ollama` | free | [Ollama](https://ollama.com) installed locally | Same plan, rephrased by a local LLM that is told not to change any number |
+| `studyforge_chat()` | free with Ollama (default); paid if you pick `anthropic`/`openai` | `ellmer` + a tool-capable model (e.g. `qwen2.5`) | Multi-turn conversational agent calling the same 16 tools |
+
+On the 49 paper-grounded examples the free `local` engine recovers **92% of expected spec fields**, suggests a matching design for **98%**, and fills **zero** must-ask values (it never invents effect sizes, variances or unit counts). Reproduce with `evaluate_extraction()` or `Rscript inst/scripts/eval_extraction.R`.
 
 ## Use the engine directly (no LLM)
 
@@ -72,12 +81,15 @@ protocol_notes("spatial sorghum")     # what published trials actually did
 | `R/designs.R` | CRD, RCBD, alpha-lattice, split-plot, factorial, augmented layouts with a standard schema |
 | `R/spec.R` | StudySpec with dotted paths, assumption tracking, schema validation |
 | `R/layouts.R` | Tray (augmented-by-tray), field coordinates with borders, mouse cage and fly vial allocation, resource equation, hazard and protocol lookups |
-| `R/agent.R` | ellmer agent: system prompt + 16 tools |
+| `R/local_agent.R` | Free offline engine: `extract_spec_local()`, `studyforge_ask()`, `launch_studyforge()` |
+| `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
+| `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
+| `inst/shiny/studyforge` | Local Shiny app (plan, setup checks, starter layout download, StudySpec) |
 | `inst/registry/setup_hazards.json` | 38 setup hazards (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia...), each with mitigation, covariates to record and a source |
 | `inst/registry/protocol_notes.json` | Notes from the methods of 30 published studies: what they did, the numbers, the lesson |
 | `inst/registry/*.json` (other) | 15-design catalog, cited pseudoreplication rules, experimental units, systems and their questions, spec schema |
 | `inst/examples/study_examples.jsonl` | 49 prompt → expected-spec cases grounded in published studies; 28 include a full reference plan (design, layout, replication, randomization, what to record, analysis, pitfalls) and the hazards the agent must raise |
-| `inst/scripts/eval_extraction.R` | Runs the agent over the examples and scores extraction |
+| `inst/scripts/eval_extraction.R` | Scores the free extractor (default) or the Ollama agent against the examples |
 
 ## Example set
 

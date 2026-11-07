@@ -24,25 +24,39 @@ studyforge_system_prompt <- function() {
   )
 }
 
-#' Build the StudyForge chat agent (requires ellmer)
+#' Build the conversational StudyForge agent (optional; requires ellmer)
 #'
-#' @param model Model id for ellmer::chat_anthropic().
-#' @param outdir Where make_design writes the design package.
-#' @param chat Optional pre-built ellmer Chat object (e.g. another provider).
+#' Most users do not need this: studyforge_ask() and launch_studyforge() are free
+#' and offline. This tool-calling agent defaults to a free local model through
+#' Ollama (https://ollama.com; pick a model with tool support, e.g. "qwen2.5" or
+#' "llama3.1"). Paid providers are available only if you choose them.
+#'
+#' @param provider "ollama" (default, free and local), "anthropic" or "openai" (paid API keys).
+#' @param model Model id; defaults depend on provider.
+#' @param outdir Where layouts and the design package are written.
+#' @param chat Optional pre-built ellmer Chat object (any provider).
 #' @return An ellmer Chat with StudyForge tools registered. Run it with
 #'   ellmer::live_console(chat) or ellmer::live_browser(chat).
 #' @export
-studyforge_chat <- function(model = "claude-sonnet-5-5", outdir = "studyforge_run", chat = NULL) {
+studyforge_chat <- function(provider = c("ollama", "anthropic", "openai"), model = NULL,
+                            outdir = "studyforge_run", chat = NULL) {
   if (!requireNamespace("ellmer", quietly = TRUE)) {
-    stop("Install ellmer to use the agent: install.packages('ellmer')", call. = FALSE)
+    stop("Install ellmer to use the conversational agent (install.packages('ellmer')), ",
+         "or use the free offline studyforge_ask() / launch_studyforge().", call. = FALSE)
   }
+  provider <- match.arg(provider)
   state <- new.env()
   state$spec <- new_spec()
   state$audit <- NULL
   state$power <- NULL
 
   if (is.null(chat)) {
-    chat <- ellmer::chat_anthropic(model = model, system_prompt = studyforge_system_prompt())
+    sp <- studyforge_system_prompt()
+    chat <- switch(provider,
+      ollama = ellmer::chat_ollama(model = model %||% Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "qwen2.5"),
+                                   system_prompt = sp),
+      anthropic = ellmer::chat_anthropic(model = model, system_prompt = sp),
+      openai = ellmer::chat_openai(model = model, system_prompt = sp))
   }
   for (t in studyforge_tools(state, outdir)) chat$register_tool(t)
   attr(chat, "studyforge_state") <- state

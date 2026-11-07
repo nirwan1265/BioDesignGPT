@@ -2,597 +2,1559 @@
   {
     "id": "field_sorghum_prep_spatial",
     "prompt": "I'm testing about 1,000 sorghum test-cross hybrids per site at several locations in two-row plots. Seed lets me replicate maybe 30% of them, and I have 10 commercial checks. How should I lay it out and analyse it?",
-    "source": {"citation": "Velazco et al. 2017, Theor Appl Genet 130:1375-1392", "doi": "10.1007/s00122-017-2894-4", "basis": "21 trials, p-rep (~30% replicated twice), 10 checks, 34-86 rows x 20-40 cols, SpATS"},
-    "expected_spec": {"system": "field", "organism": "Sorghum bicolor", "experimental_unit": "plot",
-      "factors": [{"name": "genotype", "n_levels": 1000}, {"name": "check", "n_levels": 10}]},
-    "must_ask": ["primary_outcome.name", "design.locations", "constraints.max_units"],
+    "source": {
+      "citation": "Velazco et al. 2017, Theor Appl Genet 130:1375-1392",
+      "doi": "10.1007/s00122-017-2894-4",
+      "basis": "21 trials, p-rep (~30% replicated twice), 10 checks, 34-86 rows x 20-40 cols, SpATS"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Sorghum bicolor",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 1000
+        },
+        {
+          "name": "check",
+          "n_levels": 10
+        }
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "design.locations",
+      "constraints.max_units"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["prep", "spatial_analysis"],
-    "expected_hazards": ["field_spatial_analysis_needed", "field_missing_plots", "field_management_rows_columns", "field_border_effects"],
+    "recommended_designs": [
+      "prep",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_spatial_analysis_needed",
+      "field_missing_plots",
+      "field_management_rows_columns",
+      "field_border_effects"
+    ],
     "reference_plan": {
       "design": "Resolvable p-rep: ~30% of hybrids in two plots (one in each half of the field, giving two resolvable blocks), ~70% once; checks replicated more often and spread across the grid.",
       "layout": "Rectangular grid (e.g. ~45 rows x 30 columns for ~1,350 plots) with a ring of border plots; coordinates recorded for every plot.",
       "replication": "Replication comes from repeated hybrids, checks and locations; plan for 3-29% plot loss.",
       "randomization": "Randomize within each half; record the seed.",
-      "record": ["row", "column", "missing_reason", "planting/harvest order"],
+      "record": [
+        "row",
+        "column",
+        "missing_reason",
+        "planting/harvest order"
+      ],
       "analysis": "Per site: SpATS (genotype + 2-D P-spline + random row and column); then combine BLUEs across sites.",
-      "pitfalls": ["Losing unreplicated entries to missing plots", "Running non-spatial analysis on a large trial"]
+      "pitfalls": [
+        "Losing unreplicated entries to missing plots",
+        "Running non-spatial analysis on a large trial"
+      ]
     },
     "notes": "Spatial models cut residual variance by 49% (yield) in the source trials."
   },
   {
     "id": "field_sorghum_lowP_patchy",
     "prompt": "70 sorghum varieties under low-phosphorus conditions on a farmer-like field where the soil is very patchy. I can do two or three reps.",
-    "source": {"citation": "Leiser et al. 2012, J Agron Crop Sci", "doi": "10.1111/j.1439-037X.2012.00529.x", "basis": "17 trials, 70 genotypes, Mali; plant-available P CV 39%; AR1xAR1 gained ~10 points of heritability over RCB"},
-    "expected_spec": {"system": "field", "organism": "Sorghum bicolor", "experimental_unit": "plot",
-      "factors": [{"name": "genotype", "n_levels": 70}]},
-    "must_ask": ["design.reps", "primary_outcome.name", "power.residual_sd"],
+    "source": {
+      "citation": "Leiser et al. 2012, J Agron Crop Sci",
+      "doi": "10.1111/j.1439-037X.2012.00529.x",
+      "basis": "17 trials, 70 genotypes, Mali; plant-available P CV 39%; AR1xAR1 gained ~10 points of heritability over RCB"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Sorghum bicolor",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 70
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "primary_outcome.name",
+      "power.residual_sd"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["alpha", "spatial_analysis"],
-    "expected_hazards": ["field_soil_heterogeneity", "field_block_orientation", "field_spatial_analysis_needed"],
+    "recommended_designs": [
+      "alpha",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_soil_heterogeneity",
+      "field_block_orientation",
+      "field_spatial_analysis_needed"
+    ],
     "reference_plan": {
       "design": "Alpha-lattice with incomplete blocks of 7 plots (70 = 10 x 7) per rep; prefer 3 reps on patchy soil.",
       "layout": "Compact blocks, long axis across the visible gradient; reps side by side; border ring.",
       "replication": "3 reps per site; 2 reps only if the analysis will be spatial.",
       "randomization": "agricolae alpha generator with recorded seed.",
-      "record": ["row", "column", "soil_P_grid", "ECa", "stand_count"],
+      "record": [
+        "row",
+        "column",
+        "soil_P_grid",
+        "ECa",
+        "stand_count"
+      ],
       "analysis": "Compare lattice model with AR1xAR1 (+ random row/col); keep the best by AIC/residual plots.",
-      "pitfalls": ["Blocks laid along the gradient", "Treating two reps as enough without spatial analysis"]
+      "pitfalls": [
+        "Blocks laid along the gradient",
+        "Treating two reps as enough without spatial analysis"
+      ]
     },
     "notes": "Gains from spatial models were largest under low P and with two reps."
   },
   {
     "id": "field_eca_covariate_breeding",
     "prompt": "First-stage sugarcane selection: about 440 families at two sites, one of them sandy and low fertility. Incomplete blocks with two checks per block. I could map the soil if it's worth it.",
-    "source": {"citation": "Cursi et al. 2021, Front Plant Sci 12:749533", "doi": "10.3389/fpls.2021.749533", "basis": "EM38 ECa >10,000 readings/site; AR1xAR1 raised H2 from 0.35 to 0.72 on sandy site"},
-    "expected_spec": {"system": "field", "experimental_unit": "plot",
-      "factors": [{"name": "family", "n_levels": 440}, {"name": "check", "n_levels": 2}],
-      "design": {"locations": 2}},
-    "must_ask": ["primary_outcome.name", "design.reps"],
+    "source": {
+      "citation": "Cursi et al. 2021, Front Plant Sci 12:749533",
+      "doi": "10.3389/fpls.2021.749533",
+      "basis": "EM38 ECa >10,000 readings/site; AR1xAR1 raised H2 from 0.35 to 0.72 on sandy site"
+    },
+    "expected_spec": {
+      "system": "field",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "family",
+          "n_levels": 440
+        },
+        {
+          "name": "check",
+          "n_levels": 2
+        }
+      ],
+      "design": {
+        "locations": 2
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "design.reps"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["alpha", "spatial_analysis"],
-    "expected_hazards": ["field_soil_heterogeneity", "field_spatial_analysis_needed", "field_missing_plots"],
+    "recommended_designs": [
+      "alpha",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_soil_heterogeneity",
+      "field_spatial_analysis_needed",
+      "field_missing_plots"
+    ],
     "reference_plan": {
       "design": "Incomplete blocks with 2 checks in every block (as planned), 2 reps if seedlings allow.",
       "layout": "Georeferenced grid; ECa survey (two depths) about 30 days after planting; soil grid ~7-9 points/ha.",
       "replication": "2 reps per site; checks in every block give tray-like block correction.",
       "randomization": "Random within blocks; record seed.",
-      "record": ["row", "column", "ECa_shallow", "ECa_deep", "soil_PC1"],
+      "record": [
+        "row",
+        "column",
+        "ECa_shallow",
+        "ECa_deep",
+        "soil_PC1"
+      ],
       "analysis": "Baseline vs +covariate vs AR1xAR1 vs AR1xAR1 + covariate; forward-select covariates.",
-      "pitfalls": ["Expecting covariates alone to fix spatial trend (spatial error structure gave most of the gain)"]
+      "pitfalls": [
+        "Expecting covariates alone to fix spatial trend (spatial error structure gave most of the gain)"
+      ]
     },
     "notes": "Mapping matters most on sandy, low-fertility soil."
   },
   {
     "id": "field_line_source_irrigation",
     "prompt": "I want to test 3 wheat cultivars across a range of water levels using one sprinkler line down the middle of the field, with 3 blocks.",
-    "source": {"citation": "Hanks et al. 1980, Soil Sci Soc Am J 44:886-888 (agridat::hanks.sprinkler)", "doi": null, "basis": "Line-source, 6 levels per side, 3 genotypes x 3 blocks; Toeplitz correlation along distance"},
-    "expected_spec": {"system": "field", "organism": "Triticum aestivum",
-      "factors": [{"name": "cultivar", "n_levels": 3}, {"name": "irrigation", "applied_to": "distance_from_line"}],
-      "design": {"reps": 3}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Hanks et al. 1980, Soil Sci Soc Am J 44:886-888 (agridat::hanks.sprinkler)",
+      "doi": null,
+      "basis": "Line-source, 6 levels per side, 3 genotypes x 3 blocks; Toeplitz correlation along distance"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Triticum aestivum",
+      "factors": [
+        {
+          "name": "cultivar",
+          "n_levels": 3
+        },
+        {
+          "name": "irrigation",
+          "applied_to": "distance_from_line"
+        }
+      ],
+      "design": {
+        "reps": 3
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["line_source"],
-    "expected_hazards": ["field_irrigation_gradient", "field_management_rows_columns"],
+    "recommended_designs": [
+      "line_source"
+    ],
+    "expected_hazards": [
+      "field_irrigation_gradient",
+      "field_management_rows_columns"
+    ],
     "reference_plan": {
       "design": "Line-source: cultivars as strips perpendicular to the line within each block; subplots at fixed distances on both sides (e.g. 6 per side).",
       "layout": "Catch cans at each distance to measure actual water applied; buffer beyond the last subplot.",
       "replication": "3 blocks; cultivar randomized within block; irrigation is NOT randomized.",
       "randomization": "Randomize cultivar strip order within each block.",
-      "record": ["distance_from_line", "side", "catch_can_mm", "wind_direction"],
+      "record": [
+        "distance_from_line",
+        "side",
+        "catch_can_mm",
+        "wind_direction"
+      ],
       "analysis": "cultivar x irrigation x side fixed; block, block:side, block:irrigation random; Toeplitz or distance-based correlation within block:cultivar.",
-      "pitfalls": ["Treating distance levels as randomized treatments", "Wind skewing the gradient to one side"]
+      "pitfalls": [
+        "Treating distance levels as randomized treatments",
+        "Wind skewing the gradient to one side"
+      ]
     },
     "notes": "Water level is set by distance from the line, so inference about irrigation relies on the model."
   },
   {
     "id": "field_height_groups_borders",
     "prompt": "30 oilseed rape varieties, a mix of tall hybrids and short open-pollinated types, in 1.5 m plots side by side, 4 reps.",
-    "source": {"citation": "Büchse, GCIRC Bulletin 18", "doi": null, "basis": "Interplot interference up to ~5%; double-width plots or core harvest; group by height/type"},
-    "expected_spec": {"system": "field", "organism": "Brassica napus", "experimental_unit": "plot",
-      "factors": [{"name": "variety", "n_levels": 30}], "design": {"reps": 4}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Büchse, GCIRC Bulletin 18",
+      "doi": null,
+      "basis": "Interplot interference up to ~5%; double-width plots or core harvest; group by height/type"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Brassica napus",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "variety",
+          "n_levels": 30
+        }
+      ],
+      "design": {
+        "reps": 4
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["split", "rcbd"],
-    "expected_hazards": ["field_interplot_competition", "field_border_effects"],
+    "recommended_designs": [
+      "split",
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "field_interplot_competition",
+      "field_border_effects"
+    ],
     "reference_plan": {
       "design": "Group varieties by type/height (e.g. 4 groups) as whole plots, varieties randomized within groups; or keep RCBD but use double-width plots.",
       "layout": "3.0 m plots harvested whole, or 3.0 m plots with only the central 1.5 m harvested; border ring.",
       "replication": "4 reps.",
       "randomization": "Groups randomized within rep; varieties within group.",
-      "record": ["plant_height", "harvested_width", "row", "column"],
+      "record": [
+        "plant_height",
+        "harvested_width",
+        "row",
+        "column"
+      ],
       "analysis": "Split-plot model if grouped; between-group comparisons have whole-plot error.",
-      "pitfalls": ["Short varieties ranked low because they sit next to tall hybrids"]
+      "pitfalls": [
+        "Short varieties ranked low because they sit next to tall hybrids"
+      ]
     },
     "notes": "Double-width plots were expected to halve interference."
   },
   {
     "id": "field_unreplicated_checks_soil",
     "prompt": "Progeny rows: about 3,000 soybean lines, one plot each at one site because seed is limited. I can repeat a handful of checks many times.",
-    "source": {"citation": "Carroll et al. 2024, Crop Sci 64:3135-3152", "doi": "10.1002/csc2.21336", "basis": "~10 checks x ~46 reps per field; P-splines 168% and soil-ML 181% relative efficiency"},
-    "expected_spec": {"system": "field", "organism": "Glycine max", "experimental_unit": "plot",
-      "factors": [{"name": "genotype", "n_levels": 3000}], "design": {"reps": 1}},
-    "must_ask": ["primary_outcome.name", "constraints.max_units"],
+    "source": {
+      "citation": "Carroll et al. 2024, Crop Sci 64:3135-3152",
+      "doi": "10.1002/csc2.21336",
+      "basis": "~10 checks x ~46 reps per field; P-splines 168% and soil-ML 181% relative efficiency"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Glycine max",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 3000
+        }
+      ],
+      "design": {
+        "reps": 1
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "constraints.max_units"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["diagonal_checks", "augmented", "spatial_analysis"],
-    "expected_hazards": ["field_unreplicated_needs_checks", "field_soil_heterogeneity", "field_spatial_analysis_needed"],
+    "recommended_designs": [
+      "diagonal_checks",
+      "augmented",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_unreplicated_needs_checks",
+      "field_soil_heterogeneity",
+      "field_spatial_analysis_needed"
+    ],
     "reference_plan": {
       "design": "Checks spread systematically (diagonal or regular grid) through the field, ~5-10% of plots; entries randomized to the remaining plots.",
       "layout": "Row x column grid with coordinates; optional soil sampling or ECa map.",
       "replication": "Entries unreplicated; checks give error and trend.",
       "randomization": "Random allocation of entries (required for moving-grid adjustment).",
-      "record": ["row", "column", "is_check", "soil_features"],
+      "record": [
+        "row",
+        "column",
+        "is_check",
+        "soil_features"
+      ],
       "analysis": "P-spline (SpATS/statgenSTA) spatial model; check-based relative efficiency to compare adjustments.",
-      "pitfalls": ["Planting families in contiguous blocks (invalidates moving grid)", "Too few checks to see the trend"]
+      "pitfalls": [
+        "Planting families in contiguous blocks (invalidates moving grid)",
+        "Too few checks to see the trend"
+      ]
     },
     "notes": "Spatial adjustment only helps when yield is spatially autocorrelated."
   },
   {
     "id": "field_drip_managed_drought",
     "prompt": "Managed-drought trial for 60 maize hybrids. Drip tape laterals run every 4 rows, fed from a main along the north edge; in drought plots I turn the drip off after flowering. 3 reps.",
-    "source": {"citation": "Design logic: split-plot as in Bhattarai et al. 2020 (doi:10.1002/csc2.20171); water gradient handling as in Hanks et al. 1980", "doi": "10.1002/csc2.20171", "basis": "Water regime applied per lateral group belongs on whole plots"},
-    "expected_spec": {"system": "field", "organism": "Zea mays",
-      "factors": [{"name": "hybrid", "n_levels": 60, "applied_to": "subplot"}, {"name": "water", "n_levels": 2, "applied_to": "main_plot"}],
-      "design": {"reps": 3}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Design logic: split-plot as in Bhattarai et al. 2020 (doi:10.1002/csc2.20171); water gradient handling as in Hanks et al. 1980",
+      "doi": "10.1002/csc2.20171",
+      "basis": "Water regime applied per lateral group belongs on whole plots"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Zea mays",
+      "factors": [
+        {
+          "name": "hybrid",
+          "n_levels": 60,
+          "applied_to": "subplot"
+        },
+        {
+          "name": "water",
+          "n_levels": 2,
+          "applied_to": "main_plot"
+        }
+      ],
+      "design": {
+        "reps": 3
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["split", "spatial_analysis"],
-    "expected_hazards": ["field_irrigation_gradient", "field_border_effects", "field_spatial_analysis_needed"],
+    "recommended_designs": [
+      "split",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_irrigation_gradient",
+      "field_border_effects",
+      "field_spatial_analysis_needed"
+    ],
     "reference_plan": {
       "design": "Split-plot: water regime on whole plots (groups of laterals), 60 hybrids randomized within each whole plot (alpha sub-blocks of 6 or 10 if whole plots are long).",
       "layout": "Blocks run east-west at a constant distance from the north main; buffer rows (or a dry alley) between irrigated and drought whole plots to stop lateral water movement.",
       "replication": "3 reps gives only 2 df for the water test; consider 4-6 reps if the water main effect matters.",
       "randomization": "Water regime randomized to whole plots within each block; hybrids within whole plots.",
-      "record": ["distance_from_main", "lateral_id", "soil_moisture_probe", "row", "column", "flowering_date"],
+      "record": [
+        "distance_from_main",
+        "lateral_id",
+        "soil_moisture_probe",
+        "row",
+        "column",
+        "flowering_date"
+      ],
       "analysis": "y ~ water*hybrid + (1|block) + (1|block:water) + spatial terms within whole plots.",
-      "pitfalls": ["Pressure drop along laterals far from the main", "Seepage into drought plots from neighbouring irrigated plots", "Turning drip off on a different date per rep"]
+      "pitfalls": [
+        "Pressure drop along laterals far from the main",
+        "Seepage into drought plots from neighbouring irrigated plots",
+        "Turning drip off on a different date per rep"
+      ]
     },
     "notes": "Ask where the main and laterals are before drawing any layout."
   },
   {
     "id": "field_serpentine_row_column",
     "prompt": "120 wheat lines, 3 reps, sown and harvested with a plot combine in serpentine order. There might be a gradient but I don't know which way it runs.",
-    "source": {"citation": "Gilmour, Cullis & Verbyla 1997, JABES 2:269-293; Rodríguez-Álvarez et al. 2018 (SpATS)", "doi": "10.2307/1400446", "basis": "Extraneous row/column variation from field operations; AR1xAR1 dominates"},
-    "expected_spec": {"system": "field", "organism": "Triticum aestivum", "experimental_unit": "plot",
-      "factors": [{"name": "genotype", "n_levels": 120}], "design": {"reps": 3}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Gilmour, Cullis & Verbyla 1997, JABES 2:269-293; Rodríguez-Álvarez et al. 2018 (SpATS)",
+      "doi": "10.2307/1400446",
+      "basis": "Extraneous row/column variation from field operations; AR1xAR1 dominates"
+    },
+    "expected_spec": {
+      "system": "field",
+      "organism": "Triticum aestivum",
+      "experimental_unit": "plot",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 120
+        }
+      ],
+      "design": {
+        "reps": 3
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["row_column", "alpha", "spatial_analysis"],
-    "expected_hazards": ["field_management_rows_columns", "field_block_orientation", "field_spatial_analysis_needed"],
+    "recommended_designs": [
+      "row_column",
+      "alpha",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_management_rows_columns",
+      "field_block_orientation",
+      "field_spatial_analysis_needed"
+    ],
     "reference_plan": {
       "design": "Resolvable row-column (each rep a rectangle, e.g. 10 x 12) or alpha-lattice with k = 10 or 12 plus row/column terms.",
       "layout": "Reps side by side; record row, column and the serpentine harvest order.",
       "replication": "3 reps.",
       "randomization": "Within rep; seed recorded.",
-      "record": ["row", "column", "harvest_order", "harvest_date"],
+      "record": [
+        "row",
+        "column",
+        "harvest_order",
+        "harvest_date"
+      ],
       "analysis": "genotype + rep + random row and column + AR1xAR1 or SpATS; inspect variogram.",
-      "pitfalls": ["Harvest drift (moisture, combine calibration) aligned with serpentine order"]
+      "pitfalls": [
+        "Harvest drift (moisture, combine calibration) aligned with serpentine order"
+      ]
     },
     "notes": "When gradient direction is unknown, row-column designs cover both directions."
   },
   {
     "id": "field_moving_grid_single_plants",
     "prompt": "Single-plant selection nursery: 2,000 spaced plants from 40 families, no replication. Can I adjust for soil differences?",
-    "source": {"citation": "Technow, mvngGrAd R package vignette", "doi": null, "basis": "Moving-grid adjustment requires random allocation and no self-influence"},
-    "expected_spec": {"system": "field", "experimental_unit": "plant",
-      "factors": [{"name": "family", "n_levels": 40}], "design": {"reps": 1}},
-    "must_ask": ["primary_outcome.name", "organism"],
+    "source": {
+      "citation": "Technow, mvngGrAd R package vignette",
+      "doi": null,
+      "basis": "Moving-grid adjustment requires random allocation and no self-influence"
+    },
+    "expected_spec": {
+      "system": "field",
+      "experimental_unit": "plant",
+      "factors": [
+        {
+          "name": "family",
+          "n_levels": 40
+        }
+      ],
+      "design": {
+        "reps": 1
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "organism"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["augmented", "spatial_analysis"],
-    "expected_hazards": ["field_unreplicated_needs_checks", "field_soil_heterogeneity"],
+    "recommended_designs": [
+      "augmented",
+      "spatial_analysis"
+    ],
+    "expected_hazards": [
+      "field_unreplicated_needs_checks",
+      "field_soil_heterogeneity"
+    ],
     "reference_plan": {
       "design": "Randomize individual plants (not family blocks) over the grid; add repeated check plants if possible.",
       "layout": "Regular grid with coordinates for every plant.",
       "replication": "None for individuals; checks or the moving grid supply the environmental estimate.",
       "randomization": "Complete randomization of plants to grid positions.",
-      "record": ["row", "column", "family"],
+      "record": [
+        "row",
+        "column",
+        "family"
+      ],
       "analysis": "Moving-grid adjustment excluding the centre cell; or 2-D P-splines.",
-      "pitfalls": ["Family-block planting biases moving-grid adjustment", "Strong competition makes neighbour correlation negative"]
+      "pitfalls": [
+        "Family-block planting biases moving-grid adjustment",
+        "Strong competition makes neighbour correlation negative"
+      ]
     },
     "notes": "Check covariate-response correlation before adjusting."
   },
   {
     "id": "gh_conveyor_two_phase",
     "prompt": "Wheat in an automated imaging greenhouse with conveyor lanes, 33 lines x 2 salt levels x 8 reps (528 carts). Plants germinate in a normal greenhouse first, then move to the conveyor.",
-    "source": {"citation": "Brien et al. 2013, Plant Methods 9:5", "doi": "10.1186/1746-4811-9-5", "basis": "Two-phase experiment; small E-W and large N-S trends; rotation increased error"},
-    "expected_spec": {"system": "greenhouse", "organism": "Triticum aestivum", "experimental_unit": "pot",
-      "factors": [{"name": "line", "n_levels": 33}, {"name": "salt", "n_levels": 2}], "design": {"reps": 8}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Brien et al. 2013, Plant Methods 9:5",
+      "doi": "10.1186/1746-4811-9-5",
+      "basis": "Two-phase experiment; small E-W and large N-S trends; rotation increased error"
+    },
+    "expected_spec": {
+      "system": "greenhouse",
+      "organism": "Triticum aestivum",
+      "experimental_unit": "pot",
+      "factors": [
+        {
+          "name": "line",
+          "n_levels": 33
+        },
+        {
+          "name": "salt",
+          "n_levels": 2
+        }
+      ],
+      "design": {
+        "reps": 8
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["row_column", "alpha"],
-    "expected_hazards": ["gh_north_south_gradient", "gh_rotation_vs_blocking", "gh_two_phase"],
+    "recommended_designs": [
+      "row_column",
+      "alpha"
+    ],
+    "expected_hazards": [
+      "gh_north_south_gradient",
+      "gh_rotation_vs_blocking",
+      "gh_two_phase"
+    ],
     "reference_plan": {
       "design": "Blocks = groups of lanes/positions small enough to be homogeneous (row-column on lanes x positions); salt x line randomized within blocks.",
       "layout": "Germination-phase blocks map onto conveyor blocks ('big with big').",
       "replication": "8 reps as blocks.",
       "randomization": "Two-stage randomization recorded for both phases.",
-      "record": ["phase1_position", "lane", "position", "imaging_order"],
+      "record": [
+        "phase1_position",
+        "lane",
+        "position",
+        "imaging_order"
+      ],
       "analysis": "line*salt + block + lane/position terms + linear N-S trend.",
-      "pitfalls": ["Relying on cart rotation instead of design", "Phase-1 positions ignored"]
+      "pitfalls": [
+        "Relying on cart rotation instead of design",
+        "Phase-1 positions ignored"
+      ]
     },
     "notes": "Rotation only works if plants spend equal time in every microclimate."
   },
   {
     "id": "gh_door_pad_sprinkler",
     "prompt": "Greenhouse bay: door at the south end, cooling pad on the east wall, fans on the west, overhead sprinklers. 8 benches. Testing 24 tomato genotypes x 2 nitrogen levels, 4 plants per combination.",
-    "source": {"citation": "Design logic from Brien et al. 2013 (doi:10.1186/1746-4811-9-5), Poorter et al. 2012 (doi:10.1071/FP12028), Hartung et al. 2019", "doi": "10.1186/1746-4811-9-5", "basis": "Local microclimate sources create gradients; block across them"},
-    "expected_spec": {"system": "greenhouse", "organism": "Solanum lycopersicum",
-      "factors": [{"name": "genotype", "n_levels": 24}, {"name": "nitrogen", "n_levels": 2}], "design": {"reps": 4}},
-    "must_ask": ["experimental_unit", "primary_outcome.name"],
+    "source": {
+      "citation": "Design logic from Brien et al. 2013 (doi:10.1186/1746-4811-9-5), Poorter et al. 2012 (doi:10.1071/FP12028), Hartung et al. 2019",
+      "doi": "10.1186/1746-4811-9-5",
+      "basis": "Local microclimate sources create gradients; block across them"
+    },
+    "expected_spec": {
+      "system": "greenhouse",
+      "organism": "Solanum lycopersicum",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 24
+        },
+        {
+          "name": "nitrogen",
+          "n_levels": 2
+        }
+      ],
+      "design": {
+        "reps": 4
+      }
+    },
+    "must_ask": [
+      "experimental_unit",
+      "primary_outcome.name"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["factorial", "row_column", "split"],
-    "expected_hazards": ["gh_local_sources", "gh_north_south_gradient", "gh_watering", "gh_rotation_vs_blocking"],
+    "recommended_designs": [
+      "factorial",
+      "row_column",
+      "split"
+    ],
+    "expected_hazards": [
+      "gh_local_sources",
+      "gh_north_south_gradient",
+      "gh_watering",
+      "gh_rotation_vs_blocking"
+    ],
     "reference_plan": {
       "design": "Pad-fan cooling makes an east-west temperature gradient: run benches north-south so each bench sits at one temperature and use benches (or bench pairs) as blocks; 48 genotype x N combinations per block.",
       "layout": "Guard plants on bench ends nearest the door and pad; no measured plants under sprinkler overlap edges or next to the door.",
       "replication": "4 blocks (pairs of benches), one plant per combination per block.",
       "randomization": "Randomize combinations within each block; if N is delivered by fertigation zone, put N on whole plots (split-plot).",
-      "record": ["bench", "position", "distance_to_pad", "distance_to_door", "temperature_logger"],
+      "record": [
+        "bench",
+        "position",
+        "distance_to_pad",
+        "distance_to_door",
+        "temperature_logger"
+      ],
       "analysis": "genotype*N + block (+ position trend); split-plot error for N if zoned.",
-      "pitfalls": ["Overhead sprinklers giving uneven water or leaching N", "Door draughts on the south end", "Nitrogen applied by hand in group order"]
+      "pitfalls": [
+        "Overhead sprinklers giving uneven water or leaching N",
+        "Door draughts on the south end",
+        "Nitrogen applied by hand in group order"
+      ]
     },
     "notes": "Sketch the bay with every source marked before randomizing."
   },
   {
     "id": "gh_pot_size_drought",
     "prompt": "Drought study on 12 sorghum lines in 2 L pots. Plants will reach about 40 g dry mass by the end. I water by hand with a measuring cup.",
-    "source": {"citation": "Poorter et al. 2012, Funct Plant Biol 39:821-838", "doi": "10.1071/FP12028", "basis": "Pots too small above ~2 g dry mass per L; water gravimetrically"},
-    "expected_spec": {"system": "greenhouse", "organism": "Sorghum bicolor", "experimental_unit": "pot",
-      "factors": [{"name": "line", "n_levels": 12}, {"name": "water"}]},
-    "must_ask": ["design.reps", "primary_outcome.name"],
+    "source": {
+      "citation": "Poorter et al. 2012, Funct Plant Biol 39:821-838",
+      "doi": "10.1071/FP12028",
+      "basis": "Pots too small above ~2 g dry mass per L; water gravimetrically"
+    },
+    "expected_spec": {
+      "system": "greenhouse",
+      "organism": "Sorghum bicolor",
+      "experimental_unit": "pot",
+      "factors": [
+        {
+          "name": "line",
+          "n_levels": 12
+        },
+        {
+          "name": "water"
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "primary_outcome.name"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["factorial", "rcbd"],
-    "expected_hazards": ["gh_pot_and_root_environment", "gh_watering"],
+    "recommended_designs": [
+      "factorial",
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "gh_pot_and_root_environment",
+      "gh_watering"
+    ],
     "reference_plan": {
       "design": "Factorial line x water in RCBD with benches as blocks.",
       "layout": "Pots of at least ~20 L for 40 g plants (2 g/L rule), white or foil-wrapped; fixed substrate mass per pot.",
       "replication": "Set by power on ln(biomass); expect SD of ln(dry mass) 0.2-0.6.",
       "randomization": "Within bench; watering order by block.",
-      "record": ["pot_weight", "water_added", "substrate_mass", "soil_water_content"],
+      "record": [
+        "pot_weight",
+        "water_added",
+        "substrate_mass",
+        "soil_water_content"
+      ],
       "analysis": "line*water + block; drought defined by target soil water content, not volume added.",
-      "pitfalls": ["40 g in 2 L = 20 g/L: roots pot-bound, drought starts in controls too", "Volume watering makes drought depend on plant size"]
+      "pitfalls": [
+        "40 g in 2 L = 20 g/L: roots pot-bound, drought starts in controls too",
+        "Volume watering makes drought depend on plant size"
+      ]
     },
     "notes": "Use gravimetric watering to a target weight."
   },
   {
     "id": "chamber_temperature_four_chambers",
     "prompt": "Heat stress on Arabidopsis: 22 C vs 30 C. I have 4 identical chambers and can do 2 runs, 30 plants per chamber.",
-    "source": {"citation": "Potvin et al. 1990, Can J Bot 68:499-504; Porter et al. 2015, doi:10.1186/s13007-015-0088-0", "doi": "10.1186/s13007-015-0088-0", "basis": "Identical chambers and runs differ; chamber is the unit"},
-    "expected_spec": {"system": "growth_chamber", "organism": "Arabidopsis thaliana", "experimental_unit": "chamber",
-      "measurement_unit": "plant", "subsamples_per_unit": 30,
-      "factors": [{"name": "temperature", "n_levels": 2, "applied_to": "chamber"}]},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
-    "expected_audit": {"pseudoreplication_risk": "high"},
-    "recommended_designs": ["chamber_runs"],
-    "expected_hazards": ["ch_between_chamber_pseudoreplication", "ch_within_chamber_position", "ch_equipment_drift"],
+    "source": {
+      "citation": "Potvin et al. 1990, Can J Bot 68:499-504; Porter et al. 2015, doi:10.1186/s13007-015-0088-0",
+      "doi": "10.1186/s13007-015-0088-0",
+      "basis": "Identical chambers and runs differ; chamber is the unit"
+    },
+    "expected_spec": {
+      "system": "growth_chamber",
+      "organism": "Arabidopsis thaliana",
+      "experimental_unit": "chamber",
+      "measurement_unit": "plant",
+      "subsamples_per_unit": 30,
+      "factors": [
+        {
+          "name": "temperature",
+          "n_levels": 2,
+          "applied_to": "chamber"
+        }
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
+    "expected_audit": {
+      "pseudoreplication_risk": "high"
+    },
+    "recommended_designs": [
+      "chamber_runs"
+    ],
+    "expected_hazards": [
+      "ch_between_chamber_pseudoreplication",
+      "ch_within_chamber_position",
+      "ch_equipment_drift"
+    ],
     "reference_plan": {
       "design": "Run 1: 2 chambers at 22 C, 2 at 30 C (random). Run 2: swap assignments. True n = 4 chamber-runs per temperature.",
       "layout": "Within each chamber, block by shelf; corners filled with guard plants.",
       "replication": "4 chamber-runs per level; 30 plants per chamber are subsamples (average or (1|run:chamber)).",
       "randomization": "Temperature to chamber per run; plant positions within chamber.",
-      "record": ["chamber", "run", "shelf", "position", "independent_temp_logger", "PAR_map"],
+      "record": [
+        "chamber",
+        "run",
+        "shelf",
+        "position",
+        "independent_temp_logger",
+        "PAR_map"
+      ],
       "analysis": "y ~ temperature + (1|run) + (1|run:chamber) (+ (1|run:chamber:shelf)).",
-      "pitfalls": ["One chamber per temperature (confounded)", "Skipping a uniformity pilot"]
+      "pitfalls": [
+        "One chamber per temperature (confounded)",
+        "Skipping a uniformity pilot"
+      ]
     },
     "notes": "Run a short uniformity pilot (fresh weight, flower count) first."
   },
   {
     "id": "chamber_elevated_co2_cylinders",
     "prompt": "Elevated CO2 (800 ppm) vs ambient on wheat in walk-in chambers. The CO2 is injected from gas cylinders and controlled by the chamber analyser.",
-    "source": {"citation": "Porter et al. 2015, Plant Methods", "doi": "10.1186/s13007-015-0088-0", "basis": "CO2 analyser fault traced via d13C; independent sensors recommended"},
-    "expected_spec": {"system": "growth_chamber", "organism": "Triticum aestivum", "experimental_unit": "chamber",
-      "factors": [{"name": "co2", "n_levels": 2, "applied_to": "chamber"}]},
-    "must_ask": ["design.reps", "primary_outcome.name"],
+    "source": {
+      "citation": "Porter et al. 2015, Plant Methods",
+      "doi": "10.1186/s13007-015-0088-0",
+      "basis": "CO2 analyser fault traced via d13C; independent sensors recommended"
+    },
+    "expected_spec": {
+      "system": "growth_chamber",
+      "organism": "Triticum aestivum",
+      "experimental_unit": "chamber",
+      "factors": [
+        {
+          "name": "co2",
+          "n_levels": 2,
+          "applied_to": "chamber"
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "primary_outcome.name"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["chamber_runs"],
-    "expected_hazards": ["ch_equipment_drift", "ch_between_chamber_pseudoreplication", "ch_vertical_light_and_co2"],
+    "recommended_designs": [
+      "chamber_runs"
+    ],
+    "expected_hazards": [
+      "ch_equipment_drift",
+      "ch_between_chamber_pseudoreplication",
+      "ch_vertical_light_and_co2"
+    ],
     "reference_plan": {
       "design": ">=2 chambers per CO2 level or repeated runs swapping levels.",
       "layout": "Independent CO2 logger in each chamber at canopy height; limit door openings.",
       "replication": "Chamber-runs are the units.",
       "randomization": "CO2 level to chamber per run.",
-      "record": ["independent_CO2_log", "leaf_d13C", "door_open_log"],
+      "record": [
+        "independent_CO2_log",
+        "leaf_d13C",
+        "door_open_log"
+      ],
       "analysis": "y ~ co2 + (1|run) + (1|run:chamber).",
-      "pitfalls": ["Analyser zero drift injecting excess CO2", "People in the chamber raising CO2"]
+      "pitfalls": [
+        "Analyser zero drift injecting excess CO2",
+        "People in the chamber raising CO2"
+      ]
     },
     "notes": "Cylinder CO2 is 13C-depleted, so leaf d13C reveals how much was injected."
   },
   {
     "id": "chamber_trays_checks_per_tray",
     "prompt": "I have 200 Arabidopsis accessions for flowering time and only 48-cell trays (6 x 8) on 3 shelves in one chamber. I can't replicate everything. Can I put Col-0 in every tray instead?",
-    "source": {"citation": "Augmented design (Federer 1956); p-rep (Cullis et al. 2006, doi:10.1198/108571106X154443); corner/edge effects (Potvin et al. 1990; Poorter et al. 2012)", "doi": "10.1198/108571106X154443", "basis": "Repeated checks estimate block (tray) effects so entries need no replication"},
-    "expected_spec": {"system": "growth_chamber", "organism": "Arabidopsis thaliana", "experimental_unit": "cell",
-      "primary_outcome": {"name": "flowering_time", "type": "continuous"},
-      "factors": [{"name": "accession", "n_levels": 200}, {"name": "check", "n_levels": 1}], "design": {"reps": 1}},
-    "must_ask": ["power.minimum_detectable_difference", "constraints.max_units"],
+    "source": {
+      "citation": "Augmented design (Federer 1956); p-rep (Cullis et al. 2006, doi:10.1198/108571106X154443); corner/edge effects (Potvin et al. 1990; Poorter et al. 2012)",
+      "doi": "10.1198/108571106X154443",
+      "basis": "Repeated checks estimate block (tray) effects so entries need no replication"
+    },
+    "expected_spec": {
+      "system": "growth_chamber",
+      "organism": "Arabidopsis thaliana",
+      "experimental_unit": "cell",
+      "primary_outcome": {
+        "name": "flowering_time",
+        "type": "continuous"
+      },
+      "factors": [
+        {
+          "name": "accession",
+          "n_levels": 200
+        },
+        {
+          "name": "check",
+          "n_levels": 1
+        }
+      ],
+      "design": {
+        "reps": 1
+      }
+    },
+    "must_ask": [
+      "power.minimum_detectable_difference",
+      "constraints.max_units"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["augmented_tray", "prep"],
-    "expected_hazards": ["tray_position_effects", "ch_within_chamber_position", "tray_treatment_unit"],
+    "recommended_designs": [
+      "augmented_tray",
+      "prep"
+    ],
+    "expected_hazards": [
+      "tray_position_effects",
+      "ch_within_chamber_position",
+      "tray_treatment_unit"
+    ],
     "reference_plan": {
       "design": "Augmented-by-tray: Col-0 and a second check (e.g. Ler, different flowering time) once in every tray; accessions spread across trays. With guard edges a 6 x 8 tray has 24 interior cells: 2 checks + 22 accessions, so 10 trays.",
       "layout": "Edge cells hold guard plants; trays distributed over the 3 shelves; avoid chamber corners.",
       "replication": "Accessions unreplicated; consider replicating ~20% (p-rep) if 2-3 extra trays fit.",
       "randomization": "make_tray_design(): random accession-to-tray and cell positions; record seed.",
-      "record": ["tray", "shelf", "cell_row", "cell_col", "is_check", "sowing_date", "stratification"],
+      "record": [
+        "tray",
+        "shelf",
+        "cell_row",
+        "cell_col",
+        "is_check",
+        "sowing_date",
+        "stratification"
+      ],
       "analysis": "y ~ genotype + (1|tray) using checks to estimate tray effects (or shelf + cell position terms).",
-      "pitfalls": ["Bottom-watering whole trays makes tray the unit for any water treatment", "One check that flowers outside the accessions' range adjusts poorly"]
+      "pitfalls": [
+        "Bottom-watering whole trays makes tray the unit for any water treatment",
+        "One check that flowers outside the accessions' range adjusts poorly"
+      ]
     },
     "notes": "Two checks with contrasting phenotypes estimate tray effects more robustly than one."
   },
   {
     "id": "chamber_reproducibility_runs",
     "prompt": "We compared leaf growth of 3 Arabidopsis accessions and got a different ranking than another lab. How do I make the result robust?",
-    "source": {"citation": "Massonnet et al. 2010, Plant Physiol 152:2142-2157", "doi": "10.1104/pp.109.148338", "basis": "10 labs, standardized protocol; light quality and handling explained differences"},
-    "expected_spec": {"system": "growth_chamber", "organism": "Arabidopsis thaliana",
-      "primary_outcome": {"name": "leaf_growth", "type": "continuous"},
-      "factors": [{"name": "accession", "n_levels": 3}]},
-    "must_ask": ["design.reps", "experimental_unit"],
+    "source": {
+      "citation": "Massonnet et al. 2010, Plant Physiol 152:2142-2157",
+      "doi": "10.1104/pp.109.148338",
+      "basis": "10 labs, standardized protocol; light quality and handling explained differences"
+    },
+    "expected_spec": {
+      "system": "growth_chamber",
+      "organism": "Arabidopsis thaliana",
+      "primary_outcome": {
+        "name": "leaf_growth",
+        "type": "continuous"
+      },
+      "factors": [
+        {
+          "name": "accession",
+          "n_levels": 3
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "experimental_unit"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["rcbd", "chamber_runs"],
-    "expected_hazards": ["ch_cross_lab_reproducibility", "ch_equipment_drift", "ch_within_chamber_position"],
+    "recommended_designs": [
+      "rcbd",
+      "chamber_runs"
+    ],
+    "expected_hazards": [
+      "ch_cross_lab_reproducibility",
+      "ch_equipment_drift",
+      "ch_within_chamber_position"
+    ],
     "reference_plan": {
       "design": "Repeat the experiment over >=3 independent runs (blocks), ideally in 2 chambers or facilities.",
       "layout": "Blocks within chamber; same pot, substrate and handling SOP.",
       "replication": "Plants within run are subsamples of run x accession for reproducibility claims.",
       "randomization": "Positions within chamber each run.",
-      "record": ["light_spectrum", "PAR", "temperature", "handling_times", "run"],
+      "record": [
+        "light_spectrum",
+        "PAR",
+        "temperature",
+        "handling_times",
+        "run"
+      ],
       "analysis": "accession + (1|run) + (1|run:accession); report run x accession variance.",
-      "pitfalls": ["Different light quality between facilities", "Handling (watering, sampling time) differing between runs"]
+      "pitfalls": [
+        "Different light quality between facilities",
+        "Handling (watering, sampling time) differing between runs"
+      ]
     },
     "notes": "Molecular profiles carried strong lab effects even when growth matched."
   },
   {
     "id": "chamber_within_nutrients_shelves",
     "prompt": "Four nutrient solutions on maize seedlings, all in one growth chamber, 48 pots on 4 shelves.",
-    "source": {"citation": "Potvin et al. 1990, Can J Bot 68:499-504", "doi": null, "basis": "Corners poor, centre best; block within chambers; each treatment at least twice per block"},
-    "expected_spec": {"system": "growth_chamber", "organism": "Zea mays", "experimental_unit": "pot",
-      "factors": [{"name": "nutrient", "n_levels": 4}], "blocking_factors": ["shelf"]},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Potvin et al. 1990, Can J Bot 68:499-504",
+      "doi": null,
+      "basis": "Corners poor, centre best; block within chambers; each treatment at least twice per block"
+    },
+    "expected_spec": {
+      "system": "growth_chamber",
+      "organism": "Zea mays",
+      "experimental_unit": "pot",
+      "factors": [
+        {
+          "name": "nutrient",
+          "n_levels": 4
+        }
+      ],
+      "blocking_factors": [
+        "shelf"
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["rcbd"],
-    "expected_hazards": ["ch_within_chamber_position", "tray_treatment_unit", "ch_vertical_light_and_co2"],
+    "recommended_designs": [
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "ch_within_chamber_position",
+      "tray_treatment_unit",
+      "ch_vertical_light_and_co2"
+    ],
     "reference_plan": {
       "design": "RCBD with shelves as blocks: 12 pots per shelf = 4 nutrients x 3 pots.",
       "layout": "Corner positions hold guard pots; lamp height adjusted per shelf; PAR mapped.",
       "replication": "12 pots per nutrient (3 per shelf); pots must be individually supplied (not one shared reservoir per nutrient).",
       "randomization": "Within shelf.",
-      "record": ["shelf", "position", "PAR_at_position"],
+      "record": [
+        "shelf",
+        "position",
+        "PAR_at_position"
+      ],
       "analysis": "nutrient + (1|shelf); add position terms if PAR map shows gradients.",
-      "pitfalls": ["One hydroponic tank per nutrient makes the tank the unit (n = 1)"]
+      "pitfalls": [
+        "One hydroponic tank per nutrient makes the tank the unit (n = 1)"
+      ]
     },
     "notes": "Ask how solutions are delivered before calling pots replicates."
   },
   {
     "id": "mouse_resource_equation_pilot",
     "prompt": "Pilot of a new compound in mice: vehicle plus 3 doses, so 4 groups. There's no prior SD for the endpoint.",
-    "source": {"citation": "Arifin & Zahiruddin 2017, Malays J Med Sci 24:101-105; Festing & Altman 2002", "doi": "10.21315/mjms2017.24.5.11", "basis": "Resource equation: error df 10-20"},
-    "expected_spec": {"system": "mouse", "factors": [{"name": "dose", "n_levels": 4}]},
-    "must_ask": ["primary_outcome.name", "power.residual_sd", "experimental_unit"],
+    "source": {
+      "citation": "Arifin & Zahiruddin 2017, Malays J Med Sci 24:101-105; Festing & Altman 2002",
+      "doi": "10.21315/mjms2017.24.5.11",
+      "basis": "Resource equation: error df 10-20"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "factors": [
+        {
+          "name": "dose",
+          "n_levels": 4
+        }
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.residual_sd",
+      "experimental_unit"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["crd", "rcbd"],
-    "expected_hazards": ["mouse_sample_size", "mouse_randomization_blinding", "mouse_cage_effect"],
+    "recommended_designs": [
+      "crd",
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "mouse_sample_size",
+      "mouse_randomization_blinding",
+      "mouse_cage_effect"
+    ],
     "reference_plan": {
       "design": "Randomized block design (blocks = batch or cage racks), 4 dose groups.",
       "layout": "Mixed cages if dosing is individual.",
       "replication": "Resource equation for k = 4: 4 to 6 mice per group (more if attrition expected); replace with a power analysis once an SD exists.",
       "randomization": "Within blocks; blinded outcome assessment.",
-      "record": ["cage", "batch", "dosing_time", "assessor"],
+      "record": [
+        "cage",
+        "batch",
+        "dosing_time",
+        "assessor"
+      ],
       "analysis": "dose + block; trend test across doses.",
-      "pitfalls": ["Treating the resource equation as a power analysis", "Copying n from unrelated studies"]
+      "pitfalls": [
+        "Treating the resource equation as a power analysis",
+        "Copying n from unrelated studies"
+      ]
     },
     "notes": "Planning recommendation only; IACUC review required."
   },
   {
     "id": "mouse_factorial_strain_sex",
     "prompt": "Does the drug effect depend on strain and sex? Two strains, both sexes, drug vs vehicle.",
-    "source": {"citation": "Shaw et al. 2002, ILAR J 43:223-232; Garcia-Sifuentes & Maney 2021", "doi": "10.1093/ilar.43.4.223", "basis": "Factorials reduce animal use and test interactions"},
-    "expected_spec": {"system": "mouse",
-      "factors": [{"name": "drug", "n_levels": 2}, {"name": "strain", "n_levels": 2}, {"name": "sex", "n_levels": 2}]},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference", "experimental_unit"],
+    "source": {
+      "citation": "Shaw et al. 2002, ILAR J 43:223-232; Garcia-Sifuentes & Maney 2021",
+      "doi": "10.1093/ilar.43.4.223",
+      "basis": "Factorials reduce animal use and test interactions"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "factors": [
+        {
+          "name": "drug",
+          "n_levels": 2
+        },
+        {
+          "name": "strain",
+          "n_levels": 2
+        },
+        {
+          "name": "sex",
+          "n_levels": 2
+        }
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference",
+      "experimental_unit"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["factorial"],
-    "expected_hazards": ["mouse_sex_analysis", "mouse_sample_size", "mouse_cage_effect"],
+    "recommended_designs": [
+      "factorial"
+    ],
+    "expected_hazards": [
+      "mouse_sex_analysis",
+      "mouse_sample_size",
+      "mouse_cage_effect"
+    ],
     "reference_plan": {
       "design": "2 x 2 x 2 factorial in randomized blocks (batches).",
       "layout": "Single-sex, single-strain cages; drug mixed within cages if individually dosed.",
       "replication": "Power for the drug x strain or drug x sex interaction if that is the question (needs ~4x the n of a main effect).",
       "randomization": "Within strain x sex x batch.",
-      "record": ["cage", "batch", "sex", "strain"],
+      "record": [
+        "cage",
+        "batch",
+        "sex",
+        "strain"
+      ],
       "analysis": "drug*strain*sex + batch (+ (1|cage)).",
-      "pitfalls": ["Separate experiments per strain/sex, then comparing p-values"]
+      "pitfalls": [
+        "Separate experiments per strain/sex, then comparing p-values"
+      ]
     },
     "notes": "Planning recommendation only."
   },
   {
     "id": "mouse_microbiome_cage_unit",
     "prompt": "Microbiome study: antibiotics vs control in the drinking water, 10 mice per group housed 5 per cage.",
-    "source": {"citation": "McCafferty et al. 2013, ISME J 7:2116-2125; ARRIVE 2.0 item 1b", "doi": "10.1038/ismej.2013.106", "basis": "Cage effects develop over weeks; drinking-water treatment makes cage the unit"},
-    "expected_spec": {"system": "mouse", "experimental_unit": "cage", "measurement_unit": "mouse", "subsamples_per_unit": 5,
-      "factors": [{"name": "antibiotic", "n_levels": 2, "applied_to": "cage"}], "design": {"reps": 2}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
-    "expected_audit": {"pseudoreplication_risk": "high"},
-    "recommended_designs": ["crd", "rcbd"],
-    "expected_hazards": ["mouse_cage_effect"],
+    "source": {
+      "citation": "McCafferty et al. 2013, ISME J 7:2116-2125; ARRIVE 2.0 item 1b",
+      "doi": "10.1038/ismej.2013.106",
+      "basis": "Cage effects develop over weeks; drinking-water treatment makes cage the unit"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "experimental_unit": "cage",
+      "measurement_unit": "mouse",
+      "subsamples_per_unit": 5,
+      "factors": [
+        {
+          "name": "antibiotic",
+          "n_levels": 2,
+          "applied_to": "cage"
+        }
+      ],
+      "design": {
+        "reps": 2
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
+    "expected_audit": {
+      "pseudoreplication_risk": "high"
+    },
+    "recommended_designs": [
+      "crd",
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "mouse_cage_effect"
+    ],
     "reference_plan": {
       "design": "Cage-level randomization with more, smaller cages: e.g. 5 cages x 2 mice per group instead of 2 x 5.",
       "layout": "Cages interleaved on the rack; baseline faecal samples before treatment.",
       "replication": "n = cages per group (currently 2, which gives almost no df).",
       "randomization": "Antibiotic to cage; cages balanced by litter/source.",
-      "record": ["cage", "rack_position", "baseline_sample", "source_litter"],
+      "record": [
+        "cage",
+        "rack_position",
+        "baseline_sample",
+        "source_litter"
+      ],
       "analysis": "Mixed model or PERMANOVA with cage as the unit (strata = cage).",
-      "pitfalls": ["Two cages per group: treatment confounded with cage"]
+      "pitfalls": [
+        "Two cages per group: treatment confounded with cage"
+      ]
     },
     "notes": "Planning recommendation only."
   },
   {
     "id": "mouse_male_housing_decision",
     "prompt": "Behaviour study in male BALB/c mice with 3 treatment groups. Should I single-house them?",
-    "source": {"citation": "Kappel, Hawkins & Mendl 2017, Animals 7:88", "doi": "10.3390/ani7120088", "basis": "Housing choice is context dependent; aggression vs isolation"},
-    "expected_spec": {"system": "mouse", "factors": [{"name": "treatment", "n_levels": 3}]},
-    "must_ask": ["primary_outcome.name", "experimental_unit"],
+    "source": {
+      "citation": "Kappel, Hawkins & Mendl 2017, Animals 7:88",
+      "doi": "10.3390/ani7120088",
+      "basis": "Housing choice is context dependent; aggression vs isolation"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "factors": [
+        {
+          "name": "treatment",
+          "n_levels": 3
+        }
+      ]
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "experimental_unit"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["rcbd"],
-    "expected_hazards": ["mouse_housing_decision", "mouse_experimenter_effect", "mouse_cage_effect"],
+    "recommended_designs": [
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "mouse_housing_decision",
+      "mouse_experimenter_effect",
+      "mouse_cage_effect"
+    ],
     "reference_plan": {
       "design": "RCBD with cage or batch as block; same housing for every group.",
       "layout": "If group-housed, mix treatments within cages (individual dosing) and record social rank/wounds; if single-housed, justify and provide enrichment.",
       "replication": "Set by power; account for removals due to fighting.",
       "randomization": "Within cage/batch; test order randomized.",
-      "record": ["housing_type", "aggression_events", "cage", "test_order", "experimenter"],
+      "record": [
+        "housing_type",
+        "aggression_events",
+        "cage",
+        "test_order",
+        "experimenter"
+      ],
       "analysis": "treatment + block (+ (1|cage)).",
-      "pitfalls": ["Single-housing only some groups", "Fighting-related removals concentrated in one group"]
+      "pitfalls": [
+        "Single-housing only some groups",
+        "Fighting-related removals concentrated in one group"
+      ]
     },
     "notes": "Planning recommendation only."
   },
   {
     "id": "mouse_pain_experimenter",
     "prompt": "Von Frey pain thresholds after nerve injury vs sham. Two technicians, one man and one woman, will test the mice.",
-    "source": {"citation": "Sorge et al. 2014, Nat Methods 11:629-632", "doi": "10.1038/nmeth.2935", "basis": "Male experimenters induce stress analgesia"},
-    "expected_spec": {"system": "mouse",
-      "primary_outcome": {"name": "mechanical_threshold", "type": "continuous"},
-      "factors": [{"name": "injury", "n_levels": 2}], "blocking_factors": ["experimenter"]},
-    "must_ask": ["power.minimum_detectable_difference", "experimental_unit"],
+    "source": {
+      "citation": "Sorge et al. 2014, Nat Methods 11:629-632",
+      "doi": "10.1038/nmeth.2935",
+      "basis": "Male experimenters induce stress analgesia"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "primary_outcome": {
+        "name": "mechanical_threshold",
+        "type": "continuous"
+      },
+      "factors": [
+        {
+          "name": "injury",
+          "n_levels": 2
+        }
+      ],
+      "blocking_factors": [
+        "experimenter"
+      ]
+    },
+    "must_ask": [
+      "power.minimum_detectable_difference",
+      "experimental_unit"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["rcbd"],
-    "expected_hazards": ["mouse_experimenter_effect", "mouse_randomization_blinding"],
+    "recommended_designs": [
+      "rcbd"
+    ],
+    "expected_hazards": [
+      "mouse_experimenter_effect",
+      "mouse_randomization_blinding"
+    ],
     "reference_plan": {
       "design": "Experimenter as a blocking factor: each technician tests equal numbers of injured and sham mice (or one technician tests all).",
       "layout": "Same room, time of day and habituation for both.",
       "replication": "Set by power on threshold SD.",
       "randomization": "Testing order randomized; tester blinded to surgery.",
-      "record": ["experimenter", "test_time", "habituation_minutes"],
+      "record": [
+        "experimenter",
+        "test_time",
+        "habituation_minutes"
+      ],
       "analysis": "injury + experimenter (+ interaction check).",
-      "pitfalls": ["One technician tests all injured, the other all sham"]
+      "pitfalls": [
+        "One technician tests all injured, the other all sham"
+      ]
     },
     "notes": "Planning recommendation only."
   },
   {
     "id": "mouse_sex_specific_claim",
     "prompt": "The drug worked in males (p < 0.05) but not in females (p = 0.2). Can we say the effect is male-specific?",
-    "source": {"citation": "Garcia-Sifuentes & Maney 2021, eLife 10:e70817", "doi": "10.7554/eLife.70817", "basis": "Sex-specific claims need an interaction test"},
-    "expected_spec": {"system": "mouse", "factors": [{"name": "drug", "n_levels": 2}, {"name": "sex", "n_levels": 2}]},
-    "must_ask": ["power.minimum_detectable_difference", "primary_outcome.name"],
+    "source": {
+      "citation": "Garcia-Sifuentes & Maney 2021, eLife 10:e70817",
+      "doi": "10.7554/eLife.70817",
+      "basis": "Sex-specific claims need an interaction test"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "factors": [
+        {
+          "name": "drug",
+          "n_levels": 2
+        },
+        {
+          "name": "sex",
+          "n_levels": 2
+        }
+      ]
+    },
+    "must_ask": [
+      "power.minimum_detectable_difference",
+      "primary_outcome.name"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["factorial"],
-    "expected_hazards": ["mouse_sex_analysis"],
+    "recommended_designs": [
+      "factorial"
+    ],
+    "expected_hazards": [
+      "mouse_sex_analysis"
+    ],
     "reference_plan": {
       "design": "Analyse as a 2 x 2 factorial; a future study should be powered for the interaction.",
       "layout": "n/a (analysis question).",
       "replication": "Interaction tests need much larger n than main effects.",
       "randomization": "n/a.",
-      "record": ["sex"],
+      "record": [
+        "sex"
+      ],
       "analysis": "y ~ drug * sex; report the interaction estimate and CI.",
-      "pitfalls": ["Comparing p-values between sexes is not a test of difference"]
+      "pitfalls": [
+        "Comparing p-values between sexes is not a test of difference"
+      ]
     },
     "notes": "Answer: not without testing drug x sex."
   },
   {
     "id": "mouse_maternal_diet_offspring",
     "prompt": "Maternal high-fat diet during pregnancy; then I test 3 pups per litter at 8 weeks. 6 dams per diet.",
-    "source": {"citation": "Lazic, Clarke-Williams & Munafò 2018, PLoS Biol 16:e2005282", "doi": "10.1371/journal.pbio.2005282", "basis": "Only 22% of parent-treated studies used the correct unit"},
-    "expected_spec": {"system": "mouse", "experimental_unit": "litter", "measurement_unit": "pup", "subsamples_per_unit": 3,
-      "factors": [{"name": "diet", "n_levels": 2, "applied_to": "dam"}], "design": {"reps": 6}},
-    "must_ask": ["primary_outcome.name", "power.minimum_detectable_difference"],
-    "expected_audit": {"pseudoreplication_risk": "high"},
-    "recommended_designs": ["crd"],
-    "expected_hazards": ["mouse_litter_unit"],
+    "source": {
+      "citation": "Lazic, Clarke-Williams & Munafò 2018, PLoS Biol 16:e2005282",
+      "doi": "10.1371/journal.pbio.2005282",
+      "basis": "Only 22% of parent-treated studies used the correct unit"
+    },
+    "expected_spec": {
+      "system": "mouse",
+      "experimental_unit": "litter",
+      "measurement_unit": "pup",
+      "subsamples_per_unit": 3,
+      "factors": [
+        {
+          "name": "diet",
+          "n_levels": 2,
+          "applied_to": "dam"
+        }
+      ],
+      "design": {
+        "reps": 6
+      }
+    },
+    "must_ask": [
+      "primary_outcome.name",
+      "power.minimum_detectable_difference"
+    ],
+    "expected_audit": {
+      "pseudoreplication_risk": "high"
+    },
+    "recommended_designs": [
+      "crd"
+    ],
+    "expected_hazards": [
+      "mouse_litter_unit"
+    ],
     "reference_plan": {
       "design": "Diet randomized to dams; n = 6 litters per diet.",
       "layout": "Record pup sex; balance sexes per litter where possible.",
       "replication": "Add dams, not pups; 2-3 pups per litter adds little power.",
       "randomization": "Diet to dam; testing order randomized.",
-      "record": ["dam_id", "litter_size", "pup_sex"],
+      "record": [
+        "dam_id",
+        "litter_size",
+        "pup_sex"
+      ],
       "analysis": "y ~ diet (+ sex) + (1 | litter).",
-      "pitfalls": ["Reporting n = 18 pups per diet"]
+      "pitfalls": [
+        "Reporting n = 18 pups per diet"
+      ]
     },
     "notes": "Planning recommendation only."
   },
   {
     "id": "fly_dietary_restriction_lifespan",
     "prompt": "Lifespan of wild-type Dahomey females on 3 yeast concentrations.",
-    "source": {"citation": "Piper & Partridge 2016, Methods Mol Biol 1478:291-302", "doi": "10.1007/978-1-4939-6371-3_18", "basis": "Standard density, 48 h mating, 100-150 flies per treatment at 10-15 per vial, rearing-bottle blocking"},
-    "expected_spec": {"system": "drosophila", "organism": "Drosophila melanogaster",
-      "primary_outcome": {"name": "lifespan", "type": "survival"},
-      "experimental_unit": "vial", "measurement_unit": "fly",
-      "factors": [{"name": "diet", "n_levels": 3, "applied_to": "vial"}]},
-    "must_ask": ["design.reps", "power.minimum_detectable_difference"],
-    "expected_audit": {"pseudoreplication_risk": "high"},
-    "recommended_designs": ["vial_lifespan"],
-    "expected_hazards": ["fly_larval_density", "fly_mating_and_sex", "fly_housing_density", "fly_rearing_bottle_confound", "fly_food_batch_incubator", "fly_vial_unit"],
+    "source": {
+      "citation": "Piper & Partridge 2016, Methods Mol Biol 1478:291-302",
+      "doi": "10.1007/978-1-4939-6371-3_18",
+      "basis": "Standard density, 48 h mating, 100-150 flies per treatment at 10-15 per vial, rearing-bottle blocking"
+    },
+    "expected_spec": {
+      "system": "drosophila",
+      "organism": "Drosophila melanogaster",
+      "primary_outcome": {
+        "name": "lifespan",
+        "type": "survival"
+      },
+      "experimental_unit": "vial",
+      "measurement_unit": "fly",
+      "factors": [
+        {
+          "name": "diet",
+          "n_levels": 3,
+          "applied_to": "vial"
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "power.minimum_detectable_difference"
+    ],
+    "expected_audit": {
+      "pseudoreplication_risk": "high"
+    },
+    "recommended_designs": [
+      "vial_lifespan"
+    ],
+    "expected_hazards": [
+      "fly_larval_density",
+      "fly_mating_and_sex",
+      "fly_housing_density",
+      "fly_rearing_bottle_confound",
+      "fly_food_batch_incubator",
+      "fly_vial_unit"
+    ],
     "reference_plan": {
       "design": "make_vial_allocation(): e.g. 15 rearing bottles, each supplying one vial of 10 females to each diet (150 flies per diet).",
       "layout": "Vials in random tray positions; trays rotated in the incubator by block; 25 C, 65% RH, 12:12 LD.",
       "replication": "Vials are the units for diet; flies are subsamples.",
       "randomization": "Bottle-to-vial allocation balanced; tray positions random.",
-      "record": ["vial_id", "rearing_bottle", "food_batch", "tray", "deaths", "censors"],
+      "record": [
+        "vial_id",
+        "rearing_bottle",
+        "food_batch",
+        "tray",
+        "deaths",
+        "censors"
+      ],
       "analysis": "Mixed Cox model: Surv ~ diet + (1|vial); log-rank as a check.",
-      "pitfalls": ["Uncontrolled larval density", "Virgin vs mated females mixed", "Different food cooks per diet"]
+      "pitfalls": [
+        "Uncontrolled larval density",
+        "Virgin vs mated females mixed",
+        "Different food cooks per diet"
+      ]
     },
     "notes": "Mate 48 h after emergence, then sort sexes."
   },
   {
     "id": "fly_mutant_genetic_background",
     "prompt": "Our mutant line lives 40% longer than Canton-S. Is that enough to publish?",
-    "source": {"citation": "Toivonen et al. 2007, PLoS Genet 3:e95", "doi": "10.1371/journal.pgen.0030095", "basis": "Indy effect vanished after backcrossing and Wolbachia clearance"},
-    "expected_spec": {"system": "drosophila", "organism": "Drosophila melanogaster",
-      "primary_outcome": {"name": "lifespan", "type": "survival"},
-      "factors": [{"name": "genotype", "n_levels": 2}]},
-    "must_ask": ["design.reps", "power.minimum_detectable_difference"],
+    "source": {
+      "citation": "Toivonen et al. 2007, PLoS Genet 3:e95",
+      "doi": "10.1371/journal.pgen.0030095",
+      "basis": "Indy effect vanished after backcrossing and Wolbachia clearance"
+    },
+    "expected_spec": {
+      "system": "drosophila",
+      "organism": "Drosophila melanogaster",
+      "primary_outcome": {
+        "name": "lifespan",
+        "type": "survival"
+      },
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 2
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["vial_lifespan"],
-    "expected_hazards": ["fly_genetic_background", "fly_wolbachia", "fly_mating_and_sex"],
+    "recommended_designs": [
+      "vial_lifespan"
+    ],
+    "expected_hazards": [
+      "fly_genetic_background",
+      "fly_wolbachia",
+      "fly_mating_and_sex"
+    ],
     "reference_plan": {
       "design": "Backcross the mutation >=6 generations into your control background, test Wolbachia in both lines, then rerun with vial design.",
       "layout": "As in the standard vial lifespan design.",
       "replication": "100-150 flies per genotype per sex, repeated in an independent cohort.",
       "randomization": "Rearing-bottle blocks.",
-      "record": ["backcross_generations", "wolbachia_status", "control_stock"],
+      "record": [
+        "backcross_generations",
+        "wolbachia_status",
+        "control_stock"
+      ],
       "analysis": "Mixed Cox model with vial random effect.",
-      "pitfalls": ["Comparing a mutant to an unrelated wild-type stock"]
+      "pitfalls": [
+        "Comparing a mutant to an unrelated wild-type stock"
+      ]
     },
     "notes": "Not yet: background and cytoplasm first."
   },
   {
     "id": "fly_uas_gal4_controls",
     "prompt": "We overexpress a gene with da-GAL4 > UAS-geneX and compare lifespan to wild type.",
-    "source": {"citation": "Burnett et al. 2011, Nature 477:482-485", "doi": "10.1038/nature10296", "basis": "dSir2 effect vs wild type disappeared vs transgenic controls"},
-    "expected_spec": {"system": "drosophila", "organism": "Drosophila melanogaster",
-      "factors": [{"name": "genotype", "n_levels": 2}]},
-    "must_ask": ["primary_outcome.type", "design.reps"],
+    "source": {
+      "citation": "Burnett et al. 2011, Nature 477:482-485",
+      "doi": "10.1038/nature10296",
+      "basis": "dSir2 effect vs wild type disappeared vs transgenic controls"
+    },
+    "expected_spec": {
+      "system": "drosophila",
+      "organism": "Drosophila melanogaster",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 2
+        }
+      ],
+      "primary_outcome": {
+        "name": "lifespan",
+        "type": "survival"
+      }
+    },
+    "must_ask": [
+      "design.reps",
+      "power.minimum_detectable_difference"
+    ],
     "expected_audit": null,
-    "recommended_designs": ["vial_lifespan"],
-    "expected_hazards": ["fly_genetic_background", "fly_wolbachia", "fly_mating_and_sex"],
+    "recommended_designs": [
+      "vial_lifespan"
+    ],
+    "expected_hazards": [
+      "fly_genetic_background",
+      "fly_wolbachia",
+      "fly_mating_and_sex"
+    ],
     "reference_plan": {
       "design": "Three genotypes: da-GAL4/+, UAS-geneX/+ and da-GAL4 > UAS-geneX, all in the same backcrossed background.",
       "layout": "Standard vial lifespan design.",
       "replication": "100-150 flies per genotype per sex.",
       "randomization": "Rearing-bottle blocks.",
-      "record": ["genotype", "backcross_generations", "wolbachia_status"],
+      "record": [
+        "genotype",
+        "backcross_generations",
+        "wolbachia_status"
+      ],
       "analysis": "Experimental line must differ from BOTH parental controls.",
-      "pitfalls": ["Wild type as the only control"]
+      "pitfalls": [
+        "Wild type as the only control"
+      ]
     },
     "notes": "Insertion and background effects can mimic overexpression effects."
   },
   {
     "id": "fly_body_size_density",
     "prompt": "Measuring wing size in 2 mutants vs a control. I set up crosses with 8 females per vial overnight and measure the offspring.",
-    "source": {"citation": "microPublication Biology 2023 (larval density and pupal size); Clancy & Kennington 2001", "doi": "10.17912/micropub.biology.000959", "basis": "Pupal size falls with ~25 extra larvae per vial"},
-    "expected_spec": {"system": "drosophila", "organism": "Drosophila melanogaster",
-      "primary_outcome": {"name": "wing_size", "type": "continuous"},
-      "experimental_unit": "vial", "measurement_unit": "fly",
-      "factors": [{"name": "genotype", "n_levels": 3}]},
-    "must_ask": ["design.reps", "power.minimum_detectable_difference"],
-    "expected_audit": {"pseudoreplication_risk": "high"},
-    "recommended_designs": ["rcbd", "crd"],
-    "expected_hazards": ["fly_larval_density", "fly_rearing_bottle_confound", "fly_food_batch_incubator"],
+    "source": {
+      "citation": "microPublication Biology 2023 (larval density and pupal size); Clancy & Kennington 2001",
+      "doi": "10.17912/micropub.biology.000959",
+      "basis": "Pupal size falls with ~25 extra larvae per vial"
+    },
+    "expected_spec": {
+      "system": "drosophila",
+      "organism": "Drosophila melanogaster",
+      "primary_outcome": {
+        "name": "wing_size",
+        "type": "continuous"
+      },
+      "experimental_unit": "vial",
+      "measurement_unit": "fly",
+      "factors": [
+        {
+          "name": "genotype",
+          "n_levels": 3
+        }
+      ]
+    },
+    "must_ask": [
+      "design.reps",
+      "power.minimum_detectable_difference"
+    ],
+    "expected_audit": {
+      "pseudoreplication_risk": "high"
+    },
+    "recommended_designs": [
+      "rcbd",
+      "crd"
+    ],
+    "expected_hazards": [
+      "fly_larval_density",
+      "fly_rearing_bottle_confound",
+      "fly_food_batch_incubator"
+    ],
     "reference_plan": {
       "design": "Several replicate vials per genotype at a fixed larval density (pick e.g. 30-50 first-instar larvae per vial).",
       "layout": "Vials of all genotypes in each tray; same food cook.",
       "replication": "Replicate vials per genotype; measure a fixed number of flies of each sex per vial.",
       "randomization": "Vial positions random within trays.",
-      "record": ["larvae_per_vial", "vial_id", "sex", "food_batch"],
+      "record": [
+        "larvae_per_vial",
+        "vial_id",
+        "sex",
+        "food_batch"
+      ],
       "analysis": "y ~ genotype * sex + (1|vial).",
-      "pitfalls": ["Egg-lay density varying by genotype fecundity", "Pooling sexes"]
+      "pitfalls": [
+        "Egg-lay density varying by genotype fecundity",
+        "Pooling sexes"
+      ]
     },
     "notes": "Mutant fecundity differences change density and hence size."
   }

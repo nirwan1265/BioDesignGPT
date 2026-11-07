@@ -445,11 +445,13 @@
           "name": "check",
           "n_levels": 4
         }
-      ]
+      ],
+      "design": {
+        "reps": 1
+      }
     },
     "must_ask": [
       "primary_outcome.name",
-      "design.reps",
       "constraints.max_units"
     ],
     "expected_audit": {

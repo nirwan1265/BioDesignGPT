@@ -19,6 +19,8 @@ Imports:
     stats,
     utils
 Suggests:
+    httr2,
+    shiny,
     ellmer (>= 0.3.0),
     lme4,
     simr,

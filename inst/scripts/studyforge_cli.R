@@ -1,15 +1,29 @@
 #!/usr/bin/env Rscript
-# Interactive StudyForge session.
-#   Rscript studyforge_cli.R            # terminal chat
-#   Rscript studyforge_cli.R --browser  # Shiny chat in the browser
-# Requires: ANTHROPIC_API_KEY, and packages studyforge + ellmer.
+# StudyForge from the terminal. Free by default.
+#   Rscript studyforge_cli.R "120 maize lines, drought, two locations, 3 reps"   # one question, offline
+#   Rscript studyforge_cli.R                                                     # interactive, offline
+#   Rscript studyforge_cli.R --ollama "..."                                       # free local LLM rephrasing
+#   Rscript studyforge_cli.R --chat                                               # conversational agent via Ollama
+#   Rscript studyforge_cli.R --app                                                # local Shiny app
 library(studyforge)
 
 args <- commandArgs(trailingOnly = TRUE)
-chat <- studyforge_chat(outdir = "studyforge_run")
+flags <- args[startsWith(args, "--")]
+question <- paste(args[!startsWith(args, "--")], collapse = " ")
+provider <- if ("--ollama" %in% flags) "ollama" else "local"
 
-if ("--browser" %in% args) {
-  ellmer::live_browser(chat)
+if ("--app" %in% flags) {
+  launch_studyforge(launch.browser = TRUE)
+} else if ("--chat" %in% flags) {
+  ellmer::live_console(studyforge_chat(provider = "ollama"))
+} else if (nzchar(question)) {
+  print(studyforge_ask(question, provider = provider))
 } else {
-  ellmer::live_console(chat)
+  con <- file("stdin")
+  cat("Describe your experiment (empty line to quit):\n> ")
+  while (length(line <- readLines(con, n = 1)) && nzchar(line)) {
+    print(studyforge_ask(line, provider = provider))
+    cat("\n> ")
+  }
+  close(con)
 }
