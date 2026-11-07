@@ -43,6 +43,26 @@ book <- make_design("split", c("I0", "I1", "I2"), reps = 4,
 write_design_package(book, new_spec(), "studyforge_run")
 ```
 
+### Setup layouts (trays, field grids, cages, vials)
+
+```r
+# 200 accessions in 48-cell trays (6 x 8): Col-0 and Ler in every tray, edge cells as guards
+trays <- make_tray_design(paste0("Acc", 1:200), c("Col-0", "Ler"), tray_rows = 6, tray_cols = 8)
+
+# put an RCBD on a field grid with serpentine order and a border ring (for SpATS / AR1xAR1)
+field <- add_field_coordinates(make_design("rcbd", paste0("G", 1:12), reps = 3), n_cols = 6)
+
+# mice: diet in the cage makes the cage the unit
+cages <- make_cage_allocation(c("LF", "HF"), n_per_group = 8, per_cage = 4, delivery = "cage")
+
+# flies: every rearing bottle supplies one vial to each diet
+vials <- make_vial_allocation(c("DR", "AL", "Rapa"), vials_per_treatment = 15, flies_per_vial = 10)
+
+resource_equation_n(k = 4)            # 4-6 animals/group when no SD exists
+setup_hazards("greenhouse")           # doors, pads, sprinklers, gradients, pot size...
+protocol_notes("spatial sorghum")     # what published trials actually did
+```
+
 ## What's inside
 
 | Component | Purpose |
@@ -51,9 +71,12 @@ write_design_package(book, new_spec(), "studyforge_run")
 | `R/power.R` | Simulation power: RCBD, split-plot (correct error strata), alpha-lattice (lme4), generic `simr` wrapper, sensitivity tables |
 | `R/designs.R` | CRD, RCBD, alpha-lattice, split-plot, factorial, augmented layouts with a standard schema |
 | `R/spec.R` | StudySpec with dotted paths, assumption tracking, schema validation |
-| `R/agent.R` | ellmer agent: system prompt + 10 tools |
-| `inst/registry/*.json` | Design catalog, pseudoreplication rules (each cited), experimental units, systems and their consequential questions, spec schema |
-| `inst/examples/study_examples.jsonl` | 21 prompt → expected-spec cases grounded in published studies |
+| `R/layouts.R` | Tray (augmented-by-tray), field coordinates with borders, mouse cage and fly vial allocation, resource equation, hazard and protocol lookups |
+| `R/agent.R` | ellmer agent: system prompt + 16 tools |
+| `inst/registry/setup_hazards.json` | 38 setup hazards (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia...), each with mitigation, covariates to record and a source |
+| `inst/registry/protocol_notes.json` | Notes from the methods of 30 published studies: what they did, the numbers, the lesson |
+| `inst/registry/*.json` (other) | 15-design catalog, cited pseudoreplication rules, experimental units, systems and their questions, spec schema |
+| `inst/examples/study_examples.jsonl` | 49 prompt → expected-spec cases grounded in published studies; 28 include a full reference plan (design, layout, replication, randomization, what to record, analysis, pitfalls) and the hazards the agent must raise |
 | `inst/scripts/eval_extraction.R` | Runs the agent over the examples and scores extraction |
 
 ## Example set

@@ -17,6 +17,9 @@ studyforge_system_prompt <- function() {
     "6. Use lookup_design to explain strengths and tradeoffs; only propose designs in the catalog.",
     "7. Call spec_validate before make_design. Generate the layout only once consequential fields are set or flagged as assumptions.",
     "8. For animal studies, state that this is a planning recommendation and needs statistician, veterinarian and IACUC review.",
+    "9. Call setup_hazards for the system and ask about the physical setup (irrigation lines, field edges, doors, pads, sprinklers,",
+    "   chamber corners, trays, cages, vials, rearing). Put the relevant hazards and the covariates to record into the plan.",
+    "10. Use protocol_notes to ground advice in what published studies actually did, and cite them.",
     sep = "\n"
   )
 }
@@ -83,8 +86,58 @@ studyforge_tools <- function(state, outdir = "studyforge_run") {
     T(safely(function(system) json(system_questions(system))), name = "system_questions",
       description = "Consequential questions to ask for an experimental system.",
       arguments = list(system = ellmer::type_enum(
-        values = c("field", "greenhouse", "growth_chamber", "mouse", "bulk_rnaseq",
+        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila", "bulk_rnaseq",
                    "metabolomics_lipidomics", "single_cell")))),
+
+    T(safely(function(system) json(setup_hazards(system))), name = "setup_hazards",
+      description = "Setup problems for a system (borders, irrigation lines, doors, chamber corners, cages, fly density...) with mitigations and covariates to record.",
+      arguments = list(system = ellmer::type_enum(
+        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila")))),
+
+    T(safely(function(query = "", system = NULL) json(protocol_notes(query, system))),
+      name = "protocol_notes",
+      description = "Search notes from published methods (what they did, numbers, lessons). Query words are ANDed.",
+      arguments = list(query = str("e.g. 'spatial sorghum', 'cage', 'larval density'", required = FALSE),
+                       system = str(required = FALSE))),
+
+    T(safely(function(entries, checks, tray_rows, tray_cols, check_copies = 1L, guard_edges = TRUE) {
+        book <- make_tray_design(split_csv(entries), split_csv(checks), tray_rows, tray_cols,
+                                 check_copies = check_copies, guard_edges = guard_edges)
+        files <- write_design_package(book, state$spec, outdir, state$audit, state$power)
+        paste0("Trays: ", max(book$tray), ". Wrote: ", paste(files, collapse = ", "), "\n",
+               paste(utils::capture.output(print(table(book$tray, book$role))), collapse = "\n"))
+      }), name = "make_tray_design",
+      description = "Augmented-by-tray layout: every tray gets the checks, entries spread across trays, optional guard edge cells.",
+      arguments = list(entries = str("Comma-separated entries"), checks = str("Comma-separated checks"),
+                       tray_rows = int(), tray_cols = int(),
+                       check_copies = int(required = FALSE),
+                       guard_edges = ellmer::type_boolean(required = FALSE))),
+
+    T(safely(function(groups, n_per_group, per_cage, delivery, sexes = "F,M") {
+        d <- make_cage_allocation(split_csv(groups), n_per_group, per_cage, delivery, split_csv(sexes))
+        files <- write_design_package(d, state$spec, outdir, state$audit, state$power)
+        sprintf("Unit: %s; experimental units per group per sex: %s; cages: %d. Wrote: %s",
+                attr(d, "unit"), attr(d, "true_n"), length(unique(d$cage)), paste(files, collapse = ", "))
+      }), name = "make_cage_allocation",
+      description = "Allocate mice to cages: individual dosing mixes groups within cages (cage = block); cage delivery assigns whole cages (cage = unit).",
+      arguments = list(groups = str(), n_per_group = int("Animals per group per sex"), per_cage = int(),
+                       delivery = ellmer::type_enum(values = c("individual", "cage")),
+                       sexes = str("Comma-separated, default F,M", required = FALSE))),
+
+    T(safely(function(treatments, vials_per_treatment, flies_per_vial = 10L) {
+        d <- make_vial_allocation(split_csv(treatments), vials_per_treatment, flies_per_vial)
+        files <- write_design_package(d, state$spec, outdir, state$audit, state$power)
+        sprintf("%d vials; %d flies per treatment. Wrote: %s", nrow(d),
+                attr(d, "flies_per_treatment"), paste(files, collapse = ", "))
+      }), name = "make_vial_allocation",
+      description = "Drosophila vial layout: each rearing bottle supplies one vial to every treatment; random tray positions.",
+      arguments = list(treatments = str(), vials_per_treatment = int(),
+                       flies_per_vial = int(required = FALSE))),
+
+    T(safely(function(k, attrition = 0) json(resource_equation_n(k, attrition))),
+      name = "resource_equation_n",
+      description = "Animals per group by the resource equation when no SD is available (planning fallback, not a power analysis).",
+      arguments = list(k = int("Number of groups"), attrition = num(required = FALSE))),
 
     T(safely(function(system) json(lapply(designs_for_system(system), lookup_design))),
       name = "designs_for_system",

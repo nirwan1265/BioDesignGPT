@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "rules": [
     {
       "id": "leaves_within_plant",
@@ -80,6 +80,30 @@
       "applies_when": "destructive sampling",
       "message": "Destructive sampling means different plants at each time point; this is not a repeated-measures design.",
       "source": "Design logic; see 10.1073/pnas.1907500116 (weekly destructive sampling, 3 reps x 10 pooled plants)"
+    },
+    {
+      "id": "flies_within_vial",
+      "measurement_unit": "fly",
+      "nested_in": "vial",
+      "applies_when": "treatment in food or drug",
+      "message": "Flies in one vial share food and microenvironment; replicate vials and model (1 | vial).",
+      "source": "Piper & Partridge 2016, doi:10.1007/978-1-4939-6371-3_18; Lazic et al. 2018, doi:10.1371/journal.pbio.2005282"
+    },
+    {
+      "id": "plants_within_tray",
+      "measurement_unit": "plant",
+      "nested_in": "tray",
+      "applies_when": "treatment applied per tray",
+      "message": "Bottom-watered or flooded trays make the tray the unit for that treatment.",
+      "source": "Hurlbert 1984, doi:10.2307/1942661"
+    },
+    {
+      "id": "plants_within_chamber",
+      "measurement_unit": "plant",
+      "nested_in": "chamber",
+      "applies_when": "treatment set per chamber",
+      "message": "Plants in one chamber are subsamples for chamber-level treatments; replicate chambers or runs.",
+      "source": "Potvin et al. 1990, Can J Bot 68:499-504; Porter et al. 2015, doi:10.1186/s13007-015-0088-0"
     }
   ]
 }

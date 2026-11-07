@@ -1,98 +1,317 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "designs": [
     {
       "id": "crd",
       "name": "Completely randomized design",
       "engine": "agricolae::design.crd",
-      "requires": ["treatments", "reps"],
+      "requires": [
+        "treatments",
+        "reps"
+      ],
       "use_when": "Units are homogeneous (e.g., one growth chamber shelf with no gradient); few units.",
       "strength": "Simplest analysis, maximum error df.",
       "tradeoff": "No control of spatial or batch heterogeneity; rarely the best choice in greenhouses or fields.",
       "model": "y ~ treatment",
-      "systems": ["growth_chamber", "cell_culture", "greenhouse"]
+      "systems": [
+        "growth_chamber",
+        "cell_culture",
+        "greenhouse",
+        "drosophila"
+      ]
     },
     {
       "id": "rcbd",
       "name": "Randomized complete block design",
       "engine": "agricolae::design.rcbd",
-      "requires": ["treatments", "reps"],
+      "requires": [
+        "treatments",
+        "reps"
+      ],
       "use_when": "All treatments fit in one reasonably homogeneous block (bench, field strip, batch, day).",
       "strength": "Simple and interpretable; removes block-to-block variation.",
       "tradeoff": "Blocks become heterogeneous when they hold many entries (e.g., >20-30 field plots).",
       "model": "y ~ treatment + block",
-      "systems": ["field", "greenhouse", "growth_chamber", "mouse", "sequencing"]
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "sequencing",
+        "drosophila"
+      ]
     },
     {
       "id": "alpha",
       "name": "Alpha-lattice (resolvable incomplete block) design",
       "engine": "agricolae::design.alpha",
-      "requires": ["treatments", "reps", "block_size"],
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
       "constraints": "Number of treatments must equal block_size * number_of_blocks_per_rep; reps >= 2.",
       "use_when": "Many genotypes (tens to hundreds) so complete blocks would be heterogeneous.",
       "strength": "Controls within-replicate field heterogeneity with small incomplete blocks.",
       "tradeoff": "Requires mixed-model analysis; block size must divide the number of entries.",
       "model": "y ~ genotype + rep + (1 | rep:block)",
-      "systems": ["field", "greenhouse"],
-      "example_sources": ["10.3389/fpls.2022.999692", "10.1186/s13007-019-0527-4"]
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": [
+        "10.3389/fpls.2022.999692",
+        "10.1186/s13007-019-0527-4"
+      ]
     },
     {
       "id": "split",
       "name": "Split-plot design (whole plots in RCBD)",
       "engine": "agricolae::design.split",
-      "requires": ["treatments", "treatments2", "reps"],
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
       "use_when": "One factor is hard to randomize at small scale (irrigation, temperature chamber, tillage) and is applied to whole plots; the other factor (genotype) is randomized within them.",
       "strength": "Practical for irrigation x genotype trials; precise subplot and interaction tests.",
       "tradeoff": "Whole-plot factor has its own, larger error term and few df; power for it is low unless many blocks.",
       "model": "y ~ main * sub + block + (1 | block:main)",
-      "systems": ["field", "greenhouse", "growth_chamber"],
-      "example_sources": ["10.1002/csc2.20171"]
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": [
+        "10.1002/csc2.20171"
+      ]
     },
     {
       "id": "factorial",
       "name": "Factorial treatment structure in RCBD",
       "engine": "agricolae::design.ab",
-      "requires": ["factor_levels", "reps"],
+      "requires": [
+        "factor_levels",
+        "reps"
+      ],
       "use_when": "Interest in interactions (genotype x treatment, treatment x sex) and all combinations can be randomized at the same unit level.",
       "strength": "Tests main effects and interactions efficiently.",
       "tradeoff": "Number of cells grows multiplicatively; interaction power needs larger n than main effects.",
       "model": "y ~ A * B + block",
-      "systems": ["greenhouse", "growth_chamber", "mouse", "cell_culture"]
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "cell_culture",
+        "drosophila"
+      ]
     },
     {
       "id": "augmented",
       "name": "Augmented block design",
       "engine": "agricolae::design.dau",
-      "requires": ["checks", "new_entries", "reps"],
+      "requires": [
+        "checks",
+        "new_entries",
+        "reps"
+      ],
       "use_when": "Large number of new entries with seed for only one plot each; replicated checks estimate error and block effects.",
       "strength": "Screens many unreplicated lines.",
       "tradeoff": "Low precision for new entries; error df comes only from checks.",
       "model": "y ~ check_or_entry + block",
-      "systems": ["field"],
-      "example_sources": ["Federer 1956 Hawaiian Planters' Record 55:191-208"]
+      "systems": [
+        "field"
+      ],
+      "example_sources": [
+        "Federer 1956 Hawaiian Planters' Record 55:191-208"
+      ]
     },
     {
       "id": "prep",
       "name": "Partially replicated (p-rep) design",
       "engine": "not_implemented (see FielDHub::partially_replicated)",
-      "requires": ["entries", "replicated_fraction"],
+      "requires": [
+        "entries",
+        "replicated_fraction"
+      ],
       "use_when": "Early-generation multi-environment trials where only a fraction of lines can be replicated.",
       "strength": "More efficient than augmented designs for the same plot count.",
       "tradeoff": "Needs spatial or mixed-model analysis; layout generation is non-trivial.",
       "model": "y ~ (1 | genotype) + spatial terms",
-      "systems": ["field"],
-      "example_sources": ["10.1198/108571106X154443"]
+      "systems": [
+        "field"
+      ],
+      "example_sources": [
+        "10.1198/108571106X154443"
+      ]
     },
     {
       "id": "repeated_measures",
       "name": "Repeated-measures / longitudinal design",
       "engine": "simulation only",
-      "requires": ["treatments", "timepoints", "units_per_group"],
+      "requires": [
+        "treatments",
+        "timepoints",
+        "units_per_group"
+      ],
       "use_when": "The same unit is measured over time (non-destructive phenotyping, body weight).",
       "strength": "Uses within-unit correlation; models trajectories.",
       "tradeoff": "Needs a correlation structure; destructive sampling over time is NOT repeated measures.",
       "model": "y ~ treatment * time + (1 | unit)",
-      "systems": ["greenhouse", "mouse", "field"]
+      "systems": [
+        "greenhouse",
+        "mouse",
+        "field",
+        "drosophila"
+      ]
+    },
+    {
+      "id": "row_column",
+      "name": "Resolvable row-column design",
+      "engine": "not_implemented (see FielDHub / DiGGer); use make_design('alpha') plus add_field_coordinates() and model row and column",
+      "requires": [
+        "treatments",
+        "reps",
+        "n_rows",
+        "n_cols"
+      ],
+      "use_when": "Gradients may run in either direction (fields, greenhouse benches, chamber shelves) and replicates are contiguous rectangles.",
+      "strength": "Removes row and column variation within each replicate.",
+      "tradeoff": "Layout generation needs specialist software; analysis needs a mixed model.",
+      "model": "y ~ genotype + rep + (1 | rep:row) + (1 | rep:col)",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": [
+        "arXiv:2505.12569"
+      ]
+    },
+    {
+      "id": "spatial_analysis",
+      "name": "Spatial analysis of a gridded trial (SpATS / AR1xAR1)",
+      "engine": "analysis only: SpATS::SpATS or asreml/sommer AR1xAR1",
+      "requires": [
+        "row",
+        "col"
+      ],
+      "use_when": "Any field or bench trial laid out on a row x column grid; especially large or low-input trials.",
+      "strength": "Large precision gains (residual variance -49% for sorghum yield in one study).",
+      "tradeoff": "Needs coordinates for every plot; model checking required.",
+      "model": "y ~ genotype + f(row, col) + (1 | row) + (1 | col)",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": [
+        "10.1007/s00122-017-2894-4",
+        "10.1111/j.1439-037X.2012.00529.x"
+      ]
+    },
+    {
+      "id": "diagonal_checks",
+      "name": "Systematic (diagonal) check arrangement for unreplicated entries",
+      "engine": "not_implemented (see FielDHub::diagonal_arrangement); approximate with make_design('augmented') + add_field_coordinates()",
+      "requires": [
+        "entries",
+        "checks",
+        "n_rows",
+        "n_cols"
+      ],
+      "use_when": "Hundreds to thousands of unreplicated lines; checks spread evenly over the field to model spatial trend.",
+      "strength": "Even check coverage supports spatial adjustment.",
+      "tradeoff": "Checks use plots; entries still unreplicated.",
+      "model": "y ~ (1|genotype) + check + spatial terms",
+      "systems": [
+        "field"
+      ],
+      "example_sources": [
+        "10.1002/csc2.21336"
+      ]
+    },
+    {
+      "id": "line_source",
+      "name": "Line-source irrigation gradient",
+      "engine": "layout by distance from line; analysis with correlated subplots",
+      "requires": [
+        "genotypes",
+        "blocks",
+        "levels_per_side"
+      ],
+      "use_when": "Water level is the treatment and is created by a single sprinkler line, so it cannot be randomized.",
+      "strength": "Many water levels from one line; cheap.",
+      "tradeoff": "Water level is not randomized; needs a correlation model and careful interpretation.",
+      "model": "y ~ genotype * irrigation * side + (1|block) + (1|block:side) + (1|block:irrigation), Toeplitz along distance",
+      "systems": [
+        "field"
+      ],
+      "example_sources": [
+        "Hanks et al. 1980 SSSAJ 44:886-888"
+      ]
+    },
+    {
+      "id": "augmented_tray",
+      "name": "Augmented-by-tray design (checks in every tray, guard edges)",
+      "engine": "studyforge::make_tray_design",
+      "requires": [
+        "entries",
+        "checks",
+        "tray_rows",
+        "tray_cols"
+      ],
+      "use_when": "Many genotypes in seedling trays or flats (chamber or greenhouse) with too few seeds or cells for full replication.",
+      "strength": "Tray effects estimated from repeated checks; entries need not be replicated.",
+      "tradeoff": "Entries compared with low precision; checks use cells.",
+      "model": "y ~ check_or_entry + (1 | tray) (+ cell row/col if needed)",
+      "systems": [
+        "growth_chamber",
+        "greenhouse"
+      ],
+      "example_sources": [
+        "Federer 1956",
+        "10.1198/108571106X154443"
+      ]
+    },
+    {
+      "id": "chamber_runs",
+      "name": "Between-chamber treatments with replicated chambers or runs",
+      "engine": "studyforge::make_design('rcbd') with run as block and chamber as unit",
+      "requires": [
+        "treatments",
+        "chambers",
+        "runs"
+      ],
+      "use_when": "Temperature, CO2, light or photoperiod treatments that are set per chamber.",
+      "strength": "Separates treatment from chamber identity.",
+      "tradeoff": "Needs >=2 chambers per level or repeated runs swapping assignments; few df.",
+      "model": "y ~ treatment + (1 | run) + (1 | run:chamber)",
+      "systems": [
+        "growth_chamber"
+      ],
+      "example_sources": [
+        "10.1186/s13007-015-0088-0"
+      ]
+    },
+    {
+      "id": "vial_lifespan",
+      "name": "Drosophila vial lifespan design with rearing-bottle blocks",
+      "engine": "studyforge::make_vial_allocation",
+      "requires": [
+        "treatments",
+        "vials_per_treatment",
+        "flies_per_vial"
+      ],
+      "use_when": "Lifespan, fecundity or survival assays in vials.",
+      "strength": "Each rearing bottle supplies every treatment, so rearing effects are blocked.",
+      "tradeoff": "Many vials to transfer; vial is the unit for food/drug treatments.",
+      "model": "coxme(Surv(age, dead) ~ treatment + (1 | vial) + (1 | bottle))",
+      "systems": [
+        "drosophila"
+      ],
+      "example_sources": [
+        "10.1007/978-1-4939-6371-3_18"
+      ]
     }
   ]
 }

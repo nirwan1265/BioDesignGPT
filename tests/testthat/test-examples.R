@@ -48,6 +48,23 @@ test_that("expected audits agree with the deterministic unit_audit()", {
   }
 })
 
+test_that("expected hazards exist and match the example's system", {
+  hz <- load_registry("setup_hazards")$hazards
+  hz_sys <- setNames(vapply(hz, `[[`, "", "system"), vapply(hz, `[[`, "", "id"))
+  for (e in ex) {
+    ids <- unlist(e$expected_hazards)
+    if (!length(ids)) next
+    expect_true(all(ids %in% names(hz_sys)), label = e$id)
+  }
+})
+
+test_that("reference plans are complete", {
+  fields <- c("design", "layout", "replication", "randomization", "record", "analysis", "pitfalls")
+  plans <- Filter(function(e) !is.null(e$reference_plan), ex)
+  expect_gte(length(plans), 25)
+  for (e in plans) expect_true(all(fields %in% names(e$reference_plan)), label = e$id)
+})
+
 test_that("score_extraction scores a perfect and an imperfect extraction", {
   e <- ex[[1]]
   perfect <- score_extraction(e$expected_spec, e$expected_spec)

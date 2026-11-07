@@ -1,0 +1,348 @@
+{
+  "version": "0.2.0",
+  "description": "Things that go wrong while setting up an experiment, what they bias, and what to do in the design and in the data sheet. The agent should raise the relevant ones before finalizing a layout.",
+  "hazards": [
+    {
+      "id": "field_border_effects",
+      "system": "field",
+      "hazard": "Plots on the outside edge of the trial (and next to alleys, roads, tree lines) get more light, water and nutrients and less competition.",
+      "consequence": "Edge plots look better or worse than interior plots for reasons unrelated to genotype or treatment.",
+      "mitigation": ["Surround the trial with at least one ring of border (filler) plots that are not measured", "Harvest or phenotype only the centre rows of multi-row plots", "Record each plot's row and column so edge position can be modelled"],
+      "record": ["row", "column", "is_edge_plot"],
+      "source": "Büchse, GCIRC Bulletin 18 (winter oilseed rape interplot interference); Poorter et al. 2012, Funct Plant Biol 39:821-838"
+    },
+    {
+      "id": "field_interplot_competition",
+      "system": "field",
+      "hazard": "Tall or late entries shade short or early neighbours, especially in single- or two-row plots.",
+      "consequence": "Yield bias of up to about 5% reported between pure stand and neighbour-affected plots; rankings of short entries are pulled down.",
+      "mitigation": ["Group entries by height or maturity class and randomize within groups (a split-plot or separate adjacent blocks per group)", "Use wider plots and harvest the centre", "If needed, use neighbour height as a covariate"],
+      "record": ["plant_height", "flowering_date", "neighbour_ids"],
+      "source": "Büchse, GCIRC Bulletin 18; height-grouped blocks as in Chakrabarty et al. 2021, doi:10.3389/fpls.2021.772177"
+    },
+    {
+      "id": "field_irrigation_gradient",
+      "system": "field",
+      "hazard": "Water is not uniform: distance from drip laterals, pipe mains, sprinkler lines or the low end of a furrow creates a gradient.",
+      "consequence": "A moisture gradient aligned with treatments or blocks looks like a treatment or genotype effect.",
+      "mitigation": ["Lay out each block so it sits at a constant distance from the water source (blocks parallel to the line, plots within block spread along it)", "If the gradient itself is the treatment, use a line-source design and model correlated subplots", "Record distance to the nearest lateral/main and soil moisture at a few points"],
+      "record": ["distance_to_irrigation_line", "soil_moisture", "irrigation_zone"],
+      "source": "Hanks et al. 1980, Soil Sci Soc Am J 44:886-888 (line-source sprinkler); agridat::hanks.sprinkler"
+    },
+    {
+      "id": "field_soil_heterogeneity",
+      "system": "field",
+      "hazard": "Patchy soil fertility, texture or nutrient availability (plant-available P varied with CV 39% within one Malian sorghum field).",
+      "consequence": "Inflated residual variance, lower heritability, changed genotype rankings, especially under low input.",
+      "mitigation": ["Map apparent electrical conductivity (EM38) or a soil grid before or shortly after planting", "Use small or incomplete blocks oriented across the main gradient", "Fit spatial models (AR1xAR1 or SpATS) and test soil covariates"],
+      "record": ["ECa", "soil_P", "elevation"],
+      "source": "Leiser et al. 2012, J Agron Crop Sci, doi:10.1111/j.1439-037X.2012.00529.x; Cursi et al. 2021, doi:10.3389/fpls.2021.749533"
+    },
+    {
+      "id": "field_management_rows_columns",
+      "system": "field",
+      "hazard": "Operations done row by row or column by column (sowing, spraying, harvest direction, serpentine harvesting, irrigation sets) leave stripes in the data.",
+      "consequence": "Extraneous variation aligned with rows/columns that block designs do not remove.",
+      "mitigation": ["Record row, column and the order/direction of each operation", "Include random row and column effects in the analysis", "Avoid doing all reps of one treatment on one day or with one machine pass"],
+      "record": ["row", "column", "harvest_order", "operator", "date"],
+      "source": "Gilmour, Cullis & Verbyla 1997, JABES 2:269-293; Rodríguez-Álvarez et al. 2018, Spatial Statistics (SpATS)"
+    },
+    {
+      "id": "field_spatial_analysis_needed",
+      "system": "field",
+      "hazard": "Large trials (hundreds of plots) almost always have smooth trends and patchiness that blocks miss.",
+      "consequence": "In 20 Australian sorghum trials, spatial models cut residual variance by 49% for yield and 22% for plant height.",
+      "mitigation": ["Plan a rectangular row x column grid and keep coordinates for every plot", "Analyse with SpATS (2-D P-splines) or AR1xAR1 plus random row/column effects", "Check residual maps before trusting BLUEs"],
+      "record": ["row", "column"],
+      "source": "Velazco et al. 2017, Theor Appl Genet 130:1375-1392, doi:10.1007/s00122-017-2894-4"
+    },
+    {
+      "id": "field_block_orientation",
+      "system": "field",
+      "hazard": "Blocks laid out along (instead of across) the main gradient are internally heterogeneous.",
+      "consequence": "Blocking removes little variance; heritability drops.",
+      "mitigation": ["Walk the field and check history, slope, drainage and previous crop before laying out blocks", "Make blocks compact and long axis perpendicular to the gradient", "When gradient direction is unknown, use row-column designs"],
+      "record": ["block", "row", "column"],
+      "source": "Leiser et al. 2012, doi:10.1111/j.1439-037X.2012.00529.x"
+    },
+    {
+      "id": "field_missing_plots",
+      "system": "field",
+      "hazard": "Plots are lost to poor emergence, lodging, animals, flooding or harvest errors (3-29% missing per trial in large sorghum p-rep trials).",
+      "consequence": "Unbalanced data; unreplicated entries can be lost completely.",
+      "mitigation": ["Plan extra replication of key entries and checks", "Use mixed-model or spatial analysis that tolerates missing plots", "Record the reason for every missing plot"],
+      "record": ["missing_reason", "stand_count"],
+      "source": "Velazco et al. 2017, doi:10.1007/s00122-017-2894-4"
+    },
+    {
+      "id": "field_unreplicated_needs_checks",
+      "system": "field",
+      "hazard": "Early-generation trials with one plot per entry have no direct error estimate.",
+      "consequence": "Selections chase field position rather than genetics.",
+      "mitigation": ["Repeat check varieties throughout the field (augmented, diagonal or p-rep arrangements)", "Randomize entries to positions; moving-grid adjustment is only valid with random allocation", "Combine checks with soil maps or spatial models"],
+      "record": ["is_check", "row", "column"],
+      "source": "Carroll et al. 2024, Crop Sci 64:3135-3152, doi:10.1002/csc2.21336; Technow, mvngGrAd package vignette; Cullis et al. 2006, doi:10.1198/108571106X154443"
+    },
+    {
+      "id": "gh_north_south_gradient",
+      "system": "greenhouse",
+      "hazard": "Light and temperature change along the house with sun angle (north-south) and over the day (east-west).",
+      "consequence": "Large north-south trends were found across multiline experiments in an automated greenhouse; barley pots showed a clear north-south gradient.",
+      "mitigation": ["Use small blocks or row-column designs aligned with the house axes", "Add a linear trend term for the gradient direction", "Do not rely on pot rotation to remove it"],
+      "record": ["bench", "row", "column"],
+      "source": "Brien et al. 2013, Plant Methods 9:5, doi:10.1186/1746-4811-9-5; Hartung et al. 2019, doi:10.1186/s13007-019-0527-4"
+    },
+    {
+      "id": "gh_rotation_vs_blocking",
+      "system": "greenhouse",
+      "hazard": "Rotating pots is often used instead of a statistical design.",
+      "consequence": "Rotation reduced trends but increased error variance; fixed-position blocking (alpha design, blocks of 4 pots) did better.",
+      "mitigation": ["Prefer fixed positions with blocks plus trend terms", "If you rotate, every plant must spend equal time in each microclimate at comparable growth stages, and you must record the schedule"],
+      "record": ["rotation_schedule"],
+      "source": "Hartung et al. 2019; Brien et al. 2013"
+    },
+    {
+      "id": "gh_local_sources",
+      "system": "greenhouse",
+      "hazard": "Doors, cooling pads, fans, heaters, overhead sprinklers or misters, shade from structure, and walkways create local gradients near them.",
+      "consequence": "Plants near a door or pad experience different temperature, humidity and airflow; sprinkler overlap gives uneven water.",
+      "mitigation": ["Sketch the house: mark door, pads, fans, heaters, irrigation heads and posts", "Block so each block is at a similar distance from each source; leave guard plants nearest the source", "Log temperature/humidity at bench level in at least two positions"],
+      "record": ["distance_to_door", "distance_to_pad", "bench", "sensor_log"],
+      "source": "Microclimate principles from Brien et al. 2013 and Poorter et al. 2012 (local gradients; contaminants near air intakes)"
+    },
+    {
+      "id": "gh_pot_and_root_environment",
+      "system": "greenhouse",
+      "hazard": "Small or dark pots heat up and restrict roots.",
+      "consequence": "Pots are likely too small once plant dry mass exceeds about 2 g per litre of soil; dark pots overheat roots in sun.",
+      "mitigation": ["Choose pot size for the final plant size", "Use white pots or reflective covers", "Fill pots with a fixed mass (not volume) of substrate"],
+      "record": ["pot_volume", "substrate_mass"],
+      "source": "Poorter et al. 2012, Funct Plant Biol 39:821-838"
+    },
+    {
+      "id": "gh_watering",
+      "system": "greenhouse",
+      "hazard": "Uneven or volume-based watering creates hidden drought differences; cold tap water reduced growth by 20-30% in some species.",
+      "consequence": "Drought treatments become confounded with pot position, size or watering order.",
+      "mitigation": ["Water gravimetrically to target pot weight", "Use room-temperature water and monitor pH/EC", "Randomize watering order or water by block"],
+      "record": ["pot_weight", "water_added", "watering_time"],
+      "source": "Poorter et al. 2012"
+    },
+    {
+      "id": "gh_two_phase",
+      "system": "greenhouse",
+      "hazard": "Plants germinated in one place and moved to another (e.g., to a conveyor system) carry first-phase position effects.",
+      "consequence": "Phase-one position confounds phase-two treatments if not randomized consistently.",
+      "mitigation": ["Randomize blocks of phase one to blocks of phase two ('big with big')", "Record positions in both phases"],
+      "record": ["phase1_position", "phase2_position"],
+      "source": "Brien et al. 2013"
+    },
+    {
+      "id": "ch_between_chamber_pseudoreplication",
+      "system": "growth_chamber",
+      "hazard": "One chamber per treatment level (temperature, CO2, photoperiod).",
+      "consequence": "Treatment is confounded with chamber; identically programmed chambers differed in plant growth.",
+      "mitigation": ["Use at least two chambers per treatment, or repeat runs swapping treatments among chambers", "Treat run x chamber as the experimental unit in the analysis"],
+      "record": ["chamber", "run"],
+      "source": "Potvin et al. 1990, Can J Bot 68:499-504; Porter et al. 2015, Plant Methods, doi:10.1186/s13007-015-0088-0"
+    },
+    {
+      "id": "ch_within_chamber_position",
+      "system": "growth_chamber",
+      "hazard": "Light falls 20-50% near walls; corners grow worst and centre best.",
+      "consequence": "Block position explained ~10% (bean) to ~30% (maize) of height variance.",
+      "mitigation": ["Block within the chamber (each block holds every treatment)", "Do not measure plants in corner positions; fill them with guard plants", "Map PAR at plant height before the experiment"],
+      "record": ["shelf", "position", "PAR_at_position"],
+      "source": "Potvin et al. 1990; Poorter et al. 2012"
+    },
+    {
+      "id": "ch_equipment_drift",
+      "system": "growth_chamber",
+      "hazard": "Sensor drift and malfunctions (a CO2 analyser fault, corrosion from a previous SO2 study) silently change conditions; lamps age.",
+      "consequence": "Four of eight 'identical' chambers showed chamber effects, two traced to equipment faults.",
+      "mitigation": ["Run a short uniformity pilot (fresh weight, flower count) before key experiments", "Check conditions with independent sensors", "Measure light at start, end and every two weeks"],
+      "record": ["independent_sensor_log", "PAR_checks", "maintenance_log"],
+      "source": "Porter et al. 2015, doi:10.1186/s13007-015-0088-0; Poorter et al. 2012"
+    },
+    {
+      "id": "ch_rotation_tradeoff",
+      "system": "growth_chamber",
+      "hazard": "Rotating plants among chambers to average out chamber effects.",
+      "consequence": "Smooths means but increases variance and makes it impossible to trace which chamber caused a problem.",
+      "mitigation": ["Prefer replication of chambers/runs over rotation", "If rotating, log every move"],
+      "record": ["rotation_log"],
+      "source": "Porter et al. 2015"
+    },
+    {
+      "id": "ch_vertical_light_and_co2",
+      "system": "growth_chamber",
+      "hazard": "Vertical light gradients matter for plants taller than ~40 cm; people and plants shift CO2 in closed chambers.",
+      "consequence": "Tall genotypes get more light; CO2 can exceed 1200 ppm or fall below ambient.",
+      "mitigation": ["Adjust lamp or shelf height to canopy top", "Limit time with doors open; log CO2"],
+      "record": ["canopy_height", "CO2_log"],
+      "source": "Poorter et al. 2012"
+    },
+    {
+      "id": "ch_cross_lab_reproducibility",
+      "system": "growth_chamber",
+      "hazard": "Same genotypes and protocol in different labs give different phenotypes, mainly through light quality and handling.",
+      "consequence": "Genotype rankings changed in some of 10 labs; metabolite profiles carried strong lab effects.",
+      "mitigation": ["Document light spectrum, intensity and handling in detail", "Repeat experiments over runs/facilities and analyse run as a block"],
+      "record": ["light_spectrum", "handling_protocol"],
+      "source": "Massonnet et al. 2010, Plant Physiol 152:2142-2157, doi:10.1104/pp.109.148338"
+    },
+    {
+      "id": "tray_position_effects",
+      "system": "growth_chamber",
+      "hazard": "Trays differ (position on shelf, watering, light), and cells on tray edges dry faster and get more side light.",
+      "consequence": "Genotypes on good trays or interior cells look better.",
+      "mitigation": ["Put the same reference genotype(s) in every tray to estimate tray effects (augmented-by-tray design)", "Use edge cells for guard plants", "Randomize entries to trays and cells; record tray and cell"],
+      "record": ["tray", "cell_row", "cell_col", "is_check"],
+      "source": "Augmented-design logic (Federer 1956; Cullis et al. 2006); edge and corner effects (Potvin et al. 1990; Poorter et al. 2012)"
+    },
+    {
+      "id": "tray_treatment_unit",
+      "system": "growth_chamber",
+      "hazard": "Watering or nutrient treatments applied per tray (bottom watering, flooded trays).",
+      "consequence": "The tray, not the plant, is the experimental unit for that treatment.",
+      "mitigation": ["Replicate trays per treatment level and randomize trays to positions", "Analyse with tray as a random effect"],
+      "record": ["tray", "treatment"],
+      "source": "Hurlbert 1984, doi:10.2307/1942661"
+    },
+    {
+      "id": "mouse_cage_effect",
+      "system": "mouse",
+      "hazard": "Mice sharing a cage converge in microbiome, stress and behaviour; cage effects develop over weeks.",
+      "consequence": "If each treatment is in one or two cages, treatment and cage are confounded.",
+      "mitigation": ["Use several cages per group; spread treatments across cages when dosing individually", "Treat cage as the unit when treatment is via diet, water or co-housing", "Record cage and rack position"],
+      "record": ["cage", "rack_position"],
+      "source": "McCafferty et al. 2013, ISME J 7:2116-2125, doi:10.1038/ismej.2013.106; ARRIVE 2.0 item 1b"
+    },
+    {
+      "id": "mouse_litter_unit",
+      "system": "mouse",
+      "hazard": "Treatments given to dams but analysed per pup.",
+      "consequence": "Only 22% of surveyed parent-treated studies replicated the right unit; 46% pseudoreplicated.",
+      "mitigation": ["n = number of dams/litters", "Use (1 | litter) or one pup per litter per outcome"],
+      "record": ["dam_id", "litter_id"],
+      "source": "Lazic, Clarke-Williams & Munafò 2018, PLoS Biol 16:e2005282, doi:10.1371/journal.pbio.2005282"
+    },
+    {
+      "id": "mouse_housing_decision",
+      "system": "mouse",
+      "hazard": "Single vs group housing of males: group housing risks fighting and chronic subordination stress; single housing removes social contact.",
+      "consequence": "Which is better is context dependent (strain, age, social rank, husbandry) and affects welfare and data.",
+      "mitigation": ["Decide housing before the study and justify it", "Never single-house only one treatment group", "Record housing, fighting and wounds; plan removal rules"],
+      "record": ["housing_type", "aggression_events"],
+      "source": "Kappel, Hawkins & Mendl 2017, Animals 7:88, doi:10.3390/ani7120088"
+    },
+    {
+      "id": "mouse_experimenter_effect",
+      "system": "mouse",
+      "hazard": "Male experimenters (and their odours) induce stress-related analgesia in mice and rats.",
+      "consequence": "Baseline pain and behaviour depend on who tests the animals.",
+      "mitigation": ["Use one experimenter or balance experimenters across groups", "Record experimenter identity and testing time"],
+      "record": ["experimenter", "test_time"],
+      "source": "Sorge et al. 2014, Nat Methods 11:629-632, doi:10.1038/nmeth.2935"
+    },
+    {
+      "id": "mouse_sex_analysis",
+      "system": "mouse",
+      "hazard": "Claiming a 'sex-specific' effect from separate tests in males and females, or pooling sexes without checking.",
+      "consequence": "Sex differences over-reported or masked.",
+      "mitigation": ["Use a factorial design and test the treatment x sex interaction", "Power the study for the interaction if that is the question"],
+      "record": ["sex"],
+      "source": "Garcia-Sifuentes & Maney 2021, eLife 10:e70817, doi:10.7554/eLife.70817"
+    },
+    {
+      "id": "mouse_sample_size",
+      "system": "mouse",
+      "hazard": "No pilot SD, so sample size is guessed or copied.",
+      "consequence": "Under- or over-powered studies.",
+      "mitigation": ["Power analysis when an SD and effect of interest exist", "Otherwise the resource equation: error df E = N - k should be 10-20 (n per group between 10/k + 1 and 20/k + 1)", "Consider factorial designs to answer several questions with the same animals"],
+      "record": [],
+      "source": "Arifin & Zahiruddin 2017, Malays J Med Sci 24:101-105, doi:10.21315/mjms2017.24.5.11; Festing & Altman 2002, ILAR J 43:244-258; Shaw et al. 2002, ILAR J 43:223-232"
+    },
+    {
+      "id": "mouse_randomization_blinding",
+      "system": "mouse",
+      "hazard": "Animals assigned by order of catching, or outcomes measured unblinded and in group order.",
+      "consequence": "Systematic bias from time of day, cage order and expectation.",
+      "mitigation": ["Randomize allocation (within blocks such as batch, sex, litter)", "Randomize order of measurement and blind assessors"],
+      "record": ["allocation_seed", "measurement_order", "assessor_blinded"],
+      "source": "Festing & Altman 2002, doi:10.1093/ilar.43.4.244"
+    },
+    {
+      "id": "fly_larval_density",
+      "system": "drosophila",
+      "hazard": "Larval density varies between vials even with the same number of parents.",
+      "consequence": "Pupal size fell measurably as larvae per vial increased by about 25; density also affects development time and adult traits.",
+      "mitigation": ["Collect eggs from cages and dispense a fixed egg volume, or pick a fixed number of first-instar larvae (e.g., 30-50 per vial)", "Record larvae per vial"],
+      "record": ["larvae_per_vial", "egg_collection_date"],
+      "source": "Micropublication Biology 2023, doi:10.17912/micropub.biology.000959; Clancy & Kennington 2001, DIS 84:168-169; Piper & Partridge 2016, doi:10.1007/978-1-4939-6371-3_18"
+    },
+    {
+      "id": "fly_genetic_background",
+      "system": "drosophila",
+      "hazard": "Mutants and transgenics differ from controls in genetic background, not only the focal gene.",
+      "consequence": "Reported lifespan extensions (Indy, dSir2) disappeared after background standardization.",
+      "mitigation": ["Backcross at least six generations into your own control stock", "Use the right controls (both parental lines for UAS/GAL4)"],
+      "record": ["backcross_generations", "control_stock"],
+      "source": "Toivonen et al. 2007, PLoS Genet 3:e95, doi:10.1371/journal.pgen.0030095; Burnett et al. 2011, Nature 477:482-485, doi:10.1038/nature10296; Piper & Partridge 2016"
+    },
+    {
+      "id": "fly_wolbachia",
+      "system": "drosophila",
+      "hazard": "Lines differ in Wolbachia infection.",
+      "consequence": "A long-lived male phenotype vanished after tetracycline clearance.",
+      "mitigation": ["PCR-test all lines for Wolbachia", "Clear with tetracycline and allow recovery generations, or match infection status"],
+      "record": ["wolbachia_status"],
+      "source": "Toivonen et al. 2007"
+    },
+    {
+      "id": "fly_mating_and_sex",
+      "system": "drosophila",
+      "hazard": "Mating status and mixed-sex housing change lifespan and interact with diet and genotype.",
+      "consequence": "Treatment effects confounded with courtship and mating.",
+      "mitigation": ["Let flies mate for 48 h after emergence, then sort sexes", "House single-sex vials", "Avoid CO2 on newly emerged flies; use cold to collect virgins"],
+      "record": ["mating_status", "sex", "anaesthesia"],
+      "source": "Piper & Partridge 2016"
+    },
+    {
+      "id": "fly_housing_density",
+      "system": "drosophila",
+      "hazard": "Flies per vial and container size change lifespan.",
+      "consequence": "Lifespan optimum around 2-15 flies per container; larger containers shortened life even at equal density.",
+      "mitigation": ["Use a fixed number of flies per vial (10-15) and 100-150 flies per treatment", "Keep vial type and food volume constant", "Lay vials on their sides late in life"],
+      "record": ["flies_per_vial", "vial_type"],
+      "source": "Piper & Partridge 2016"
+    },
+    {
+      "id": "fly_rearing_bottle_confound",
+      "system": "drosophila",
+      "hazard": "All flies for one treatment come from one rearing bottle.",
+      "consequence": "Rearing bottle effects are confounded with treatment.",
+      "mitigation": ["One rearing bottle per replicate: each bottle supplies one vial to every treatment", "Record source bottle for each vial"],
+      "record": ["rearing_bottle"],
+      "source": "Piper & Partridge 2016"
+    },
+    {
+      "id": "fly_vial_unit",
+      "system": "drosophila",
+      "hazard": "Flies in one vial share food, microbes and microenvironment.",
+      "consequence": "For food or drug treatments, the vial is the experimental unit; flies are subsamples.",
+      "mitigation": ["Replicate vials, not just flies", "Analyse with vial as a random effect (mixed Cox or GLMM) and record deaths per vial"],
+      "record": ["vial_id"],
+      "source": "Unit logic from Lazic et al. 2018; per-vial recording from Piper & Partridge 2016"
+    },
+    {
+      "id": "fly_food_batch_incubator",
+      "system": "drosophila",
+      "hazard": "Diet quality, cook batch and incubator position differ across the experiment.",
+      "consequence": "Diet changes lifespan strongly; a batch or shelf aligned with treatment biases results.",
+      "mitigation": ["Use one food cook per transfer for all treatments", "Randomize vial positions in trays and rotate trays in the incubator by block", "Record batch and tray"],
+      "record": ["food_batch", "tray", "incubator_shelf"],
+      "source": "Piper & Partridge 2016; position-effect logic from Potvin et al. 1990"
+    }
+  ]
+}
