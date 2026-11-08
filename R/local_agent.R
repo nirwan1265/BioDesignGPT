@@ -38,6 +38,12 @@
 )
 
 .sf_systems <- list(
+  functional_validation = "validat\\w* (?:them|candidates?|genes?|in vivo)|in silico and in vivo|crispr knockouts? in|complementation in|heterologous expression|confirm them",
+  ribo_seq = "ribo-?seq|ribosome profiling|translation efficiency|translatome",
+  atac_seq = "atac-?seq|chromatin accessibility|accessible chromatin",
+  multi_omics = "gwas.*(?:rna-?seq|transcriptom|eqtl)|(?:rna-?seq|transcriptom).*gwas|eqtl|twas|coloc",
+  breeding_genetics = "diallel|nc ?ii|north carolina design|\\brils?\\b|recombinant inbred|\\bnam\\b|nested association|doubled haploid|backcross|brother-sister|sib[- ]mating|single seed descent|\\bself(?:ed|ing)?\\b.*\\bf\\d|\\bf\\d\\b.*heterozyg|introgress|inbred yet|call it inbred|treat it as inbred",
+  multi_environment = "(?:greenhouse|growth chamber|glasshouse).*(?:field)|yield stability|genotype by environment|\\bgxe\\b|\\bmet\\b",
   single_cell = "single[- ]?cell|scrna|\\bcells each\\b",
   bulk_rnaseq = "rna-?seq|transcriptom",
   metabolomics_lipidomics = "lipidomic|metabolomic|lc-?ms|gc-?ms",
@@ -214,6 +220,67 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, "\\bbatch(?:es)?\\b")) set("blocking_factors", if (.sf_has(text, "librar")) "library_batch" else "injection_batch")
   if (identical(spec$system, "drosophila") && is.null(spec$organism)) set("organism", "Drosophila melanogaster")
 
+  # round 3: populations, assays, extra organisms, environments (alias table, longest match first)
+  find_all <- function(cat) {
+    t <- .sf_alias_table()
+    t <- t[t$category == cat, ]
+    t <- t[order(-nchar(t$alias)), ]
+    hits <- list()
+    taken <- rep(FALSE, nchar(text))
+    for (i in seq_len(nrow(t))) {
+      m <- gregexpr(paste0("(?<![a-z0-9])", gsub("([.()+?*^$|\\[\\]\\\\])", "\\\\\\1", tolower(t$alias[i])), "(?![a-z0-9])"), text, perl = TRUE)[[1]]
+      for (k in seq_along(m)) {
+        if (m[k] < 0) next
+        rng <- m[k]:(m[k] + attr(m, "match.length")[k] - 1)
+        if (any(taken[rng])) next
+        taken[rng] <- TRUE
+        hits[[length(hits) + 1]] <- c(pos = m[k], term = t$canonical_term[i])
+      }
+    }
+    if (!length(hits)) return(character())
+    h <- do.call(rbind, hits)
+    unique(h[order(as.integer(h[, "pos"])), "term"])
+  }
+  sys_now <- spec$system %||% ""
+  orgs <- find_all("organism")
+  if (length(orgs) > 1 && identical(spec$system, "functional_validation")) set("organisms", orgs)
+  if (length(orgs) && identical(spec$system, "functional_validation")) set("organism", orgs[1])
+  if (sys_now %in% c("multi_omics", "ribo_seq", "atac_seq", "functional_validation", "bulk_rnaseq", "breeding_genetics")) {
+    as <- find_all("assay")
+    as <- setdiff(as, if (!sys_now %in% c("multi_omics", "functional_validation", "ribo_seq", "atac_seq")) c("rnaseq", "gwas"))
+    if (length(as)) set("assays", as)
+  }
+  if (identical(spec$system, "breeding_genetics")) {
+    mt <- find_all("mating")
+    if (length(mt)) {
+      set("population.mating", mt[1])
+      if (mt[1] %in% c("ril", "nam", "dh")) set("population.type", mt[1])
+      if (mt[1] %in% c("ril", "dh", "biparental")) set("population.parents", 2)
+    }
+    g <- regmatches(text, regexpr(paste0("(?:for|after)\\s+", .sf_num_re, "\\s+generations"), text, perl = TRUE))
+    if (length(g)) set("population.generations", .sf_num(regmatches(g, regexpr(.sf_num_re, g, perl = TRUE))))
+    fg <- regmatches(text, regexpr("(?:to|until|the|at|in) (?:the )?f(\\d+)\\b", text, perl = TRUE))
+    if (length(fg)) set("population.filial_generation", as.numeric(sub(".*f", "", fg)))
+    mf <- regmatches(text, regexec(paste0(.sf_num_re, "\\s+males and\\s+", .sf_num_re, "\\s+females"), text, perl = TRUE))[[1]]
+    if (length(mf)) set("population.parents", .sf_num(mf[2]) + .sf_num(mf[3]))
+    fo <- regmatches(text, regexec(paste0(.sf_num_re, "\\s+founders"), text, perl = TRUE))[[1]]
+    if (length(fo)) set("population.parents", .sf_num(fo[2]) + 1)
+    am <- regmatches(text, regexec(paste0("among\\s+", .sf_num_re, "\\s+"), text, perl = TRUE))[[1]]
+    if (length(am)) set("population.parents", .sf_num(am[2]))
+    if (.sf_has(text, "gca|sca|combining ability|heterosis")) {
+      set("primary_outcome.name", "gca_sca"); set("primary_outcome.type", "continuous")
+    }
+  }
+  if (identical(spec$system, "multi_environment") && .sf_has(text, "greenhouse|growth chamber|glasshouse|controlled environment") && .sf_has(text, "field")) {
+    set("environments", c("greenhouse", "field"))
+  }
+  if (identical(spec$system, "ribo_seq") && .sf_has(text, "translation(?:al)? efficiency")) {
+    set("primary_outcome.name", "translation_efficiency"); set("primary_outcome.type", "continuous")
+  }
+  if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, "yield stability")) {
+    set("primary_outcome.name", "grain_yield"); set("primary_outcome.type", "continuous")
+  }
+
   spec$question <- question
   spec
 }
@@ -248,6 +315,22 @@ extract_spec_local <- function(question) {
     cand <- c(cand, "rcbd")
   } else if (sys == "mouse") {
     cand <- c(cand, if (length(f) > 1) "factorial", "rcbd", "crd")
+  } else if (sys == "breeding_genetics") {
+    mt <- spec$population$mating %||% ""
+    q <- tolower(spec$question %||% "")
+    cand <- c(cand, if (mt == "diallel") "diallel", if (mt == "nc_design") "nc_design",
+              if (mt %in% c("nam", "ril", "dh", "biparental", "selfing", "sib_mating", "backcross") || .sf_has(q, "qtl|mapping|inbred")) "mapping_population",
+              if (!is.null(spec$design$locations)) "met_fa", "alpha")
+  } else if (sys == "multi_environment") {
+    cand <- c(cand, if (length(spec$environments) > 1 || .sf_has(tolower(spec$question %||% ""), "greenhouse|chamber")) "gh_field_validation", "met_fa", "alpha", "spatial_analysis")
+  } else if (sys == "multi_omics") {
+    cand <- c(cand, "gwas_eqtl", if ("atac_seq" %in% spec$assays) "atac_replicated", if ("ribo_seq" %in% spec$assays) "riboseq_rnaseq", "alpha")
+  } else if (sys == "ribo_seq") {
+    cand <- c(cand, "riboseq_rnaseq", "rcbd")
+  } else if (sys == "atac_seq") {
+    cand <- c(cand, "atac_replicated", "rcbd")
+  } else if (sys == "functional_validation") {
+    cand <- c(cand, "cross_species_validation", "rcbd")
   } else if (sys == "drosophila") {
     cand <- c(cand, if (identical(spec$primary_outcome$name, "lifespan") || .sf_has(tolower(spec$question %||% ""), "lifespan|diet|yeast")) "vial_lifespan", "rcbd")
   } else {
@@ -313,7 +396,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   candidates <- .sf_candidates(spec)
   designs <- lapply(candidates, lookup_design)
-  hazards <- if (!is.na(system) && system %in% c("field", "greenhouse", "growth_chamber", "mouse", "drosophila")) setup_hazards(system) else list()
+  hazards <- if (!is.na(system)) setup_hazards(system) else list()
   if (length(hazards)) {
     # most relevant first: hazards sharing words with the question
     qwords <- unique(strsplit(gsub("[^a-z ]", " ", tolower(question)), "\\s+")[[1]])

@@ -33,11 +33,11 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 
 ### Optional: trained prompt tagger
 
-A small BERT-style model (7 MB, bundled) trained on synthetic, label-correct prompts. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On 20 fresh prompts never used for tuning: rules 76% → hybrid **92%** field recall, zero invented values. Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
+A small BERT-style model (7 MB, bundled) trained on synthetic, label-correct prompts. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 84% → hybrid **87%** field recall, zero invented values (details and all test sets in training/README.md). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
 
 ```r
 studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")
-studyforge_alias("milo")   # "Sorghum bicolor" -- 427 aliases, SimItAll-style
+studyforge_alias("milo")   # "Sorghum bicolor" -- 595 aliases, SimItAll-style
 ```
 
 On the 49 paper-grounded examples the free `local` engine recovers **92% of expected spec fields**, suggests a matching design for **98%**, and fills **zero** must-ask values (it never invents effect sizes, variances or unit counts). Reproduce with `evaluate_extraction()` or `Rscript inst/scripts/eval_extraction.R`.
@@ -94,10 +94,10 @@ protocol_notes("spatial sorghum")     # what published trials actually did
 | `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
 | `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
 | `inst/shiny/studyforge` | Local Shiny app (plan, setup checks, starter layout download, StudySpec) |
-| `inst/registry/setup_hazards.json` | 38 setup hazards (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia...), each with mitigation, covariates to record and a source |
-| `inst/registry/protocol_notes.json` | Notes from the methods of 30 published studies: what they did, the numbers, the lesson |
-| `inst/registry/*.json` (other) | 15-design catalog, cited pseudoreplication rules, experimental units, systems and their questions, spec schema |
-| `inst/examples/study_examples.jsonl` | 49 prompt → expected-spec cases grounded in published studies; 28 include a full reference plan (design, layout, replication, randomization, what to record, analysis, pitfalls) and the hazards the agent must raise |
+| `inst/registry/setup_hazards.json` | 57 setup hazards (now also inbreeding, crossing, GxE, greenhouse-to-field, GWAS/eQTL, Ribo-seq, ATAC-seq, validation; (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia...), each with mitigation, covariates to record and a source |
+| `inst/registry/protocol_notes.json` | Notes from the methods of 40 published studies and standards: what they did, the numbers, the lesson |
+| `inst/registry/*.json` (other) | 24-design catalog (incl. diallel, NC designs, mapping populations, MET with FA, GWAS+eQTL, Ribo-seq, ATAC-seq, two-organism validation), cited pseudoreplication rules, experimental units, systems and their questions, spec schema |
+| `inst/examples/study_examples.jsonl` | 59 prompt → expected-spec cases grounded in published studies; 38 include a full reference plan (design, layout, replication, randomization, what to record, analysis, pitfalls) and the hazards the agent must raise |
 | `inst/scripts/eval_extraction.R` | Scores the free extractor (default) or the Ollama agent against the examples |
 
 ## Example set

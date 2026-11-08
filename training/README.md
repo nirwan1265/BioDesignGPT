@@ -16,28 +16,32 @@ learning: find the sentence families with the most errors, generate more of them
 | `generate.py` | Compositional synthetic data, 28 sentence families, hard negatives ("3 m rows", "two or three reps", "after flowering", "well-watered"), filler and case noise |
 | `train.py` | Multi-task model: token tags + system class. Tiny BERT from scratch (CPU, no downloads) or `--base allenai/scibert_scivocab_uncased` |
 | `mine_errors.py` | Per-family error on dev, writes upweighting for the next `generate.py` round |
-| `paraphrase_ollama.py` | Free local-LLM paraphrases that must keep every labelled span verbatim (others are discarded) |
+| `paraphrase_ollama.py` | Free local-LLM paraphrases in 6 writing styles; kept only if every labelled span survives verbatim and no new numbers appear; resumable, parallel |
+| `run_paraphrase_round.sh` | One command: generate -> paraphrase (Ollama) -> mix -> retrain -> score on held-out sets |
 | `train_scibert.slurm` | HPC job: 20k examples, SciBERT fine-tune, predictions on both test sets |
 | `../inst/python/` | Inference (`model.py`, `decode.py`, `predict.py`), shared by training and the R package |
 | `../data-raw/fresh_test.json` | 20 prompts written before round-2 results and never used for tuning |
 
-## Results (tiny BERT from scratch, 3 layers, 192 hidden, 7 MB, trained on CPU in ~4 min)
+## Results
 
-Field recall from `evaluate_extraction()`; "invented" = examples where a must-ask value was filled.
+Field recall from `evaluate_extraction()`; "invented" = examples where a value the user never stated (a must-ask field) was filled in.
+Current model: round 3, tiny BERT (3 layers, 192 hidden, 7.5 MB), 14,000 synthetic sentences from 40 families, 8 epochs on 2 CPUs (~9 min).
 
-| Extractor | 49 paper examples (used for error analysis) | 20 fresh prompts (untouched test) |
-|---|---|---|
-| Rules (`extract_spec_local`) | 92.1%, invented 0 | 76.0%, invented 0 |
-| Tagger alone | 82.3%, invented 4 | 83.2%, invented 1 |
-| **Hybrid** (rules first, tagger fills gaps, numbers must appear in the prompt) | **93.9%**, invented 3* | **92.0%, invented 0** |
+| Set | What it is | Rules | Model alone | **Hybrid** |
+|---|---|---|---|---|
+| 59 paper examples | Used for error analysis (development) | 91.8% | 81.3% | **93.4%** (2 invented*) |
+| fresh v1 (20) | Plants/animals; written before round 2 | 76.0% | 85.6% | **91.2%**, 0 invented |
+| fresh v2 (22) | Genetics, MET, multi-omics, validation; written before round 3 | 94.1%** | 83.1% | **97.5%**, 0 invented |
+| **fresh v3 (12)** | **Written after all code, scored once, no changes since** | 73.8% | 83.6% | **86.9%, 0 invented** |
 
-\* The remaining cases are outcomes the user actually wrote ("behavior assay", "body weight") that the labels treated as must-ask.
+\* Outcomes the user did write ("behavior assay", "body weight") that the labels treated as must-ask.
+\*\* Not a clean number: some round-3 rule patterns were written after reading v2. v3 exists because of that, and it is the honest estimate for new wording (~87%).
 
-Round 1 (5,000 examples, 19 families) scored only 65% on the 49 examples: the model memorised templates.
-Round 2 added 9 families from the error analysis, fillers and noise (8,000 examples). Because round 2 was
-designed from errors on the 49 examples, they are a development set; the 20 fresh prompts are the honest
-test. Note: the merge guards (rep counts need a replication word; outcomes must be known terms) were added
-after looking once at hybrid errors on all 69 prompts. A new, unseen set is needed for the next claim.
+History: round 1 (5k sentences, 19 families) memorised templates (65% on the paper set). Round 2 added 9 families from error analysis plus filler/noise. Round 3 added 12 families and 5 new tags
+(`GEN_N`, `PARENT_N`, `MATING`, `ASSAY`, `ENV`) for inbreeding, sib mating, backcrossing, diallel / NC II, RIL / NAM / DH populations, multi-environment trials, greenhouse-to-field validation,
+GWAS + RNA-seq/eQTL, Ribo-seq, ATAC-seq and two-organism validation.
+
+Known boundary: multi-location yield trials can be labelled `field` or `multi_environment`; in hybrid mode the rules decide.
 
 ## Reproduce
 
@@ -59,7 +63,7 @@ evaluate_extraction(function(q) merge_specs(extract_spec_local(q), P[[q]], q), f
 ## Next steps
 
 1. Fine-tune SciBERT on HPC (`sbatch training/train_scibert.slurm`); its pretraining knows words the tiny model has never seen ("von Frey", "bay", strain names).
-2. Run `paraphrase_ollama.py` to add natural variation, then another `mine_errors.py` round.
+2. Run `bash training/run_paraphrase_round.sh` on a machine with Ollama (needs downloads, so it cannot run in the Claude sandbox), then another `mine_errors.py` round.
 3. Collect 50-100 prompts written by labmates, label them once, and keep them as the permanent test set.
 4. Export to ONNX for an in-browser version (transformers.js) so nothing needs installing.
 5. Mine more papers: each methods section becomes a realistic test prompt and, where needed, a new template family.

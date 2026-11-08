@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "designs": [
     {
       "id": "crd",
@@ -311,6 +311,187 @@
       ],
       "example_sources": [
         "10.1007/978-1-4939-6371-3_18"
+      ]
+    },
+    {
+      "id": "diallel",
+      "name": "Diallel mating design (Griffing methods 1-4)",
+      "engine": "cross list: all pairs (+/- reciprocals, selfs); field test in alpha/RCBD",
+      "requires": [
+        "parents"
+      ],
+      "use_when": "Estimate general and specific combining ability (GCA/SCA) among a modest number of parents (about 5-12).",
+      "strength": "Every parent combination; separates additive (GCA) and non-additive (SCA) effects.",
+      "tradeoff": "Crosses grow as p(p-1)/2; reciprocals double it; usually limited to fixed parents.",
+      "model": "y ~ GCA_i + GCA_j + SCA_ij + env + rep(env)",
+      "systems": [
+        "breeding_genetics"
+      ],
+      "example_sources": [
+        "Griffing 1956, Aust J Biol Sci 9:463-493"
+      ]
+    },
+    {
+      "id": "nc_design",
+      "name": "North Carolina designs (NC I, NC II)",
+      "engine": "cross list + hierarchical (NC I) or factorial males x females (NC II)",
+      "requires": [
+        "males",
+        "females"
+      ],
+      "use_when": "Estimate additive and dominance variance with more parents than a diallel allows; NC II for heterotic groups (males x females).",
+      "strength": "Scales to many parents; NC II gives GCA for both sexes/groups.",
+      "tradeoff": "Needs controlled pollination; many crosses to test across environments.",
+      "model": "y ~ (1|male) + (1|female) + (1|male:female) + env",
+      "systems": [
+        "breeding_genetics"
+      ],
+      "example_sources": [
+        "Comstock & Robinson 1948, Biometrics 4:254-266"
+      ]
+    },
+    {
+      "id": "mapping_population",
+      "name": "Biparental / multiparental mapping population (F2, RIL, NAM, MAGIC)",
+      "engine": "population plan + field design (alpha) for phenotyping",
+      "requires": [
+        "parents",
+        "lines_per_family",
+        "generations"
+      ],
+      "use_when": "QTL mapping or combined linkage-association mapping.",
+      "strength": "Known pedigree; NAM combines linkage power with association resolution.",
+      "tradeoff": "Years of selfing; segregation distortion and residual heterozygosity.",
+      "model": "y ~ family + QTL + (1|line) + design terms",
+      "systems": [
+        "breeding_genetics"
+      ],
+      "example_sources": [
+        "10.1534/genetics.107.074245"
+      ]
+    },
+    {
+      "id": "met_fa",
+      "name": "Multi-environment trial with factor-analytic GxE model",
+      "engine": "make_design('alpha') per environment + mixed model FA(k)",
+      "requires": [
+        "entries",
+        "environments",
+        "reps"
+      ],
+      "use_when": "Same entries in several locations/years; interest in stability and GxE.",
+      "strength": "Models environment-specific variances and genetic correlations.",
+      "tradeoff": "Needs enough environments (>= 5-6) for FA structures; complex fitting.",
+      "model": "y ~ env + (1|env:rep) + FA(env):genotype",
+      "systems": [
+        "field",
+        "multi_environment"
+      ],
+      "example_sources": [
+        "Smith, Cullis & Thompson 2001, Biometrics 57:1138-1147"
+      ]
+    },
+    {
+      "id": "gh_field_validation",
+      "name": "Controlled-environment screen validated in the field",
+      "engine": "greenhouse RCBD/alpha + field MET on overlapping and independent genotypes",
+      "requires": [
+        "genotypes",
+        "greenhouse_reps",
+        "field_environments"
+      ],
+      "use_when": "A cheap early greenhouse trait is proposed to predict field performance.",
+      "strength": "Tests transferability directly.",
+      "tradeoff": "Pot conditions differ from field; small genotype sets give unstable correlations.",
+      "model": "cor(BLUP_gh, BLUP_field) with CI; or bivariate mixed model",
+      "systems": [
+        "multi_environment",
+        "greenhouse",
+        "field"
+      ],
+      "example_sources": [
+        "10.3389/fpls.2018.00587"
+      ]
+    },
+    {
+      "id": "gwas_eqtl",
+      "name": "GWAS + expression (eQTL/TWAS/colocalization) on one diversity panel",
+      "engine": "panel phenotyping (alpha/MET) + RNA-seq of one tissue/time per genotype",
+      "requires": [
+        "genotypes",
+        "tissues",
+        "timepoint"
+      ],
+      "use_when": "Link trait associations to genes via expression.",
+      "strength": "Prioritises causal genes; colocalization tests a shared variant.",
+      "tradeoff": "Expression is tissue/time specific; needs hundreds of genotypes for eQTL power.",
+      "model": "GWAS: y ~ SNP + Q + (1|K); eQTL per gene; coloc / TWAS",
+      "systems": [
+        "multi_omics"
+      ],
+      "example_sources": [
+        "10.1038/ng1702",
+        "10.1371/journal.pgen.1004383",
+        "10.1038/ng.3506"
+      ]
+    },
+    {
+      "id": "riboseq_rnaseq",
+      "name": "Ribo-seq with matched RNA-seq",
+      "engine": "crd/rcbd on conditions; split each lysate into footprint and mRNA libraries",
+      "requires": [
+        "conditions",
+        "reps"
+      ],
+      "use_when": "Translation efficiency or translational regulation between conditions.",
+      "strength": "Separates transcriptional from translational change.",
+      "tradeoff": "Low input yields, rRNA contamination, arrest artifacts.",
+      "model": "footprints ~ condition * assay (xtail / RiboDiff / anota)",
+      "systems": [
+        "ribo_seq",
+        "multi_omics"
+      ],
+      "example_sources": [
+        "10.1016/j.csbj.2018.04.001",
+        "10.1126/science.1168978"
+      ]
+    },
+    {
+      "id": "atac_replicated",
+      "name": "Replicated ATAC-seq (with matched RNA-seq)",
+      "engine": "rcbd with nuclei-prep day as block",
+      "requires": [
+        "conditions",
+        "reps"
+      ],
+      "use_when": "Differential chromatin accessibility or regulatory region discovery.",
+      "strength": "Maps accessible regions with low input.",
+      "tradeoff": "Organellar reads in plants; Tn5 bias; needs IDR-reproducible peaks.",
+      "model": "counts ~ condition + prep_day (DESeq2/edgeR on consensus peaks)",
+      "systems": [
+        "atac_seq",
+        "multi_omics"
+      ],
+      "example_sources": [
+        "10.1093/nar/gkw1179",
+        "10.1038/nmeth.2688"
+      ]
+    },
+    {
+      "id": "cross_species_validation",
+      "name": "Two-organism functional validation",
+      "engine": "per organism: rcbd/crd with independent alleles and sibling controls",
+      "requires": [
+        "candidates",
+        "organisms",
+        "alleles_per_gene"
+      ],
+      "use_when": "Confirm a candidate gene's function in the crop and a model organism (e.g., sorghum + Arabidopsis, or mouse + fly).",
+      "strength": "Two independent systems make an artefact unlikely.",
+      "tradeoff": "Orthologs may differ in function; transformation is slow in many crops.",
+      "model": "phenotype ~ allele + (1|line) + block, per organism",
+      "systems": [
+        "functional_validation"
       ]
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "systems": [
     {
       "id": "field",
@@ -132,6 +132,94 @@
       ],
       "reporting_checklist": "Minimal lifespan reporting (SurvCurv)",
       "guidance": "100-150 flies per treatment as 10-15 per vial; backcross >=6 generations (Piper & Partridge 2016, doi:10.1007/978-1-4939-6371-3_18)."
+    },
+    {
+      "id": "breeding_genetics",
+      "consequential_questions": [
+        "What population: inbred panel, F2, RILs (SSD), NAM, backcross, diallel, North Carolina design, or sib-mated animal lines?",
+        "How many parents/founders, and how many generations of selfing or sib mating are planned?",
+        "Goal: estimate additive vs dominance variance (GCA/SCA), map QTL, or fix lines?",
+        "Pollination control: bagging, isolation distance, emasculation, outcrossing rate?",
+        "Seed source and maternal effects: are all parents grown in one environment before crossing?"
+      ],
+      "default_blocking": [
+        "location",
+        "rep",
+        "cross_batch"
+      ],
+      "guidance": "Inbreeding under selfing: F_t = 1 - (1/2)^t after t selfing generations (F6 ~ 0.97). Brother-sister mating needs ~20 generations for an inbred mouse strain (F ~ 0.986). (Falconer & Mackay 1996)"
+    },
+    {
+      "id": "multi_environment",
+      "consequential_questions": [
+        "Which environments (locations x years x managements), and are they chosen to represent the target population of environments?",
+        "Same entries in every environment, or partially overlapping sets?",
+        "Is the greenhouse/chamber trait meant to predict field performance? Which field trait and environments validate it?",
+        "Will environmental covariates (weather, soil, water input) be recorded for each environment?"
+      ],
+      "default_blocking": [
+        "environment",
+        "rep",
+        "incomplete_block"
+      ],
+      "guidance": "Analyse METs with a mixed model and factor-analytic GxE structure (Smith, Cullis & Thompson 2001); validate controlled-environment traits on independent field genotypes (Peirone et al. 2018)."
+    },
+    {
+      "id": "multi_omics",
+      "consequential_questions": [
+        "Which layers (GWAS, RNA-seq/eQTL, ATAC, Ribo-seq, metabolomics) and on the same individuals/tissue/time?",
+        "How many genotypes for the eQTL/GWAS part (power) vs how many replicates for the differential part?",
+        "Integration method: colocalization, TWAS, Mendelian randomization, or overlap of peaks and variants?",
+        "Are sampling date, time of day and tissue matched across layers?"
+      ],
+      "default_blocking": [
+        "harvest_day",
+        "library_batch",
+        "sequencing_lane"
+      ],
+      "guidance": "Correct GWAS for population structure and kinship (Q+K mixed model, Yu et al. 2006); integrate with colocalization or TWAS rather than nearest-gene overlap."
+    },
+    {
+      "id": "ribo_seq",
+      "consequential_questions": [
+        "Is matched RNA-seq from the same lysate planned (needed for translation efficiency)?",
+        "How will translation be arrested: flash freezing vs cycloheximide (initiation-site artifacts)?",
+        "Nuclease, footprint size window and rRNA depletion strategy for your organism?",
+        "Biological replicates per condition?"
+      ],
+      "default_blocking": [
+        "harvest_day",
+        "library_batch"
+      ],
+      "guidance": "Translation efficiency = footprints / mRNA, so matched RNA-seq is required; expect heavy rRNA contamination without depletion (Eastman et al. 2018; Ingolia et al. 2009)."
+    },
+    {
+      "id": "atac_seq",
+      "consequential_questions": [
+        "Tissue and nuclei isolation method (crude, FANS sorting, INTACT)?",
+        "Biological replicates (>= 2) and target depth?",
+        "In plants: expected chloroplast/mitochondrial read fraction and how you will reduce it?",
+        "Comparison design: conditions/genotypes, and matched RNA-seq?"
+      ],
+      "default_blocking": [
+        "nuclei_prep_day",
+        "library_batch"
+      ],
+      "guidance": "ENCODE: >=2 biological replicates, ~25M non-duplicate non-mito fragments, FRiP > 0.3, IDR reproducibility. Plants: crude nuclei gave ~50% organellar reads; FANS reduced it (Lu et al. 2017)."
+    },
+    {
+      "id": "functional_validation",
+      "consequential_questions": [
+        "What is the candidate evidence (GWAS hit, eQTL, ATAC peak) and how many candidates?",
+        "Validation route in each organism: CRISPR knockout, mutant alleles, overexpression, complementation, heterologous expression?",
+        "Are there at least two independent alleles/lines per gene and the right controls (empty vector, wild-type siblings, azygous segregants)?",
+        "In silico steps first: orthology, expression in the relevant tissue, colocalization, predicted variant effect?"
+      ],
+      "default_blocking": [
+        "transformation_batch",
+        "generation"
+      ],
+      "guidance": "Validate with independent alleles and sibling controls; an in silico prediction prioritises but does not validate (design logic; Kaelin 2017 on validation pitfalls)."
     }
   ]
 }

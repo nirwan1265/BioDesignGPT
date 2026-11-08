@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Notes taken from the methods of published studies: what they actually did, the numbers, and the lesson for design. Paraphrased; see the DOI for details.",
   "notes": [
     {
@@ -7,270 +7,650 @@
       "system": "field",
       "citation": "Enyew et al. 2022, Front Plant Sci 13:999692",
       "doi": "10.3389/fpls.2022.999692",
-      "did": ["324 sorghum accessions at 3 Ethiopian sites in one season", "Alpha-lattice, 12 incomplete blocks of 27 plots, 2 reps per site", "Single 3 m rows, 0.75 m apart, thinned to 0.2 m", "Five tagged plants per plot measured", "Combined ANOVA and BLUPs by REML"],
+      "did": [
+        "324 sorghum accessions at 3 Ethiopian sites in one season",
+        "Alpha-lattice, 12 incomplete blocks of 27 plots, 2 reps per site",
+        "Single 3 m rows, 0.75 m apart, thinned to 0.2 m",
+        "Five tagged plants per plot measured",
+        "Combined ANOVA and BLUPs by REML"
+      ],
       "lesson": "Block size 27 divides 324 evenly; tagged plants are subsamples averaged per plot.",
-      "tags": ["alpha", "gwas", "sorghum", "multi-location"]
+      "tags": [
+        "alpha",
+        "gwas",
+        "sorghum",
+        "multi-location"
+      ]
     },
     {
       "id": "chakrabarty2021_unreplicated",
       "system": "field",
       "citation": "Chakrabarty et al. 2021, Front Plant Sci 12:772177",
       "doi": "10.3389/fpls.2021.772177",
-      "did": ["330 sorghum lines in 6 environments (cold vs control sites)", "Lines split into 3 height groups, each group planted as its own adjacent block", "Unreplicated plots within each environment", "Five bagged panicles per plot treated as biological replicates"],
+      "did": [
+        "330 sorghum lines in 6 environments (cold vs control sites)",
+        "Lines split into 3 height groups, each group planted as its own adjacent block",
+        "Unreplicated plots within each environment",
+        "Five bagged panicles per plot treated as biological replicates"
+      ],
       "lesson": "Grouping by height limits shading between neighbours; but panicles within a plot are subsamples, so environments or checks must provide error.",
-      "tags": ["height_grouping", "unreplicated", "pseudoreplication"]
+      "tags": [
+        "height_grouping",
+        "unreplicated",
+        "pseudoreplication"
+      ]
     },
     {
       "id": "bhattarai2020_split",
       "system": "field",
       "citation": "Bhattarai et al. 2020, Crop Sci 60:2167-2179",
       "doi": "10.1002/csc2.20171",
-      "did": ["Split-plot, 4 reps, 2 years, Texas High Plains", "Main plots: 3 irrigation levels (50, 200, 350 mm)", "Subplots: 5 forage cultivars (corn, 2 BMR sorghums, 2 BMR pearl millets)"],
+      "did": [
+        "Split-plot, 4 reps, 2 years, Texas High Plains",
+        "Main plots: 3 irrigation levels (50, 200, 350 mm)",
+        "Subplots: 5 forage cultivars (corn, 2 BMR sorghums, 2 BMR pearl millets)"
+      ],
       "lesson": "Irrigation applied by system to whole plots belongs on the main plot; its test has few df.",
-      "tags": ["split", "irrigation"]
+      "tags": [
+        "split",
+        "irrigation"
+      ]
     },
     {
       "id": "velazco2017_sorghum_spats",
       "system": "field",
       "citation": "Velazco et al. 2017, Theor Appl Genet 130:1375-1392",
       "doi": "10.1007/s00122-017-2894-4",
-      "did": ["21 sorghum hybrid trials at 12 locations in eastern Australia", "Resolvable p-rep designs: ~30% of test hybrids replicated twice, 70% once; 10 checks with extra replication", "Trials of 34-86 rows by 20-40 columns (880-1760 plots), plots of two rows", "3-29% missing plots per trial", "SpATS 2-D P-spline model vs best AR1xAR1-type models"],
+      "did": [
+        "21 sorghum hybrid trials at 12 locations in eastern Australia",
+        "Resolvable p-rep designs: ~30% of test hybrids replicated twice, 70% once; 10 checks with extra replication",
+        "Trials of 34-86 rows by 20-40 columns (880-1760 plots), plots of two rows",
+        "3-29% missing plots per trial",
+        "SpATS 2-D P-spline model vs best AR1xAR1-type models"
+      ],
       "lesson": "Spatial models reduced residual variance 49% (yield) and 22% (height); one general SpATS model worked for every trial.",
-      "tags": ["prep", "spatial", "sorghum", "spats"]
+      "tags": [
+        "prep",
+        "spatial",
+        "sorghum",
+        "spats"
+      ]
     },
     {
       "id": "leiser2012_lowinput",
       "system": "field",
       "citation": "Leiser et al. 2012, J Agron Crop Sci",
       "doi": "10.1111/j.1439-037X.2012.00529.x",
-      "did": ["17 trials with 70 sorghum genotypes in Mali, low and high P", "Intensive soil sampling showed plant-available P CV of 39.4% within a field", "Compared RCB, lattice and AR1/AR2 spatial models"],
+      "did": [
+        "17 trials with 70 sorghum genotypes in Mali, low and high P",
+        "Intensive soil sampling showed plant-available P CV of 39.4% within a field",
+        "Compared RCB, lattice and AR1/AR2 spatial models"
+      ],
       "lesson": "Spatial models raised yield heritability ~10 points over RCB and 6 over lattice; block placement and orientation matter.",
-      "tags": ["spatial", "soil", "low_input", "sorghum"]
+      "tags": [
+        "spatial",
+        "soil",
+        "low_input",
+        "sorghum"
+      ]
     },
     {
       "id": "cursi2021_eca",
       "system": "field",
       "citation": "Cursi et al. 2021, Front Plant Sci 12:749533",
       "doi": "10.3389/fpls.2021.749533",
-      "did": ["Sugarcane first breeding stage, ~440 families at 2 sites", "Incomplete blocks with 2 commercial checks in every block", "Soil grid of 7-8.6 points/ha, 17 soil variables reduced by PCA", "EM38 ECa at two depths ~30 days after planting, >10,000 readings per site", "Models: baseline, +covariate, AR1xAR1, AR1xAR1 + covariate"],
+      "did": [
+        "Sugarcane first breeding stage, ~440 families at 2 sites",
+        "Incomplete blocks with 2 commercial checks in every block",
+        "Soil grid of 7-8.6 points/ha, 17 soil variables reduced by PCA",
+        "EM38 ECa at two depths ~30 days after planting, >10,000 readings per site",
+        "Models: baseline, +covariate, AR1xAR1, AR1xAR1 + covariate"
+      ],
       "lesson": "AR1xAR1 gave most of the gain on sandy soil (H2 0.35 to 0.72); ECa added a little more.",
-      "tags": ["covariate", "eca", "spatial"]
+      "tags": [
+        "covariate",
+        "eca",
+        "spatial"
+      ]
     },
     {
       "id": "gilmour1997_extraneous",
       "system": "field",
       "citation": "Gilmour, Cullis & Verbyla 1997, JABES 2:269-293",
       "doi": "10.2307/1400446",
-      "did": ["Separated global trend, local (natural) spatial variation and extraneous variation from field procedures aligned with rows/columns", "Model selection with residual plots, variograms and likelihood ratio tests"],
+      "did": [
+        "Separated global trend, local (natural) spatial variation and extraneous variation from field procedures aligned with rows/columns",
+        "Model selection with residual plots, variograms and likelihood ratio tests"
+      ],
       "lesson": "No single model fits all trials, but separable autoregressive (AR1xAR1) structures usually dominate; record operations by row and column.",
-      "tags": ["spatial", "ar1", "management"]
+      "tags": [
+        "spatial",
+        "ar1",
+        "management"
+      ]
     },
     {
       "id": "hanks1980_line_source",
       "system": "field",
       "citation": "Hanks et al. 1980, Soil Sci Soc Am J 44:886-888 (via agridat::hanks.sprinkler)",
       "doi": null,
-      "did": ["Line-source sprinkler down the middle of the trial; 6 irrigation levels on each side", "3 wheat genotypes in 3 blocks; subplots at increasing distance from the line", "Analysis with correlated subplots (Toeplitz) and block x irrigation terms"],
+      "did": [
+        "Line-source sprinkler down the middle of the trial; 6 irrigation levels on each side",
+        "3 wheat genotypes in 3 blocks; subplots at increasing distance from the line",
+        "Analysis with correlated subplots (Toeplitz) and block x irrigation terms"
+      ],
       "lesson": "When water level is set by distance from a line, it cannot be randomized; model the correlation along the gradient.",
-      "tags": ["line_source", "irrigation", "gradient"]
+      "tags": [
+        "line_source",
+        "irrigation",
+        "gradient"
+      ]
     },
     {
       "id": "buchse_border",
       "system": "field",
       "citation": "Büchse, GCIRC Bulletin 18 (oilseed rape variety trials, 1992-1999 data)",
       "doi": null,
-      "did": ["Measured interplot interference between tall and short oilseed rape varieties", "Compared single-width, core-harvest and double-width plots"],
+      "did": [
+        "Measured interplot interference between tall and short oilseed rape varieties",
+        "Compared single-width, core-harvest and double-width plots"
+      ],
       "lesson": "Interference biased yield up to ~5%; harvest plot centres or use double-width plots, and group varieties by height/type.",
-      "tags": ["border", "competition", "plot_size"]
+      "tags": [
+        "border",
+        "competition",
+        "plot_size"
+      ]
     },
     {
       "id": "carroll2024_soil_ml",
       "system": "field",
       "citation": "Carroll et al. 2024, Crop Sci 64:3135-3152",
       "doi": "10.1002/csc2.21336",
-      "did": ["Unreplicated soybean progeny rows and preliminary yield trials at 3-5 locations", "About 10 checks per field, each replicated ~46 times", "Compared moving means (5x5), P-splines, and soil-map-based machine learning adjustment"],
+      "did": [
+        "Unreplicated soybean progeny rows and preliminary yield trials at 3-5 locations",
+        "About 10 checks per field, each replicated ~46 times",
+        "Compared moving means (5x5), P-splines, and soil-map-based machine learning adjustment"
+      ],
       "lesson": "Relative efficiencies: moving means 116%, P-splines 168%, field-specific soil ML 181%; checks are what make precision measurable.",
-      "tags": ["unreplicated", "checks", "spatial", "soil"]
+      "tags": [
+        "unreplicated",
+        "checks",
+        "spatial",
+        "soil"
+      ]
     },
     {
       "id": "technow_moving_grid",
       "system": "field",
       "citation": "Technow, mvngGrAd R package vignette",
       "doi": null,
-      "did": ["Moving-grid covariate = mean of neighbouring entries in a user-defined grid", "Adjust each entry by regression on its grid mean"],
+      "did": [
+        "Moving-grid covariate = mean of neighbouring entries in a user-defined grid",
+        "Adjust each entry by regression on its grid mean"
+      ],
       "lesson": "Valid only if entries are randomly allocated (no family blocks) and an entry does not influence its own covariate; skip if neighbour competition makes the correlation negative.",
-      "tags": ["moving_grid", "unreplicated"]
+      "tags": [
+        "moving_grid",
+        "unreplicated"
+      ]
     },
     {
       "id": "hartung2019_greenhouse",
       "system": "greenhouse",
       "citation": "Hartung et al. 2019, Plant Methods 15:143",
       "doi": "10.1186/s13007-019-0527-4",
-      "did": ["80 Mitscherlich pots of barley on 4 tables (2 rows x 10 pots each), 20 plants per pot", "Compared pot re-arrangement vs fixed-position block designs on a known north-south gradient", "Superimposed 20 virtual treatments, 200 randomizations per design"],
+      "did": [
+        "80 Mitscherlich pots of barley on 4 tables (2 rows x 10 pots each), 20 plants per pot",
+        "Compared pot re-arrangement vs fixed-position block designs on a known north-south gradient",
+        "Superimposed 20 virtual treatments, 200 randomizations per design"
+      ],
       "lesson": "Fixed positions with blocks across the gradient beat re-arrangement; alpha design with blocks of 4 pots was best.",
-      "tags": ["greenhouse", "alpha", "rotation", "gradient"]
+      "tags": [
+        "greenhouse",
+        "alpha",
+        "rotation",
+        "gradient"
+      ]
     },
     {
       "id": "brien2013_smarthouse",
       "system": "greenhouse",
       "citation": "Brien et al. 2013, Plant Methods 9:5",
       "doi": "10.1186/1746-4811-9-5",
-      "did": ["Wheat germinated in a greenhouse (6 rows x 48 columns) then moved to a conveyor Smarthouse (zones of 3 lanes x 24 positions)", "Compared fixed benches, fixed carts, and two cart rotation schemes", "Re-analysed three multiline experiments"],
+      "did": [
+        "Wheat germinated in a greenhouse (6 rows x 48 columns) then moved to a conveyor Smarthouse (zones of 3 lanes x 24 positions)",
+        "Compared fixed benches, fixed carts, and two cart rotation schemes",
+        "Re-analysed three multiline experiments"
+      ],
       "lesson": "Small east-west and large north-south trends; rotation reduced trend but raised error; use small blocks or trend-free designs with trend terms.",
-      "tags": ["greenhouse", "conveyor", "two_phase", "rotation"]
+      "tags": [
+        "greenhouse",
+        "conveyor",
+        "two_phase",
+        "rotation"
+      ]
     },
     {
       "id": "poorter2012_growing_plants",
       "system": "greenhouse",
       "citation": "Poorter et al. 2012, Funct Plant Biol 39:821-838",
       "doi": "10.1071/FP12028",
-      "did": ["Review of practical plant-growing pitfalls across chambers, greenhouses and gardens"],
+      "did": [
+        "Review of practical plant-growing pitfalls across chambers, greenhouses and gardens"
+      ],
       "lesson": "Pot too small above ~2 g dry mass per litre; light falls 20-50% near walls; measure light every 2 weeks; water to weight; cold water can cut growth 20-30%; SD of ln(dry mass) >0.6 means very variable plants.",
-      "tags": ["pot_size", "light", "watering", "replication"]
+      "tags": [
+        "pot_size",
+        "light",
+        "watering",
+        "replication"
+      ]
     },
     {
       "id": "potvin1990_chambers",
       "system": "growth_chamber",
       "citation": "Potvin et al. 1990, Can J Bot 68:499-504",
       "doi": null,
-      "did": ["Uniformity trials with bean and maize in two identical Conviron chambers over repeated runs", "Plants arranged in blocks within chambers"],
+      "did": [
+        "Uniformity trials with bean and maize in two identical Conviron chambers over repeated runs",
+        "Plants arranged in blocks within chambers"
+      ],
       "lesson": "Chambers and runs differed; corner blocks grew worst; block position explained ~10-30% of height variance. Replicate chambers and time; block within chambers; leave corners as guards.",
-      "tags": ["chamber", "uniformity", "corners"]
+      "tags": [
+        "chamber",
+        "uniformity",
+        "corners"
+      ]
     },
     {
       "id": "porter2015_chamber_effect",
       "system": "growth_chamber",
       "citation": "Porter et al. 2015, Plant Methods 11",
       "doi": "10.1186/s13007-015-0088-0",
-      "did": ["Broad bean, 10 plants in each of 8 walk-in chambers set identically for 35 days", "Bulbs replaced and chambers cleaned beforehand; spectra checked", "Measured fresh weight, flowers, gas exchange, fluorescence, d13C"],
+      "did": [
+        "Broad bean, 10 plants in each of 8 walk-in chambers set identically for 35 days",
+        "Bulbs replaced and chambers cleaned beforehand; spectra checked",
+        "Measured fresh weight, flowers, gas exchange, fluorescence, d13C"
+      ],
       "lesson": "4 of 8 chambers showed effects; 2 traced to faults (CO2 analyser, corrosion). Run a uniformity pilot; fresh weight and flower count detect effects cheaply.",
-      "tags": ["chamber", "pilot", "equipment"]
+      "tags": [
+        "chamber",
+        "pilot",
+        "equipment"
+      ]
     },
     {
       "id": "massonnet2010_ten_labs",
       "system": "growth_chamber",
       "citation": "Massonnet et al. 2010, Plant Physiol 152:2142-2157",
       "doi": "10.1104/pp.109.148338",
-      "did": ["3 Arabidopsis accessions grown in 10 labs with a standardized protocol", "Leaf growth, metabolites and transcriptomes compared"],
+      "did": [
+        "3 Arabidopsis accessions grown in 10 labs with a standardized protocol",
+        "Leaf growth, metabolites and transcriptomes compared"
+      ],
       "lesson": "A core of labs matched; others changed rankings. Light quality and handling explained much of it.",
-      "tags": ["reproducibility", "arabidopsis"]
+      "tags": [
+        "reproducibility",
+        "arabidopsis"
+      ]
     },
     {
       "id": "festing2002_guidelines",
       "system": "mouse",
       "citation": "Festing & Altman 2002, ILAR J 43:244-258",
       "doi": "10.1093/ilar.43.4.244",
-      "did": ["Guidelines: define the experimental unit, randomize, block, record husbandry, size by power analysis"],
+      "did": [
+        "Guidelines: define the experimental unit, randomize, block, record husbandry, size by power analysis"
+      ],
       "lesson": "Never start without an analysis plan; use randomized block designs to absorb batch and time effects.",
-      "tags": ["mouse", "guidelines"]
+      "tags": [
+        "mouse",
+        "guidelines"
+      ]
     },
     {
       "id": "shaw2002_factorial",
       "system": "mouse",
       "citation": "Shaw et al. 2002, ILAR J 43:223-232",
       "doi": "10.1093/ilar.43.4.223",
-      "did": ["Factorial designs over sex, strain, age and protocol factors in drug discovery"],
+      "did": [
+        "Factorial designs over sex, strain, age and protocol factors in drug discovery"
+      ],
       "lesson": "Factorials find conditions that maximise sensitivity and reduce animal use compared with one-factor-at-a-time.",
-      "tags": ["mouse", "factorial"]
+      "tags": [
+        "mouse",
+        "factorial"
+      ]
     },
     {
       "id": "arifin2017_resource_equation",
       "system": "mouse",
       "citation": "Arifin & Zahiruddin 2017, Malays J Med Sci 24:101-105",
       "doi": "10.21315/mjms2017.24.5.11",
-      "did": ["Reformulated the resource equation for one-way, repeated-measures and other ANOVA designs"],
+      "did": [
+        "Reformulated the resource equation for one-way, repeated-measures and other ANOVA designs"
+      ],
       "lesson": "When SD is unknown, keep error df between 10 and 20; for k groups, n per group from 10/k + 1 to 20/k + 1 (round up).",
-      "tags": ["mouse", "sample_size"]
+      "tags": [
+        "mouse",
+        "sample_size"
+      ]
     },
     {
       "id": "mccafferty2013_cage",
       "system": "mouse",
       "citation": "McCafferty et al. 2013, ISME J 7:2116-2125",
       "doi": "10.1038/ismej.2013.106",
-      "did": ["Germ-free mice moved to SPF, gavaged or colonized from the cage, followed 8 weeks by 16S sequencing"],
+      "did": [
+        "Germ-free mice moved to SPF, gavaged or colonized from the cage, followed 8 weeks by 16S sequencing"
+      ],
       "lesson": "Cage effects took weeks to develop and were not removed by a common gavage; cage must be in the design.",
-      "tags": ["mouse", "cage", "microbiome"]
+      "tags": [
+        "mouse",
+        "cage",
+        "microbiome"
+      ]
     },
     {
       "id": "lazic2018_whatisN",
       "system": "mouse",
       "citation": "Lazic, Clarke-Williams & Munafò 2018, PLoS Biol 16:e2005282",
       "doi": "10.1371/journal.pbio.2005282",
-      "did": ["Surveyed published parent-treated animal experiments 2011-2016"],
+      "did": [
+        "Surveyed published parent-treated animal experiments 2011-2016"
+      ],
       "lesson": "22% replicated the correct unit, 46% pseudoreplicated; distinguish biological, experimental and observational units.",
-      "tags": ["mouse", "litter", "unit"]
+      "tags": [
+        "mouse",
+        "litter",
+        "unit"
+      ]
     },
     {
       "id": "kappel2017_housing",
       "system": "mouse",
       "citation": "Kappel, Hawkins & Mendl 2017, Animals 7:88",
       "doi": "10.3390/ani7120088",
-      "did": ["Review plus survey on group vs single housing of male mice"],
+      "did": [
+        "Review plus survey on group vs single housing of male mice"
+      ],
       "lesson": "No universal answer; depends on strain, age, rank and husbandry. Decide and justify housing up front.",
-      "tags": ["mouse", "housing"]
+      "tags": [
+        "mouse",
+        "housing"
+      ]
     },
     {
       "id": "sorge2014_experimenter",
       "system": "mouse",
       "citation": "Sorge et al. 2014, Nat Methods 11:629-632",
       "doi": "10.1038/nmeth.2935",
-      "did": ["Pain assays in mice and rats with male vs female experimenters, worn T-shirts and male odours"],
+      "did": [
+        "Pain assays in mice and rats with male vs female experimenters, worn T-shirts and male odours"
+      ],
       "lesson": "Male experimenters caused stress-induced analgesia; experimenter is a variable to control and record.",
-      "tags": ["mouse", "behaviour", "experimenter"]
+      "tags": [
+        "mouse",
+        "behaviour",
+        "experimenter"
+      ]
     },
     {
       "id": "garcia2021_sex",
       "system": "mouse",
       "citation": "Garcia-Sifuentes & Maney 2021, eLife 10:e70817",
       "doi": "10.7554/eLife.70817",
-      "did": ["Audited 147 articles for sex-difference claims"],
+      "did": [
+        "Audited 147 articles for sex-difference claims"
+      ],
       "lesson": "Sex-specific effects were often claimed without testing the interaction; pooling without testing can mask differences.",
-      "tags": ["mouse", "sex"]
+      "tags": [
+        "mouse",
+        "sex"
+      ]
     },
     {
       "id": "piper2016_fly_lifespan",
       "system": "drosophila",
       "citation": "Piper & Partridge 2016, Methods Mol Biol 1478:291-302",
       "doi": "10.1007/978-1-4939-6371-3_18",
-      "did": ["Egg collection from cages; standard larval density by fixed egg volume or picking 30-50 larvae", "Mate 48 h after emergence, then sort sexes under light CO2", "25 C, 65% humidity, 12:12 LD; transfer every 2-3 days, score deaths and censors", "100-150 flies per treatment as 10-15 per vial", "One rearing bottle per replicate vial, allocated across treatments", "Backcross 6 generations into the lab's own control stock"],
+      "did": [
+        "Egg collection from cages; standard larval density by fixed egg volume or picking 30-50 larvae",
+        "Mate 48 h after emergence, then sort sexes under light CO2",
+        "25 C, 65% humidity, 12:12 LD; transfer every 2-3 days, score deaths and censors",
+        "100-150 flies per treatment as 10-15 per vial",
+        "One rearing bottle per replicate vial, allocated across treatments",
+        "Backcross 6 generations into the lab's own control stock"
+      ],
       "lesson": "Small protocol changes (diet, density, mating, background) can create apparent lifespan effects.",
-      "tags": ["drosophila", "lifespan", "protocol"]
+      "tags": [
+        "drosophila",
+        "lifespan",
+        "protocol"
+      ]
     },
     {
       "id": "toivonen2007_indy",
       "system": "drosophila",
       "citation": "Toivonen et al. 2007, PLoS Genet 3:e95",
       "doi": "10.1371/journal.pgen.0030095",
-      "did": ["Re-tested Indy mutants in inbred and outbred backgrounds", "Cleared Wolbachia with tetracycline"],
+      "did": [
+        "Re-tested Indy mutants in inbred and outbred backgrounds",
+        "Cleared Wolbachia with tetracycline"
+      ],
       "lesson": "The lifespan extension came from an X-linked background locus and Wolbachia, not Indy.",
-      "tags": ["drosophila", "background", "wolbachia"]
+      "tags": [
+        "drosophila",
+        "background",
+        "wolbachia"
+      ]
     },
     {
       "id": "burnett2011_sir2",
       "system": "drosophila",
       "citation": "Burnett et al. 2011, Nature 477:482-485",
       "doi": "10.1038/nature10296",
-      "did": ["Re-tested dSir2 overexpression with UAS-GAL4 against the proper transgenic controls"],
+      "did": [
+        "Re-tested dSir2 overexpression with UAS-GAL4 against the proper transgenic controls"
+      ],
       "lesson": "Longer life vs wild type but not vs the transgenic controls; always include both parental lines.",
-      "tags": ["drosophila", "transgene", "controls"]
+      "tags": [
+        "drosophila",
+        "transgene",
+        "controls"
+      ]
     },
     {
       "id": "micropub2023_larval_density",
       "system": "drosophila",
       "citation": "Effect of D. melanogaster larval density on pupal size, microPublication Biology 2023",
       "doi": "10.17912/micropub.biology.000959",
-      "did": ["Oregon-R first-instar larvae placed at 1-100 per vial from 6 parental cages; pupal length measured"],
+      "did": [
+        "Oregon-R first-instar larvae placed at 1-100 per vial from 6 parental cages; pupal length measured"
+      ],
       "lesson": "Pupal size fell with even ~25 extra larvae per vial; control larvae per vial for size studies.",
-      "tags": ["drosophila", "density", "body_size"]
+      "tags": [
+        "drosophila",
+        "density",
+        "body_size"
+      ]
     },
     {
       "id": "clancy2001_density",
       "system": "drosophila",
       "citation": "Clancy & Kennington 2001, Drosophila Information Service 84:168-169",
       "doi": null,
-      "did": ["Washed eggs from cages, dispensed with a cut pipette tip; 13 ul gave ~223 eggs"],
+      "did": [
+        "Washed eggs from cages, dispensed with a cut pipette tip; 13 ul gave ~223 eggs"
+      ],
       "lesson": "A fixed egg volume gives consistent bottle densities; adjust volume for known egg lethality.",
-      "tags": ["drosophila", "larval", "density"]
+      "tags": [
+        "drosophila",
+        "larval",
+        "density"
+      ]
+    },
+    {
+      "id": "yu2008_nam",
+      "system": "breeding_genetics",
+      "citation": "Yu, Holland, McMullen & Buckler 2008, Genetics 178:539-551",
+      "doi": "10.1534/genetics.107.074245",
+      "did": [
+        "25 diverse maize founders each crossed to B73",
+        "200 RILs per family by selfing, 5,000 RILs total",
+        "Simulated power of combined linkage + association mapping"
+      ],
+      "lesson": "A common parent plus many families combines linkage power with association resolution.",
+      "tags": [
+        "nam",
+        "mapping",
+        "maize",
+        "ril"
+      ]
+    },
+    {
+      "id": "lu2017_plant_atac",
+      "system": "atac_seq",
+      "citation": "Lu et al. 2017, Nucleic Acids Res 45:e41",
+      "doi": "10.1093/nar/gkw1179",
+      "did": [
+        "Arabidopsis seedlings and roots; crude nuclei vs FANS-sorted nuclei; maize as second species",
+        "50,000 nuclei standard input, down to 500 tested",
+        "Biological replicates; compared with DNase-seq"
+      ],
+      "lesson": "Crude nuclei gave ~50% organellar reads and weaker replicate agreement; sorting improved both; ~10M reads recovered most accessible regions.",
+      "tags": [
+        "atac",
+        "plant",
+        "nuclei",
+        "chloroplast"
+      ]
+    },
+    {
+      "id": "encode_atac",
+      "system": "atac_seq",
+      "citation": "ENCODE ATAC-seq data standards",
+      "doi": null,
+      "did": [
+        ">=2 biological replicates",
+        "25M non-duplicate, non-mitochondrial fragments per replicate (paired-end: 50M reads)",
+        "FRiP > 0.3, NRF > 0.9, PBC1 > 0.9, IDR reproducibility"
+      ],
+      "lesson": "Plan replicates and depth to these targets; check TSS enrichment against annotation-specific thresholds.",
+      "tags": [
+        "atac",
+        "qc",
+        "replicates"
+      ]
+    },
+    {
+      "id": "eastman2018_riboseq",
+      "system": "ribo_seq",
+      "citation": "Eastman, Smircich & Sotelo-Silveira 2018, Comput Struct Biotechnol J 16:167-176",
+      "doi": "10.1016/j.csbj.2018.04.001",
+      "did": [
+        "Review of ribosome profiling steps: arrest, nuclease digestion, ribosome isolation, size selection, rRNA depletion, analysis"
+      ],
+      "lesson": "Cycloheximide causes initiation-site pile-up; rRNA can be ~90% of reads; translation efficiency needs matched RNA-seq.",
+      "tags": [
+        "riboseq",
+        "translation"
+      ]
+    },
+    {
+      "id": "peirone2018_gh_field",
+      "system": "multi_environment",
+      "citation": "Peirone et al. 2018, Front Plant Sci 9:587",
+      "doi": "10.3389/fpls.2018.00587",
+      "did": [
+        "Soybean in an automated greenhouse platform (7 genotypes per experiment) vs national field trial network (36 water-limited of 80 environments)",
+        "Early transpiration efficiency vs field yield drought susceptibility"
+      ],
+      "lesson": "Greenhouse traits correlated with field drought response, but on only 7 genotypes; validate on independent genotypes and objectively defined field environments.",
+      "tags": [
+        "greenhouse",
+        "field",
+        "validation",
+        "drought",
+        "soybean"
+      ]
+    },
+    {
+      "id": "yu2006_qk",
+      "system": "multi_omics",
+      "citation": "Yu et al. 2006, Nat Genet 38:203-208",
+      "doi": "10.1038/ng1702",
+      "did": [
+        "Unified mixed model with population structure (Q) and kinship (K) for association mapping in maize and Arabidopsis"
+      ],
+      "lesson": "Q+K models control false positives from structure and relatedness.",
+      "tags": [
+        "gwas",
+        "kinship",
+        "structure"
+      ]
+    },
+    {
+      "id": "giambartolomei2014_coloc",
+      "system": "multi_omics",
+      "citation": "Giambartolomei et al. 2014, PLoS Genet 10:e1004383",
+      "doi": "10.1371/journal.pgen.1004383",
+      "did": [
+        "Bayesian test of whether trait and expression associations share a causal variant"
+      ],
+      "lesson": "Overlap of peaks is not shared causality; test colocalization.",
+      "tags": [
+        "coloc",
+        "eqtl",
+        "gwas"
+      ]
+    },
+    {
+      "id": "falconer_inbreeding",
+      "system": "breeding_genetics",
+      "citation": "Falconer & Mackay 1996, Introduction to Quantitative Genetics (4th ed.)",
+      "doi": null,
+      "did": [
+        "Inbreeding coefficient under regular systems of mating"
+      ],
+      "lesson": "Selfing: F_t = 1-(1/2)^t; full-sib mating approaches F = 1 far more slowly (~20 generations for inbred strains).",
+      "tags": [
+        "inbreeding",
+        "selfing",
+        "sib"
+      ]
+    },
+    {
+      "id": "griffing1956_diallel",
+      "system": "breeding_genetics",
+      "citation": "Griffing 1956, Aust J Biol Sci 9:463-493",
+      "doi": null,
+      "did": [
+        "Four diallel methods with or without parents and reciprocals; GCA/SCA analysis"
+      ],
+      "lesson": "Choose the method by whether selfs and reciprocals are included; crosses scale with parents squared.",
+      "tags": [
+        "diallel",
+        "gca",
+        "sca",
+        "crosses"
+      ]
+    },
+    {
+      "id": "smith2001_fa",
+      "system": "multi_environment",
+      "citation": "Smith, Cullis & Thompson 2001, Biometrics 57:1138-1147",
+      "doi": null,
+      "did": [
+        "Factor-analytic variance models for GxE in multi-environment variety trials"
+      ],
+      "lesson": "FA models capture heterogeneous genetic variances and correlations across environments parsimoniously.",
+      "tags": [
+        "met",
+        "gxe",
+        "fa"
+      ]
     }
   ]
 }

@@ -15,9 +15,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
 
 TAGS = ["ORG", "GENO_N", "CHECK_N", "REPS_N", "LOC_N", "SEASON_N", "SUB_N", "MEAS", "EXP",
-        "FACTOR", "LEVELS_N", "APPLY", "OUTCOME", "BLOCK"]
+        "FACTOR", "LEVELS_N", "APPLY", "OUTCOME", "BLOCK", "GEN_N", "PARENT_N", "MATING", "ASSAY", "ENV"]
 SYSTEMS = ["field", "greenhouse", "growth_chamber", "mouse", "drosophila", "bulk_rnaseq",
-           "metabolomics_lipidomics", "single_cell", "cell_culture"]
+           "metabolomics_lipidomics", "single_cell", "cell_culture", "breeding_genetics", "multi_environment",
+           "multi_omics", "ribo_seq", "atac_seq", "functional_validation"]
 TOKEN_RE = re.compile(r"\d+(?:[.,]\d+)*|[A-Za-z]+(?:[-'/][A-Za-z0-9]+)*|[^\sA-Za-z\d]")
 WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight",
          9: "nine", 10: "ten", 11: "eleven", 12: "twelve", 15: "fifteen", 20: "twenty"}
@@ -636,7 +637,205 @@ def fam_field_nursery():
     return e
 
 
-FAMILIES = {f.__name__[4:]: f for f in [fam_mouse_housing, fam_mouse_claim, fam_mouse_behaviour, fam_mouse_brief, fam_fly_claim,
+
+# ---------------------------------------------------------------- round-3 families: genetics, MET, multi-omics, validation
+CROPS_GEN = ["Sorghum bicolor", "Zea mays", "Triticum aestivum", "Oryza sativa", "Glycine max", "Hordeum vulgare", "Arabidopsis thaliana", "Setaria viridis"]
+
+
+def mating(e, canon, text=None):
+    e.spec.setdefault("population", {})["mating"] = canon
+    return (text or pick(aliases("mating", canon)), "MATING")
+
+
+def assay(e, canon, text=None):
+    a = e.spec.setdefault("assays", [])
+    if canon not in a:
+        a.append(canon)
+    return (text or pick(aliases("assay", canon)[:4]), "ASSAY")
+
+
+def fam_inbreeding_selfing():
+    e = Ex(R, "breeding_genetics", "inbreeding_selfing")
+    g = R.randint(4, 8)
+    n = R.choice([150, 200, 250, 300, 400])
+    e.spec["population"] = {"type": "ril", "parents": 2, "filial_generation": g}
+    o = org(e, CROPS_GEN)
+    e.factor("genotype", n)
+    e.say(pick(["I crossed two", "We made a cross between two", "From a biparental cross of two"]), o, "parents", "and want to make",
+          (numtxt(n, R), "GENO_N"), pick(["RILs", "recombinant inbred lines", "inbred lines"]), "by", mating(e, "selfing"), "to",
+          (pick([f"F{g}", f"F{g} generation"]), "GEN_N"), ".", pick(["How homozygous will they be?", "How many lines should I start with?", "How do I phenotype them?", ""]))
+    e.spec["population"]["parents"] = 2
+    return e
+
+
+def fam_inbreeding_sib():
+    e = Ex(R, "breeding_genetics", "inbreeding_sib")
+    g = R.randint(5, 25)
+    o = org(e, ["Mus musculus", "Drosophila melanogaster", "Danio rerio"])
+    e.spec["population"] = {"generations": g}
+    e.say(pick(["We maintain a new", "Starting a new", "Our"]), o, pick(["line", "strain", "colony"]), "by", mating(e, "sib_mating"), "for",
+          (numtxt(g, R) + " generations", "GEN_N"), ".", pick(["Is it inbred yet?", "When can we call it inbred?", "How much heterozygosity is left?", "How do we check it?"]))
+    return e
+
+
+def fam_backcross():
+    e = Ex(R, "breeding_genetics", "backcross")
+    g = R.randint(2, 7)
+    o = org(e, CROPS_GEN + ["Mus musculus", "Drosophila melanogaster"])
+    e.spec["population"] = {"generations": g}
+    e.say(pick(["We are introgressing a mutation into", "Moving a transgene into", "Introgressing a QTL into"]), pick(["the elite background", "our lab background", "B73", "BTx623", "C57BL/6"]),
+          "of", o, "by", mating(e, "backcross"), "for", (numtxt(g, R) + " generations", "GEN_N"), ".", pick(["Is that enough?", "How much donor genome remains?", "What controls do I need?"]))
+    return e
+
+
+def fam_diallel():
+    e = Ex(R, "breeding_genetics", "diallel")
+    p = R.randint(4, 12)
+    e.spec["population"] = {"parents": p}
+    o = org(e, ["Zea mays", "Sorghum bicolor", "Oryza sativa", "Gossypium hirsutum", "Pennisetum glaucum"])
+    pieces = [lambda: e.say(pick(["I want a", "Planning a", "We'll make a"]), mating(e, "diallel"), "among", (numtxt(p, R), "PARENT_N"), o, pick(["inbred parents", "parents", "lines"]),
+                            pick(["with reciprocals", "without reciprocals", "", "including selfs"])),
+              lambda: e.say("to estimate", (pick(["combining ability", "GCA and SCA", "heterosis"]), "OUTCOME"))]
+    e.spec["primary_outcome"] = {"name": "gca_sca", "type": "continuous"}
+    if maybe(0.6): pieces.append(lambda: locations(e))
+    if maybe(0.5): pieces.append(lambda: reps(e))
+    join(e, pieces)
+    return e
+
+
+def fam_nc2():
+    e = Ex(R, "breeding_genetics", "nc2")
+    m, f = R.randint(3, 10), R.randint(3, 10)
+    e.spec["population"] = {"parents": m + f}
+    o = org(e, ["Zea mays", "Sorghum bicolor", "Oryza sativa", "Pennisetum glaucum"])
+    nloc = R.randint(2, 5)
+    e.design("locations", nloc)
+    e.say(mating(e, "nc_design", pick(["North Carolina Design II", "NC II", "an NC II design"])), "with", (numtxt(m, R), "PARENT_N"), "males and", (numtxt(f, R), "PARENT_N"), "females of", o,
+          pick([", hybrids tested at", "; F1s evaluated in"]), (numtxt(nloc, R), "LOC_N"), "locations")
+    return e
+
+
+def fam_mapping_pop():
+    e = Ex(R, "breeding_genetics", "mapping_pop")
+    kind = pick(["nam", "ril", "biparental", "dh"])
+    o = org(e, CROPS_GEN)
+    if kind == "nam":
+        fam, per = R.randint(5, 30), R.choice([100, 150, 200])
+        e.spec["population"] = {"type": "nam", "parents": fam + 1}
+        e.factor("genotype", fam * per)
+        e.say("A", mating(e, "nam", pick(["NAM", "nested association mapping"])), "population in", o, ":", (numtxt(fam, R), "PARENT_N"), "founders crossed to a common parent,",
+              str(per), "RILs each, so", (f"{fam * per:,}" if fam * per >= 1000 else str(fam * per), "GENO_N"), "lines")
+    else:
+        n = R.choice([94, 150, 188, 200, 300])
+        e.spec["population"] = {"type": kind, "parents": 2}
+        e.factor("genotype", n)
+        e.say((numtxt(n, R), "GENO_N"), mating(e, kind), "from", o, pick(["for QTL mapping", "to map drought tolerance", "to map flowering time"]))
+    if maybe(0.6):
+        e.say(","); locations(e)
+    if maybe(0.5):
+        e.say(","); reps(e)
+    e.say(pick([".", ". How do I lay out the field?", ". What design for phenotyping?"]))
+    return e
+
+
+def fam_met():
+    e = Ex(R, "multi_environment", "met")
+    e.spec["experimental_unit"] = "plot"
+    pieces = [lambda: (e.say(pick(["Yield trial of", "Testing", "Evaluating"])), genotypes(e, PLANTS, 10, 400)),
+              lambda: locations(e), lambda: seasons(e)]
+    if maybe(0.7): pieces.append(lambda: reps(e))
+    e.spec["primary_outcome"] = {"name": "grain_yield", "type": "continuous"}
+    pieces.append(lambda: e.say("to study", (pick(["yield stability", "yield", "grain yield"]), "OUTCOME"), pick(["and GxE", "across environments", "genotype by environment interaction", ""])))
+    join(e, pieces)
+    return e
+
+
+def fam_gh_field():
+    e = Ex(R, "multi_environment", "gh_field")
+    e.spec["environments"] = ["greenhouse", "field"]
+    o_trait = pick(["biomass", "photosynthesis", "plant_height"])
+    e.spec["primary_outcome"] = {"name": o_trait, "type": "continuous"}
+    pieces = [lambda: (e.say(pick(["Screen", "We screen", "Phenotyping"])), genotypes(e, POT_PLANTS, 6, 300)),
+              lambda: e.say("in the", (pick(["greenhouse", "growth chamber", "glasshouse"]), "ENV"), "for", (pick(aliases("outcome", o_trait)[:3]), "OUTCOME"),
+                            pick(["early in development", "at the seedling stage", "under drought", ""])),
+              lambda: e.say(pick(["and then test whether it predicts", "then validate against", "and compare with"]), (pick(["field", "field trials", "the field"]), "ENV"),
+                            pick(["yield", "performance", "drought response"]))]
+    if maybe(0.5): pieces.append(lambda: locations(e))
+    join(e, pieces)
+    return e
+
+
+def fam_gwas_rnaseq():
+    e = Ex(R, "multi_omics", "gwas_rnaseq")
+    n = R.choice([150, 200, 250, 300, 350, 400, 500])
+    o = org(e, ["Sorghum bicolor", "Zea mays", "Oryza sativa", "Arabidopsis thaliana", "Glycine max"])
+    e.factor("genotype", n)
+    trait = pick(["lipid_content", "flowering_time", "plant_height"])
+    e.spec["primary_outcome"] = {"name": trait, "type": "continuous"}
+    pieces = [lambda: e.say(pick(["We have a", "Using a", "I have a"]), (numtxt(n, R), "GENO_N"), "-line", o, "diversity panel with", assay(e, "gwas"), "hits for",
+                            (pick(aliases("outcome", trait)[:3]), "OUTCOME")),
+              lambda: e.say(pick(["and want to add", "plan to run", "now want"]), assay(e, "rnaseq"), pick(["of leaves", "on one tissue", "at flowering", "in two tissues", ""]),
+                            pick(["to find candidate genes", "for eQTL mapping", "to prioritize genes", "for TWAS"]))]
+    if maybe(0.4): pieces.append(lambda: e.say(pick(["and", "then"]), assay(e, "eqtl"), pick(["colocalization", "analysis"])))
+    if maybe(0.3): pieces.append(lambda: e.say(pick(["plus", "and maybe"]), assay(e, "lipidomics")))
+    join(e, pieces)
+    return e
+
+
+def fam_riboseq():
+    e = Ex(R, "ribo_seq", "riboseq")
+    o = org(e, ["Arabidopsis thaliana", "Zea mays", "Saccharomyces cerevisiae", "Mus musculus", "Drosophila melanogaster", "Oryza sativa"])
+    f = pick(["temperature", "water", "salt", "genotype"])
+    e.factor(f, 2)
+    txt = {"temperature": "heat vs control", "water": "drought vs control", "salt": "salt vs control", "genotype": "mutant vs wild type"}[f]
+    pieces = [lambda: e.say(assay(e, "ribo_seq"), "on", o, "under", (txt, "FACTOR")),
+              lambda: e.say("to measure", (pick(["translation efficiency", "translational regulation", "translation"]), "OUTCOME"))]
+    if maybe(0.6): pieces.append(lambda: reps(e, ("replicates", "biological replicates")))
+    if maybe(0.4): pieces.append(lambda: e.say(pick(["with matched", "alongside", "together with"]), assay(e, "rnaseq")))
+    e.spec["primary_outcome"] = {"name": "translation_efficiency", "type": "continuous"}
+    join(e, pieces)
+    return e
+
+
+def fam_atac():
+    e = Ex(R, "atac_seq", "atac")
+    o = org(e, ["Arabidopsis thaliana", "Zea mays", "Sorghum bicolor", "Oryza sativa", "Mus musculus"])
+    f = pick(["water", "temperature", "genotype", "treatment"])
+    k = R.randint(2, 4)
+    e.factor(f, k)
+    pieces = [lambda: e.say(assay(e, "atac_seq"), "of", o, pick(["roots", "leaves", "seedlings", "liver", "shoot apex"]), "across", (numtxt(k, R), "LEVELS_N"),
+                            (pick({"water": ["water treatments", "drought levels"], "temperature": ["temperatures"], "genotype": ["genotypes", "lines"], "treatment": ["treatments"]}[f]), "FACTOR"))]
+    if maybe(0.6): pieces.append(lambda: reps(e, ("replicates", "biological replicates")))
+    if maybe(0.5): pieces.append(lambda: e.say(pick(["with matched", "plus", "and"]), assay(e, "rnaseq"), pick(["from the same tissue", "", "to link peaks to expression"])))
+    if maybe(0.3): pieces.append(lambda: e.say("I have only", pick(["crude nuclei", "a few thousand nuclei", "no sorter"])))
+    join(e, pieces)
+    return e
+
+
+def fam_validation():
+    e = Ex(R, "functional_validation", "validation")
+    c = R.randint(1, 10)
+    o1 = org(e, ["Sorghum bicolor", "Zea mays", "Oryza sativa", "Mus musculus", "Glycine max"])
+    first = e.spec["organism"]
+    o2canon = pick({"Sorghum bicolor": ["Arabidopsis thaliana", "Setaria viridis", "Nicotiana benthamiana", "Oryza sativa"],
+                    "Zea mays": ["Arabidopsis thaliana", "Setaria viridis", "Nicotiana benthamiana"],
+                    "Oryza sativa": ["Arabidopsis thaliana", "Brachypodium distachyon"],
+                    "Glycine max": ["Arabidopsis thaliana", "Nicotiana benthamiana"],
+                    "Mus musculus": ["Drosophila melanogaster", "Danio rerio", "Caenorhabditis elegans"]}[first])
+    o2 = (pick(aliases("organism", o2canon)), "ORG")
+    e.spec["organisms"] = [first, o2canon]
+    e.spec["candidates"] = c
+    pieces = [lambda: e.say(pick(["We found", "GWAS gave us", "Our eQTL analysis prioritized"]), numtxt(c, R),
+                            pick(["candidate genes", "candidates", "genes"]), "in", o1),
+              lambda: e.say(pick(["and want to validate them", "How do we validate them", "We want to confirm them"]), assay(e, "in_silico", pick(["in silico", "computationally"])), "and in vivo"),
+              lambda: e.say("using", assay(e, pick(["crispr", "overexpression", "complementation"])), "in", pick(["the crop", "it", "the original species"]),
+                            "and", assay(e, pick(["heterologous", "crispr", "overexpression"])), "in", o2)]
+    join(e, pieces)
+    return e
+
+
+FAMILIES = {f.__name__[4:]: f for f in [fam_inbreeding_selfing, fam_inbreeding_sib, fam_backcross, fam_diallel, fam_nc2, fam_mapping_pop, fam_met, fam_gh_field,
+                                         fam_gwas_rnaseq, fam_riboseq, fam_atac, fam_validation, fam_mouse_housing, fam_mouse_claim, fam_mouse_behaviour, fam_mouse_brief, fam_fly_claim,
                                          fam_gh_layout, fam_gh_gradient, fam_chamber_lab, fam_field_nursery,fam_field_panel, fam_field_unreplicated, fam_field_treatment, fam_field_line_source,
                                          fam_greenhouse, fam_chamber_between, fam_chamber_trays, fam_chamber_within,
                                          fam_mouse_cage, fam_mouse_litter, fam_mouse_individual, fam_mouse_factorial, fam_mouse_cells,
@@ -646,7 +845,9 @@ DEFAULT_WEIGHTS = {"field_panel": 4, "field_unreplicated": 2, "field_treatment":
                    "mouse_individual": 1.5, "mouse_factorial": 1, "mouse_cells": 0.7, "fly_lifespan": 1.5, "fly_genotype": 1,
                    "rnaseq": 1.5, "lipidomics": 1, "singlecell": 0.7, "cellculture": 0.7,
                    "mouse_housing": 1, "mouse_claim": 1, "mouse_behaviour": 1, "mouse_brief": 1, "fly_claim": 1.2,
-                   "gh_layout": 1.2, "gh_gradient": 1.2, "chamber_lab": 1, "field_nursery": 1}
+                   "gh_layout": 1.2, "gh_gradient": 1.2, "chamber_lab": 1, "field_nursery": 1,
+                   "inbreeding_selfing": 1.5, "inbreeding_sib": 1, "backcross": 1, "diallel": 1.5, "nc2": 1, "mapping_pop": 1.5,
+                   "met": 2, "gh_field": 1.5, "gwas_rnaseq": 1.5, "riboseq": 1.2, "atac": 1.2, "validation": 1.5}
 
 FILLERS = ["I'm planning my next experiment.", "My advisor wants a defensible design.", "Budget is tight.", "This is for a grant proposal.",
            "Any advice?", "Help me plan this.", "I'm new to experimental design.", "We had problems last season.", "Reviewers asked about our design.",

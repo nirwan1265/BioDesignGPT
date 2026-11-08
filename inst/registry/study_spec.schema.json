@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final.",
   "consequential": [
     "system",
@@ -24,7 +24,15 @@
     "power.target_power",
     "power.attrition",
     "constraints.max_units",
-    "constraints.budget"
+    "constraints.budget",
+    "population.type",
+    "population.parents",
+    "population.generations",
+    "population.mating",
+    "assays",
+    "organisms",
+    "environments",
+    "population.filial_generation"
   ],
   "enums": {
     "system": [
@@ -36,7 +44,13 @@
       "metabolomics_lipidomics",
       "single_cell",
       "cell_culture",
-      "drosophila"
+      "drosophila",
+      "breeding_genetics",
+      "multi_environment",
+      "multi_omics",
+      "ribo_seq",
+      "atac_seq",
+      "functional_validation"
     ],
     "primary_outcome.type": [
       "continuous",

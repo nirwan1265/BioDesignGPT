@@ -426,3 +426,171 @@ dose groups	treatment	factor	curated terminology (round 2)	high
 drug groups	treatment	factor	curated terminology (round 2)	high
 treatments	treatment	factor	curated terminology (round 2)	high
 water levels	water	factor	curated terminology (round 2)	high
+diallel	breeding_genetics	system	curated terminology (round 3)	high
+mating design	breeding_genetics	system	curated terminology (round 3)	high
+crossing block	breeding_genetics	system	curated terminology (round 3)	high
+mapping population	breeding_genetics	system	curated terminology (round 3)	high
+ril population	breeding_genetics	system	curated terminology (round 3)	high
+nam population	breeding_genetics	system	curated terminology (round 3)	high
+north carolina design	breeding_genetics	system	curated terminology (round 3)	high
+nc ii	breeding_genetics	system	curated terminology (round 3)	high
+backcross population	breeding_genetics	system	curated terminology (round 3)	high
+inbreeding	breeding_genetics	system	curated terminology (round 3)	high
+multi-environment trial	multi_environment	system	curated terminology (round 3)	high
+met	multi_environment	system	curated terminology (round 3)	high
+gxe	multi_environment	system	curated terminology (round 3)	high
+genotype by environment	multi_environment	system	curated terminology (round 3)	high
+greenhouse and field	multi_environment	system	curated terminology (round 3)	high
+multi-year trial	multi_environment	system	curated terminology (round 3)	high
+multi-omics	multi_omics	system	curated terminology (round 3)	high
+eqtl	multi_omics	system	curated terminology (round 3)	high
+twas	multi_omics	system	curated terminology (round 3)	high
+colocalization	multi_omics	system	curated terminology (round 3)	high
+gwas and rna-seq	multi_omics	system	curated terminology (round 3)	high
+integrative omics	multi_omics	system	curated terminology (round 3)	high
+ribo-seq	ribo_seq	system	curated terminology (round 3)	high
+riboseq	ribo_seq	system	curated terminology (round 3)	high
+ribosome profiling	ribo_seq	system	curated terminology (round 3)	high
+footprinting	ribo_seq	system	curated terminology (round 3)	high
+translatome	ribo_seq	system	curated terminology (round 3)	high
+atac-seq	atac_seq	system	curated terminology (round 3)	high
+atacseq	atac_seq	system	curated terminology (round 3)	high
+chromatin accessibility	atac_seq	system	curated terminology (round 3)	high
+accessible chromatin	atac_seq	system	curated terminology (round 3)	high
+dnase-seq	atac_seq	system	curated terminology (round 3)	high
+validation	functional_validation	system	curated terminology (round 3)	high
+functional validation	functional_validation	system	curated terminology (round 3)	high
+validate candidates	functional_validation	system	curated terminology (round 3)	high
+crispr knockout	functional_validation	system	curated terminology (round 3)	high
+complementation	functional_validation	system	curated terminology (round 3)	high
+heterologous expression	functional_validation	system	curated terminology (round 3)	high
+selfing	selfing	mating	curated terminology (round 3)	high
+self-pollination	selfing	mating	curated terminology (round 3)	high
+selfed	selfing	mating	curated terminology (round 3)	high
+self	selfing	mating	curated terminology (round 3)	high
+single seed descent	selfing	mating	curated terminology (round 3)	high
+ssd	selfing	mating	curated terminology (round 3)	high
+sib mating	sib_mating	mating	curated terminology (round 3)	high
+sibling mating	sib_mating	mating	curated terminology (round 3)	high
+brother-sister mating	sib_mating	mating	curated terminology (round 3)	high
+full-sib mating	sib_mating	mating	curated terminology (round 3)	high
+sib-mating	sib_mating	mating	curated terminology (round 3)	high
+brother x sister	sib_mating	mating	curated terminology (round 3)	high
+backcross	backcross	mating	curated terminology (round 3)	high
+backcrossing	backcross	mating	curated terminology (round 3)	high
+backcrossed	backcross	mating	curated terminology (round 3)	high
+bc1	backcross	mating	curated terminology (round 3)	high
+introgression	backcross	mating	curated terminology (round 3)	high
+diallel	diallel	mating	curated terminology (round 3)	high
+half diallel	diallel	mating	curated terminology (round 3)	high
+full diallel	diallel	mating	curated terminology (round 3)	high
+all pairwise crosses	diallel	mating	curated terminology (round 3)	high
+north carolina design ii	nc_design	mating	curated terminology (round 3)	high
+nc ii	nc_design	mating	curated terminology (round 3)	high
+nc design	nc_design	mating	curated terminology (round 3)	high
+north carolina design	nc_design	mating	curated terminology (round 3)	high
+males x females	nc_design	mating	curated terminology (round 3)	high
+testcross	testcross	mating	curated terminology (round 3)	high
+test cross	testcross	mating	curated terminology (round 3)	high
+topcross	testcross	mating	curated terminology (round 3)	high
+biparental cross	biparental	mating	curated terminology (round 3)	high
+f2 population	biparental	mating	curated terminology (round 3)	high
+f2	biparental	mating	curated terminology (round 3)	high
+bi-parental	biparental	mating	curated terminology (round 3)	high
+nam	nam	mating	curated terminology (round 3)	high
+nested association mapping	nam	mating	curated terminology (round 3)	high
+common parent	nam	mating	curated terminology (round 3)	high
+ril	ril	mating	curated terminology (round 3)	high
+rils	ril	mating	curated terminology (round 3)	high
+recombinant inbred lines	ril	mating	curated terminology (round 3)	high
+doubled haploid	dh	mating	curated terminology (round 3)	high
+doubled haploids	dh	mating	curated terminology (round 3)	high
+dh lines	dh	mating	curated terminology (round 3)	high
+gwas	gwas	assay	curated terminology (round 3)	high
+genome-wide association	gwas	assay	curated terminology (round 3)	high
+association mapping	gwas	assay	curated terminology (round 3)	high
+rna-seq	rnaseq	assay	curated terminology (round 3)	high
+rnaseq	rnaseq	assay	curated terminology (round 3)	high
+transcriptome	rnaseq	assay	curated terminology (round 3)	high
+transcriptomics	rnaseq	assay	curated terminology (round 3)	high
+expression profiling	rnaseq	assay	curated terminology (round 3)	high
+eqtl	eqtl	assay	curated terminology (round 3)	high
+expression qtl	eqtl	assay	curated terminology (round 3)	high
+eqtl mapping	eqtl	assay	curated terminology (round 3)	high
+atac-seq	atac_seq	assay	curated terminology (round 3)	high
+atacseq	atac_seq	assay	curated terminology (round 3)	high
+chromatin accessibility	atac_seq	assay	curated terminology (round 3)	high
+accessible chromatin	atac_seq	assay	curated terminology (round 3)	high
+ribo-seq	ribo_seq	assay	curated terminology (round 3)	high
+riboseq	ribo_seq	assay	curated terminology (round 3)	high
+ribosome profiling	ribo_seq	assay	curated terminology (round 3)	high
+chip-seq	chip_seq	assay	curated terminology (round 3)	high
+chipseq	chip_seq	assay	curated terminology (round 3)	high
+histone marks	chip_seq	assay	curated terminology (round 3)	high
+bisulfite sequencing	methylation	assay	curated terminology (round 3)	high
+wgbs	methylation	assay	curated terminology (round 3)	high
+dna methylation	methylation	assay	curated terminology (round 3)	high
+methylome	methylation	assay	curated terminology (round 3)	high
+crispr	crispr	assay	curated terminology (round 3)	high
+crispr knockout	crispr	assay	curated terminology (round 3)	high
+gene editing	crispr	assay	curated terminology (round 3)	high
+crispr-cas9	crispr	assay	curated terminology (round 3)	high
+knockout lines	crispr	assay	curated terminology (round 3)	high
+overexpression	overexpression	assay	curated terminology (round 3)	high
+overexpressing	overexpression	assay	curated terminology (round 3)	high
+35s overexpression	overexpression	assay	curated terminology (round 3)	high
+transgenic overexpression	overexpression	assay	curated terminology (round 3)	high
+complementation	complementation	assay	curated terminology (round 3)	high
+rescue	complementation	assay	curated terminology (round 3)	high
+complemented	complementation	assay	curated terminology (round 3)	high
+heterologous expression	heterologous	assay	curated terminology (round 3)	high
+expressed in yeast	heterologous	assay	curated terminology (round 3)	high
+expressed in arabidopsis	heterologous	assay	curated terminology (round 3)	high
+transient expression	heterologous	assay	curated terminology (round 3)	high
+nicotiana benthamiana	heterologous	assay	curated terminology (round 3)	high
+in silico	in_silico	assay	curated terminology (round 3)	high
+computational prediction	in_silico	assay	curated terminology (round 3)	high
+orthology	in_silico	assay	curated terminology (round 3)	high
+synteny	in_silico	assay	curated terminology (round 3)	high
+variant effect prediction	in_silico	assay	curated terminology (round 3)	high
+structure prediction	in_silico	assay	curated terminology (round 3)	high
+qtl mapping	qtl_mapping	assay	curated terminology (round 3)	high
+linkage mapping	qtl_mapping	assay	curated terminology (round 3)	high
+qtl	qtl_mapping	assay	curated terminology (round 3)	high
+lipidomics	lipidomics	assay	curated terminology (round 3)	high
+lipid profiling	lipidomics	assay	curated terminology (round 3)	high
+nicotiana benthamiana	Nicotiana benthamiana	organism	curated terminology (round 3)	high
+benthamiana	Nicotiana benthamiana	organism	curated terminology (round 3)	high
+n. benthamiana	Nicotiana benthamiana	organism	curated terminology (round 3)	high
+tobacco	Nicotiana benthamiana	organism	curated terminology (round 3)	high
+c. elegans	Caenorhabditis elegans	organism	curated terminology (round 3)	high
+worms	Caenorhabditis elegans	organism	curated terminology (round 3)	high
+nematodes	Caenorhabditis elegans	organism	curated terminology (round 3)	high
+caenorhabditis elegans	Caenorhabditis elegans	organism	curated terminology (round 3)	high
+zebrafish	Danio rerio	organism	curated terminology (round 3)	high
+danio rerio	Danio rerio	organism	curated terminology (round 3)	high
+setaria	Setaria viridis	organism	curated terminology (round 3)	high
+setaria viridis	Setaria viridis	organism	curated terminology (round 3)	high
+green foxtail	Setaria viridis	organism	curated terminology (round 3)	high
+brachypodium	Brachypodium distachyon	organism	curated terminology (round 3)	high
+greenhouse	greenhouse	environment	curated terminology (round 3)	high
+glasshouse	greenhouse	environment	curated terminology (round 3)	high
+growth chamber	greenhouse	environment	curated terminology (round 3)	high
+controlled environment	greenhouse	environment	curated terminology (round 3)	high
+pots	greenhouse	environment	curated terminology (round 3)	high
+field	field	environment	curated terminology (round 3)	high
+field trials	field	environment	curated terminology (round 3)	high
+field sites	field	environment	curated terminology (round 3)	high
+the field	field	environment	curated terminology (round 3)	high
+yield stability	grain_yield	outcome	curated terminology (round 3)	high
+translation efficiency	translation_efficiency	outcome	curated terminology (round 3)	high
+translational efficiency	translation_efficiency	outcome	curated terminology (round 3)	high
+te	translation_efficiency	outcome	curated terminology (round 3)	high
+accessibility	chromatin_accessibility	outcome	curated terminology (round 3)	high
+accessible regions	chromatin_accessibility	outcome	curated terminology (round 3)	high
+peaks	chromatin_accessibility	outcome	curated terminology (round 3)	high
+combining ability	gca_sca	outcome	curated terminology (round 3)	high
+gca	gca_sca	outcome	curated terminology (round 3)	high
+sca	gca_sca	outcome	curated terminology (round 3)	high
+heterosis	gca_sca	outcome	curated terminology (round 3)	high
+hybrid vigor	gca_sca	outcome	curated terminology (round 3)	high

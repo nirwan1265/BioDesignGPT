@@ -11,9 +11,9 @@ cd "$SLURM_SUBMIT_DIR"
 # python -m venv sfenv && source sfenv/bin/activate && pip install torch transformers tokenizers
 source sfenv/bin/activate
 
-python training/generate.py --n 20000 --seed 1 --out training/data/train.jsonl
+python training/generate.py --n 30000 --seed 1 --out training/data/train.jsonl
 python training/generate.py --n 2000  --seed 2 --out training/data/dev.jsonl
 python training/train.py --base allenai/scibert_scivocab_uncased --epochs 4 --bs 32 --lr 3e-5 \
   --train training/data/train.jsonl --dev training/data/dev.jsonl --out inst/models/sf-scibert
 python inst/python/predict.py --model inst/models/sf-scibert --examples inst/examples/study_examples.jsonl --out preds_scibert_49.json
-python inst/python/predict.py --model inst/models/sf-scibert --examples training/data/fresh_test.jsonl --out preds_scibert_fresh.json
+for s in fresh_test fresh_test_v2 fresh_test_v3; do python inst/python/predict.py --model inst/models/sf-scibert --examples training/data/$s.jsonl --out preds_scibert_$s.json; done

@@ -165,11 +165,56 @@ def to_spec(tokens, tags, system, text=None):
             b = "library_batch" if "librar" in low else "injection_batch"
         spec["blocking_factors"] = [b]
 
+    # round 3: populations, assays, environments, extra organisms
+    if len(org) > 1:
+        spec["organisms"] = list(dict.fromkeys(org))
+    pop = {}
+    mats = [canon(s, "mating") for s, _ in get("MATING")]
+    mats = [m for m in mats if m]
+    if mats:
+        pop["mating"] = mats[0]
+        if mats[0] in ("ril", "nam", "dh", "biparental"):
+            pop["type"] = mats[0]
+        if mats[0] in ("ril", "biparental", "dh"):
+            pop["parents"] = 2
+    for s, _ in get("GEN_N"):
+        m = re.match(r"\s*f\s*(\d+)", s.lower())
+        if m:
+            pop["filial_generation"] = int(m.group(1))
+            if pop.get("mating") == "selfing" or "mating" not in pop:
+                pop.setdefault("type", "ril")
+                pop["parents"] = pop.get("parents", 2)
+        elif num(s) is not None:
+            pop["generations"] = num(s)
+        break
+    pn = [num(s) for s, _ in get("PARENT_N")]
+    pn = [v for v in pn if v is not None]
+    if pn:
+        pop["parents"] = pn[0] + 1 if pop.get("mating") == "nam" else sum(pn)
+    if pop:
+        spec["population"] = pop
+    assays = []
+    for s, _ in get("ASSAY"):
+        a = canon(s, "assay")
+        if a and a not in assays:
+            assays.append(a)
+    if assays:
+        spec["assays"] = assays
+    envs = []
+    for s, _ in get("ENV"):
+        v = canon(s, "environment")
+        if v and v not in envs:
+            envs.append(v)
+    if envs:
+        spec["environments"] = envs
+
     if "experimental_unit" not in spec:  # same defaults as the rule engine
         if system == "field":
             spec["experimental_unit"] = "plant" if re.search(r"single-plant|spaced plants", low) else "plot"
         elif system in ("growth_chamber", "greenhouse") and re.search(r"\btrays?\b|\bflats?\b", low):
             spec["experimental_unit"] = "cell"
+        elif system == "multi_environment" and re.search(r"\bplots?\b|locations?|sites?|environments", low):
+            spec["experimental_unit"] = "plot"
         elif system in ("greenhouse", "growth_chamber") and re.search(r"\bpots?\b|carts?|imaging platform", low):
             spec["experimental_unit"] = "pot"
         elif system == "drosophila" and re.search(r"lifespan|diet|yeast|wing", low):

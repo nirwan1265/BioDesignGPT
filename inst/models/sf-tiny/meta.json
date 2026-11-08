@@ -28,7 +28,17 @@
     "B-OUTCOME",
     "I-OUTCOME",
     "B-BLOCK",
-    "I-BLOCK"
+    "I-BLOCK",
+    "B-GEN_N",
+    "I-GEN_N",
+    "B-PARENT_N",
+    "I-PARENT_N",
+    "B-MATING",
+    "I-MATING",
+    "B-ASSAY",
+    "I-ASSAY",
+    "B-ENV",
+    "I-ENV"
   ],
   "systems": [
     "field",
@@ -39,14 +49,20 @@
     "bulk_rnaseq",
     "metabolomics_lipidomics",
     "single_cell",
-    "cell_culture"
+    "cell_culture",
+    "breeding_genetics",
+    "multi_environment",
+    "multi_omics",
+    "ribo_seq",
+    "atac_seq",
+    "functional_validation"
   ],
   "custom_tokenizer": true,
   "lowercase": true,
   "base": null,
   "dev": {
-    "token_f1": 0.9950067217207604,
+    "token_f1": 0.9980144751168898,
     "system_acc": 1.0
   },
-  "n_train": 8000
+  "n_train": 14000
 }

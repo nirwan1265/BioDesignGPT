@@ -20,6 +20,21 @@ merge_specs <- function(rule, model, question) {
       (v == 1 && grepl("\\b(one|single|this|no) ", text))
   }
   # guard 1: a rep count must sit next to a replication word ("two sites" is not 2 reps)
+  # "F6" states a filial generation, and NAM parents = founders + 1
+  if (!is.null(model$population$filial_generation)) {
+    fg <- model$population$filial_generation
+    if (!grepl(paste0("\\bf", fg, "\\b"), text, perl = TRUE)) model$population$filial_generation <- NULL
+  }
+  if (identical(model$population$mating, "nam") && !is.null(model$population$parents)) {
+    if (!stated(model$population$parents - 1)) model$population$parents <- NULL
+  } else if (!is.null(model$population$parents)) {
+    pn <- model$population$parents
+    parts_ok <- stated(pn) || {
+      nums <- as.numeric(regmatches(text, gregexpr("\\d+", text))[[1]])
+      any(outer(nums, nums, "+") == pn)
+    }
+    if (!parts_ok && pn != 2) model$population$parents <- NULL
+  }
   rep_ok <- function(v) {
     w <- c(as.character(v), names(.sf_number_words)[.sf_number_words == v], if (v == 1) c("no", "one", "single"))
     re <- paste0("\\b(", paste(w, collapse = "|"), ")\\s+(?:\\w+\\s+){0,2}?(reps?|replicat\\w*|replications?|blocks?|benches|vials|dams|plants per combination)|",
@@ -33,10 +48,13 @@ merge_specs <- function(rule, model, question) {
   out <- rule
   for (p in c("system", "organism", "experimental_unit", "measurement_unit", "subsamples_per_unit",
               "primary_outcome.name", "primary_outcome.type", "design.reps", "design.locations",
-              "design.seasons", "blocking_factors")) {
+              "design.seasons", "blocking_factors", "population.mating", "population.type",
+              "population.parents", "population.generations", "population.filial_generation",
+              "assays", "organisms", "environments")) {
     if (is.null(spec_get(out, p))) {
       v <- spec_get(model, p)
-      if (!is.null(v) && all(vapply(as.list(unlist(v)), stated, logical(1)))) out <- spec_set(out, p, v)
+      prechecked <- p %in% c("population.parents", "population.filial_generation")
+      if (!is.null(v) && (prechecked || all(vapply(as.list(unlist(v)), stated, logical(1))))) out <- spec_set(out, p, v)
     }
   }
   have <- vapply(out$factors %||% list(), `[[`, "", "name")

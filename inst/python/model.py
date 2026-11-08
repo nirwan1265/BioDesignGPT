@@ -7,10 +7,11 @@ from decode import to_spec
 
 TOKEN_RE = re.compile(r"\d+(?:[.,]\d+)*|[A-Za-z]+(?:[-'/][A-Za-z0-9]+)*|[^\sA-Za-z\d]")
 TAGS = ["ORG", "GENO_N", "CHECK_N", "REPS_N", "LOC_N", "SEASON_N", "SUB_N", "MEAS", "EXP",
-        "FACTOR", "LEVELS_N", "APPLY", "OUTCOME", "BLOCK"]
+        "FACTOR", "LEVELS_N", "APPLY", "OUTCOME", "BLOCK", "GEN_N", "PARENT_N", "MATING", "ASSAY", "ENV"]
 LABELS = ["O"] + [p + t for t in TAGS for p in ("B-", "I-")]
 SYSTEMS = ["field", "greenhouse", "growth_chamber", "mouse", "drosophila", "bulk_rnaseq",
-           "metabolomics_lipidomics", "single_cell", "cell_culture"]
+           "metabolomics_lipidomics", "single_cell", "cell_culture", "breeding_genetics", "multi_environment",
+           "multi_omics", "ribo_seq", "atac_seq", "functional_validation"]
 
 
 def words(text):
