@@ -61,8 +61,8 @@
   "lowercase": true,
   "base": null,
   "dev": {
-    "token_f1": 0.9980144751168898,
+    "token_f1": 0.9985270573166827,
     "system_acc": 1.0
   },
-  "n_train": 14000
+  "n_train": 14782
 }
