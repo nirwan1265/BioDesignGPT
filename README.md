@@ -33,7 +33,7 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 
 ### Optional: trained prompt tagger
 
-A small BERT-style model (7 MB, bundled) trained on synthetic, label-correct prompts. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 84% → hybrid **87%** field recall, zero invented values (details and all test sets in training/README.md). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
+A small BERT-style model (8.7 MB, bundled) trained on synthetic, label-correct prompts plus local-LLM paraphrases. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 85% → hybrid **88.5%** field recall, zero invented values (details and all test sets in training/README.md). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
 
 ```r
 studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")

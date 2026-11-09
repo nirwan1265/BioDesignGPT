@@ -25,17 +25,20 @@ learning: find the sentence families with the most errors, generate more of them
 ## Results
 
 Field recall from `evaluate_extraction()`; "invented" = examples where a value the user never stated (a must-ask field) was filled in.
-Current model: round 3, tiny BERT (3 layers, 192 hidden, 7.5 MB), 14,000 synthetic sentences from 40 families, 8 epochs on 2 CPUs (~9 min).
+Current model: round 4, tiny BERT (3 layers, 192 hidden, 8.7 MB): the round-3 data (14,000 synthetic sentences from
+40 families) plus 782 Llama 3.1 paraphrases made with `run_paraphrase_round.sh` (14,782 sentences).
 
 | Set | What it is | Rules | Model alone | **Hybrid** |
 |---|---|---|---|---|
-| 59 paper examples | Used for error analysis (development) | 91.8% | 81.3% | **93.4%** (2 invented*) |
+| 59 paper examples | Used for error analysis (development) | 91.8% | 81.3% | **93.7%** (2 invented*) |
 | fresh v1 (20) | Plants/animals; written before round 2 | 76.0% | 85.6% | **91.2%**, 0 invented |
-| fresh v2 (22) | Genetics, MET, multi-omics, validation; written before round 3 | 94.1%** | 83.1% | **97.5%**, 0 invented |
-| **fresh v3 (12)** | **Written after all code, scored once, no changes since** | 73.8% | 83.6% | **86.9%, 0 invented** |
+| fresh v2 (22) | Genetics, MET, multi-omics, validation; written before round 3 | 94.1%** | 91.5% | **97.5%**, 0 invented |
+| **fresh v3 (12)** | **Written after all code, scored once, no changes since** | 73.8% | 85.2% | **88.5%, 0 invented** |
+
+Round 3 -> round 4 (paraphrases only): model alone v2 83.1 -> 91.5, v3 83.6 -> 85.2; hybrid v3 86.9 -> 88.5.
 
 \* Outcomes the user did write ("behavior assay", "body weight") that the labels treated as must-ask.
-\*\* Not a clean number: some round-3 rule patterns were written after reading v2. v3 exists because of that, and it is the honest estimate for new wording (~87%).
+\*\* Not a clean number: some round-3 rule patterns were written after reading v2. v3 exists because of that, and it is the honest estimate for new wording (~88%).
 
 History: round 1 (5k sentences, 19 families) memorised templates (65% on the paper set). Round 2 added 9 families from error analysis plus filler/noise. Round 3 added 12 families and 5 new tags
 (`GEN_N`, `PARENT_N`, `MATING`, `ASSAY`, `ENV`) for inbreeding, sib mating, backcrossing, diallel / NC II, RIL / NAM / DH populations, multi-environment trials, greenhouse-to-field validation,
