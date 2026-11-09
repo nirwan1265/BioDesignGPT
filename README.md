@@ -1,4 +1,4 @@
-# StudyForge
+# BioDesignGPT
 
 An experimental-design agent for plant and biological research. You describe the experiment in plain language; StudyForge asks the questions that actually change the design, audits your experimental units for pseudoreplication, runs simulation-based power analysis, and writes a randomized layout plus metadata template.
 
