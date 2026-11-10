@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <style>
+    .bg      { fill: none; }
+    .core    { fill: #f4f1ea; stroke: #3d3a33; }
+    .core-t  { fill: #1f1d19; }
+    .core-s  { fill: #4f4b42; }
+    .des     { fill: #e6f2ea; stroke: #2f7a4f; }
+    .sim     { fill: #e7eefa; stroke: #2f5fa8; }
+    .ana     { fill: #f6ebe4; stroke: #a65a2a; }
+    .pnt     { fill: #f2e8f4; stroke: #864a92; }
+    .name    { fill: #1f1d19; font-weight: 700; font-size: 22px; }
+    .role    { fill: #2b2924; font-weight: 600; font-size: 14px; }
+    .what    { fill: #55514a; font-size: 12.5px; }
+    .flow    { stroke: #3d3a33; stroke-width: 2; fill: none; }
+    .spoke   { stroke: #8a857a; stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; }
+    .flow-t  { fill: #3d3a33; font-size: 12px; font-style: italic; }
+    .arrow   { fill: #3d3a33; }
+    .tag     { fill: #ffffff; stroke: #8a857a; }
+    .tag-t   { fill: #3d3a33; font-size: 11px; }
+    @media (prefers-color-scheme: dark) {
+      .core   { fill: #2a2824; stroke: #c9c3b6; }
+      .core-t { fill: #f2efe8; }
+      .core-s { fill: #c9c3b6; }
+      .des    { fill: #17301f; stroke: #6fc28f; }
+      .sim    { fill: #172540; stroke: #7aa4e8; }
+      .ana    { fill: #3a2417; stroke: #e2955e; }
+      .pnt    { fill: #33203a; stroke: #c690d2; }
+      .name   { fill: #f2efe8; }
+      .role   { fill: #e6e2d9; }
+      .what   { fill: #b9b3a6; }
+      .flow   { stroke: #c9c3b6; }
+      .spoke  { stroke: #7d786d; }
+      .flow-t { fill: #c9c3b6; }
+      .arrow  { fill: #c9c3b6; }
+      .tag    { fill: #1f1d1a; stroke: #7d786d; }
+      .tag-t  { fill: #c9c3b6; }
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <!-- spokes: every head reads the shared core -->
+  <path class="spoke" d="M270,150 L355,232"/>
+  <path class="spoke" d="M690,150 L605,232"/>
+  <path class="spoke" d="M690,450 L605,368"/>
+  <path class="spoke" d="M270,450 L355,368"/>
+
+  <!-- flow around the ring: design -> simulate -> analyze -> figures -->
+  <path class="flow" d="M272,95 L686,95" marker-end="url(#ah)"/>
+  <rect class="tag" x="420" y="82" width="120" height="26" rx="13"/>
+  <text class="tag-t" x="480" y="99" text-anchor="middle">StudySpec + layout</text>
+
+  <path class="flow" d="M805,152 L805,446" marker-end="url(#ah)"/>
+  <rect class="tag" x="752" y="286" width="106" height="26" rx="13"/>
+  <text class="tag-t" x="805" y="303" text-anchor="middle">simulated data</text>
+
+  <path class="flow" d="M688,505 L274,505" marker-end="url(#ah)"/>
+  <rect class="tag" x="430" y="492" width="100" height="26" rx="13"/>
+  <text class="tag-t" x="480" y="509" text-anchor="middle">fitted results</text>
+
+  <path class="flow" d="M155,448 L155,154" marker-end="url(#ah)" stroke-dasharray="7 5"/>
+  <rect class="tag" x="96" y="286" width="118" height="26" rx="13"/>
+  <text class="tag-t" x="155" y="303" text-anchor="middle">next experiment</text>
+
+  <!-- core -->
+  <rect class="core" x="330" y="215" width="300" height="170" rx="18" stroke-width="2.5"/>
+  <text class="core-t" x="480" y="256" text-anchor="middle" font-size="26" font-weight="800">BioCore</text>
+  <text class="core-s" x="480" y="282" text-anchor="middle" font-size="13" font-weight="600">plain-language agent + shared knowledge</text>
+  <text class="core-s" x="480" y="310" text-anchor="middle" font-size="12.5">rules registry (the truths) · cited sources</text>
+  <text class="core-s" x="480" y="330" text-anchor="middle" font-size="12.5">published-practice evidence · 34 species</text>
+  <text class="core-s" x="480" y="350" text-anchor="middle" font-size="12.5">StudySpec · one spec read by every head</text>
+
+  <!-- Biodes (top-left) -->
+  <rect class="des" x="40" y="40" width="230" height="110" rx="14" stroke-width="2"/>
+  <text class="name" x="60" y="74">Biodes</text>
+  <text class="role" x="60" y="97">Design the experiment</text>
+  <text class="what" x="60" y="117">unit audit · power · randomization</text>
+  <text class="what" x="60" y="134">field, tray, cage &amp; vial layouts</text>
+
+  <!-- Simitall (top-right) -->
+  <rect class="sim" x="690" y="40" width="230" height="110" rx="14" stroke-width="2"/>
+  <text class="name" x="710" y="74">Simitall</text>
+  <text class="role" x="710" y="97">Simulate the data</text>
+  <text class="what" x="710" y="117">effects, noise &amp; batches under</text>
+  <text class="what" x="710" y="134">the planned design</text>
+
+  <!-- Bioana (bottom-right) -->
+  <rect class="ana" x="690" y="450" width="230" height="110" rx="14" stroke-width="2"/>
+  <text class="name" x="710" y="484">Bioana</text>
+  <text class="role" x="710" y="507">Analyze the results</text>
+  <text class="what" x="710" y="527">model matched to the design</text>
+  <text class="what" x="710" y="544">QC · DE · mixed models · GWAS</text>
+
+  <!-- Biopaint (bottom-left) -->
+  <rect class="pnt" x="40" y="450" width="230" height="110" rx="14" stroke-width="2"/>
+  <text class="name" x="60" y="484">Biopaint</text>
+  <text class="role" x="60" y="507">Make the figures</text>
+  <text class="what" x="60" y="527">layout maps · power curves</text>
+  <text class="what" x="60" y="544">publication-ready plots</text>
+</svg>

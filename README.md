@@ -1,8 +1,28 @@
-# BioDesignGPT
+# Biodes
 
-An experimental-design agent for plant and biological research. You describe the experiment in plain language; StudyForge asks the questions that actually change the design, audits your experimental units for pseudoreplication, runs simulation-based power analysis, and writes a randomized layout plus metadata template.
+**Design the experiment before you run it.** Biodes is the experimental-design head of a small suite of free, offline tools for plant and biological research. You describe the experiment in plain language; Biodes asks the questions that actually change the design, audits your experimental units for pseudoreplication, runs simulation-based power analysis, and writes a randomized layout plus a metadata template.
 
-**Free for everyone. No API key, no account, works offline.** The default engine reads your description with transparent rules, and every number comes from deterministic R code (`agricolae` for layouts, `lme4`/`simr` for mixed-model power). A local AI model is optional, never required.
+**Free for everyone. No API key, no account, works offline.** Every number comes from deterministic R code (`agricolae` for layouts, `lme4`/`simr` for mixed-model power). A local AI model is optional, never required.
+
+<p align="center">
+  <img src="docs/bio_suite.svg" alt="BioCore at the center, shared by four heads: Biodes designs the experiment, Simitall simulates the data, Bioana analyzes the results, Biopaint makes the figures" width="860">
+</p>
+
+## The suite
+
+One shared core, four heads. Each head reads the same StudySpec and cites the same rules, so the design, the simulation, the analysis and the figures can't contradict each other.
+
+| Part | Job | Status |
+|---|---|---|
+| **BioCore** | Plain-language agent, the rules registry (the "truths", each with a source), published-practice evidence, and the StudySpec every head shares | Rules and evidence layer in progress |
+| **Biodes** (this repo) | Design: unit audit, candidate designs, power, randomization, field/tray/cage/vial layouts | Available |
+| **Simitall** | Simulate data under the planned design: effects, noise, batches | From SimItAll's simulation module; integration planned |
+| **Bioana** | Analyze with the model that matches the design: QC, DE, mixed models, GWAS | From SimItAll's analysis module; integration planned |
+| **Biopaint** | Figures: layout maps, power curves, publication-ready plots | Planned |
+
+The flow follows a real project: **Biodes** hands a StudySpec and layout to **Simitall**, simulated data goes to **Bioana**, fitted results go to **Biopaint**, and what you learn feeds the next design.
+
+> The R package is still named `studyforge` (and its functions `studyforge_*`) while the rename to Biodes is in progress.
 
 ## Install
 
@@ -33,7 +53,7 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 
 ### Optional: trained prompt tagger
 
-A small BERT-style model (8.7 MB, bundled) trained on synthetic, label-correct prompts plus local-LLM paraphrases. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 85% → hybrid **88.5%** field recall, zero invented values (details and all test sets in training/README.md). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it. See [training/README.md](training/README.md).
+A small BERT-style model (8.7 MB, bundled) trained on synthetic, label-correct prompts plus local-LLM paraphrases. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 85% → hybrid **88.5%** field recall, zero invented values (details and all test sets in [training/README.md](training/README.md)). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it.
 
 ```r
 studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")
@@ -81,6 +101,20 @@ setup_hazards("greenhouse")           # doors, pads, sprinklers, gradients, pot 
 protocol_notes("spatial sorghum")     # what published trials actually did
 ```
 
+## Published-practice evidence (BioCore)
+
+Rules say what is statistically correct; evidence says what published studies actually did. Biodes will report both, e.g. *"Sorghum leaf RNA-seq, designed studies: median 3 reps per condition, ~30M reads, mostly NovaSeq 6000; for your effect size the rule recommends ≥ 6."*
+
+The evidence layer is built from public metadata and open-access papers, never invented:
+
+| Script | What it collects |
+|---|---|
+| `harvest_evidence.R` | Run and sample metadata from ENA/SRA and GEO for 34 species (crops, trees, model animals, yeast); a technique classifier (Ribo-seq, CUT&Tag, scRNA-seq, DAP-seq, degradome, Hi-C, ATAC, ChIP, methylome, ...); per-study samples, conditions, reps per condition, sequencer, depth, kits, tissues |
+| `enrich_evidence.R` | Links designed studies to papers (GEO, BioProject, Europe PMC), pulls BioSample attributes to recover the real factor structure (e.g. `treatment[2] x time point[3]`, reps per cell), and extracts growth conditions, design, replication, pooling and statistics from open-access methods sections |
+| `download_papers.R` | Saves the open-access full texts (XML, optional PDF) behind the evidence, for reading and checking |
+
+Current harvest: 83,154 studies across 34 species and 46 technique classes. Sorghum, fully enriched: 330 designed studies, 162 with a paper, factor structures for 184, methods extracted from 214 open-access papers. Enrichment of the other species is running. Only extracted facts and DOIs ship with the package; full texts stay local.
+
 ## What's inside
 
 | Component | Purpose |
@@ -94,7 +128,7 @@ protocol_notes("spatial sorghum")     # what published trials actually did
 | `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
 | `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
 | `inst/shiny/studyforge` | Local Shiny app (plan, setup checks, starter layout download, StudySpec) |
-| `inst/registry/setup_hazards.json` | 57 setup hazards (now also inbreeding, crossing, GxE, greenhouse-to-field, GWAS/eQTL, Ribo-seq, ATAC-seq, validation; (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia...), each with mitigation, covariates to record and a source |
+| `inst/registry/setup_hazards.json` | 57 setup hazards (field borders, irrigation lines, soil, greenhouse doors/pads/sprinklers, chamber corners and drift, trays, cages, housing, experimenter, fly density/background/Wolbachia, inbreeding, crossing, GxE, greenhouse-to-field, GWAS/eQTL, Ribo-seq, ATAC-seq, validation...), each with mitigation, covariates to record and a source |
 | `inst/registry/protocol_notes.json` | Notes from the methods of 40 published studies and standards: what they did, the numbers, the lesson |
 | `inst/registry/*.json` (other) | 24-design catalog (incl. diallel, NC designs, mapping populations, MET with FA, GWAS+eQTL, Ribo-seq, ATAC-seq, two-organism validation), cited pseudoreplication rules, experimental units, systems and their questions, spec schema |
 | `inst/examples/study_examples.jsonl` | 59 prompt → expected-spec cases grounded in published studies; 38 include a full reference plan (design, layout, replication, randomization, what to record, analysis, pitfalls) and the hazards the agent must raise |
@@ -102,7 +136,7 @@ protocol_notes("spatial sorghum")     # what published trials actually did
 
 ## Example set
 
-Each example pairs a user-style prompt with the spec the agent should extract, the fields it **must ask about** (and never fill in itself), the expected unit-audit verdict, and the designs it should recommend. The cases are built from published designs, including some that contain the mistakes StudyForge is meant to catch:
+Each example pairs a user-style prompt with the spec the agent should extract, the fields it **must ask about** (and never fill in itself), the expected unit-audit verdict, and the designs it should recommend. The cases are built from published designs, including some that contain the mistakes Biodes is meant to catch:
 
 - Alpha-lattice sorghum GWAS, 324 accessions, 3 sites, 2 reps (Enyew et al. 2022, doi:10.3389/fpls.2022.999692)
 - Unreplicated plots with five panicles treated as replicates (Chakrabarty et al. 2021, doi:10.3389/fpls.2021.772177)
@@ -130,3 +164,4 @@ testthat::test_local()
 - Animal-study output is a planning recommendation, not an ethics approval; final designs need statistician, veterinarian and IACUC review.
 - Power for split-plot and alpha-lattice is simulation-based; report the Monte Carlo SE (`mcse`) with it.
 - p-rep layouts are in the catalog but not generated yet (see FielDHub).
+- Published-practice evidence describes what studies did, not what is correct; Biodes shows it next to the rule, never in place of it.
