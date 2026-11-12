@@ -29,6 +29,9 @@ SPECIES = {"Sorghum bicolor": "sorghum", "Zea mays": "maize", "Arabidopsis thali
            "Bos taurus": "cattle", "Macaca mulatta": "macaque", "Saccharomyces cerevisiae": "yeast"}
 
 
+SPECIES_NAME = {v: k for k, v in SPECIES.items()}
+
+
 def species_key(organism, index_dir):
     o = organism.strip()
     if os.path.isdir(os.path.join(index_dir, o.lower())):
@@ -78,16 +81,36 @@ def search(index_dir, organism, query, technique=None, k=5, per_paper=2, embedde
         else:
             note = f"few {technique} papers for {sp}; searched all techniques"
     order = idx[np.argsort(-scores[idx])]
-    hits, per = [], {}
-    for i in order:
-        m = meta[i]
-        if per.get(m["pmcid"], 0) >= per_paper:
-            continue
-        per[m["pmcid"]] = per.get(m["pmcid"], 0) + 1
-        hits.append({"score": round(float(scores[i]), 3), "pmcid": m["pmcid"], "doi": m["doi"], "year": m["year"],
-                     "techniques": m["techniques"], "text": m["text"]})
-        if len(hits) >= k:
-            break
+    target = SPECIES_NAME.get(sp)
+    labelled = any("organism_main" in m for m in meta[:50])
+
+    def same(m):   # paper is about the shard's organism (unlabelled shards: trust the shard)
+        if not labelled or m.get("organism_main") in (None, target):
+            return True
+        c = m.get("organism_counts") or {}   # a real second organism, not a passing mention
+        return c.get(target, 0) >= 0.5 * c.get(m["organism_main"], 1)
+
+    def pick(cands, limit):
+        out, per = [], {}
+        for i in cands:
+            m = meta[i]
+            if per.get(m["pmcid"], 0) >= per_paper:
+                continue
+            per[m["pmcid"]] = per.get(m["pmcid"], 0) + 1
+            other = None if same(m) else m.get("organism_main")
+            out.append({"score": round(float(scores[i]), 3), "pmcid": m["pmcid"], "doi": m["doi"], "year": m["year"],
+                        "techniques": m["techniques"], "organism": other or target, "other_organism": bool(other),
+                        "text": m["text"]})
+            if len(out) >= limit:
+                break
+        return out
+
+    hits = pick([i for i in order if same(meta[i])], k)
+    if len(hits) < k:   # labelled fallback: same method in another organism
+        extra = pick([i for i in order if not same(meta[i])], k - len(hits))
+        if extra:
+            note = ((note + "; ") if note else "") + f"only {len(hits)} {sp} papers matched; added {len(extra)} from other organisms"
+        hits += extra
     return {"species": sp, "technique": technique, "hits": hits, "note": note}
 
 
@@ -114,7 +137,8 @@ def main():
         return
     print(f"{r['species']} / {r['technique'] or 'all techniques'}" + (f"  ({r['note']})" if r["note"] else ""))
     for h in r["hits"]:
-        print(f"\n[{h['score']}] {h['pmcid']} doi:{h['doi']} ({h['year']}; {', '.join(h['techniques']) or '?'})")
+        tag = f"  [{h['organism']} study]" if h.get("other_organism") else ""
+        print(f"\n[{h['score']}] {h['pmcid']} doi:{h['doi']} ({h['year']}; {', '.join(h['techniques']) or '?'}){tag}")
         print("  " + h["text"][:600] + ("..." if len(h["text"]) > 600 else ""))
 
 

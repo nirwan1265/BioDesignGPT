@@ -95,7 +95,8 @@ class STEmbedder:
         from sentence_transformers import SentenceTransformer
         self.name, self.batch = name, batch
         self.m = SentenceTransformer(name, device=device)
-        self.dim = self.m.get_sentence_embedding_dimension()
+        dimf = getattr(self.m, "get_embedding_dimension", None) or self.m.get_sentence_embedding_dimension
+        self.dim = dimf()
         self.prefix = next((v for k, v in self.QUERY_PREFIX.items() if k in name.lower()), "")
         self.doc_prefix = "passage: " if "e5" in name.lower() else ""
 

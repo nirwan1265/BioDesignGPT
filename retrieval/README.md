@@ -32,3 +32,14 @@ SPECIES=sorghum sbatch retrieval/build_index.slurm      # one organism
 
 Embedding model: `BAAI/bge-base-en-v1.5` (change with `--model`; rebuild shards with `--force`).
 Full texts and the index stay local; only DOIs and short quotes appear in plans.
+
+### Wrong-organism papers
+
+Papers reach a shard because they mention one of its datasets, so the rat shard also holds mouse papers that
+reanalyse rat data. Label each paper with the organism its own methods are about (mention counts, antibody
+names like "rat anti-mouse" ignored), once after building:
+
+    python retrieval/label_organisms.py --index index
+
+Search then returns same-organism papers first and only adds other-organism hits, tagged `[Mus musculus study]`,
+when too few match.
