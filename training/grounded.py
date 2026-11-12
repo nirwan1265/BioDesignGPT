@@ -37,6 +37,12 @@ TECH = {
     "ATAC-seq": ("atac_seq", ["ATAC-seq", "ATAC-seq"]),
 }
 
+# the measured outcome each assay implies (decodes via the outcome aliases)
+OUTCOME_BY_TECH = {t: ["gene expression", "differential expression", "transcript abundance"]
+                   for t in ("Bulk RNA-seq", "3' Tag-seq", "Long-read RNA (Iso-Seq/ONT)")}
+OUTCOME_BY_TECH["Ribo-seq"] = ["translation efficiency", "translational efficiency"]
+OUTCOME_BY_TECH["ATAC-seq"] = ["accessible regions"]
+
 # factor attribute -> role
 ROLE = {}
 for k in ["genotype", "cultivar", "strain", "ecotype", "line", "breed", "genetic_mod", "population", "variety",
@@ -223,6 +229,9 @@ def build(row, R, n_variants):
                 pieces.append(lambda: e.say(G.pick(["with", "using", "", "n ="]), (G.numtxt(reps, R), "REPS_N"), G.pick(nouns),
                                             G.pick(["", "per condition", "each", ""])))
             rep_said = True
+        oc = OUTCOME_BY_TECH.get(row["technique"])
+        if oc and G.maybe(0.35):
+            pieces.append(lambda: e.say(G.pick(["to look at", "to compare", "to measure", "for"]), (G.pick(oc), "OUTCOME")))
         if kd == "plant" and env and G.maybe(0.6):
             et = {"greenhouse": ["greenhouse", "glasshouse"], "growth_chamber": ["growth chamber", "growth chambers"],
                   "field": ["field", "the field"]}.get(env)

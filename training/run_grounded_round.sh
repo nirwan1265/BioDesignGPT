@@ -11,7 +11,7 @@
 set -euo pipefail
 EVIDENCE=${EVIDENCE:?set EVIDENCE to the folder with the all_species_*.tsv files}
 PY=${PY:-python}
-GROUNDED_N=${GROUNDED_N:-15000}     # how many grounded prompts to mix with the template data
+GROUNDED_N=${GROUNDED_N:-8000}     # how many grounded prompts to mix with the template data
 EPOCHS=${EPOCHS:-8}
 HOLDOUT=${HOLDOUT:-setaria,poplar,zebrafish,xenopus}
 D=training/data
@@ -46,7 +46,7 @@ echo "== 4/5 train -> $NEW"
 $PY training/train.py --train $D/train_r5.jsonl --dev $D/dev_r5.jsonl --out $NEW --epochs "$EPOCHS"
 
 echo "== 5/5 predict + score (old sf-tiny vs new sf-tiny-r5)"
-SETS="inst/examples/study_examples.jsonl $D/fresh_test.jsonl $D/fresh_test_v2.jsonl $D/fresh_test_v3.jsonl $D/grounded_eval.jsonl"
+SETS="inst/examples/study_examples.jsonl $D/fresh_test.jsonl $D/fresh_test_v2.jsonl $D/fresh_test_v3.jsonl $D/fresh_test_v4.jsonl $D/grounded_eval.jsonl"
 for m in sf-tiny sf-tiny-r5; do
   for s in $SETS; do
     $PY inst/python/predict.py --model inst/models/$m --examples "$s" --out "$D/preds_${m}_$(basename "$s" .jsonl).json"
@@ -56,6 +56,7 @@ Rscript - <<'EOF'
 suppressMessages(if (requireNamespace("pkgload", quietly = TRUE)) pkgload::load_all(".", quiet = TRUE) else library(studyforge))
 sets <- c(study_examples = "inst/examples/study_examples.jsonl", fresh_v1 = "training/data/fresh_test.jsonl",
           fresh_v2 = "training/data/fresh_test_v2.jsonl", fresh_v3 = "training/data/fresh_test_v3.jsonl",
+          fresh_v4 = "training/data/fresh_test_v4.jsonl",
           grounded_heldout = "training/data/grounded_eval.jsonl")
 res <- NULL
 for (s in names(sets)) {
@@ -69,6 +70,7 @@ for (s in names(sets)) {
 }
 print(res, row.names = FALSE)
 write.csv(res, "training/data/round5_scores.csv", row.names = FALSE)
-cat("\nKeep sf-tiny-r5 only if it is at least as good on fresh_v3 and study_examples, better on grounded_heldout,",
+cat("\nfresh_v3 was used to find the round-5 regressions, so it is a dev set now; fresh_v4 is the clean test.",
+    "\nKeep sf-tiny-r5 only if it is at least as good on fresh_v4 and study_examples, better on grounded_heldout,",
     "\nand invents nothing. Then: rm -r inst/models/sf-tiny && mv inst/models/sf-tiny-r5 inst/models/sf-tiny\n")
 EOF

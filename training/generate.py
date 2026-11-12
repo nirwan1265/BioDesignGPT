@@ -478,7 +478,8 @@ def fam_rnaseq():
     o = org(e, ["Sorghum bicolor", "Zea mays", "Arabidopsis thaliana", "Saccharomyces cerevisiae", "Mus musculus"])
     k = R.randint(2, 3)
     pieces = [lambda: e.say(assay(e, "rnaseq", pick(["RNA-seq", "bulk RNA-seq", "transcriptome profiling"])), "of", o),
-              lambda: (e.factor("genotype", k), e.say((numtxt(k, R), "GENO_N"), pick(["genotypes", "lines", "strains"])))]
+              lambda: (e.factor("genotype", k), e.say((numtxt(k, R), "GENO_N"), pick(["genotypes", "lines", "strains"]),
+                                                         pick(["", "", "", "(drought-tolerant and susceptible)" if k == 2 else "", "(resistant and susceptible)" if k == 2 else ""])))]
     if maybe(0.6):
         f = pick(["water", "temperature", "nitrogen"]); e.factor(f, 2)
         pieces.append(lambda: e.say("under", (pick(["drought vs control", "heat vs control", "low vs high nitrogen"]), "FACTOR")))
@@ -683,7 +684,9 @@ def fam_backcross():
     g = R.randint(2, 7)
     o = org(e, CROPS_GEN + ["Mus musculus", "Drosophila melanogaster"])
     e.spec["population"] = {"generations": g}
-    e.say(pick(["We are introgressing a mutation into", "Moving a transgene into", "Introgressing a QTL into"]), pick(["the elite background", "our lab background", "B73", "BTx623", "C57BL/6"]),
+    e.say(pick(["We are introgressing a mutation into", "Moving a transgene into", "Introgressing a QTL into",
+                 "Introgressing a disease resistance gene into", "Moving a blight resistance locus into",
+                 "Backcrossing a high-oil allele into", "Introgressing a drought tolerance QTL into"]), pick(["the elite background", "our lab background", "B73", "BTx623", "C57BL/6"]),
           "of", o, "by", mating(e, "backcross"), "for", (numtxt(g, R) + " generations", "GEN_N"), ".", pick(["Is that enough?", "How much donor genome remains?", "What controls do I need?"]))
     return e
 
@@ -775,7 +778,8 @@ def fam_gwas_rnaseq():
     pieces = [lambda: e.say(pick(["We have a", "Using a", "I have a"]), (numtxt(n, R), "GENO_N"), "-line", o, "diversity panel with", assay(e, "gwas"), "hits for",
                             (pick(aliases("outcome", trait)[:3]), "OUTCOME")),
               lambda: e.say(pick(["and want to add", "plan to run", "now want"]), assay(e, "rnaseq"), pick(["of leaves", "on one tissue", "at flowering", "in two tissues", ""]),
-                            pick(["to find candidate genes", "for eQTL mapping", "to prioritize genes", "for TWAS"]))]
+                            pick(["to find candidate genes", "for eQTL mapping", "to prioritize genes", "for TWAS",
+                                 "to find genes behind seed oil content", "to find disease resistance genes", "behind drought tolerance"]))]
     if maybe(0.4): pieces.append(lambda: e.say(pick(["and", "then"]), assay(e, "eqtl"), pick(["colocalization", "analysis"])))
     if maybe(0.3): pieces.append(lambda: e.say(pick(["plus", "and maybe"]), assay(e, "lipidomics")))
     join(e, pieces)
