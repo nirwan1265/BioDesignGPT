@@ -14,11 +14,15 @@
 .sf_find_all <- function(text, cat) {
   t <- .sf_alias_table()
   t <- t[t$category == cat, ]
+  if (nrow(t) > 300) {   # big vocabularies: only aliases whose first word is in the text
+    first <- sub("^[^a-z0-9]*([a-z0-9]+).*$", "\\1", tolower(t$alias))
+    t <- t[first %in% regmatches(text, gregexpr("[a-z0-9]+", text))[[1]], ]
+  }
   t <- t[order(-nchar(t$alias)), ]
   hits <- list()
   taken <- rep(FALSE, nchar(text))
   for (i in seq_len(nrow(t))) {
-    m <- gregexpr(paste0("(?<![a-z0-9])", gsub("([.()+?*^$|\\[\\]\\\\])", "\\\\\\1", tolower(t$alias[i])), "(?![a-z0-9])"),
+    m <- gregexpr(paste0("(?<![a-z0-9])\\Q", gsub("\\E", "", tolower(t$alias[i]), fixed = TRUE), "\\E(?![a-z0-9])"),
                   text, perl = TRUE)[[1]]
     for (k in seq_along(m)) {
       if (m[k] < 0) next

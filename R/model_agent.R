@@ -75,9 +75,36 @@ merge_specs <- function(rule, model, question) {
 .sf_alias_table <- function() {
   if (is.null(.sf_alias_cache$t)) {
     f <- system.file("agent", "aliases.tsv", package = "studyforge")
-    .sf_alias_cache$t <- utils::read.delim(f, quote = "", stringsAsFactors = FALSE)
+    t <- utils::read.delim(f, quote = "", stringsAsFactors = FALSE)
+    .sf_alias_cache$t <- rbind(t, .sf_vocab_aliases(t))
   }
   .sf_alias_cache$t
+}
+
+# Organism names built from sources (data-raw/vocab/build_vocab.py: NCBI Taxonomy + strains, cultivars and
+# cell lines recorded in our harvested studies), added as organism aliases. Curated rows win. For prompts,
+# a strain name must not be able to pass as an everyday word: a single plain word ("atlantic", "jack",
+# "lewis") is left out; names with a digit, hyphen, slash or space (B73, Col-0, C57BL/6J, Sprague-Dawley,
+# Heinz 1706) are used when seen in >= 3 studies.
+.sf_vocab_aliases <- function(t) {
+  f <- system.file("vocab", "organism_names.tsv", package = "studyforge")
+  if (!nzchar(f)) return(t[0, ])
+  v <- utils::read.delim(f, quote = "", stringsAsFactors = FALSE, colClasses = "character")
+  n <- suppressWarnings(as.integer(v$n_studies))
+  keep <- v$source != "aliases.tsv" &
+    (v$source != "biosample" | (!grepl("^[a-z]+$", v$name) & !is.na(n) & n >= 3)) &
+    !tolower(v$name) %in% tolower(t$alias[t$category == "organism"])
+  v <- v[keep, ]
+  if (!nrow(v)) return(t[0, ])
+  out <- t[rep(1, nrow(v)), ]
+  out[] <- NA
+  out$alias <- v$name
+  out$canonical_term <- v$organism
+  out$category <- "organism"
+  if ("source" %in% names(out)) out$source <- paste0("vocab:", v$source)
+  if ("confidence" %in% names(out)) out$confidence <- ifelse(v$source == "biosample", "medium", "high")
+  rownames(out) <- NULL
+  out
 }
 
 #' Look up the canonical term for an alias (SimItAll-style alias table)

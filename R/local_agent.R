@@ -122,7 +122,7 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, "antibiotic")) add_factor("antibiotic", 2, if (.sf_has(text, "drinking water|diet")) "cage")
   if (.sf_has(text, "high-fat|low-fat|maternal .*diet|diet")) {
     n <- .sf_count_before(text, c("yeast concentrations?", "diets?"))
-    add_factor("diet", n %|na|% 2, if (.sf_has(text, "pregnan|maternal|dams")) "dam" else if (spec$system %in% "drosophila") "vial")
+    add_factor("diet", n %|na|% 2, if (.sf_has(text, "pregnan|maternal|dams")) "dam" else if (isTRUE(spec$system %in% "drosophila")) "vial")
   }
   if (.sf_has(text, "\\bdoses?\\b")) add_factor("dose", .sf_count_before(text, c("groups?")) %|na|% NA)
   if (.sf_has(text, "male and female|both sexes|males? .* females?")) add_factor("sex", 2)

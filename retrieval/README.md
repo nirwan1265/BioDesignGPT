@@ -36,10 +36,13 @@ Full texts and the index stay local; only DOIs and short quotes appear in plans.
 ### Wrong-organism papers
 
 Papers reach a shard because they mention one of its datasets, so the rat shard also holds mouse papers that
-reanalyse rat data. Label each paper with the organism its own methods are about (mention counts, antibody
-names like "rat anti-mouse" ignored), once after building:
+reanalyse rat data. After building, label each paper and passage with the organism its own text is about:
 
     python retrieval/label_organisms.py --index index
 
-Search then returns same-organism papers first and only adds other-organism hits, tagged `[Mus musculus study]`,
-when too few match.
+Names come from `inst/vocab/organism_names.tsv` (see `data-raw/vocab/`), not hand lists. Three general rules:
+longest name wins ("guinea pig" is not pig); an organism word next to a material or antibody word is a reagent
+("corn oil", "yeast extract", "goat anti-rabbit IgG"); a name about as common in every shard as in its own is
+dropped (listed in `index/_names_dropped.tsv`). Search returns same-organism passages first and adds
+other-organism ones, tagged `[Mus musculus study]`, only when too few match. A paper that uses two organisms
+(rats for RNA-seq, mice for the knockout) is split by passage.

@@ -86,18 +86,23 @@ def search(index_dir, organism, query, technique=None, k=5, per_paper=2, embedde
 
     def other_of(m):
         """None if the passage is about the shard's organism, else the organism it is about.
-        The passage's own mentions decide (a paper may use rats and mice); passages that name no
-        organism inherit the paper's label. Unlabelled shards: trust the shard."""
+        A passage's own mentions decide when the paper really uses that second organism (rats for
+        RNA-seq, mice for the knockout); a stray mention ("Orange G") falls back to the paper's label.
+        Unlabelled shards: trust the shard."""
         if not labelled:
             return None
+        paper = m.get("organism_counts") or {}
+        main = m.get("organism_main")
         pc = m.get("passage_organisms") or {}
-        c = pc or (m.get("organism_counts") or {})
-        if not c:
+        if pc:
+            top = max(pc, key=pc.get)
+            if top == target or pc.get(target, 0) >= 0.5 * pc[top]:
+                return None
+            if paper.get(top, 0) >= 0.2 * paper.get(main, 1):
+                return top
+        if main in (None, target) or paper.get(target, 0) >= 0.5 * paper.get(main, 1):
             return None
-        top = max(c, key=c.get)
-        if top == target or c.get(target, 0) >= 0.5 * c[top]:
-            return None
-        return top
+        return main
 
     def same(m):
         return other_of(m) is None
