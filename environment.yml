@@ -1,0 +1,23 @@
+# One environment for Biodes: R package + Python tagger training/inference.
+#   conda env create -f environment.yml        # (or: mamba env create -f environment.yml)
+#   conda activate biodes
+#   Rscript -e 'install.packages("simr", repos = "https://cloud.r-project.org")'   # optional: mixed-model power
+# Works on macOS (Apple silicon or Intel) and Linux/HPC. PyTorch here is the CPU/MPS build; the tiny
+# tagger trains fine on a laptop. For SciBERT on an HPC GPU, see training/train_scibert.slurm.
+name: biodes
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytorch
+  - transformers
+  - tokenizers
+  - r-base=4.4
+  - r-jsonlite
+  - r-agricolae
+  - r-lme4
+  - r-data.table
+  - r-pkgload
+  - r-testthat
+  - r-shiny
+  - r-remotes
