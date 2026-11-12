@@ -53,7 +53,13 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 
 ### Optional: trained prompt tagger
 
-A small BERT-style model (8.7 MB, bundled) trained on synthetic, label-correct prompts plus local-LLM paraphrases. Used as `engine = "hybrid"`, the rules go first and the model fills gaps; numbers are accepted only if they appear in the prompt. On a clean held-out set written after all code was frozen: rules 74% → model 85% → hybrid **88.5%** field recall, zero invented values (details and all test sets in [training/README.md](training/README.md)). Needs Python with `torch` and `transformers` (`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it.
+A small BERT-style model (bundled) trained on synthetic, label-correct prompts, local-LLM paraphrases, and prompts
+grounded in ~19,000 real designed studies from public archives. Used as `engine = "hybrid"`, the rules go first and
+the model fills gaps; numbers are accepted only if they appear in the prompt. On prompts written before the latest
+round and scored once: **88.2%** field recall (up from 70.6%), and **88.9%** on real studies of species never seen in
+training (up from 51.0%), with zero invented values (details and all test sets in [training/README.md](training/README.md)).
+Needs Python with `torch` and `transformers` (`conda env create -f environment.yml`, or set
+`Sys.setenv(STUDYFORGE_PYTHON = "path/to/python")`); everything else keeps working without it.
 
 ```r
 studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")
@@ -103,17 +109,36 @@ protocol_notes("spatial sorghum")     # what published trials actually did
 
 ## Published-practice evidence (BioCore)
 
-Rules say what is statistically correct; evidence says what published studies actually did. Biodes will report both, e.g. *"Sorghum leaf RNA-seq, designed studies: median 3 reps per condition, ~30M reads, mostly NovaSeq 6000; for your effect size the rule recommends ≥ 6."*
+Rules say what is statistically correct; evidence says what published studies actually did. Biodes reports both:
 
-The evidence layer is built from public metadata and open-access papers, never invented:
+```r
+published_practice("sorghum", "RNA-seq", "leaf")
+#> 55 designed Bulk RNA-seq studies of Sorghum bicolor (leaf) in public archives (2016-2026).
+#> Replicates per condition: median 3 (IQR 2-3, from 46 studies); 22% used 6 or more.
+#> Read depth: median 23.4 M reads per run (IQR 20-28.6).
+#> Recent sequencers: Illumina NovaSeq 6000, Illumina HiSeq 2500, NextSeq 500.
+#> Examples:
+#>   PRJNA1137865 (2024; 3 reps; genotype[Tx430 transgenic, Tx430 WT]) doi:10.1111/pbi.14527 ...
+published_practice("zebrafish")            # every technique with data for an organism
+```
 
-| Script | What it collects |
+`studyforge_ask()` adds this section to plans automatically for omics designs (organism + assay, tissue taken from the
+question), and flags replicate numbers below the published median, while still sending sample size to power analysis
+("for differential expression, 6 or more biological replicates detect far more genes than 3"). It is descriptive:
+most published studies are under-replicated, so it is context, never the recommendation.
+
+The tables (`inst/extdata/published_*.tsv.gz`, under 1 MB) are built from public metadata and open-access papers:
+
+| Script (`data-raw/evidence/`) | What it does |
 |---|---|
-| `harvest_evidence.R` | Run and sample metadata from ENA/SRA and GEO for 34 species (crops, trees, model animals, yeast); a technique classifier (Ribo-seq, CUT&Tag, scRNA-seq, DAP-seq, degradome, Hi-C, ATAC, ChIP, methylome, ...); per-study samples, conditions, reps per condition, sequencer, depth, kits, tissues |
-| `enrich_evidence.R` | Links designed studies to papers (GEO, BioProject, Europe PMC), pulls BioSample attributes to recover the real factor structure (e.g. `treatment[2] x time point[3]`, reps per cell), and extracts growth conditions, design, replication, pooling and statistics from open-access methods sections |
-| `download_papers.R` | Saves the open-access full texts (XML, optional PDF) behind the evidence, for reading and checking |
+| `harvest_evidence.R` | Run and sample metadata from ENA/SRA and GEO for 34 species (crops, trees, model animals, human, yeast); a technique classifier (Ribo-seq, CUT&Tag, scRNA-seq, DAP-seq, degradome, Hi-C, ATAC, ChIP, methylome, ...); per-study samples, conditions, reps per condition, sequencer, depth, kits, tissues |
+| `enrich_evidence.R` | Links designed studies to papers (GEO, BioProject, Europe PMC), recovers the real factor structure from BioSample attributes or sample names (e.g. `treatment[2] x time point[3]`, reps per cell), and extracts growth conditions, design, replication, pooling and statistics from open-access methods sections |
+| `build_practice.R` | Builds the shipped summary and example-study tables |
+| `download_papers.R` | Saves the open-access full texts behind the evidence, for reading and checking (local only) |
 
-Current harvest: 83,154 studies across 34 species and 46 technique classes. Sorghum, fully enriched: 330 designed studies, 162 with a paper, factor structures for 184, methods extracted from 214 open-access papers. Enrichment of the other species is running. Only extracted facts and DOIs ship with the package; full texts stay local.
+Current harvest: 83,154 studies across 34 species; about 57,000 designed studies, 43,933 study-paper links, factor
+structures for 36,732 studies, and methods extracted from 32,606 open-access papers. Only extracted facts and DOIs ship
+with the package; full texts stay local.
 
 ## What's inside
 
@@ -125,6 +150,7 @@ Current harvest: 83,154 studies across 34 species and 46 technique classes. Sorg
 | `R/spec.R` | StudySpec with dotted paths, assumption tracking, schema validation |
 | `R/layouts.R` | Tray (augmented-by-tray), field coordinates with borders, mouse cage and fly vial allocation, resource equation, hazard and protocol lookups |
 | `R/local_agent.R` | Free offline engine: `extract_spec_local()`, `studyforge_ask()`, `launch_studyforge()` |
+| `R/practice.R` | `published_practice()`: what designed studies did per organism x technique x tissue, with citable examples |
 | `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
 | `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
 | `inst/shiny/studyforge` | Local Shiny app (plan, setup checks, starter layout download, StudySpec) |
@@ -164,4 +190,4 @@ testthat::test_local()
 - Animal-study output is a planning recommendation, not an ethics approval; final designs need statistician, veterinarian and IACUC review.
 - Power for split-plot and alpha-lattice is simulation-based; report the Monte Carlo SE (`mcse`) with it.
 - p-rep layouts are in the catalog but not generated yet (see FielDHub).
-- Published-practice evidence describes what studies did, not what is correct; Biodes shows it next to the rule, never in place of it.
+- Published-practice evidence describes what studies did, not what is correct; Biodes shows it next to the rule, never in place of it. Human and mouse coverage is limited to recent studies (2024 onward) for now.

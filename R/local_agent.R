@@ -420,6 +420,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     candidates = candidates, designs = designs, hazards = hazards,
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
+    practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
     disclaimer = if (identical(system, "mouse")) "Planning recommendation only; final designs need statistician, veterinarian and IACUC review."
   ), class = "studyforge_answer")
 
@@ -489,6 +490,20 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
   if (length(x$notes)) {
     cat0("\nWhat published studies did:")
     for (n in x$notes) cat0("  - ", n$citation, ": ", n$lesson)
+  }
+  if (!is.null(x$practice)) {
+    cat0("\nPublished practice (what designed studies in ENA/SRA/GEO did; descriptive, not a recommendation):")
+    for (l in .sf_practice_lines(x$practice)) cat0("  ", l)
+    sm <- x$practice$summary
+    reps <- s$design$reps
+    if (!is.null(reps) && !is.na(sm$reps_median) && reps < sm$reps_median) {
+      cat0("  Your ", reps, " replicate(s) per condition is fewer than the median of these studies (",
+           .sf_fmt(sm$reps_median), ").")
+    }
+    if (x$practice$technique %in% c("Bulk RNA-seq", "3' Tag-seq", "small RNA-seq")) {
+      cat0("  For differential expression, 6 or more biological replicates detect far more genes than 3 ",
+           "(Schurch et al. 2016, doi:10.1261/rna.053959.115); base n on power, not on the median.")
+    }
   }
   cat0("\nStarter code:\n", x$recipe)
   cat0("\nPower: give a minimum detectable difference and residual SD (pilot data or literature); ",
