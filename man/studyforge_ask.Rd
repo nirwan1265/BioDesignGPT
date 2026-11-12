@@ -10,7 +10,8 @@ studyforge_ask(
   engine = c("rules", "hybrid", "auto"),
   model = Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "llama3.2"),
   ollama_endpoint = Sys.getenv("STUDYFORGE_OLLAMA_ENDPOINT",
-    "http://localhost:11434/api/generate")
+    "http://localhost:11434/api/generate"),
+  fix = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ STUDYFORGE_PYTHON), or "auto" (hybrid when STUDYFORGE_PYTHON is set, else rules)
 \item{model}{Ollama model name.}
 
 \item{ollama_endpoint}{Ollama generate endpoint.}
+
+\item{fix}{Named list of corrections applied to the extracted spec (see studyforge_fix()).}
 }
 \value{
 An object of class \code{studyforge_answer}.

@@ -221,26 +221,7 @@ extract_spec_local <- function(question) {
   if (identical(spec$system, "drosophila") && is.null(spec$organism)) set("organism", "Drosophila melanogaster")
 
   # round 3: populations, assays, extra organisms, environments (alias table, longest match first)
-  find_all <- function(cat) {
-    t <- .sf_alias_table()
-    t <- t[t$category == cat, ]
-    t <- t[order(-nchar(t$alias)), ]
-    hits <- list()
-    taken <- rep(FALSE, nchar(text))
-    for (i in seq_len(nrow(t))) {
-      m <- gregexpr(paste0("(?<![a-z0-9])", gsub("([.()+?*^$|\\[\\]\\\\])", "\\\\\\1", tolower(t$alias[i])), "(?![a-z0-9])"), text, perl = TRUE)[[1]]
-      for (k in seq_along(m)) {
-        if (m[k] < 0) next
-        rng <- m[k]:(m[k] + attr(m, "match.length")[k] - 1)
-        if (any(taken[rng])) next
-        taken[rng] <- TRUE
-        hits[[length(hits) + 1]] <- c(pos = m[k], term = t$canonical_term[i])
-      }
-    }
-    if (!length(hits)) return(character())
-    h <- do.call(rbind, hits)
-    unique(h[order(as.integer(h[, "pos"])), "term"])
-  }
+  find_all <- function(cat) .sf_find_all(text, cat)
   sys_now <- spec$system %||% ""
   orgs <- find_all("organism")
   if (length(orgs) > 1 && identical(spec$system, "functional_validation")) set("organisms", orgs)
@@ -281,6 +262,7 @@ extract_spec_local <- function(question) {
     set("primary_outcome.name", "grain_yield"); set("primary_outcome.type", "continuous")
   }
 
+  spec <- .sf_general_layer(spec, text)
   spec$question <- question
   spec
 }
@@ -377,16 +359,19 @@ extract_spec_local <- function(question) {
 #'   STUDYFORGE_PYTHON), or "auto" (hybrid when STUDYFORGE_PYTHON is set, else rules).
 #' @param model Ollama model name.
 #' @param ollama_endpoint Ollama generate endpoint.
+#' @param fix Named list of corrections applied to the extracted spec (see studyforge_fix()).
 #' @return An object of class `studyforge_answer`.
 #' @export
 studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c("rules", "hybrid", "auto"),
                            model = Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "llama3.2"),
                            ollama_endpoint = Sys.getenv("STUDYFORGE_OLLAMA_ENDPOINT",
-                                                        "http://localhost:11434/api/generate")) {
+                                                        "http://localhost:11434/api/generate"),
+                           fix = NULL) {
   provider <- match.arg(provider)
   engine <- match.arg(engine)
   if (engine == "auto") engine <- if (nzchar(Sys.getenv("STUDYFORGE_PYTHON"))) "hybrid" else "rules"
   spec <- if (engine == "hybrid") extract_spec_hybrid(question) else extract_spec_local(question)
+  spec <- .sf_apply_fix(spec, fix)
   v <- validate_spec(spec)
   system <- spec$system %||% NA_character_
 
@@ -416,7 +401,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
 
   ans <- structure(list(
-    question = question, provider = provider, engine = engine, spec = spec, validation = v, audit = audit,
+    question = question, provider = provider, engine = engine, fixes = fix, spec = spec, validation = v, audit = audit,
     candidates = candidates, designs = designs, hazards = hazards,
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
@@ -460,6 +445,13 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
   }
   s <- x$spec
   cat0("StudyForge (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger", ", free)\n")
+  cat0("Here's what I understood (fix anything wrong: studyforge_fix(answer, organism = \"...\", factors = \"name:levels\")):")
+  for (l in .sf_skeleton_lines(s, x$fixes %||% list())) cat0(l)
+  if (identical(s$goal, "analysis")) {
+    cat0("\nThis reads as analysis of data you already have. Analysis (Bioana) is coming; below is the design",
+         " this data implies, which fixes the model it should be analysed with.")
+  }
+  cat0("")
   cat0("System: ", s$system %||% "unknown", if (!is.null(s$organism)) paste0(" | Organism: ", s$organism))
   if (length(s$factors)) {
     fx <- vapply(s$factors, function(f) paste0(f$name, if (!is.null(f$n_levels)) paste0(" (", f$n_levels, ")"),

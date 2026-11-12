@@ -737,3 +737,13 @@ library batches	batch	blocking	evidence layer (ENA/GEO studies)	high
 sequencing batches	batch	blocking	evidence layer (ENA/GEO studies)	high
 s. cerevisiae	Saccharomyces cerevisiae	organism	evidence layer (ENA/GEO studies)	high
 baker's yeast	Saccharomyces cerevisiae	organism	evidence layer (ENA/GEO studies)	high
+cold	temperature	factor	general extraction layer	high
+cold treatment	temperature	factor	general extraction layer	high
+freezing	temperature	factor	general extraction layer	high
+low temperature	temperature	factor	general extraction layer	high
+people	Homo sapiens	organism	general extraction layer	high
+patients	Homo sapiens	organism	general extraction layer	high
+participants	Homo sapiens	organism	general extraction layer	high
+volunteers	Homo sapiens	organism	general extraction layer	high
+placebo	treatment	factor	general extraction layer	high
+placibo	treatment	factor	general extraction layer	high
