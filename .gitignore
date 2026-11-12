@@ -16,3 +16,4 @@ training/data/round5_scores.csv
 inst/models/sf-tiny-r5/
 index/
 logs/
+llm/preds/

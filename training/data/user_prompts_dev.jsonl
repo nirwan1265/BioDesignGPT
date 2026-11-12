@@ -1,0 +1,7 @@
+{"id": "u01", "prompt": "i want to do a cold chamber experiment. for arabidopsis. how cold affects the roots. and also possibly phenotype the roots. what phenotype traits can i take?"}
+{"id": "u02", "prompt": "i work in a hospital and they gave a medicine to 300 people. 190 were treatment and the rest were placibo. what statistical test should i do?"}
+{"id": "u03", "prompt": "i have some human rnaseq data. in 5 condition of diets. how to find DE genes."}
+{"id": "u04", "prompt": "i have a field experiment for maize. and i want to do chipseq here. how do i do this in great detail."}
+{"id": "u05", "prompt": "i want to do a potato experiment with mutagenesis on field. in high salinity condition. how to do this?"}
+{"id": "u06", "prompt": "I want to do a cre flux rat experiment for a gene of my choice. give me the plan."}
+{"id": "u07", "prompt": "I want to do a drosophila gwas and rnaseq for 200 DGRP lines for feeding trials."}
