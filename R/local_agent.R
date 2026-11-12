@@ -406,6 +406,11 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
     practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
+    traits = tryCatch({
+      omics <- length(spec$assays) || isTRUE(spec$system %in% c("bulk_rnaseq", "single_cell", "ribo_seq", "atac_seq", "multi_omics"))
+      if (grepl(.SF_ASKS_TRAITS, tolower(question), perl = TRUE) || (is.null(spec$primary_outcome$name) && !omics && !identical(spec$goal, "analysis")))
+        suggest_traits(spec$tissue, .sf_stresses(spec, question), spec$organism, n = 6)
+    }, error = function(e) NULL),
     disclaimer = if (identical(system, "mouse")) "Planning recommendation only; final designs need statistician, veterinarian and IACUC review."
   ), class = "studyforge_answer")
 
@@ -482,6 +487,15 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
   if (length(x$notes)) {
     cat0("\nWhat published studies did:")
     for (n in x$notes) cat0("  - ", n$citation, ": ", n$lesson)
+  }
+  if (!is.null(x$traits) && nrow(x$traits)) {
+    cat0("\nTraits you could measure", if (!is.null(s$tissue)) paste0(" (", s$tissue, ")"), " -- pick one primary outcome; the rest are secondary:")
+    for (i in seq_len(nrow(x$traits))) {
+      t <- x$traits[i, ]
+      cat0("  - ", t$trait, ": ", t$measured_by, " [", t$tools, "]", if (t$destructive) " (destructive)",
+           if (nzchar(t$doi)) paste0(" (", t$source, ", doi:", t$doi, ")"))
+      if (nzchar(t$note)) cat0("      ", t$note)
+    }
   }
   if (!is.null(x$practice)) {
     cat0("\nPublished practice (what designed studies in ENA/SRA/GEO did; descriptive, not a recommendation):")

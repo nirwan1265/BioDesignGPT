@@ -97,10 +97,10 @@ summ <- function(d) {
     n_with_paper = sum(!is.na(d$doi))
   )
 }
-all_t <- bs[, summ(.SD), by = .(species, organism, technique)][, tissue := "all"]
-tis_t <- bs[!is.na(tissue), if (.N >= 5) summ(.SD), by = .(species, organism, technique, tissue)]
+all_t <- bs[, summ(.SD), by = .(species, organism, group, technique)][, tissue := "all"]
+tis_t <- bs[!is.na(tissue), if (.N >= 5) summ(.SD), by = .(species, organism, group, technique, tissue)]
 practice <- rbind(all_t, tis_t, use.names = TRUE)
-setcolorder(practice, c("species", "organism", "technique", "tissue"))
+setcolorder(practice, c("species", "organism", "group", "technique", "tissue"))
 practice <- practice[n_designed >= 3][order(species, technique, tissue != "all", -n_designed)]
 
 # ---- citable examples ----------------------------------------------------------------------------

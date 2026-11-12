@@ -68,6 +68,27 @@ studyforge_alias("milo")   # "Sorghum bicolor" -- 595 aliases, SimItAll-style
 
 On the 49 paper-grounded examples the free `local` engine recovers **92% of expected spec fields**, suggests a matching design for **98%**, and fills **zero** must-ask values (it never invents effect sizes, variances or unit counts). Reproduce with `evaluate_extraction()` or `Rscript inst/scripts/eval_extraction.R`.
 
+### What Biodes understood, and fixing it
+
+Every plan opens with the fields it extracted. Anything it could not find shows `?`, with a hint from published
+studies where one exists; phenotypes are kept as written for you to confirm. Correct any field and the plan is rebuilt:
+
+```r
+a <- studyforge_ask("I want maize RNA-seq for drought vs control")
+#> Here's what I understood (fix anything wrong: studyforge_fix(answer, organism = "...", factors = "name:levels")):
+#>   Goal:                design a new study
+#>   Organism:            Zea mays
+#>   Setting:             bulk_rnaseq
+#>   Assay / data:        rnaseq
+#>   Tissue:              ? (most studied: leaf, root, endosperm, kernel)
+#>   Sequencing:          ? (typical: Illumina NovaSeq 6000, ~24.1 M reads per sample)
+#>   Factors (levels):    water (2)
+#>   ...
+a <- studyforge_fix(a, tissue = "leaf", design.reps = 6)
+
+suggest_traits("roots", "cold", "Arabidopsis thaliana")   # "what can I measure?", with methods and sources
+```
+
 ## Use the engine directly (no LLM)
 
 ```r
@@ -151,6 +172,8 @@ with the package; full texts stay local.
 | `R/layouts.R` | Tray (augmented-by-tray), field coordinates with borders, mouse cage and fly vial allocation, resource equation, hazard and protocol lookups |
 | `R/local_agent.R` | Free offline engine: `extract_spec_local()`, `studyforge_ask()`, `launch_studyforge()` |
 | `R/practice.R` | `published_practice()`: what designed studies did per organism x technique x tissue, with citable examples |
+| `R/general_extract.R` | Table-driven extraction layer (any organism/assay/factor word in the alias table, generic counts), the plan skeleton, `studyforge_fix()` |
+| `R/traits.R` + `inst/registry/traits.json` | `suggest_traits()`: traits by organ and stress with method, tools, design note and source |
 | `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
 | `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
 | `inst/shiny/studyforge` | Local Shiny app (plan, setup checks, starter layout download, StudySpec) |

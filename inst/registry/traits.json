@@ -1,0 +1,552 @@
+{
+ "version": 1,
+ "description": "Traits a researcher can measure, by organ and stress, with how to measure them and a source. Used by suggest_traits() and plans when the outcome is not stated or the user asks what to measure. Suggestions only: the researcher picks the primary outcome.",
+ "traits": [
+  {
+   "id": "primary_root_length",
+   "trait": "Primary root length and growth rate",
+   "organ": [
+    "root"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "mm; mm/day",
+   "method": "Scan or photograph plates/rhizotrons on fixed days; trace in image software",
+   "tools": "SmartRoot, RhizoVision Explorer, ImageJ",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Image the same plates repeatedly: repeated measures per plant, analyse growth rate per plant, not per image.",
+   "source": {
+    "citation": "Lobet et al. 2011, Plant Physiol (SmartRoot)",
+    "doi": "10.1104/pp.111.179895"
+   }
+  },
+  {
+   "id": "lateral_root_density",
+   "trait": "Lateral root number and density",
+   "organ": [
+    "root"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "plant",
+   "type": "count",
+   "unit": "LR per cm primary root",
+   "method": "Count emerged lateral roots (and primordia under DIC if needed); divide by primary-root length",
+   "tools": "Microscope, SmartRoot",
+   "destructive": false,
+   "throughput": "medium",
+   "note": "Density depends on primary-root length; report both and compare at the same developmental stage.",
+   "source": {
+    "citation": "Dubrovsky & Forde 2012, Plant Cell",
+    "doi": "10.1105/tpc.111.089698"
+   }
+  },
+  {
+   "id": "root_architecture",
+   "trait": "Root system architecture (total length, area, angle, diameter classes)",
+   "organ": [
+    "root"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "cm, cm2, degrees",
+   "method": "Image whole root systems (washed roots, plates or rhizotrons)",
+   "tools": "RhizoVision Explorer, WinRHIZO",
+   "destructive": true,
+   "throughput": "high",
+   "note": "Standardise imaging settings across all treatments; batch = imaging day.",
+   "source": {
+    "citation": "Seethepalli et al. 2021, AoB Plants (RhizoVision Explorer)",
+    "doi": "10.1093/aobpla/plab056"
+   }
+  },
+  {
+   "id": "root_hair",
+   "trait": "Root hair length and density",
+   "organ": [
+    "root"
+   ],
+   "stress": [
+    "any",
+    "nutrient"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "um; hairs/mm",
+   "method": "Image a fixed zone behind the root tip under a stereo microscope",
+   "tools": "Stereo microscope, ImageJ",
+   "destructive": false,
+   "throughput": "medium",
+   "note": "Several hairs per root are subsamples of one plant.",
+   "source": {
+    "citation": "Schneider et al. 2012, Nat Methods (ImageJ)",
+    "doi": "10.1038/nmeth.2089"
+   }
+  },
+  {
+   "id": "root_shoot_biomass",
+   "trait": "Root and shoot dry biomass, root:shoot ratio",
+   "organ": [
+    "root",
+    "shoot",
+    "whole plant"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "mg",
+   "method": "Harvest, wash roots, oven-dry (e.g. 60-70 C to constant weight), weigh",
+   "tools": "Drying oven, balance",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Destructive: plan separate plants per harvest time.",
+   "source": null
+  },
+  {
+   "id": "freezing_tolerance_el",
+   "trait": "Freezing tolerance by electrolyte leakage (LT50)",
+   "organ": [
+    "leaf",
+    "rosette"
+   ],
+   "stress": [
+    "cold"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "% leakage; LT50 (C)",
+   "method": "Cool detached tissue stepwise to a series of sub-zero temperatures, thaw, measure conductivity before and after boiling",
+   "tools": "Programmable cooling bath, conductivity meter",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Fit a dose-response curve per genotype x treatment; compare LT50s.",
+   "source": {
+    "citation": "Measuring freezing tolerance of leaves and rosettes: electrolyte leakage and chlorophyll fluorescence assays, Methods Mol Biol 2020",
+    "doi": "10.1007/978-1-0716-0660-5_2"
+   }
+  },
+  {
+   "id": "fv_fm",
+   "trait": "Maximum PSII efficiency (Fv/Fm)",
+   "organ": [
+    "leaf",
+    "rosette",
+    "shoot"
+   ],
+   "stress": [
+    "cold",
+    "heat",
+    "drought",
+    "salt",
+    "light"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "ratio 0-0.85",
+   "method": "Dark-adapt (about 20-30 min), measure chlorophyll fluorescence",
+   "tools": "PAM fluorometer or fluorescence imager",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Imaging gives whole-rosette values; measure all treatments in randomized order within a session.",
+   "source": {
+    "citation": "Maxwell & Johnson 2000, J Exp Bot",
+    "doi": "10.1093/jexbot/51.345.659"
+   }
+  },
+  {
+   "id": "freezing_damage_imaging",
+   "trait": "Freezing damage by chlorophyll fluorescence imaging",
+   "organ": [
+    "leaf",
+    "rosette"
+   ],
+   "stress": [
+    "cold"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "Fv/Fm after freeze-thaw",
+   "method": "Freeze detached leaves at several temperatures, image Fv/Fm after recovery",
+   "tools": "Fluorescence imager",
+   "destructive": true,
+   "throughput": "high",
+   "note": "Non-invasive alternative to electrolyte leakage.",
+   "source": {
+    "citation": "Ehlert & Hincha 2008, Plant Methods",
+    "doi": "10.1186/1746-4811-4-12"
+   }
+  },
+  {
+   "id": "survival_after_stress",
+   "trait": "Survival / recovery after stress",
+   "organ": [
+    "whole plant",
+    "seedling"
+   ],
+   "stress": [
+    "cold",
+    "heat",
+    "drought",
+    "salt"
+   ],
+   "group": "plant",
+   "type": "binary",
+   "unit": "% plants surviving",
+   "method": "Score regrowth after a recovery period",
+   "tools": "Visual scoring",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Binary per plant; the pot or plate is often the experimental unit - analyse proportions per unit.",
+   "source": null
+  },
+  {
+   "id": "proline",
+   "trait": "Free proline content",
+   "organ": [
+    "leaf",
+    "root",
+    "shoot"
+   ],
+   "stress": [
+    "cold",
+    "drought",
+    "salt"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "umol/g FW",
+   "method": "Ninhydrin colorimetric assay",
+   "tools": "Spectrophotometer",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Run treatments across assay plates/batches in a balanced way.",
+   "source": {
+    "citation": "Bates et al. 1973, Plant Soil",
+    "doi": "10.1007/BF00018060"
+   }
+  },
+  {
+   "id": "mda",
+   "trait": "Lipid peroxidation (MDA, TBARS)",
+   "organ": [
+    "leaf",
+    "root"
+   ],
+   "stress": [
+    "cold",
+    "heat",
+    "drought",
+    "salt"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "nmol/g FW",
+   "method": "Thiobarbituric acid assay",
+   "tools": "Spectrophotometer",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "",
+   "source": {
+    "citation": "Heath & Packer 1968, Arch Biochem Biophys",
+    "doi": "10.1016/0003-9861(68)90654-1"
+   }
+  },
+  {
+   "id": "rwc",
+   "trait": "Relative water content",
+   "organ": [
+    "leaf"
+   ],
+   "stress": [
+    "drought",
+    "salt",
+    "heat"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "%",
+   "method": "Fresh, turgid (rehydrated) and dry weights of leaf discs",
+   "tools": "Balance",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Sample the same leaf position at the same time of day.",
+   "source": {
+    "citation": "Barrs & Weatherley 1962, Aust J Biol Sci",
+    "doi": "10.1071/BI9620413"
+   }
+  },
+  {
+   "id": "gas_exchange",
+   "trait": "Photosynthesis and stomatal conductance (A, gs)",
+   "organ": [
+    "leaf"
+   ],
+   "stress": [
+    "drought",
+    "heat",
+    "salt",
+    "light",
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "umol m-2 s-1; mol m-2 s-1",
+   "method": "Infrared gas analyser on an attached leaf at set light, CO2 and temperature",
+   "tools": "LI-6800 or similar",
+   "destructive": false,
+   "throughput": "low",
+   "note": "Slow: a measurement day is a block; spread treatments evenly across times of day.",
+   "source": {
+    "citation": "Long & Bernacchi 2003, J Exp Bot",
+    "doi": "10.1093/jxb/erg262"
+   }
+  },
+  {
+   "id": "chlorophyll_spad",
+   "trait": "Chlorophyll content (SPAD or extraction)",
+   "organ": [
+    "leaf"
+   ],
+   "stress": [
+    "nutrient",
+    "drought",
+    "heat",
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "SPAD units; ug/cm2",
+   "method": "Handheld meter (average several readings per leaf) or solvent extraction",
+   "tools": "SPAD-502 or similar",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Readings on one leaf are subsamples.",
+   "source": null
+  },
+  {
+   "id": "leaf_area",
+   "trait": "Leaf / rosette area and growth rate",
+   "organ": [
+    "leaf",
+    "rosette",
+    "shoot"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "cm2; cm2/day",
+   "method": "Top-view images on fixed days",
+   "tools": "Camera + ImageJ, phenotyping platform",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Repeated measures per plant.",
+   "source": {
+    "citation": "Schneider et al. 2012, Nat Methods (ImageJ)",
+    "doi": "10.1038/nmeth.2089"
+   }
+  },
+  {
+   "id": "flowering_time",
+   "trait": "Flowering time (days to bolting/anthesis)",
+   "organ": [
+    "whole plant"
+   ],
+   "stress": [
+    "any",
+    "cold"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "days",
+   "method": "Daily scoring from sowing",
+   "tools": "Visual scoring",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Time-to-event: censor plants that never flower.",
+   "source": null
+  },
+  {
+   "id": "tissue_ions",
+   "trait": "Na+ and K+ content",
+   "organ": [
+    "leaf",
+    "root",
+    "shoot"
+   ],
+   "stress": [
+    "salt"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "mg/g DW",
+   "method": "Acid digestion of dried tissue; ICP-OES or flame photometry",
+   "tools": "ICP-OES",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "",
+   "source": null
+  },
+  {
+   "id": "disease_severity",
+   "trait": "Disease severity and AUDPC",
+   "organ": [
+    "leaf",
+    "whole plant"
+   ],
+   "stress": [
+    "disease"
+   ],
+   "group": "plant",
+   "type": "ordinal",
+   "unit": "score or % area; AUDPC",
+   "method": "Repeated severity scores or lesion area from images; integrate over time",
+   "tools": "Rating scale, ImageJ",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Rate blind to treatment where possible; one rater or rater as a block.",
+   "source": null
+  },
+  {
+   "id": "pathogen_biomass",
+   "trait": "Pathogen biomass (qPCR)",
+   "organ": [
+    "leaf",
+    "root"
+   ],
+   "stress": [
+    "disease"
+   ],
+   "group": "plant",
+   "type": "continuous",
+   "unit": "pathogen/plant DNA ratio",
+   "method": "qPCR of a pathogen gene relative to a host reference gene",
+   "tools": "qPCR",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Technical qPCR replicates are not biological replicates.",
+   "source": null
+  },
+  {
+   "id": "body_weight",
+   "trait": "Body weight and weight gain",
+   "organ": [
+    "whole body"
+   ],
+   "stress": [
+    "diet",
+    "any"
+   ],
+   "group": "animal",
+   "type": "continuous",
+   "unit": "g",
+   "method": "Weigh at the same time of day on a fixed schedule",
+   "tools": "Balance",
+   "destructive": false,
+   "throughput": "high",
+   "note": "Repeated measures per animal; the cage is the unit if diet is given per cage.",
+   "source": null
+  },
+  {
+   "id": "gtt",
+   "trait": "Glucose and insulin tolerance (GTT/ITT)",
+   "organ": [
+    "whole body",
+    "blood"
+   ],
+   "stress": [
+    "diet",
+    "metabolic"
+   ],
+   "group": "animal",
+   "type": "continuous",
+   "unit": "mg/dL; AUC",
+   "method": "Fast, inject or gavage glucose, sample tail blood at fixed times",
+   "tools": "Glucometer",
+   "destructive": false,
+   "throughput": "medium",
+   "note": "Fasting length and dose basis (body weight vs lean mass) change results; state them.",
+   "source": {
+    "citation": "Ayala et al. 2010, Dis Model Mech",
+    "doi": "10.1242/dmm.006239"
+   }
+  },
+  {
+   "id": "body_composition",
+   "trait": "Fat and lean mass",
+   "organ": [
+    "whole body"
+   ],
+   "stress": [
+    "diet",
+    "metabolic"
+   ],
+   "group": "animal",
+   "type": "continuous",
+   "unit": "g",
+   "method": "Non-invasive NMR body composition",
+   "tools": "EchoMRI or similar",
+   "destructive": false,
+   "throughput": "high",
+   "note": "",
+   "source": null
+  },
+  {
+   "id": "food_intake",
+   "trait": "Food intake",
+   "organ": [
+    "whole body"
+   ],
+   "stress": [
+    "diet"
+   ],
+   "group": "animal",
+   "type": "continuous",
+   "unit": "g/day",
+   "method": "Weigh food hoppers daily",
+   "tools": "Balance or metabolic cages",
+   "destructive": false,
+   "throughput": "medium",
+   "note": "Measured per cage when animals are group-housed: the cage is the unit.",
+   "source": null
+  },
+  {
+   "id": "lipid_profile",
+   "trait": "Lipid profile (lipid classes and species)",
+   "organ": [
+    "leaf",
+    "seed",
+    "root",
+    "liver",
+    "blood",
+    "any"
+   ],
+   "stress": [
+    "any"
+   ],
+   "group": "any",
+   "type": "continuous",
+   "unit": "nmol/mg or relative abundance",
+   "method": "Lipid extraction and LC-MS/MS with internal standards and pooled QC samples",
+   "tools": "LC-MS/MS",
+   "destructive": true,
+   "throughput": "medium",
+   "note": "Randomize injection order; pooled QC every ~10 injections; batch = injection batch.",
+   "source": {
+    "citation": "Broadhurst et al. 2018, Metabolomics",
+    "doi": "10.1007/s11306-018-1367-3"
+   }
+  }
+ ]
+}

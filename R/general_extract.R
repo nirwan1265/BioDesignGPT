@@ -180,6 +180,10 @@
   if (is.null(spec$goal)) set("goal", .sf_goal(text))
   if (is.null(spec$primary_outcome$name)) set("outcome_text", .sf_outcome_text(text))
   if (is.null(spec$tissue)) set("tissue", .sf_tissue_text(text))
+  if (is.null(spec$sequencing)) {
+    sq <- .sf_sequencing(text)
+    if (!is.null(sq)) spec$sequencing <- sq
+  }
   spec
 }
 
@@ -230,11 +234,18 @@ studyforge_fix <- function(answer, ...) {
     paste0(f$name, if (!is.null(f$n_levels)) paste0(" (", f$n_levels, ")") else " (? levels)"), ""), collapse = "; ") else "?"
   outcome <- if (!is.null(s$primary_outcome$name)) s$primary_outcome$name else
     if (!is.null(s$outcome_text)) paste0("\"", s$outcome_text, "\" (as written; confirm)") else "?"
+  hint <- function(what) { h <- tryCatch(.sf_practice_hint(s, what), error = function(e) NULL); if (is.null(h)) "?" else paste0("? (", h, ")") }
+  tissue <- if (!is.null(s$tissue)) s$tissue else hint("tissue")
+  omics <- length(s$assays) || isTRUE(s$system %in% c("bulk_rnaseq", "single_cell", "ribo_seq", "atac_seq", "multi_omics"))
+  sq <- s$sequencing
+  seqtxt <- if (!is.null(sq)) paste(c(sq$instrument, if (!is.null(sq$read_length)) paste0(sq$layout %||% "", if (!is.null(sq$layout)) " ", sq$read_length, " bp"),
+                                      if (!is.null(sq$depth_m)) paste0(sq$depth_m, " M reads")), collapse = ", ") else hint("sequencing")
   rows <- c(
     Goal = if (identical(s$goal, "analysis")) "analyse data already collected" else "design a new study",
-    Organism = q(s$organism), Setting = q(s$system), `Assay / data` = q(s$assays), Tissue = q(s$tissue),
+    Organism = q(s$organism), Setting = q(s$system), `Assay / data` = q(s$assays), Tissue = tissue,
     `Factors (levels)` = fx, `Outcome / phenotype` = outcome, `Experimental unit` = q(s$experimental_unit),
     `Replicates` = q(s$design$reps), `Locations / seasons` = paste(q(s$design$locations), "/", q(s$design$seasons)))
+  if (omics) rows <- append(rows, c(Sequencing = seqtxt), after = 5)
   c(sprintf("  %-20s %s%s", paste0(names(rows), ":"), rows,
             ifelse(names(rows) %in% c("Organism", "Replicates", "Tissue") & names(rows) %in% names(fixes), "  (corrected)", "")))
 }
