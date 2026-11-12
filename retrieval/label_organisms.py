@@ -28,13 +28,24 @@ EXTRA = {
     "Sorghum bicolor": ["sorghum", "btx623"],
     "Oryza sativa": ["rice", "nipponbare", "oryza sativa"],
     "Saccharomyces cerevisiae": ["yeast", "s. cerevisiae", "saccharomyces"],
+    "Setaria viridis": ["foxtail millet", "setaria italica", "s. italica", "a10.1", "me034", "yugu1"],
+    "Gossypium hirsutum": ["gossypium", "tm-1", "upland cotton"],
+    "Brachypodium distachyon": ["bd21", "bd21-3"],
+    "Malus domestica": ["golden delicious", "royal gala", "fuji apple"],
 }
 
 
 # reagent mentions name an organism without being about it ("rat anti-mouse IgG", "human recombinant TNF")
 REAGENT = re.compile(r"\b(?:rat|mouse|rabbit|goat|donkey|human|chicken|sheep|bovine|hamster|guinea pig)\s+(?:anti-?\s*\w+|"
                      r"monoclonal|polyclonal|igg\w*|igm|serum|recombinant|albumin|cdna|genome|reference)\b|"
-                     r"\banti-?\s*(?:rat|mouse|rabbit|goat|human)\b|\b(?:fetal|foetal) (?:bovine|calf) serum\b")
+                     r"\banti-?\s*(?:rat|mouse|rabbit|goat|human)\b|\b(?:fetal|foetal) (?:bovine|calf) serum\b|"
+                     r"\bguinea pigs?\b|\bcotton (?:swabs?|balls?|wool|tips?|pads?|plugs?|threads?)\b|\bapple (?:juice|cider)\b")
+
+
+def abbreviations(name):
+    """'Zea mays' -> 'z. mays' (how methods sections usually name the species after first use)"""
+    w = name.lower().split()
+    return {f"{w[0][0]}. {w[1]}", f"{w[0][0]}.{w[1]}"} if len(w) == 2 else set()
 
 
 def organism_patterns():
@@ -46,9 +57,11 @@ def organism_patterns():
                     terms[r["canonical_term"]].add(r["alias"].lower())
     for o, al in EXTRA.items():
         terms[o] |= set(al)
-    # ambiguous everyday words that are not reliable organism signals in methods text
+    for o in list(terms):
+        terms[o] |= abbreviations(o) | {o.lower()}
+    # ambiguous everyday words (reagent uses of cotton/apple/pig are stripped by REAGENT instead)
     for o in terms:
-        terms[o] -= {"people", "corn", "apple", "orange", "moss", "frog", "chick", "pig", "cotton"} if o not in ("Sus scrofa",) else set()
+        terms[o] -= {"people", "corn", "orange", "moss", "frog", "chick"}
     return {o: re.compile(r"(?<![a-z0-9])(?:" + "|".join(sorted(map(re.escape, t), key=len, reverse=True)) + r")(?![a-z0-9])")
             for o, t in terms.items() if t}
 
@@ -69,10 +82,13 @@ def main():
         by_paper = collections.defaultdict(collections.Counter)
         for m in meta:
             t = REAGENT.sub(" ", m["text"].lower())
+            here = collections.Counter()
             for o, p in pats.items():
                 n = len(p.findall(t))
                 if n:
-                    by_paper[m["pmcid"]][o] += n
+                    here[o] = n
+            by_paper[m["pmcid"]].update(here)
+            m["passage_organisms"] = dict(here)   # papers often use two organisms; the passage says which
         main_of = {}
         for pmcid, c in by_paper.items():
             main_of[pmcid] = c.most_common(1)[0][0] if c else None

@@ -84,11 +84,23 @@ def search(index_dir, organism, query, technique=None, k=5, per_paper=2, embedde
     target = SPECIES_NAME.get(sp)
     labelled = any("organism_main" in m for m in meta[:50])
 
-    def same(m):   # paper is about the shard's organism (unlabelled shards: trust the shard)
-        if not labelled or m.get("organism_main") in (None, target):
-            return True
-        c = m.get("organism_counts") or {}   # a real second organism, not a passing mention
-        return c.get(target, 0) >= 0.5 * c.get(m["organism_main"], 1)
+    def other_of(m):
+        """None if the passage is about the shard's organism, else the organism it is about.
+        The passage's own mentions decide (a paper may use rats and mice); passages that name no
+        organism inherit the paper's label. Unlabelled shards: trust the shard."""
+        if not labelled:
+            return None
+        pc = m.get("passage_organisms") or {}
+        c = pc or (m.get("organism_counts") or {})
+        if not c:
+            return None
+        top = max(c, key=c.get)
+        if top == target or c.get(target, 0) >= 0.5 * c[top]:
+            return None
+        return top
+
+    def same(m):
+        return other_of(m) is None
 
     def pick(cands, limit):
         out, per = [], {}
@@ -97,7 +109,7 @@ def search(index_dir, organism, query, technique=None, k=5, per_paper=2, embedde
             if per.get(m["pmcid"], 0) >= per_paper:
                 continue
             per[m["pmcid"]] = per.get(m["pmcid"], 0) + 1
-            other = None if same(m) else m.get("organism_main")
+            other = other_of(m)
             out.append({"score": round(float(scores[i]), 3), "pmcid": m["pmcid"], "doi": m["doi"], "year": m["year"],
                         "techniques": m["techniques"], "organism": other or target, "other_organism": bool(other),
                         "text": m["text"]})
