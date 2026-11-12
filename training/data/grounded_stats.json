@@ -1,0 +1,18 @@
+{
+ "studies_used": 18958,
+ "tech:Bulk RNA-seq": 13909,
+ "tech:small RNA-seq": 1842,
+ "skipped_no_usable_factor": 2097,
+ "tech:ATAC-seq": 1466,
+ "tech:Long-read RNA (Iso-Seq/ONT)": 126,
+ "tech:3' Tag-seq": 273,
+ "tech:scRNA/snRNA-seq": 800,
+ "tech:Ribo-seq": 200,
+ "tech:scATAC-seq": 342,
+ "train": 33062,
+ "dev": 874,
+ "test_heldout": 1553,
+ "eval": 300,
+ "species_train": 30,
+ "species_heldout": 4
+}

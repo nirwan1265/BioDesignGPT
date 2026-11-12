@@ -25,7 +25,8 @@ def aliases():
 
 
 def canon(text, *cats):
-    t = " " + text.lower() + " "
+    # spans are tokens joined by spaces: "c . elegans", "v . vinifera" -> "c. elegans"
+    t = " " + re.sub(r"\s+([.,])", r"\1", text.lower()) + " "
     for cat in cats:
         for a, c in aliases().get(cat, []):
             if re.search(r"(?<![a-z])" + re.escape(a) + r"(?![a-z])", t):

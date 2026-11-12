@@ -477,7 +477,7 @@ def fam_rnaseq():
     e = Ex(R, "bulk_rnaseq", "rnaseq")
     o = org(e, ["Sorghum bicolor", "Zea mays", "Arabidopsis thaliana", "Saccharomyces cerevisiae", "Mus musculus"])
     k = R.randint(2, 3)
-    pieces = [lambda: e.say((pick(["RNA-seq", "bulk RNA-seq", "transcriptome profiling"]), None), "of", o),
+    pieces = [lambda: e.say(assay(e, "rnaseq", pick(["RNA-seq", "bulk RNA-seq", "transcriptome profiling"])), "of", o),
               lambda: (e.factor("genotype", k), e.say((numtxt(k, R), "GENO_N"), pick(["genotypes", "lines", "strains"])))]
     if maybe(0.6):
         f = pick(["water", "temperature", "nitrogen"]); e.factor(f, 2)
@@ -513,7 +513,7 @@ def fam_singlecell():
     e.spec.update({"experimental_unit": "mouse", "measurement_unit": "cell", "subsamples_per_unit": c, "organism": "Mus musculus"})
     e.design("reps", n)
     e.factor("injury", 2)
-    e.say(pick(["scRNA-seq", "single-cell RNA-seq"]), "of", pick(["spinal cord", "liver", "lung"]), "from", (numtxt(n, R), "REPS_N"),
+    e.say(assay(e, "single_cell", pick(["scRNA-seq", "single-cell RNA-seq"])), "of", pick(["spinal cord", "liver", "lung"]), "from", (numtxt(n, R), "REPS_N"),
           ("injured and", "FACTOR"), numtxt(n, R), ("uninjured", "FACTOR"), ("mice", "EXP") if False else "mice", ",", "about",
           (f"{c:,}" if maybe() else str(c), "SUB_N"), ("cells", "MEAS"), "each")
     return e

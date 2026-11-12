@@ -594,3 +594,146 @@ gca	gca_sca	outcome	curated terminology (round 3)	high
 sca	gca_sca	outcome	curated terminology (round 3)	high
 heterosis	gca_sca	outcome	curated terminology (round 3)	high
 hybrid vigor	gca_sca	outcome	curated terminology (round 3)	high
+potato	Solanum tuberosum	organism	evidence layer (ENA/GEO studies)	high
+potatoes	Solanum tuberosum	organism	evidence layer (ENA/GEO studies)	high
+solanum tuberosum	Solanum tuberosum	organism	evidence layer (ENA/GEO studies)	high
+s. tuberosum	Solanum tuberosum	organism	evidence layer (ENA/GEO studies)	high
+medicago	Medicago truncatula	organism	evidence layer (ENA/GEO studies)	high
+medicago truncatula	Medicago truncatula	organism	evidence layer (ENA/GEO studies)	high
+barrel medic	Medicago truncatula	organism	evidence layer (ENA/GEO studies)	high
+m. truncatula	Medicago truncatula	organism	evidence layer (ENA/GEO studies)	high
+physcomitrium	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+physcomitrium patens	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+physcomitrella	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+physcomitrella patens	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+moss	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+p. patens	Physcomitrium patens	organism	evidence layer (ENA/GEO studies)	high
+grapevine	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+grapevines	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+grape	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+vitis vinifera	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+v. vinifera	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+wine grape	Vitis vinifera	organism	evidence layer (ENA/GEO studies)	high
+poplar	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+poplars	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+populus trichocarpa	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+populus	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+black cottonwood	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+p. trichocarpa	Populus trichocarpa	organism	evidence layer (ENA/GEO studies)	high
+eucalyptus	Eucalyptus grandis	organism	evidence layer (ENA/GEO studies)	high
+eucalyptus grandis	Eucalyptus grandis	organism	evidence layer (ENA/GEO studies)	high
+e. grandis	Eucalyptus grandis	organism	evidence layer (ENA/GEO studies)	high
+loblolly pine	Pinus taeda	organism	evidence layer (ENA/GEO studies)	high
+pinus taeda	Pinus taeda	organism	evidence layer (ENA/GEO studies)	high
+p. taeda	Pinus taeda	organism	evidence layer (ENA/GEO studies)	high
+apple	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+apples	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+apple tree	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+apple trees	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+malus domestica	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+malus	Malus domestica	organism	evidence layer (ENA/GEO studies)	high
+sweet orange	Citrus sinensis	organism	evidence layer (ENA/GEO studies)	high
+citrus	Citrus sinensis	organism	evidence layer (ENA/GEO studies)	high
+citrus sinensis	Citrus sinensis	organism	evidence layer (ENA/GEO studies)	high
+orange trees	Citrus sinensis	organism	evidence layer (ENA/GEO studies)	high
+c. sinensis	Citrus sinensis	organism	evidence layer (ENA/GEO studies)	high
+chlamydomonas	Chlamydomonas reinhardtii	organism	evidence layer (ENA/GEO studies)	high
+chlamydomonas reinhardtii	Chlamydomonas reinhardtii	organism	evidence layer (ENA/GEO studies)	high
+c. reinhardtii	Chlamydomonas reinhardtii	organism	evidence layer (ENA/GEO studies)	high
+chlamy	Chlamydomonas reinhardtii	organism	evidence layer (ENA/GEO studies)	high
+human	Homo sapiens	organism	evidence layer (ENA/GEO studies)	high
+humans	Homo sapiens	organism	evidence layer (ENA/GEO studies)	high
+homo sapiens	Homo sapiens	organism	evidence layer (ENA/GEO studies)	high
+human donors	Homo sapiens	organism	evidence layer (ENA/GEO studies)	high
+human subjects	Homo sapiens	organism	evidence layer (ENA/GEO studies)	high
+xenopus	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+xenopus laevis	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+x. laevis	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+african clawed frog	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+frog embryos	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+tadpoles	Xenopus laevis	organism	evidence layer (ENA/GEO studies)	high
+chicken	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+chickens	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+gallus gallus	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+broilers	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+broiler chickens	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+laying hens	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+chick embryos	Gallus gallus	organism	evidence layer (ENA/GEO studies)	high
+pig	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+pigs	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+piglets	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+swine	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+sus scrofa	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+sows	Sus scrofa	organism	evidence layer (ENA/GEO studies)	high
+cattle	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+cows	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+dairy cows	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+calves	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+bovine	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+bos taurus	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+heifers	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+steers	Bos taurus	organism	evidence layer (ENA/GEO studies)	high
+rhesus macaque	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+rhesus macaques	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+macaque	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+macaques	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+rhesus monkeys	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+macaca mulatta	Macaca mulatta	organism	evidence layer (ENA/GEO studies)	high
+time points	time	factor	evidence layer (ENA/GEO studies)	high
+timepoints	time	factor	evidence layer (ENA/GEO studies)	high
+time point	time	factor	evidence layer (ENA/GEO studies)	high
+timepoint	time	factor	evidence layer (ENA/GEO studies)	high
+time course	time	factor	evidence layer (ENA/GEO studies)	high
+harvest times	time	factor	evidence layer (ENA/GEO studies)	high
+sampling times	time	factor	evidence layer (ENA/GEO studies)	high
+developmental stages	stage	factor	evidence layer (ENA/GEO studies)	high
+growth stages	stage	factor	evidence layer (ENA/GEO studies)	high
+stages	stage	factor	evidence layer (ENA/GEO studies)	high
+dev stages	stage	factor	evidence layer (ENA/GEO studies)	high
+ages	age	factor	evidence layer (ENA/GEO studies)	high
+age groups	age	factor	evidence layer (ENA/GEO studies)	high
+tissues	tissue	factor	evidence layer (ENA/GEO studies)	high
+organs	tissue	factor	evidence layer (ENA/GEO studies)	high
+tissue types	tissue	factor	evidence layer (ENA/GEO studies)	high
+cell types	tissue	factor	evidence layer (ENA/GEO studies)	high
+sample types	tissue	factor	evidence layer (ENA/GEO studies)	high
+disease groups	disease	factor	evidence layer (ENA/GEO studies)	high
+disease states	disease	factor	evidence layer (ENA/GEO studies)	high
+disease status	disease	factor	evidence layer (ENA/GEO studies)	high
+patient groups	disease	factor	evidence layer (ENA/GEO studies)	high
+conditions	treatment	factor	evidence layer (ENA/GEO studies)	high
+experimental conditions	treatment	factor	evidence layer (ENA/GEO studies)	high
+stress treatments	treatment	factor	evidence layer (ENA/GEO studies)	high
+infection	treatment	factor	evidence layer (ENA/GEO studies)	high
+infection status	treatment	factor	evidence layer (ENA/GEO studies)	high
+stimuli	treatment	factor	evidence layer (ENA/GEO studies)	high
+groups	treatment	factor	evidence layer (ENA/GEO studies)	high
+cell lines	genotype	factor	evidence layer (ENA/GEO studies)	high
+ecotypes	genotype	factor	evidence layer (ENA/GEO studies)	high
+accessions	genotype	factor	evidence layer (ENA/GEO studies)	high
+cultivars	genotype	factor	evidence layer (ENA/GEO studies)	high
+breeds	genotype	factor	evidence layer (ENA/GEO studies)	high
+strains	genotype	factor	evidence layer (ENA/GEO studies)	high
+lines	genotype	factor	evidence layer (ENA/GEO studies)	high
+genotypes	genotype	factor	evidence layer (ENA/GEO studies)	high
+mutant lines	genotype	factor	evidence layer (ENA/GEO studies)	high
+bulk rna-seq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+mrna-seq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+tag-seq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+3' tag-seq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+quantseq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+3' mrna-seq	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+transcriptome profiling	rnaseq	assay	evidence layer (ENA/GEO studies)	high
+small rna-seq	small_rnaseq	assay	evidence layer (ENA/GEO studies)	high
+srna-seq	small_rnaseq	assay	evidence layer (ENA/GEO studies)	high
+mirna-seq	small_rnaseq	assay	evidence layer (ENA/GEO studies)	high
+small rna sequencing	small_rnaseq	assay	evidence layer (ENA/GEO studies)	high
+scrna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+single-cell rna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+snrna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+single-nucleus rna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+scatac-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+library batches	batch	blocking	evidence layer (ENA/GEO studies)	high
+sequencing batches	batch	blocking	evidence layer (ENA/GEO studies)	high
+s. cerevisiae	Saccharomyces cerevisiae	organism	evidence layer (ENA/GEO studies)	high
+baker's yeast	Saccharomyces cerevisiae	organism	evidence layer (ENA/GEO studies)	high

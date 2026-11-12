@@ -8,3 +8,9 @@ training/data/train*.jsonl
 training/data/dev*.jsonl
 training/data/family_weights.json
 __pycache__/
+training/data/grounded_train.jsonl
+training/data/grounded_dev.jsonl
+training/data/grounded_test.jsonl
+training/data/preds_*.json
+training/data/round5_scores.csv
+inst/models/sf-tiny-r5/
