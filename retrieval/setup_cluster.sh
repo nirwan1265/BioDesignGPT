@@ -14,11 +14,16 @@ mkdir -p "$BASE/envs" "$HF_HOME"
 
 if [ ! -x "$ENV/bin/python" ]; then
   echo "== creating $ENV"
-  conda create -y -p "$ENV" python=3.11 >/dev/null
+  conda create -y -p "$ENV" -c conda-forge --override-channels python=3.11 pip
 fi
+if [ ! -x "$ENV/bin/pip" ]; then
+  echo "== adding pip to $ENV"
+  conda install -y -p "$ENV" -c conda-forge --override-channels pip || "$ENV/bin/python" -m ensurepip --upgrade
+fi
+PIP="$ENV/bin/python -m pip"
 echo "== installing packages (pip wheels bundle CUDA; no 'module load cuda' needed)"
-"$ENV/bin/pip" install -q --upgrade pip
-"$ENV/bin/pip" install -q vllm sentence-transformers transformers huggingface_hub numpy
+$PIP install -q --upgrade pip
+$PIP install vllm sentence-transformers transformers huggingface_hub numpy
 
 echo "== downloading models into $HF_HOME"
 "$ENV/bin/python" - <<EOF
