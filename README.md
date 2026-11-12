@@ -136,7 +136,7 @@ The tables (`inst/extdata/published_*.tsv.gz`, under 1 MB) are built from public
 | `build_practice.R` | Builds the shipped summary and example-study tables |
 | `download_papers.R` | Saves the open-access full texts behind the evidence, for reading and checking (local only) |
 
-Current harvest: 83,154 studies across 34 species; about 57,000 designed studies, 43,933 study-paper links, factor
+Current harvest: 95,403 studies across 34 species; about 57,000 designed studies, 43,933 study-paper links, factor
 structures for 36,732 studies, and methods extracted from 32,606 open-access papers. Only extracted facts and DOIs ship
 with the package; full texts stay local.
 
