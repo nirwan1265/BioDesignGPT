@@ -8,7 +8,7 @@ adapter is WORK/adapter (load it with reader.py --adapter WORK/adapter).
 
     python llm/train_lora.py --base Qwen/Qwen2.5-32B-Instruct --work WORK --deadline $(( $(date +%s) + 6000 ))
 """
-import argparse, json, math, os, sys, time
+import argparse, inspect, json, math, os, sys, time
 
 import torch
 from peft import LoraConfig, get_peft_model
@@ -104,8 +104,14 @@ def main():
     ntok = sum(len(r["input_ids"]) for r in train.rows)
     print(f"{len(train)} train / {len(val)} val examples, {ntok / 1e6:.1f}M tokens per epoch", flush=True)
 
-    model = AutoModelForCausalLM.from_pretrained(a.base, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
-                                                 device_map={"": 0})
+    # `dtype` in newer transformers, `torch_dtype` in older ones
+    dt = "dtype" if "dtype" in inspect.signature(AutoModelForCausalLM.from_pretrained).parameters else "torch_dtype"
+    try:
+        model = AutoModelForCausalLM.from_pretrained(a.base, **{dt: torch.bfloat16}, attn_implementation="sdpa",
+                                                     device_map={"": 0})
+    except TypeError:
+        model = AutoModelForCausalLM.from_pretrained(a.base, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
+                                                     device_map={"": 0})
     model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     model.enable_input_require_grads()
     model.config.use_cache = False
@@ -115,13 +121,24 @@ def main():
     model.print_trainable_parameters()
 
     steps_per_epoch = math.ceil(len(train) / (a.batch * a.accum))
-    args = TrainingArguments(
+    total_steps = math.ceil(steps_per_epoch * a.epochs)
+    want = dict(
         output_dir=ck_dir, per_device_train_batch_size=a.batch, per_device_eval_batch_size=a.batch,
         gradient_accumulation_steps=a.accum, learning_rate=a.lr, num_train_epochs=a.epochs, lr_scheduler_type="cosine",
-        warmup_ratio=0.03, weight_decay=0.0, bf16=True, logging_steps=5, save_strategy="steps", save_steps=a.save_steps,
-        save_total_limit=2, eval_strategy="steps", eval_steps=max(a.save_steps, steps_per_epoch // 4),
+        warmup_steps=max(1, int(0.03 * total_steps)), weight_decay=0.0, bf16=True, logging_steps=5,
+        save_strategy="steps", save_steps=a.save_steps, save_total_limit=2,
+        eval_strategy="steps", eval_steps=max(a.save_steps, steps_per_epoch // 4),
         group_by_length=True, report_to="none", dataloader_num_workers=2, remove_unused_columns=False,
         gradient_checkpointing=False, seed=a.seed)   # checkpointing already enabled on the model
+    # transformers renames/removes arguments between versions: map the old eval name, drop what this one lacks
+    ok = set(inspect.signature(TrainingArguments.__init__).parameters)
+    if "eval_strategy" not in ok and "evaluation_strategy" in ok:
+        want["evaluation_strategy"] = want.pop("eval_strategy")
+    dropped = [k for k in want if k not in ok]
+    if dropped:
+        print("TrainingArguments: this transformers version has no " + ", ".join(dropped) + " (skipped)", flush=True)
+    args = TrainingArguments(**{k: v for k, v in want.items() if k in ok})
+    print(f"{total_steps} optimizer steps ({steps_per_epoch} per epoch), warmup {want['warmup_steps']}", flush=True)
     dl = Deadline(a.deadline)
     tr = Trainer(model=model, args=args, train_dataset=train, eval_dataset=val, data_collator=collate(tok.pad_token_id),
                  callbacks=[dl])
