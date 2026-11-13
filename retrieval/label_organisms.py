@@ -14,6 +14,7 @@ the same for every organism:
   names must be specific      a name about as common in every shard as in its own organism's shard
                               (a generic sample label such as "seedling" that slipped into the vocabulary) is dropped,
                               unless it is in at least half its own organism's papers; the list is written to <index>/_names_dropped.tsv
+                              and inst/vocab/organism_names_dropped.tsv (the R extractor skips them too)
 
     python retrieval/label_organisms.py --index index              # every shard
     python retrieval/label_organisms.py --index index --species rat
@@ -23,6 +24,7 @@ import argparse, collections, csv, json, os, re, statistics
 HERE = os.path.dirname(os.path.abspath(__file__))
 VOCAB = os.path.join(HERE, "..", "inst", "vocab", "organism_names.tsv")
 ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
+DROPPED = os.path.join(HERE, "..", "inst", "vocab", "organism_names_dropped.tsv")
 SHARD_ORGANISM = {"sorghum": "Sorghum bicolor", "maize": "Zea mays", "arabidopsis": "Arabidopsis thaliana", "rice": "Oryza sativa",
                   "wheat": "Triticum aestivum", "barley": "Hordeum vulgare", "soybean": "Glycine max",
                   "tomato": "Solanum lycopersicum", "potato": "Solanum tuberosum", "cotton": "Gossypium hirsutum",
@@ -136,10 +138,13 @@ def main():
         if own_rate < SPECIFICITY * ref and own_rate < CLEARLY_OWN:
             dropped.append((" ".join(k), org, round(own_rate, 3), round(ref, 3)))
     bad = {tuple(d[0].split()) for d in dropped}
-    with open(os.path.join(a.index, "_names_dropped.tsv"), "w", encoding="utf-8") as f:
-        f.write("name\torganism\town_shard_paper_rate\tmedian_other_rate\n")
-        for d in sorted(dropped, key=lambda d: -d[3]):
-            f.write("\t".join(map(str, d)) + "\n")
+    # also into the package, so the R extractor skips them in prompts (names are space-joined tokens)
+    for path in (os.path.join(a.index, "_names_dropped.tsv"), DROPPED):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("name\torganism\town_shard_paper_rate\tmedian_other_rate\n")
+            for d in sorted(dropped, key=lambda d: -d[3]):
+                f.write("\t".join(map(str, d)) + "\n")
     print(f"dropped {len(dropped)} non-specific names (see {a.index}/_names_dropped.tsv): "
           + ", ".join(d[0] for d in sorted(dropped, key=lambda d: -d[3])[:12]))
 

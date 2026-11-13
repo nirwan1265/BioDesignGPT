@@ -90,6 +90,13 @@ merge_specs <- function(rule, model, question) {
   f <- system.file("vocab", "organism_names.tsv", package = "studyforge")
   if (!nzchar(f)) return(t[0, ])
   v <- utils::read.delim(f, quote = "", stringsAsFactors = FALSE, colClasses = "character")
+  # names the corpus check (retrieval/label_organisms.py) found non-specific: "santa clara", "p53", "a/j"
+  d <- system.file("vocab", "organism_names_dropped.tsv", package = "studyforge")
+  if (nzchar(d)) {
+    bad <- utils::read.delim(d, quote = "", stringsAsFactors = FALSE, colClasses = "character")$name
+    tok <- vapply(regmatches(tolower(v$name), gregexpr("[a-z0-9]+", tolower(v$name))), paste, "", collapse = " ")
+    v <- v[!tok %in% bad, ]
+  }
   n <- suppressWarnings(as.integer(v$n_studies))
   keep <- v$source != "aliases.tsv" &
     (v$source != "biosample" | (!grepl("^[a-z]+$", v$name) & !is.na(n) & n >= 3)) &
