@@ -12,7 +12,8 @@ OUTCOMES = {"behaviour", "biomass", "body_weight", "chromatin_accessibility", "d
 TOP = {"system", "organism", "organisms", "experimental_unit", "measurement_unit", "subsamples_per_unit", "factors", "design",
        "assays", "primary_outcome", "population", "environments", "blocking_factors"}
 WORD = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-        "eleven": 11, "twelve": 12, "a dozen": 12, "dozen": 12, "a pair": 2, "pair": 2, "both": 2, "single": 1}
+        "eleven": 11, "twelve": 12, "a dozen": 12, "dozen": 12, "a pair": 2, "pair": 2, "both": 2, "single": 1,
+        "duplicates?": 2, "triplicates?": 3, "quadruplicates?": 4}
 errs, n, skips = [], 0, 0
 seen = set()
 stats = collections.Counter()
