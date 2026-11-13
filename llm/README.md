@@ -56,24 +56,31 @@ user. (`judgments = TRUE` turns this off, for comparison only.)
 
 ## Results (field recall %; every merged column has 0 invented must-ask values)
 
-| set | n | rules | 14B alone | 14B + rules | 32B alone | 32B + rules |
-|---|---|---|---|---|---|---|
-| study_examples (dev) | 59 | 92.7 | 77.6 | 94.3 | 80.4 | 94.0 |
-| fresh v1 | 20 | 79.2 | 84.0 | 88.0 | 83.2 | 88.8 |
-| fresh v2 | 22 | 95.8 | 67.8 | 98.3 | 77.1 | 98.3 |
-| fresh v3 (dev) | 12 | 77.0 | 73.8 | 90.2 | 80.3 | 90.2 |
-| fresh v4 (clean test) | 21 | 84.9 | 84.0 | 95.0 | 92.4 | **95.8** |
-| grounded (held-out species) | 300 | 97.8 | 88.5 | 98.7 | 92.3 | 98.6 |
+| set | n | rules | 14B alone | 14B + rules | 32B alone | 32B + rules | **32B fine-tuned alone** | **32B fine-tuned + rules** |
+|---|---|---|---|---|---|---|---|---|
+| study_examples (dev) | 59 | 92.7 | 77.6 | 94.3 | 80.4 | 94.0 | 90.6 | 94.0 |
+| fresh v1 | 20 | 80.0 | 84.0 | 88.0 | 83.2 | 88.8 | 92.0 | **94.4** |
+| fresh v2 | 22 | 95.8 | 67.8 | 98.3 | 77.1 | 98.3 | 94.9 | 97.5 |
+| fresh v3 (dev) | 12 | 77.0 | 73.8 | 90.2 | 80.3 | 90.2 | **96.7** | 91.8 |
+| fresh v4 (clean test) | 21 | 84.9 | 84.0 | 95.0 | 92.4 | 95.8 | 95.0 | 95.8 |
+| grounded (held-out species) | 300 | 97.8 | 88.5 | 98.7 | 92.3 | 98.6 | 98.6 | 98.6 |
 
-The 32B (no fine-tuning yet) reads much better on its own than the 14B (v4 92.4 vs 84.0). Where the 32B
-alone beat the merge, the rules had real bugs, fixed as general rules:
+Fine-tuning (LoRA r=16, 4,396 examples, 1 epoch, val loss 0.047) mostly helps the reader **on its own**
+(v2 77 -> 95, v3 80 -> 97, held-out species 92 -> 99). With the rules, the test sets go v1 +5.6, v4 equal,
+v2 -0.8. **Rules-first stays:** reader-first wins on the dev sets (study_examples 94.9, v3 96.7) but loses on
+v2/v4, so it doesn't generalise yet.
+
+The fine-tuned reader added two kinds of judgments the facts-only merge now refuses:
+- an outcome it inferred ("track growth" -> biomass): an outcome must be named in the question
+- a setting that doesn't fit the organism (a hospital trial as the animal-facility "mouse" system): plant
+  settings aren't for animals, the animal facility isn't for people or plants, vials are for flies
+
+The base 32B (no fine-tuning) reads much better on its own than the 14B (v4 92.4 vs 84.0). Where it beat the
+merge, the rules had real bugs, fixed as general rules:
 - spelled numbers above twelve ("thirty-six")
 - "N units per <treatment group>" states replication ("6 pigs per diet")
 - every "per" phrase is read ("15 flies per vial and 10 vials per diet")
 - flies -> fly
-
-Reader-first merging (reader wins, rules fill gaps) still loses to rules-first for the base 32B (89.4 vs 94.0
-on study_examples), because it doesn't know our schema's conventions yet. Re-test after fine-tuning.
 
 Re-score: put `preds_llm_*.json` in `llm/preds/` and run `merge_specs()` over each set with
 `evaluate_extraction()`.

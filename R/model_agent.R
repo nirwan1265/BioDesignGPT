@@ -20,6 +20,16 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
       model$primary_outcome <- NULL
   }
   if (is.character(model$organism) && !grepl("^[A-Z][a-z]+ [a-z]+", model$organism)) model$organism <- NULL
+  # the reader's setting must fit the organism: plant settings (field, greenhouse, chamber) are not for animals,
+  # the animal-facility setting ("mouse": cages, litters) is not for plants or people, vials are for flies
+  org <- rule$organism %||% (if (is.character(model$organism)) model$organism)
+  if (!is.null(model$system) && !is.null(org) && is.null(rule$system)) {
+    grp <- .sf_group_of(org)
+    bad <- (model$system %in% c("field", "greenhouse", "growth_chamber") && identical(grp, "animal")) ||
+      (model$system == "mouse" && (identical(grp, "plant") || org == "Homo sapiens")) ||
+      (model$system == "drosophila" && org != "Drosophila melanogaster")
+    if (isTRUE(bad)) model$system <- NULL
+  }
   text <- tolower(gsub(",", "", question))
   stated <- function(v) {
     if (!is.numeric(v)) return(TRUE)
@@ -59,6 +69,9 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   known_outcomes <- unique(.sf_alias_table()$canonical_term[.sf_alias_table()$category == "outcome"])
   if (!is.null(model$design$reps) && !rep_ok(model$design$reps)) model$design$reps <- NULL
   if (!is.null(model$primary_outcome$name) && !model$primary_outcome$name %in% known_outcomes) model$primary_outcome <- NULL
+  # guard 3: the outcome must be named in the question (alias table), not inferred ("track growth" is not biomass)
+  if (!is.null(model$primary_outcome$name) && !judgments &&
+      !model$primary_outcome$name %in% .sf_find_all(text, "outcome")) model$primary_outcome <- NULL
   out <- rule
   for (p in c("system", "organism", "experimental_unit", "measurement_unit", "subsamples_per_unit",
               "primary_outcome.name", "primary_outcome.type", "design.reps", "design.locations",
