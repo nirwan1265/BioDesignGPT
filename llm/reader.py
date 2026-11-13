@@ -255,9 +255,13 @@ def to_spec(d):
     return s
 
 
-def run_vllm(questions, model, max_len=8192, tp=1):
+def run_vllm(questions, model, max_len=8192, tp=1, eager=False):
+    # GPU nodes often have no nvcc: avoid FlashInfer's JIT-compiled kernels unless the user chose otherwise
+    os.environ.setdefault("VLLM_ATTENTION_BACKEND", "FLASH_ATTN")
+    os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
     from vllm import LLM, SamplingParams
-    llm = LLM(model=model, dtype="bfloat16", max_model_len=max_len, tensor_parallel_size=tp, gpu_memory_utilization=0.90)
+    llm = LLM(model=model, dtype="bfloat16", max_model_len=max_len, tensor_parallel_size=tp, gpu_memory_utilization=0.90,
+              enforce_eager=eager)
     tok = llm.get_tokenizer()
     prompts = [tok.apply_chat_template(messages(q), tokenize=False, add_generation_prompt=True) for q in questions]
     outs = llm.generate(prompts, SamplingParams(temperature=0.0, max_tokens=1200))
@@ -272,6 +276,7 @@ def main():
     ap.add_argument("--out", default=None, help="predictions json (one file) or folder (several example files)")
     ap.add_argument("--raw", action="store_true", help="also save raw model outputs")
     ap.add_argument("--tp", type=int, default=1, help="tensor parallel GPUs")
+    ap.add_argument("--eager", action="store_true", help="no CUDA graphs / torch.compile (slower start-up problems)")
     a = ap.parse_args()
     sets = {}
     for f in a.examples:
@@ -280,7 +285,7 @@ def main():
     if a.text:
         sets["text"] = [a.text]
     allq = list(dict.fromkeys(q for qs in sets.values() for q in qs))
-    raw = dict(zip(allq, run_vllm(allq, a.model, tp=a.tp)))
+    raw = dict(zip(allq, run_vllm(allq, a.model, tp=a.tp, eager=a.eager)))
     specs = {q: to_spec(parse_json(t)) for q, t in raw.items()}
     bad = sum(1 for q in allq if not specs[q])
     print(f"read {len(allq)} prompts; {bad} unparseable", file=sys.stderr)
