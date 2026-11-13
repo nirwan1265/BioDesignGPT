@@ -83,6 +83,8 @@ upf1-5	Arabidopsis thaliana	strain_or_line	biosample	2	1.0
 wassilewskija	Arabidopsis thaliana	strain_or_line	biosample	5	1.0
 wild type col-0	Arabidopsis thaliana	strain_or_line	biosample	3	1.0
 wild type-1	Arabidopsis thaliana	strain_or_line	biosample	2	1.0
+arabis thaliana	Arabidopsis thaliana	synonym	ncbi_taxonomy		
+mouse-ear cress	Arabidopsis thaliana	common	ncbi_taxonomy		
 bos taurus	Bos taurus	alias	aliases.tsv		
 bovine	Bos taurus	alias	aliases.tsv		
 calves	Bos taurus	alias	aliases.tsv		
@@ -129,7 +131,6 @@ chuannan mountain cattle	Bos taurus	strain_or_line	biosample	2	1.0
 cvcl_jq51	Bos taurus	strain_or_line	biosample	4	1.0
 dairy beef	Bos taurus	strain_or_line	biosample	3	1.0
 dairy cattle	Bos taurus	strain_or_line	biosample	4	1.0
-dairy cow	Bos taurus	strain_or_line	biosample	4	1.0
 estonian holstein breed	Bos taurus	strain_or_line	biosample	2	1.0
 friesian	Bos taurus	strain_or_line	biosample	2	1.0
 friesian-jersey crossbreed	Bos taurus	strain_or_line	biosample	2	1.0
@@ -179,6 +180,16 @@ xinjiang brown cattle	Bos taurus	strain_or_line	biosample	2	1.0
 yanbian yellow cattle	Bos taurus	strain_or_line	biosample	2	1.0
 yellow cattle	Bos taurus	strain_or_line	biosample	2	1.0
 yinchuan, china	Bos taurus	strain_or_line	biosample	2	1.0
+b. taurus	Bos taurus	abbreviation	ncbi_taxonomy		
+bos africanus	Bos taurus	subtaxon_synonym	ncbi_taxonomy		
+bos bovis	Bos taurus	synonym	ncbi_taxonomy		
+bos primigenius taurus	Bos taurus	synonym	ncbi_taxonomy		
+bos taurus africanus	Bos taurus	subtaxon_scientific	ncbi_taxonomy		
+bos taurus taurus	Bos taurus	subtaxon_scientific	ncbi_taxonomy		
+dairy cow	Bos taurus	common	ncbi_taxonomy		
+domestic cattle	Bos taurus	common	ncbi_taxonomy		
+domestic cow	Bos taurus	common	ncbi_taxonomy		
+sanga cattle	Bos taurus	subtaxon_common	ncbi_taxonomy		
 brachypodium	Brachypodium distachyon	alias	aliases.tsv		
 abr3	Brachypodium distachyon	strain_or_line	biosample	3	1.0
 abr6	Brachypodium distachyon	strain_or_line	biosample	2	1.0
@@ -192,6 +203,13 @@ bd21-3/bd3-1	Brachypodium distachyon	strain_or_line	biosample	2	1.0
 bd23-1	Brachypodium distachyon	strain_or_line	biosample	3	1.0
 bd3-1	Brachypodium distachyon	strain_or_line	biosample	3	1.0
 bd30-1	Brachypodium distachyon	strain_or_line	biosample	3	1.0
+annual false brome	Brachypodium distachyon	common	ncbi_taxonomy		
+b. distachyon	Brachypodium distachyon	abbreviation	ncbi_taxonomy		
+brachypodium distachyon	Brachypodium distachyon	scientific	ncbi_taxonomy		
+bromus distachyos	Brachypodium distachyon	synonym	ncbi_taxonomy		
+false brome	Brachypodium distachyon	common	ncbi_taxonomy		
+purple false brome	Brachypodium distachyon	common	ncbi_taxonomy		
+stiff brome	Brachypodium distachyon	common	ncbi_taxonomy		
 brassica napus	Brassica napus	alias	aliases.tsv		
 canola	Brassica napus	alias	aliases.tsv		
 oilseed rape	Brassica napus	alias	aliases.tsv		
@@ -425,6 +443,7 @@ wm654	Caenorhabditis elegans	strain_or_line	biosample	2	1.0
 wrm52	Caenorhabditis elegans	strain_or_line	biosample	2	1.0
 wyy35	Caenorhabditis elegans	strain_or_line	biosample	2	1.0
 yl701	Caenorhabditis elegans	strain_or_line	biosample	2	1.0
+rhabditis elegans	Caenorhabditis elegans	synonym	ncbi_taxonomy		
 c. reinhardtii	Chlamydomonas reinhardtii	alias	aliases.tsv		
 chlamy	Chlamydomonas reinhardtii	alias	aliases.tsv		
 chlamydomonas	Chlamydomonas reinhardtii	alias	aliases.tsv		
@@ -467,6 +486,8 @@ iclc	Chlamydomonas reinhardtii	strain_or_line	biosample	2	1.0
 maa7-ir44s	Chlamydomonas reinhardtii	strain_or_line	biosample	2	1.0
 uvm11	Chlamydomonas reinhardtii	strain_or_line	biosample	2	1.0
 uvm4	Chlamydomonas reinhardtii	strain_or_line	biosample	3	1.0
+chlamydomonas reinhardtii cc3269	Chlamydomonas reinhardtii	subtaxon_scientific	ncbi_taxonomy		
+chlamydomonas smithii	Chlamydomonas reinhardtii	synonym	ncbi_taxonomy		
 c. sinensis	Citrus sinensis	alias	aliases.tsv		
 citrus	Citrus sinensis	alias	aliases.tsv		
 citrus sinensis	Citrus sinensis	alias	aliases.tsv		
@@ -485,7 +506,6 @@ hamlin	Citrus sinensis	strain_or_line	biosample	9	1.0
 hongjiang	Citrus sinensis	strain_or_line	biosample	2	1.0
 leibo county, liangshan prefecture, sich	Citrus sinensis	strain_or_line	biosample	3	1.0
 madam vinous	Citrus sinensis	strain_or_line	biosample	6	1.0
-navel orange	Citrus sinensis	strain_or_line	biosample	2	1.0
 navelate	Citrus sinensis	strain_or_line	biosample	2	1.0
 newhall	Citrus sinensis	strain_or_line	biosample	18	1.0
 newhall navel orange	Citrus sinensis	strain_or_line	biosample	5	1.0
@@ -500,6 +520,13 @@ valencia sweet orange	Citrus sinensis	strain_or_line	biosample	4	1.0
 wanjincheng	Citrus sinensis	strain_or_line	biosample	2	1.0
 wanjincheng orange	Citrus sinensis	strain_or_line	biosample	2	1.0
 xuegan	Citrus sinensis	strain_or_line	biosample	3	1.0
+apfelsine	Citrus sinensis	common	ncbi_taxonomy		
+citrus maxima x citrus reticulata	Citrus sinensis	synonym	ncbi_taxonomy		
+citrus sinensis var. brasiliensis	Citrus sinensis	subtaxon_scientific	ncbi_taxonomy		
+citrus x sinensis	Citrus sinensis	synonym	ncbi_taxonomy		
+naranja	Citrus sinensis	common	ncbi_taxonomy		
+navel orange	Citrus sinensis	common	ncbi_taxonomy		
+valencia orange	Citrus sinensis	common	ncbi_taxonomy		
 danio rerio	Danio rerio	alias	aliases.tsv		
 zebrafish	Danio rerio	alias	aliases.tsv		
 ab jxt\xfc	Danio rerio	strain_or_line	biosample	2	1.0
@@ -598,6 +625,15 @@ zf4	Danio rerio	strain_or_line	biosample	8	1.0
 zmel1	Danio rerio	strain_or_line	biosample	2	1.0
 zmel1-inv	Danio rerio	strain_or_line	biosample	2	1.0
 zmel1-pro	Danio rerio	strain_or_line	biosample	3	1.0
+brachydanio rerio	Danio rerio	synonym	ncbi_taxonomy		
+brachydanio rerio frankei	Danio rerio	synonym	ncbi_taxonomy		
+cyprinus rerio	Danio rerio	synonym	ncbi_taxonomy		
+d. rerio	Danio rerio	abbreviation	ncbi_taxonomy		
+danio frankei	Danio rerio	synonym	ncbi_taxonomy		
+danio rerio frankei	Danio rerio	synonym	ncbi_taxonomy		
+leopard danio	Danio rerio	common	ncbi_taxonomy		
+zebra danio	Danio rerio	common	ncbi_taxonomy		
+zebra fish	Danio rerio	common	ncbi_taxonomy		
 drosophila	Drosophila melanogaster	alias	aliases.tsv		
 drosophila melanogaster	Drosophila melanogaster	alias	aliases.tsv		
 flies	Drosophila melanogaster	alias	aliases.tsv		
@@ -632,7 +668,6 @@ cp190[0]	Drosophila melanogaster	strain_or_line	biosample	3	1.0
 cp190[ko]	Drosophila melanogaster	strain_or_line	biosample	3	1.0
 ctcf 19.7-1c	Drosophila melanogaster	strain_or_line	biosample	3	1.0
 ctcf[0]	Drosophila melanogaster	strain_or_line	biosample	5	1.0
-d. melanogaster	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 dahomey	Drosophila melanogaster	strain_or_line	biosample	9	1.0
 df(1)w67c23(2)y	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 df(2l)ed489/+	Drosophila melanogaster	strain_or_line	biosample	2	1.0
@@ -673,7 +708,6 @@ esgts> shn-rnai	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 esgts> w1118	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 f1cyotm3	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 frt2a	Drosophila melanogaster	strain_or_line	biosample	2	1.0
-fruit fly	Drosophila melanogaster	strain_or_line	biosample	6	1.0
 gd7	Drosophila melanogaster	strain_or_line	biosample	3	1.0
 gd7 mutant	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 gim-012	Drosophila melanogaster	strain_or_line	biosample	2	1.0
@@ -800,6 +834,9 @@ y1 v1	Drosophila melanogaster	strain_or_line	biosample	2	1.0
 y1w1118	Drosophila melanogaster	strain_or_line	biosample	4	1.0
 y[1]w[1]	Drosophila melanogaster	strain_or_line	biosample	3	1.0
 yellow-white	Drosophila melanogaster	strain_or_line	biosample	3	1.0
+d. melanogaster	Drosophila melanogaster	abbreviation	ncbi_taxonomy		
+fruit fly	Drosophila melanogaster	common	ncbi_taxonomy		
+sophophora melanogaster	Drosophila melanogaster	synonym	ncbi_taxonomy		
 e. grandis	Eucalyptus grandis	alias	aliases.tsv		
 eucalyptus	Eucalyptus grandis	alias	aliases.tsv		
 eucalyptus grandis	Eucalyptus grandis	alias	aliases.tsv		
@@ -810,6 +847,9 @@ gl9	Eucalyptus grandis	strain_or_line	biosample	2	1.0
 m35d2	Eucalyptus grandis	strain_or_line	biosample	2	1.0
 tag0014	Eucalyptus grandis	strain_or_line	biosample	4	1.0
 tag5	Eucalyptus grandis	strain_or_line	biosample	2	1.0
+eucalyptus grandis var. grandiflora	Eucalyptus grandis	subtaxon_synonym	ncbi_taxonomy		
+eucalyptus grandis var. x grandiflora	Eucalyptus grandis	subtaxon_scientific	ncbi_taxonomy		
+rose gum	Eucalyptus grandis	common	ncbi_taxonomy		
 broiler chickens	Gallus gallus	alias	aliases.tsv		
 broilers	Gallus gallus	alias	aliases.tsv		
 chick embryos	Gallus gallus	alias	aliases.tsv		
@@ -849,7 +889,6 @@ escdl-1	Gallus gallus	strain_or_line	biosample	3	1.0
 fast -growing	Gallus gallus	strain_or_line	biosample	2	1.0
 fast-growing broiler	Gallus gallus	strain_or_line	biosample	2	1.0
 gallus	Gallus gallus	strain_or_line	biosample	4	1.0
-gallus gallus domesticus	Gallus gallus	strain_or_line	biosample	6	1.0
 green-legged partridge-like chickens	Gallus gallus	strain_or_line	biosample	2	1.0
 green-legged partridgelike chicken	Gallus gallus	strain_or_line	biosample	2	1.0
 guangxi partridge chicken	Gallus gallus	strain_or_line	biosample	2	1.0
@@ -944,6 +983,21 @@ xing hua chicken	Gallus gallus	strain_or_line	biosample	2	1.0
 xinghua	Gallus gallus	strain_or_line	biosample	2	1.0
 yellow chicken	Gallus gallus	strain_or_line	biosample	2	1.0
 yellow-feather chickens	Gallus gallus	strain_or_line	biosample	2	1.0
+bantam	Gallus gallus	common	ncbi_taxonomy		
+g. gallus	Gallus gallus	abbreviation	ncbi_taxonomy		
+gallus bankiva	Gallus gallus	subtaxon_synonym	ncbi_taxonomy		
+gallus domesticus	Gallus gallus	synonym	ncbi_taxonomy		
+gallus ferrugineus murghi	Gallus gallus	subtaxon_synonym	ncbi_taxonomy		
+gallus gallus bankiva	Gallus gallus	subtaxon_scientific	ncbi_taxonomy		
+gallus gallus domesticus	Gallus gallus	synonym	ncbi_taxonomy		
+gallus gallus gallus	Gallus gallus	subtaxon_scientific	ncbi_taxonomy		
+gallus gallus jabouillei	Gallus gallus	subtaxon_scientific	ncbi_taxonomy		
+gallus gallus murghi	Gallus gallus	subtaxon_scientific	ncbi_taxonomy		
+gallus gallus philippensis	Gallus gallus	subtaxon_synonym	ncbi_taxonomy		
+gallus gallus spadiceus	Gallus gallus	subtaxon_scientific	ncbi_taxonomy		
+perdix spadicea	Gallus gallus	subtaxon_synonym	ncbi_taxonomy		
+phasianus gallus	Gallus gallus	synonym	ncbi_taxonomy		
+phasianus gallus gallus	Gallus gallus	subtaxon_synonym	ncbi_taxonomy		
 glycine max	Glycine max	alias	aliases.tsv		
 soy	Glycine max	alias	aliases.tsv		
 soybean	Glycine max	alias	aliases.tsv		
@@ -1093,6 +1147,8 @@ zhonghuang13	Glycine max	strain_or_line	biosample	5	1.0
 zhonghuang30	Glycine max	strain_or_line	biosample	3	1.0
 zigongdongdou	Glycine max	strain_or_line	biosample	3	1.0
 zp661	Glycine max	strain_or_line	biosample	3	1.0
+g. max	Glycine max	abbreviation	ncbi_taxonomy		
+phaseolus max	Glycine max	synonym	ncbi_taxonomy		
 cotton	Gossypium hirsutum	alias	aliases.tsv		
 upland cotton	Gossypium hirsutum	alias	aliases.tsv		
 0102x-10-1	Gossypium hirsutum	strain_or_line	biosample	3	1.0
@@ -1123,9 +1179,7 @@ deltapine acala 90	Gossypium hirsutum	strain_or_line	biosample	2	1.0
 dexiamian 1	Gossypium hirsutum	strain_or_line	biosample	3	1.0
 dp5690	Gossypium hirsutum	strain_or_line	biosample	3	1.0
 fibermax 966	Gossypium hirsutum	strain_or_line	biosample	2	1.0
-g.hirsutum	Gossypium hirsutum	strain_or_line	biosample	3	1.0
 ghdmt9	Gossypium hirsutum	strain_or_line	biosample	2	1.0
-gossypium hirsutum	Gossypium hirsutum	strain_or_line	biosample	8	1.0
 gossypium hirsutum l	Gossypium hirsutum	strain_or_line	biosample	5	1.0
 h05	Gossypium hirsutum	strain_or_line	biosample	3	1.0
 hexin 26	Gossypium hirsutum	strain_or_line	biosample	2	1.0
@@ -1188,6 +1242,25 @@ zhongzhimian2	Gossypium hirsutum	strain_or_line	biosample	2	1.0
 zm113	Gossypium hirsutum	strain_or_line	biosample	3	1.0
 zm24	Gossypium hirsutum	strain_or_line	biosample	15	1.0
 zri015	Gossypium hirsutum	strain_or_line	biosample	2	1.0
+american cotton	Gossypium hirsutum	common	ncbi_taxonomy		
+american upland cotton	Gossypium hirsutum	common	ncbi_taxonomy		
+g. hirsutum	Gossypium hirsutum	abbreviation	ncbi_taxonomy		
+gossypium hirsutum	Gossypium hirsutum	scientific	ncbi_taxonomy		
+gossypium hirsutum f. palmeri	Gossypium hirsutum	subtaxon_scientific	ncbi_taxonomy		
+gossypium hirsutum subsp. hirsutum	Gossypium hirsutum	subtaxon_scientific	ncbi_taxonomy		
+gossypium hirsutum subsp. latifolium	Gossypium hirsutum	subtaxon_scientific	ncbi_taxonomy		
+gossypium hirsutum subsp. mexicanum	Gossypium hirsutum	synonym	ncbi_taxonomy		
+gossypium hirsutum var. hirsutum	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium hirsutum var. marie-galante	Gossypium hirsutum	subtaxon_scientific	ncbi_taxonomy		
+gossypium hirsutum var. nervosum	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium hirsutum var. punctatum	Gossypium hirsutum	subtaxon_scientific	ncbi_taxonomy		
+gossypium lanceolatum	Gossypium hirsutum	synonym	ncbi_taxonomy		
+gossypium latifolium	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium marie-galante	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium nervosum	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium palmerii	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium punctatum	Gossypium hirsutum	subtaxon_synonym	ncbi_taxonomy		
+gossypium purpurascens	Gossypium hirsutum	synonym	ncbi_taxonomy		
 homo sapiens	Homo sapiens	alias	aliases.tsv		
 human	Homo sapiens	alias	aliases.tsv		
 human donors	Homo sapiens	alias	aliases.tsv		
@@ -1881,6 +1954,19 @@ z138	Homo sapiens	strain_or_line	biosample	2	1.0
 zip8k8	Homo sapiens	strain_or_line	biosample	2	1.0
 zr-75-1	Homo sapiens	strain_or_line	biosample	3	1.0
 zr751	Homo sapiens	strain_or_line	biosample	3	1.0
+denisova hominin	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+denisovan	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+denisovans	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+h. sapiens	Homo sapiens	abbreviation	ncbi_taxonomy		
+homo neanderthalensis	Homo sapiens	subtaxon_synonym	ncbi_taxonomy		
+homo sapiens neanderthalensis	Homo sapiens	subtaxon_scientific	ncbi_taxonomy		
+homo sapiens ssp. 'denisova'	Homo sapiens	subtaxon_synonym	ncbi_taxonomy		
+homo sapiens subsp. 'denisova'	Homo sapiens	subtaxon_scientific	ncbi_taxonomy		
+homo sp. altai	Homo sapiens	subtaxon_synonym	ncbi_taxonomy		
+neandertal	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+neandertal man	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+neanderthal	Homo sapiens	subtaxon_common	ncbi_taxonomy		
+neanderthal man	Homo sapiens	subtaxon_common	ncbi_taxonomy		
 barley	Hordeum vulgare	alias	aliases.tsv		
 hordeum vulgare	Hordeum vulgare	alias	aliases.tsv		
 spring barley	Hordeum vulgare	alias	aliases.tsv		
@@ -1953,11 +2039,33 @@ sukai golden	Hordeum vulgare	strain_or_line	biosample	2	1.0
 tibetan hulless barley	Hordeum vulgare	strain_or_line	biosample	2	1.0
 tremois	Hordeum vulgare	strain_or_line	biosample	2	1.0
 vulgare	Hordeum vulgare	strain_or_line	biosample	3	1.0
-wild barley	Hordeum vulgare	strain_or_line	biosample	2	1.0
 xz153	Hordeum vulgare	strain_or_line	biosample	2	1.0
 yerong	Hordeum vulgare	strain_or_line	biosample	2	1.0
 zd9	Hordeum vulgare	strain_or_line	biosample	2	1.0
 zu9	Hordeum vulgare	strain_or_line	biosample	2	1.0
+domesticated barley	Hordeum vulgare	subtaxon_common	ncbi_taxonomy		
+h. vulgare	Hordeum vulgare	abbreviation	ncbi_taxonomy		
+hordeum agriocrithon	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum distichon	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum distichon var. nudum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum distichum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum hexastichon	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum sativum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum spontaneum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare convar. distichon	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare f. agriocrithon	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare subsp. agriocrithon	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare subsp. spontaneum	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare subsp. vulgare	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare subsp. vulgare var. distichum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare var. coeleste	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare var. distichon	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare var. distichum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare var. hexastichon	Hordeum vulgare	subtaxon_scientific	ncbi_taxonomy		
+hordeum vulgare var. nudum	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+hordeum vulgare var. vulgare	Hordeum vulgare	subtaxon_synonym	ncbi_taxonomy		
+two-rowed barley	Hordeum vulgare	subtaxon_common	ncbi_taxonomy		
+wild barley	Hordeum vulgare	subtaxon_common	ncbi_taxonomy		
 macaca mulatta	Macaca mulatta	alias	aliases.tsv		
 macaque	Macaca mulatta	alias	aliases.tsv		
 macaques	Macaca mulatta	alias	aliases.tsv		
@@ -1975,6 +2083,14 @@ lyon-es1	Macaca mulatta	strain_or_line	biosample	4	1.0
 mm 290-96	Macaca mulatta	strain_or_line	biosample	2	1.0
 rf/6a	Macaca mulatta	strain_or_line	biosample	3	1.0
 rhesus	Macaca mulatta	strain_or_line	biosample	6	1.0
+cercopithecus mulatta	Macaca mulatta	synonym	ncbi_taxonomy		
+m. mulatta	Macaca mulatta	abbreviation	ncbi_taxonomy		
+macaca mulatta brevicaudatus	Macaca mulatta	subtaxon_synonym	ncbi_taxonomy		
+macaca mulatta brevicaudus	Macaca mulatta	subtaxon_scientific	ncbi_taxonomy		
+macaca mulatta lasiota	Macaca mulatta	subtaxon_synonym	ncbi_taxonomy		
+macaca mulatta lasiotus	Macaca mulatta	subtaxon_scientific	ncbi_taxonomy		
+macaca mulatta vestita	Macaca mulatta	subtaxon_scientific	ncbi_taxonomy		
+rhesus monkey	Macaca mulatta	common	ncbi_taxonomy		
 apple	Malus domestica	alias	aliases.tsv		
 apple tree	Malus domestica	alias	aliases.tsv		
 apple trees	Malus domestica	alias	aliases.tsv		
@@ -2029,6 +2145,17 @@ starking delicious	Malus domestica	strain_or_line	biosample	3	1.0
 starking red	Malus domestica	strain_or_line	biosample	2	1.0
 starkrimson	Malus domestica	strain_or_line	biosample	4	1.0
 wa 38	Malus domestica	strain_or_line	biosample	2	1.0
+cultivated apple	Malus domestica	common	ncbi_taxonomy		
+m. domestica	Malus domestica	abbreviation	ncbi_taxonomy		
+malus communis	Malus domestica	synonym	ncbi_taxonomy		
+malus domestica subsp. chinensis	Malus domestica	subtaxon_scientific	ncbi_taxonomy		
+malus praecox	Malus domestica	synonym	ncbi_taxonomy		
+malus pumila auct	Malus domestica	synonym	ncbi_taxonomy		
+malus pumila var. domestica	Malus domestica	synonym	ncbi_taxonomy		
+malus sylvestris var. domestica	Malus domestica	synonym	ncbi_taxonomy		
+malus x domestica	Malus domestica	synonym	ncbi_taxonomy		
+pyrus malus	Malus domestica	synonym	ncbi_taxonomy		
+pyrus malus var. domestica	Malus domestica	synonym	ncbi_taxonomy		
 barrel medic	Medicago truncatula	alias	aliases.tsv		
 m. truncatula	Medicago truncatula	alias	aliases.tsv		
 medicago	Medicago truncatula	alias	aliases.tsv		
@@ -2045,6 +2172,10 @@ medicago truncatula gaertn, cv jemalong	Medicago truncatula	strain_or_line	biosa
 mt-a17	Medicago truncatula	strain_or_line	biosample	2	1.0
 r108	Medicago truncatula	strain_or_line	biosample	44	1.0
 truncatula	Medicago truncatula	strain_or_line	biosample	2	1.0
+medicago truncatula f. tricycla	Medicago truncatula	subtaxon_scientific	ncbi_taxonomy		
+medicago truncatula var. longiaculeata	Medicago truncatula	subtaxon_scientific	ncbi_taxonomy		
+medicago truncatula var. longispina	Medicago truncatula	subtaxon_synonym	ncbi_taxonomy		
+medicago truncatula var. truncatula	Medicago truncatula	subtaxon_scientific	ncbi_taxonomy		
 balb/c mice	Mus musculus	alias	aliases.tsv		
 c57bl/6 mice	Mus musculus	alias	aliases.tsv		
 laboratory mice	Mus musculus	alias	aliases.tsv		
@@ -2314,7 +2445,6 @@ het32	Mus musculus	strain_or_line	biosample	3	1.0
 het35	Mus musculus	strain_or_line	biosample	2	1.0
 hl-1	Mus musculus	strain_or_line	biosample	7	1.0
 hm1	Mus musculus	strain_or_line	biosample	4	1.0
-house mouse	Mus musculus	strain_or_line	biosample	2	1.0
 hoxa9-igmp	Mus musculus	strain_or_line	biosample	4	1.0
 hoxb8	Mus musculus	strain_or_line	biosample	5	1.0
 hoxb8-fl	Mus musculus	strain_or_line	biosample	2	1.0
@@ -2492,6 +2622,46 @@ yumm5.2	Mus musculus	strain_or_line	biosample	3	1.0
 z2ko e14tg2a d3 cells	Mus musculus	strain_or_line	biosample	2	1.0
 zfta-rela mnsc	Mus musculus	strain_or_line	biosample	2	1.0
 zhbtc4	Mus musculus	strain_or_line	biosample	3	1.0
+eastern european house mouse	Mus musculus	subtaxon_common	ncbi_taxonomy		
+house mouse	Mus musculus	common	ncbi_taxonomy		
+japanese wild mouse	Mus musculus	subtaxon_common	ncbi_taxonomy		
+m. m. gansuensis	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+m. m. wagneri	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+m. musculus	Mus musculus	abbreviation	ncbi_taxonomy		
+mus bactrianus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus castaneus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus domesticus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus molossinus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus	Mus musculus	scientific	ncbi_taxonomy		
+mus musculus albula	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus bactrianus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus brevirostris	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus castaneus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus castaneus x mus musculus domesticus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus castaneus x mus musculus musculus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus domesticus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus domesticus x m. m. molossinus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus domesticus x mus musculus castaneus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus domesticus x mus musculus molossinus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus domesticus x mus musculus musculus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus gansuensis	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus gentilulus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus helgolandicus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus homourus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus hortulanus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus isatissus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus molossinus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus musculus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus musculus x m. m. castaneus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus musculus x mus musculus castaneus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus musculus x mus musculus domesticus	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus musculus praetextus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus musculus wagneri	Mus musculus	subtaxon_scientific	ncbi_taxonomy		
+mus praetextus	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+mus wagneri	Mus musculus	subtaxon_synonym	ncbi_taxonomy		
+southeastern asian house mouse	Mus musculus	subtaxon_common	ncbi_taxonomy		
+southwestern asian house mouse	Mus musculus	subtaxon_common	ncbi_taxonomy		
+western european house mouse	Mus musculus	subtaxon_common	ncbi_taxonomy		
 benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
 n. benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
 nicotiana benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
@@ -2621,7 +2791,6 @@ inbred-f2-104	Oryza sativa	strain_or_line	biosample	2	1.0
 inbred-f2-106	Oryza sativa	strain_or_line	biosample	2	1.0
 indica	Oryza sativa	strain_or_line	biosample	68	1.0
 indica 93-11	Oryza sativa	strain_or_line	biosample	3	1.0
-indica rice	Oryza sativa	strain_or_line	biosample	7	1.0
 indica, pusa basmati1 (pb1)	Oryza sativa	strain_or_line	biosample	4	1.0
 indica-like/hwacheong_f2	Oryza sativa	strain_or_line	biosample	2	1.0
 indica-type	Oryza sativa	strain_or_line	biosample	2	1.0
@@ -2639,13 +2808,11 @@ irat109	Oryza sativa	strain_or_line	biosample	4	1.0
 irbb5	Oryza sativa	strain_or_line	biosample	2	1.0
 irgc 125827	Oryza sativa	strain_or_line	biosample	2	1.0
 ishikari-shiroge	Oryza sativa	strain_or_line	biosample	3	1.0
-japanese rice	Oryza sativa	strain_or_line	biosample	2	1.0
 japanica	Oryza sativa	strain_or_line	biosample	21	1.0
 japnica	Oryza sativa	strain_or_line	biosample	3	1.0
 japonica	Oryza sativa	strain_or_line	biosample	190	1.0
 japonica cultivar kitaake	Oryza sativa	strain_or_line	biosample	2	1.0
 japonica group	Oryza sativa	strain_or_line	biosample	6	1.0
-japonica rice	Oryza sativa	strain_or_line	biosample	16	1.0
 japonica taipei 309	Oryza sativa	strain_or_line	biosample	2	1.0
 japponica	Oryza sativa	strain_or_line	biosample	8	1.0
 jiangxi	Oryza sativa	strain_or_line	biosample	3	1.0
@@ -2737,13 +2904,9 @@ oryza saliva subsp keng	Oryza sativa	strain_or_line	biosample	3	1.0
 oryza sativa indica	Oryza sativa	strain_or_line	biosample	6	1.0
 oryza sativa japonica	Oryza sativa	strain_or_line	biosample	3	1.0
 oryza sativa japonica cv nipponbare	Oryza sativa	strain_or_line	biosample	2	1.0
-oryza sativa japonica group	Oryza sativa	strain_or_line	biosample	22	1.0
 oryza sativa l	Oryza sativa	strain_or_line	biosample	3	1.0
 oryza sativa l. ssp. japonica	Oryza sativa	strain_or_line	biosample	5	1.0
 oryza sativa l.subsp. japonica	Oryza sativa	strain_or_line	biosample	3	1.0
-oryza sativa subsp indica	Oryza sativa	strain_or_line	biosample	4	1.0
-oryza sativa subsp. japonica	Oryza sativa	strain_or_line	biosample	3	1.0
-oryza. sativa f. spontanea	Oryza sativa	strain_or_line	biosample	2	1.0
 oryza.sativa l.spp.japonica	Oryza sativa	strain_or_line	biosample	2	1.0
 osgelp77	Oryza sativa	strain_or_line	biosample	2	1.0
 ossrt1-rnai	Oryza sativa	strain_or_line	biosample	2	1.0
@@ -2851,6 +3014,40 @@ zhongxian3037	Oryza sativa	strain_or_line	biosample	2	1.0
 zhongzao39	Oryza sativa	strain_or_line	biosample	2	1.0
 zs97	Oryza sativa	strain_or_line	biosample	7	1.0
 zy19	Oryza sativa	strain_or_line	biosample	5	1.0
+asian cultivated rice	Oryza sativa	common	ncbi_taxonomy		
+indian rice	Oryza sativa	subtaxon_common	ncbi_taxonomy		
+indica rice	Oryza sativa	subtaxon_common	ncbi_taxonomy		
+japanese rice	Oryza sativa	subtaxon_common	ncbi_taxonomy		
+japonica rice	Oryza sativa	subtaxon_common	ncbi_taxonomy		
+long-grained rice	Oryza sativa	subtaxon_common	ncbi_taxonomy		
+o. sativa	Oryza sativa	abbreviation	ncbi_taxonomy		
+oryza sativa (indica cultivar-group)	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa (japonica cultivar-group)	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa (javanica cultivar-group)	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa aromatic japonica group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa aromatic subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa aus	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa aus cultivar-group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa aus group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa aus subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa f. spontanea	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa group v	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa indica group	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa indica group x oryza sativa japonica group	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa indica subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa japonica group	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa japonica group x oryza sativa aus subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa japonica group x oryza sativa indica group	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa subsp. indica	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa subsp. japonica	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa temperate japonica cultivar-group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa temperate japonica group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa temperate japonica subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa tropical japonica cultivar-group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa tropical japonica group	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+oryza sativa tropical japonica subgroup	Oryza sativa	subtaxon_scientific	ncbi_taxonomy		
+oryza sativa var. javanica	Oryza sativa	subtaxon_synonym	ncbi_taxonomy		
+red rice	Oryza sativa	common	ncbi_taxonomy		
 millet	Pennisetum glaucum	alias	aliases.tsv		
 pearl millet	Pennisetum glaucum	alias	aliases.tsv		
 moss	Physcomitrium patens	alias	aliases.tsv		
@@ -2868,6 +3065,8 @@ gransden wood 1962	Physcomitrium patens	strain_or_line	biosample	2	1.0
 gransden2004	Physcomitrium patens	strain_or_line	biosample	6	1.0
 patens	Physcomitrium patens	strain_or_line	biosample	6	1.0
 wt12	Physcomitrium patens	strain_or_line	biosample	2	1.0
+phascum patens	Physcomitrium patens	synonym	ncbi_taxonomy		
+physcomitrella patens subsp. patens	Physcomitrium patens	synonym	ncbi_taxonomy		
 loblolly pine	Pinus taeda	alias	aliases.tsv		
 p. taeda	Pinus taeda	alias	aliases.tsv		
 pinus taeda	Pinus taeda	alias	aliases.tsv		
@@ -3431,6 +3630,8 @@ welc-27-4	Populus trichocarpa	strain_or_line	biosample	3	1.0
 welc-27-5	Populus trichocarpa	strain_or_line	biosample	3	1.0
 yald-27-2	Populus trichocarpa	strain_or_line	biosample	3	1.0
 yale-27-3	Populus trichocarpa	strain_or_line	biosample	2	1.0
+populus balsamifera subsp. trichocarpa	Populus trichocarpa	synonym	ncbi_taxonomy		
+western balsam poplar	Populus trichocarpa	common	ncbi_taxonomy		
 rat	Rattus norvegicus	alias	aliases.tsv		
 rats	Rattus norvegicus	alias	aliases.tsv		
 sprague-dawley rats	Rattus norvegicus	alias	aliases.tsv		
@@ -3509,7 +3710,6 @@ myocd-lsd1	Rattus norvegicus	strain_or_line	biosample	3	1.0
 myocd-lsd1nf	Rattus norvegicus	strain_or_line	biosample	2	1.0
 n/nih heterogenous stock rat	Rattus norvegicus	strain_or_line	biosample	2	1.0
 n27	Rattus norvegicus	strain_or_line	biosample	2	1.0
-norway rat	Rattus norvegicus	strain_or_line	biosample	11	1.0
 nrk-49f	Rattus norvegicus	strain_or_line	biosample	4	1.0
 nrk-52e	Rattus norvegicus	strain_or_line	biosample	7	1.0
 pc12	Rattus norvegicus	strain_or_line	biosample	28	1.0
@@ -3518,7 +3718,6 @@ pkd/mhm (cy/+)	Rattus norvegicus	strain_or_line	biosample	2	1.0
 primary culturecell	Rattus norvegicus	strain_or_line	biosample	2	1.0
 primary iols	Rattus norvegicus	strain_or_line	biosample	3	1.0
 rasmc	Rattus norvegicus	strain_or_line	biosample	4	1.0
-rattus norvegicus	Rattus norvegicus	strain_or_line	biosample	3	1.0
 rattus norvegicus (norway rat)	Rattus norvegicus	strain_or_line	biosample	2	1.0
 rbl-2h3	Rattus norvegicus	strain_or_line	biosample	5	1.0
 rbmscs	Rattus norvegicus	strain_or_line	biosample	2	1.0
@@ -3567,6 +3766,12 @@ zsf1	Rattus norvegicus	strain_or_line	biosample	2	1.0
 zsf1-leprfa leprcp/crl	Rattus norvegicus	strain_or_line	biosample	2	1.0
 zucker	Rattus norvegicus	strain_or_line	biosample	2	1.0
 zucker diabetic sprague dawley	Rattus norvegicus	strain_or_line	biosample	2	1.0
+brown rat	Rattus norvegicus	common	ncbi_taxonomy		
+mus norvegicus	Rattus norvegicus	synonym	ncbi_taxonomy		
+norway rat	Rattus norvegicus	common	ncbi_taxonomy		
+r. norvegicus	Rattus norvegicus	abbreviation	ncbi_taxonomy		
+rattus norvegicus	Rattus norvegicus	scientific	ncbi_taxonomy		
+rattus norvegicus albus	Rattus norvegicus	subtaxon_scientific	ncbi_taxonomy		
 baker's yeast	Saccharomyces cerevisiae	alias	aliases.tsv		
 budding yeast	Saccharomyces cerevisiae	alias	aliases.tsv		
 s. cerevisiae	Saccharomyces cerevisiae	alias	aliases.tsv		
@@ -3829,12 +4034,10 @@ s799 x yph499	Saccharomyces cerevisiae	strain_or_line	biosample	3	1.0
 s96	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 s96,yjm789 hybrid	Saccharomyces cerevisiae	strain_or_line	biosample	7	1.0
 sa1	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
-saccharomyces cerevisiae by4741	Saccharomyces cerevisiae	strain_or_line	biosample	4	1.0
 saccharomyces cerevisiae cxau-1	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae cxau-2	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae cxau-3	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae cxau-4	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
-saccharomyces cerevisiae s288c	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae s6-1	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae s6-10	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 saccharomyces cerevisiae s6-11	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
@@ -3973,6 +4176,353 @@ yzs375 rad6-3v5	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 yzs375 rad6e49k-3v5	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 yzs375 rad6p43l-3v5	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
 z100	Saccharomyces cerevisiae	strain_or_line	biosample	2	1.0
+brewer's yeast	Saccharomyces cerevisiae	common	ncbi_taxonomy		
+candida robusta	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+mycoderma cerevisiae	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces boulardii	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces boulardii (nom. inval.)	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces boulardii edrl	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces capensis	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces cerevisiae	Saccharomyces cerevisiae	scientific	ncbi_taxonomy		
+saccharomyces cerevisiae 'var. diastaticus'	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces cerevisiae (desm.) meyen ex e.c. hansen, 1883	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces cerevisiae 101s	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae 228 cu-2	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae a364a	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae awri1631	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae awri796	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae bmn1-35	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by2961	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4741	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4741-av16	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4741-av8	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4741-bv19	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4741-e18	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae by4743	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cat-1	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 1585	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 2910	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7833	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7834	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7835	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7836	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7837	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7838	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7839	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7840	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 7960	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 9562	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 9563	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 9564	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs 9565	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae cbs1585	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs2910	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7833	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7834	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7835	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7837	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7838	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7839	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs7840	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs9562	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs9563	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs9564	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cbs9565	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae cen.pk113-7d	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae clib215	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae clib324	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae clib382	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ec1118	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ec9-8	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae fl100	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae fleischmanns baking yeast	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae fostersb	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae fosterso	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae fy	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae g600	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae gsy1135	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae i14	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae il-01	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ir-2	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae jay291	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae jwy6147	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae kry8	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae kyokai no. 7	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae lalvin l2056	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae lalvin qa23	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae lan211	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae lindquist 5672	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m1-2	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m13	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m2-8	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m22	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m32	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m34	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m3707	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m3836	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m3837	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m3838	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m3839	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m5	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m52bb	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m52cw	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae m8	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae mmy112	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae mucl 28177	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae n85	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae nam34-4c	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae nc-02	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae nrrl y-12632	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ny1308	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae p283	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae p301	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae pe-2	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae pw5	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae r008	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae r103	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae red star baking yeast	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae rm11-1a	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae s228	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae s288c	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae s288c x yjm789	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae s96 x yjm789	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae s96, yjm789 hybrid	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae s96xyjm	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae s96xyjm789	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae sgu57	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae sigma1278b	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae sk-1	Saccharomyces cerevisiae	subtaxon_synonym	ncbi_taxonomy		
+saccharomyces cerevisiae sk1	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae t7	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae t73	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae uc5	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ufmg a-905	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae vin13	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae vl3	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae vr1	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae w303	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae we372	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae y10	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae y12	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae y2209	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae y389	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae y9	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yb210	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1004	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1005	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1006	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1078	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1083	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1094	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1095	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1096	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1097	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1098	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1099	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1100	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1101	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1102	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1103	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1104	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1105	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1106	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1107	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1108	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1109	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1110	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1111	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1112	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1113	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1114	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1115	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1116	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1117	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1118	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1119	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1120	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1121	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1122	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1124	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1125	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1129	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1133	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1135	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1138	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1139	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1140	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1141	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1142	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1143	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1144	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1145	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1146	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1178	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1190	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1199	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1202	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1208	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1242	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1244	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1248	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1250	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1252	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1259	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1273	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1289	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1292	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1304	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1307	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1311	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1326	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1332	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1336	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1338	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1341	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1342	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1355	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1356	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1381	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1383	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1385	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1386	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1387	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1388	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1389	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1399	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1400	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1401	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1402	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1415	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1417	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1418	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1419	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1433	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1434	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1439	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1443	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1444	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1447	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm145	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1450	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1460	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1463	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1477	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1478	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1479	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1526	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1527	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1549	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1573	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1574	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1592	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm1615	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm189	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm193	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm195	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm223	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm244	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm248	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm269	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm270	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm271	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm280	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm308	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm320	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm326	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm332	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm339	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm421	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm428	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm432	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm434	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm435	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm436	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm437	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm439	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm440	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm450	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm451	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm453	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm454	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm455	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm456	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm464	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm466	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm467	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm470	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm521	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm525	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm541	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm554	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm555	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm560	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm561	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm627	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm634	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm653	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm669	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm670	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm671	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm672	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm674	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm676	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm677	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm678	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm681	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm682	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm683	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm689	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm693	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm789	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm810	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm811	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm813	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm815	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm816	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm936	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm945	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm946	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm947	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm948	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm949	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm950	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm951	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm952	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm953	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm954	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm955	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm956	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm957	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm958	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm959	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm960	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm961	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm962	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm963	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm964	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm965	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm966	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm967	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm969	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm972	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm975	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm978	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm981	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm984	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm987	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm990	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm993	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjm996	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yjsh1	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yph499n	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yps1009	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae yps163	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces cerevisiae ztw1	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces diastaticus	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces italicus	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces oviformis	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
+saccharomyces sp. edrl	Saccharomyces cerevisiae	subtaxon_scientific	ncbi_taxonomy		
+saccharomyces uvarum var. melibiosus	Saccharomyces cerevisiae	synonym	ncbi_taxonomy		
 sugar cane	Saccharum spp.	alias	aliases.tsv		
 sugarcane	Saccharum spp.	alias	aliases.tsv		
 green foxtail	Setaria viridis	alias	aliases.tsv		
@@ -3981,6 +4531,19 @@ setaria viridis	Setaria viridis	alias	aliases.tsv
 a10.1	Setaria viridis	strain_or_line	biosample	7	1.0
 me034v	Setaria viridis	strain_or_line	biosample	7	1.0
 tb.sv.bsa_cau	Setaria viridis	strain_or_line	biosample	2	1.0
+panicum pachystachys	Setaria viridis	subtaxon_synonym	ncbi_taxonomy		
+panicum pycnocomum	Setaria viridis	subtaxon_synonym	ncbi_taxonomy		
+panicum viride	Setaria viridis	synonym	ncbi_taxonomy		
+s. viridis	Setaria viridis	abbreviation	ncbi_taxonomy		
+setaria pycnocoma	Setaria viridis	subtaxon_synonym	ncbi_taxonomy		
+setaria viridis subsp. pachystachys	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria viridis subsp. pycnocoma	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria viridis subsp. viridis	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria viridis var. major	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria viridis var. minor	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria viridis var. pachystachys	Setaria viridis	subtaxon_synonym	ncbi_taxonomy		
+setaria viridis var. viridis	Setaria viridis	subtaxon_scientific	ncbi_taxonomy		
+setaria x pycnocoma	Setaria viridis	subtaxon_synonym	ncbi_taxonomy		
 solanum lycopersicum	Solanum lycopersicum	alias	aliases.tsv		
 tomato	Solanum lycopersicum	alias	aliases.tsv		
 tomatoes	Solanum lycopersicum	alias	aliases.tsv		
@@ -4009,7 +4572,6 @@ cerasiforme	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 cervil	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 cherokee purple	Solanum lycopersicum	strain_or_line	biosample	3	1.0
 cherry	Solanum lycopersicum	strain_or_line	biosample	4	1.0
-cherry tomato	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 chico iii	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 cln1621l	Solanum lycopersicum	strain_or_line	biosample	4	1.0
 cln2777a	Solanum lycopersicum	strain_or_line	biosample	2	1.0
@@ -4093,7 +4655,6 @@ rio grande	Solanum lycopersicum	strain_or_line	biosample	6	1.0
 rio grande prf3	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 roque	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 rutgers	Solanum lycopersicum	strain_or_line	biosample	17	1.0
-s. lycopersicum	Solanum lycopersicum	strain_or_line	biosample	3	1.0
 sakura	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 san marzano	Solanum lycopersicum	strain_or_line	biosample	4	1.0
 san marzano nano	Solanum lycopersicum	strain_or_line	biosample	3	1.0
@@ -4101,7 +4662,6 @@ santa clara	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 seokwang	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 solanum lycopersicum cv. ailsa craig	Solanum lycopersicum	strain_or_line	biosample	3	1.0
 solanum lycopersicum microtom	Solanum lycopersicum	strain_or_line	biosample	2	1.0
-solanum lycopersicum var cerasiforme	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 solanum pennellii la0716	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 sungold	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 taian-kichijitsu	Solanum lycopersicum	strain_or_line	biosample	3	1.0
@@ -4120,6 +4680,14 @@ yellow stuffer	Solanum lycopersicum	strain_or_line	biosample	3	1.0
 ynau335	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 zaofen no.2	Solanum lycopersicum	strain_or_line	biosample	2	1.0
 zhongshu4	Solanum lycopersicum	strain_or_line	biosample	2	1.0
+cherry tomato	Solanum lycopersicum	subtaxon_common	ncbi_taxonomy		
+lycopersicon esculentum	Solanum lycopersicum	synonym	ncbi_taxonomy		
+lycopersicon esculentum var. cerasiforme	Solanum lycopersicum	subtaxon_synonym	ncbi_taxonomy		
+lycopersicon esculentum var. esculentum	Solanum lycopersicum	synonym	ncbi_taxonomy		
+s. lycopersicum	Solanum lycopersicum	abbreviation	ncbi_taxonomy		
+solanum esculentum	Solanum lycopersicum	synonym	ncbi_taxonomy		
+solanum lycopersicum var. cerasiforme	Solanum lycopersicum	subtaxon_scientific	ncbi_taxonomy		
+solanum lycopersicum var. humboldtii	Solanum lycopersicum	synonym	ncbi_taxonomy		
 potato	Solanum tuberosum	alias	aliases.tsv		
 potatoes	Solanum tuberosum	alias	aliases.tsv		
 s. tuberosum	Solanum tuberosum	alias	aliases.tsv		
@@ -4195,6 +4763,10 @@ spunta	Solanum tuberosum	strain_or_line	biosample	4	1.0
 sw93-1015	Solanum tuberosum	strain_or_line	biosample	2	1.0
 valor	Solanum tuberosum	strain_or_line	biosample	2	1.0
 zhongshu 3	Solanum tuberosum	strain_or_line	biosample	2	1.0
+solanum andigenum	Solanum tuberosum	subtaxon_synonym	ncbi_taxonomy		
+solanum aracc-papa	Solanum tuberosum	synonym	ncbi_taxonomy		
+solanum tuberosum subsp. andigena	Solanum tuberosum	subtaxon_synonym	ncbi_taxonomy		
+solanum tuberosum subsp. andigenum	Solanum tuberosum	subtaxon_scientific	ncbi_taxonomy		
 forage sorghum	Sorghum bicolor	alias	aliases.tsv		
 grain sorghum	Sorghum bicolor	alias	aliases.tsv		
 milo	Sorghum bicolor	alias	aliases.tsv		
@@ -4255,6 +4827,14 @@ tx430	Sorghum bicolor	strain_or_line	biosample	11	1.0
 tx623	Sorghum bicolor	strain_or_line	biosample	2	1.0
 tx7000	Sorghum bicolor	strain_or_line	biosample	3	1.0
 wray	Sorghum bicolor	strain_or_line	biosample	5	1.0
+andropogon sorghum	Sorghum bicolor	synonym	ncbi_taxonomy		
+broomcorn	Sorghum bicolor	common	ncbi_taxonomy		
+holcus bicolor	Sorghum bicolor	synonym	ncbi_taxonomy		
+s. bicolor	Sorghum bicolor	abbreviation	ncbi_taxonomy		
+sorghum bicolor subsp. bicolor	Sorghum bicolor	synonym	ncbi_taxonomy		
+sorghum nervosum	Sorghum bicolor	synonym	ncbi_taxonomy		
+sorghum saccharatum	Sorghum bicolor	synonym	ncbi_taxonomy		
+sorghum vulgare	Sorghum bicolor	synonym	ncbi_taxonomy		
 pig	Sus scrofa	alias	aliases.tsv		
 piglets	Sus scrofa	alias	aliases.tsv		
 pigs	Sus scrofa	alias	aliases.tsv		
@@ -4285,7 +4865,6 @@ dabai	Sus scrofa	strain_or_line	biosample	2	1.0
 danish landrace	Sus scrofa	strain_or_line	biosample	2	1.0
 danish landrace x yorkshire	Sus scrofa	strain_or_line	biosample	3	1.0
 dly pigs	Sus scrofa	strain_or_line	biosample	2	1.0
-domestic pig	Sus scrofa	strain_or_line	biosample	10	1.0
 duroc	Sus scrofa	strain_or_line	biosample	33	1.0
 duroc landrace large white	Sus scrofa	strain_or_line	biosample	3	1.0
 duroc landrace yorkshire	Sus scrofa	strain_or_line	biosample	7	1.0
@@ -4370,7 +4949,6 @@ small xiang pig	Sus scrofa	strain_or_line	biosample	2	1.0
 songliao black pigs	Sus scrofa	strain_or_line	biosample	2	1.0
 suhuai	Sus scrofa	strain_or_line	biosample	2	1.0
 sujiang pig	Sus scrofa	strain_or_line	biosample	2	1.0
-sus scrofa domesticus	Sus scrofa	strain_or_line	biosample	3	1.0
 sutai	Sus scrofa	strain_or_line	biosample	2	1.0
 taihu	Sus scrofa	strain_or_line	biosample	2	1.0
 ternary pigs	Sus scrofa	strain_or_line	biosample	2	1.0
@@ -4382,7 +4960,6 @@ tongcheng	Sus scrofa	strain_or_line	biosample	2	1.0
 unified feeding management	Sus scrofa	strain_or_line	biosample	3	1.0
 wei pig	Sus scrofa	strain_or_line	biosample	2	1.0
 white composite	Sus scrofa	strain_or_line	biosample	14	1.0
-wild boar	Sus scrofa	strain_or_line	biosample	2	1.0
 wuzhishan	Sus scrofa	strain_or_line	biosample	3	1.0
 y x l	Sus scrofa	strain_or_line	biosample	2	1.0
 yorkshire	Sus scrofa	strain_or_line	biosample	47	1.0
@@ -4392,6 +4969,37 @@ yorkshire-landrace	Sus scrofa	strain_or_line	biosample	3	1.0
 yucatan	Sus scrofa	strain_or_line	biosample	4	1.0
 yucatan minipig	Sus scrofa	strain_or_line	biosample	3	1.0
 zlotnicka white	Sus scrofa	strain_or_line	biosample	3	1.0
+domestic pig	Sus scrofa	subtaxon_common	ncbi_taxonomy		
+iberian pig	Sus scrofa	subtaxon_common	ncbi_taxonomy		
+porcula taivana	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+s. scrofa	Sus scrofa	abbreviation	ncbi_taxonomy		
+sus cristatus	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus domestica	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus domesticus	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus ibericus	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus papuensis	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus scrofa affinis	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa andamensis	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa coreanus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa cristatus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa domestica	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus scrofa domesticus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa ibericus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa leucomystax	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa lybicus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa majori	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa majori x sus scrofa scrofa	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus scrofa meridionalis	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa papuensis	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa riukiuanus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa scrofa	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa scrofa x sus scrofa majori	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa taivanus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa taiwanensis	Sus scrofa	subtaxon_synonym	ncbi_taxonomy		
+sus scrofa ussuricus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+sus scrofa vittatus	Sus scrofa	subtaxon_scientific	ncbi_taxonomy		
+taiwan pig	Sus scrofa	subtaxon_common	ncbi_taxonomy		
+wild boar	Sus scrofa	common	ncbi_taxonomy		
 bread wheat	Triticum aestivum	alias	aliases.tsv		
 spring wheat	Triticum aestivum	alias	aliases.tsv		
 triticum aestivum	Triticum aestivum	alias	aliases.tsv		
@@ -4434,7 +5042,6 @@ chinses spring	Triticum aestivum	strain_or_line	biosample	3	1.0
 chris	Triticum aestivum	strain_or_line	biosample	2	1.0
 chuanmai 104	Triticum aestivum	strain_or_line	biosample	2	1.0
 cm6005	Triticum aestivum	strain_or_line	biosample	2	1.0
-common wheat	Triticum aestivum	strain_or_line	biosample	8	1.0
 csp44	Triticum aestivum	strain_or_line	biosample	2	1.0
 cv chinese spring	Triticum aestivum	strain_or_line	biosample	3	1.0
 cv paragon	Triticum aestivum	strain_or_line	biosample	2	1.0
@@ -4561,6 +5168,45 @@ zhoumai 36	Triticum aestivum	strain_or_line	biosample	6	1.0
 zhoumai18	Triticum aestivum	strain_or_line	biosample	5	1.0
 zknm1	Triticum aestivum	strain_or_line	biosample	2	1.0
 zm13	Triticum aestivum	strain_or_line	biosample	2	1.0
+canadian hard winter wheat	Triticum aestivum	common	ncbi_taxonomy		
+common wheat	Triticum aestivum	common	ncbi_taxonomy		
+t. aestivum	Triticum aestivum	abbreviation	ncbi_taxonomy		
+tibetan wheat	Triticum aestivum	subtaxon_common	ncbi_taxonomy		
+triticum aestivum subsp. aestivum	Triticum aestivum	synonym	ncbi_taxonomy		
+triticum aestivum subsp. aestivum var. erythrospermum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum aestivum subsp. aestivum var. ferrugineum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum aestivum subsp. hadropyrum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum subsp. sphaerococcum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum subsp. tibeticum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum subsp. vavilovii	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum aestivum subsp. yunnanense	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. albidum-compactoides	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. albirubrinflatum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. aureum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. baladseetense	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. erythrospermum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. ferrugineum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. graecum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. lutescens	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. lutescens-compactoides	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. milturum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. suberythrospermum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. subhostinflatum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum var. vavilovii	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum aestivum vavilovii group	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum sativum	Triticum aestivum	synonym	ncbi_taxonomy		
+triticum sphaerococcum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum sphaerococcum var. rotundatum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum sphaerocuccum var. globosum	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum vavilovii (tumanian) jakubz., 1933	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vavilovii var. mupuru	Triticum aestivum	subtaxon_scientific	ncbi_taxonomy		
+triticum vulgare	Triticum aestivum	synonym	ncbi_taxonomy		
+triticum vulgare subsp. hadropyrum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vulgare var. erythrospermum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vulgare var. ferrugineum	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vulgare var. lutescens	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vulgare var. miltura	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
+triticum vulgare var. vavilovi	Triticum aestivum	subtaxon_synonym	ncbi_taxonomy		
 grape	Vitis vinifera	alias	aliases.tsv		
 grapevine	Vitis vinifera	alias	aliases.tsv		
 grapevines	Vitis vinifera	alias	aliases.tsv		
@@ -4665,6 +5311,12 @@ yan73	Vitis vinifera	strain_or_line	biosample	2	1.0
 zaomeiguixiang	Vitis vinifera	strain_or_line	biosample	2	1.0
 zhuosexiang	Vitis vinifera	strain_or_line	biosample	2	1.0
 zinfandel	Vitis vinifera	strain_or_line	biosample	2	1.0
+vitis vinifera subsp. caucasica	Vitis vinifera	subtaxon_scientific	ncbi_taxonomy		
+vitis vinifera subsp. silvestris	Vitis vinifera	subtaxon_synonym	ncbi_taxonomy		
+vitis vinifera subsp. sylvestris	Vitis vinifera	subtaxon_scientific	ncbi_taxonomy		
+vitis vinifera subsp. vinifera	Vitis vinifera	synonym	ncbi_taxonomy		
+vitis vinifera var. sylvestris	Vitis vinifera	subtaxon_synonym	ncbi_taxonomy		
+wild grape	Vitis vinifera	subtaxon_common	ncbi_taxonomy		
 african clawed frog	Xenopus laevis	alias	aliases.tsv		
 frog embryos	Xenopus laevis	alias	aliases.tsv		
 tadpoles	Xenopus laevis	alias	aliases.tsv		
@@ -4680,6 +5332,15 @@ wild type embryo	Xenopus laevis	strain_or_line	biosample	2	1.0
 xl177	Xenopus laevis	strain_or_line	biosample	2	1.0
 xla.nxr-wtnxr	Xenopus laevis	strain_or_line	biosample	4	1.0
 xla.tg(xtr.pax8:egfp)	Xenopus laevis	strain_or_line	biosample	2	1.0
+bufo laevis	Xenopus laevis	synonym	ncbi_taxonomy		
+bufo laevis laevis	Xenopus laevis	subtaxon_synonym	ncbi_taxonomy		
+clawed frog	Xenopus laevis	common	ncbi_taxonomy		
+common platanna	Xenopus laevis	common	ncbi_taxonomy		
+platanna	Xenopus laevis	common	ncbi_taxonomy		
+xenopus laevis bunyoniensis	Xenopus laevis	subtaxon_scientific	ncbi_taxonomy		
+xenopus laevis laevis	Xenopus laevis	subtaxon_scientific	ncbi_taxonomy		
+xenopus laevis subsp. sudanensis	Xenopus laevis	subtaxon_synonym	ncbi_taxonomy		
+xenopus laevis sudanensis	Xenopus laevis	subtaxon_scientific	ncbi_taxonomy		
 corn	Zea mays	alias	aliases.tsv		
 hybrid corn	Zea mays	alias	aliases.tsv		
 inbred maize	Zea mays	alias	aliases.tsv		
@@ -4934,7 +5595,6 @@ ril105	Zea mays	strain_or_line	biosample	2	1.0
 rp125	Zea mays	strain_or_line	biosample	2	1.0
 rtcs	Zea mays	strain_or_line	biosample	2	1.0
 scd mutant	Zea mays	strain_or_line	biosample	2	1.0
-teosinte	Zea mays	strain_or_line	biosample	3	1.0
 til11	Zea mays	strain_or_line	biosample	2	1.0
 tzi8	Zea mays	strain_or_line	biosample	2	1.0
 uenf 506-8	Zea mays	strain_or_line	biosample	2	1.0
@@ -4980,3 +5640,33 @@ zhengdan959	Zea mays	strain_or_line	biosample	2	1.0
 zhengdan960	Zea mays	strain_or_line	biosample	2	1.0
 znc442	Zea mays	strain_or_line	biosample	2	1.0
 zzc01	Zea mays	strain_or_line	biosample	5	1.0
+annual teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+balsas teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+euchlaena mexicana	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+huehuetenango teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+indian corn	Zea mays	subtaxon_common	ncbi_taxonomy		
+mexican teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+san antonio huista teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+teosinte	Zea mays	subtaxon_common	ncbi_taxonomy		
+z. mays	Zea mays	abbreviation	ncbi_taxonomy		
+zea mays subsp. amylacea	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. ceratina	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. everta	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. huehuetenangensis	Zea mays	subtaxon_scientific	ncbi_taxonomy		
+zea mays subsp. indurata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. mays	Zea mays	subtaxon_scientific	ncbi_taxonomy		
+zea mays subsp. mays x zea mays subsp. parviglumis	Zea mays	subtaxon_scientific	ncbi_taxonomy		
+zea mays subsp. mexicana	Zea mays	subtaxon_scientific	ncbi_taxonomy		
+zea mays subsp. parviglumis	Zea mays	subtaxon_scientific	ncbi_taxonomy		
+zea mays subsp. ramosa	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. saccharata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. sacharata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays subsp. tunicata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays var. huehuetenangensis	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays var. japonica	Zea mays	synonym	ncbi_taxonomy		
+zea mays var. mays	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays var. saccharata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mays var. saccharata (sturtev.) l.h.bailey, 1902	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea mexicana	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea ramosa	Zea mays	subtaxon_synonym	ncbi_taxonomy		
+zea saccharata	Zea mays	subtaxon_synonym	ncbi_taxonomy		
