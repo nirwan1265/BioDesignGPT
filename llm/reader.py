@@ -186,10 +186,13 @@ def to_spec(d):
         s["goal"] = d["goal"]
     if d.get("system") in SYSTEMS:
         s["system"] = d["system"]
-    o = canon_organism(d.get("organism"))
-    if o:
+    org = d.get("organism")
+    listed = org if isinstance(org, list) else []
+    o = canon_organism(listed[0] if listed else org) if (listed or isinstance(org, str)) else None
+    if o and str(o).lower() not in ("null", "none", "unknown", "n/a"):
         s["organism"] = o
-    orgs = [canon_organism(x) for x in (d.get("organisms") or []) if x]
+    orgs = [canon_organism(x) for x in ((d.get("organisms") or []) + listed) if isinstance(x, str) and x]
+    orgs = list(dict.fromkeys(orgs))
     if len(orgs) > 1:
         s["organisms"] = orgs
     for k in ("method", "tissue", "outcome_text", "experimental_unit", "measurement_unit"):

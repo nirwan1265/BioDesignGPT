@@ -9,8 +9,17 @@
 #' @param model Spec from the trained tagger.
 #' @param question The original text.
 #' @export
-merge_specs <- function(rule, model, question) {
+merge_specs <- function(rule, model, question, judgments = FALSE) {
   if (is.null(model)) return(rule)
+  # the reader states facts; design judgments stay with the engine or become questions for the user:
+  # which unit is the experimental unit, and which of several stated outcomes is primary
+  if (!judgments) {
+    model$experimental_unit <- NULL
+    listed <- strsplit(tolower(model$outcome_text %||% ""), ",|;| and | plus ")[[1]]
+    if (length(unique(.sf_find_all(tolower(question), "outcome"))) > 1 || sum(nzchar(trimws(listed))) > 1)
+      model$primary_outcome <- NULL
+  }
+  if (is.character(model$organism) && !grepl("^[A-Z][a-z]+ [a-z]+", model$organism)) model$organism <- NULL
   text <- tolower(gsub(",", "", question))
   stated <- function(v) {
     if (!is.numeric(v)) return(TRUE)
@@ -39,7 +48,9 @@ merge_specs <- function(rule, model, question) {
     w <- c(as.character(v), names(.sf_number_words)[.sf_number_words == v], if (v == 1) c("no", "one", "single"))
     re <- paste0("\\b(", paste(w, collapse = "|"), ")\\s+(?:\\w+\\s+){0,2}?(reps?|replicat\\w*|replications?|blocks?|benches|vials|dams|plants per combination)|",
                  "\\b(", paste(w, collapse = "|"), ")\\s+(plot|row) (each|per)")
-    grepl(re, text, perl = TRUE)
+    rng <- paste0("\\b(", paste(w, collapse = "|"), ")\\s*(or|to|-)\\s*\\w+\\s+(reps?|replicat\\w*)|",
+                  "\\b\\w+\\s*(or|to|-)\\s*(", paste(w, collapse = "|"), ")\\s+(reps?|replicat\\w*)")
+    grepl(re, text, perl = TRUE) && !grepl(rng, text, perl = TRUE)   # "two or three reps" is a range, not 2
   }
   # guard 2: outcomes must be known canonical terms
   known_outcomes <- unique(.sf_alias_table()$canonical_term[.sf_alias_table()$category == "outcome"])
@@ -50,7 +61,7 @@ merge_specs <- function(rule, model, question) {
               "primary_outcome.name", "primary_outcome.type", "design.reps", "design.locations",
               "design.seasons", "blocking_factors", "population.mating", "population.type",
               "population.parents", "population.generations", "population.filial_generation",
-              "assays", "organisms", "environments")) {
+              "assays", "organisms", "environments", "method", "tissue", "outcome_text")) {
     if (is.null(spec_get(out, p))) {
       v <- spec_get(model, p)
       prechecked <- p %in% c("population.parents", "population.filial_generation")
@@ -58,13 +69,23 @@ merge_specs <- function(rule, model, question) {
     }
   }
   have <- vapply(out$factors %||% list(), `[[`, "", "name")
+  # a level count is stated if the number is in the text, or every named level is (typos allowed:
+  # "medicine ... placibo" states 2 levels)
+  named <- function(f) {
+    lv <- unlist(f$levels)
+    length(lv) >= 2 && all(vapply(tolower(lv), function(l) agrepl(l, text, max.distance = 0.2, fixed = TRUE), logical(1)))
+  }
+  count_ok <- function(f) !is.null(f$n_levels) && (stated(f$n_levels) || (named(f) && length(unlist(f$levels)) == f$n_levels))
   for (f in model$factors %||% list()) {
     if (f$name %in% have) {
       i <- which(have == f$name)[1]
-      if (is.null(out$factors[[i]]$n_levels) && !is.null(f$n_levels) && stated(f$n_levels)) out$factors[[i]]$n_levels <- f$n_levels
+      if (is.null(out$factors[[i]]$n_levels) && count_ok(f)) out$factors[[i]]$n_levels <- f$n_levels
+      if (is.null(out$factors[[i]]$levels) && named(f)) out$factors[[i]]$levels <- f$levels
       if (is.null(out$factors[[i]]$applied_to) && !is.null(f$applied_to)) out$factors[[i]]$applied_to <- f$applied_to
-    } else if (is.null(f$n_levels) || stated(f$n_levels)) {
-      out$factors[[length(out$factors) + 1]] <- f[c("name", intersect(c("n_levels", "applied_to"), names(f)))]
+    } else if (is.null(f$n_levels) || count_ok(f)) {
+      g <- f[c("name", intersect(c("n_levels", "applied_to"), names(f)))]
+      if (named(f)) g$levels <- f$levels
+      out$factors[[length(out$factors) + 1]] <- g
       have <- c(have, f$name)
     }
   }
