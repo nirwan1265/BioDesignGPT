@@ -135,7 +135,7 @@
 
 # factor words specific enough to count as a stated factor even without a number
 .SF_SPECIFIC_FACTORS <- c("temperature", "water", "salt", "nitrogen", "phosphorus", "nutrient", "diet", "co2", "light",
-                          "injury", "antibiotic", "sex", "disease")
+                          "injury", "antibiotic", "sex", "disease", "infection")
 
 .SF_SYSTEM_BY_ASSAY <- c(rnaseq = "bulk_rnaseq", small_rnaseq = "bulk_rnaseq", atac_seq = "atac_seq",
                          ribo_seq = "ribo_seq", single_cell = "single_cell", scatac_seq = "single_cell",
@@ -179,7 +179,16 @@
   fx <- spec$factors %||% list()
   have <- vapply(fx, function(f) { c <- .sf_factor_name(f$name); if (is.na(c)) f$name else c }, "")
   spec_words <- intersect(.sf_find_all(text, "factor"), .SF_SPECIFIC_FACTORS)
-  if (grepl("\\bplac[ei]bo\\b|\\bvehicle\\b|\\bsham\\b|\\bmock\\b", text, perl = TRUE)) spec_words <- union(spec_words, "treatment")
+  # one sex only ("male mice") is a constant, not a factor
+  if (!grepl("\\bmales?\\b.*\\bfemales?\\b|\\bfemales?\\b.*\\bmales?\\b|both sexes|\\bsexes\\b|\\bsex\\b", text, perl = TRUE))
+    spec_words <- setdiff(spec_words, "sex")
+  # a mock or uninfected control next to a pathogen defines an infection factor, not a generic treatment
+  if (grepl("\\bmock\\b|uninfected|non-?infected|non-?inoculated", text, perl = TRUE) &&
+      grepl("infect|inocul|virus|pathogen|challenge", text, perl = TRUE)) {
+    spec_words <- union(spec_words, "infection")
+  } else if (grepl("\\bplac[ei]bo\\b|\\bvehicle\\b|\\bsham\\b|\\bmock\\b", text, perl = TRUE)) {
+    spec_words <- union(spec_words, "treatment")
+  }
   for (w in setdiff(spec_words, have)) fx[[length(fx) + 1]] <- list(name = w)
   if (length(fx)) spec$factors <- fx
   if (is.null(spec$goal)) set("goal", .sf_goal(text))

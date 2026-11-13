@@ -29,5 +29,5 @@ echo "nvcc: $(command -v nvcc || echo none)  attention: $VLLM_ATTENTION_BACKEND"
 $PY llm/reader.py --out llm/preds --raw --examples \
   inst/examples/study_examples.jsonl training/data/fresh_test.jsonl training/data/fresh_test_v2.jsonl \
   training/data/fresh_test_v3.jsonl training/data/fresh_test_v4.jsonl training/data/grounded_eval.jsonl \
-  training/data/user_prompts_dev.jsonl
+  training/data/user_prompts_dev.jsonl training/paper_questions/splits/dev.jsonl
 ls -la llm/preds
