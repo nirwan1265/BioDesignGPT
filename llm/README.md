@@ -11,7 +11,7 @@ This adds peft/accelerate to the env and downloads the 32B model (~65 GB) into t
 
 ## Fine-tune the big reader (LoRA)
 
-    sbatch llm/finetune.slurm          # 32B on one H200; resubmits itself until done (max 6 rounds of 2 h)
+    sbatch llm/finetune.slurm          # 32B on one RTX 6000 Pro (96 GB); resubmits itself until done (max 6 rounds of 2 h)
 
 Steps (each leaves a file, so a resubmitted job skips what is done):
 1. `make_sft.py prompts`: ~4,000 labelled prompts. All 755 paraphrases, synthetic study types balanced by

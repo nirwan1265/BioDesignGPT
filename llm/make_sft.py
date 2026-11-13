@@ -2,10 +2,10 @@
 """Training data for fine-tuning the reader (LoRA), in two steps.
 
 1. prompts: a balanced sample of labelled prompts
-     training/data/train_r5.jsonl      synthetic, ~60 study types (field, chamber, mouse, fly, omics, breeding ...)
-     training/data/grounded_train.jsonl prompts built from real ENA/BioSample studies
+     train.jsonl                        synthetic, ~60 study types (training/generate.py)
+     grounded_train.jsonl               prompts built from real ENA/BioSample studies (training/grounded.py)
      training/data/para.jsonl           LLM paraphrases (the most natural wording we have)
-   Excluded: every prompt in a test/dev set, and the held-out species (setaria, poplar, zebrafish, xenopus), so
+   (found in $SFT_DATA or training/data). Excluded: every prompt in a test/dev set, and the held-out species (setaria, poplar, zebrafish, xenopus), so
    grounded_eval stays a test of unseen organisms.
 
 2. build: the training targets. Our labels cover organism, system, assays, factors, counts, units, outcome,
@@ -38,9 +38,18 @@ UNIT_WORDS = {"plot": r"plots?", "pot": r"pots?", "plant": r"plants?", "tray": r
               "cart": r"carts?", "pig": r"pigs?", "person": r"people|patients?|participants?|persons?"}
 
 
+# generated training files (git-ignored) are looked for in SFT_DATA first (the slurm job regenerates them
+# into WORK/gen, so the committed eval sets in training/data are never overwritten), then in training/data
+DATA_DIRS = [d for d in os.environ.get("SFT_DATA", "").split(":") if d] + [DATA]
+
+
 def load(name):
-    with open(os.path.join(DATA, name), encoding="utf-8") as f:
-        return [json.loads(l) for l in f if l.strip()]
+    for d in DATA_DIRS:
+        p = os.path.join(d, name)
+        if os.path.exists(p):
+            with open(p, encoding="utf-8") as f:
+                return [json.loads(l) for l in f if l.strip()]
+    raise FileNotFoundError(f"{name} not in {DATA_DIRS}; generate it (see llm/finetune.slurm)")
 
 
 def eval_prompts():
@@ -66,7 +75,7 @@ def sample_prompts(n, seed):
     banned = eval_prompts()
     # paraphrases first: they are also inside train_r5, and they are the most natural wording we have
     pools = {"paraphrase": load("para.jsonl"),
-             "synthetic": [r for r in load("train_r5.jsonl") if not str(r.get("family", "")).startswith("grounded")],
+             "synthetic": [r for r in load("train.jsonl") if not str(r.get("family", "")).startswith("grounded")],
              "grounded": load("grounded_train.jsonl")}
     # shares of the sample: paraphrases all (most natural), then synthetic study types, then real-study prompts
     want = {"paraphrase": None, "synthetic": int(n * 0.55), "grounded": int(n * 0.30)}
