@@ -8,7 +8,7 @@ set -euo pipefail
 BASE=${1:?usage: setup_cluster.sh <base folder on shared storage>}
 ENV=$BASE/envs/biodes-gpu
 export HF_HOME=$BASE/hf
-READER=${READER:-Qwen/Qwen2.5-14B-Instruct}       # 32B on an H100/H200: READER=Qwen/Qwen2.5-32B-Instruct
+READER=${READER:-Qwen/Qwen2.5-14B-Instruct}       # the big reader: READER=Qwen/Qwen2.5-32B-Instruct (~65 GB)
 EMBED=${EMBED:-BAAI/bge-base-en-v1.5}
 mkdir -p "$BASE/envs" "$HF_HOME"
 
@@ -23,7 +23,7 @@ fi
 PIP="$ENV/bin/python -m pip"
 echo "== installing packages (pip wheels bundle CUDA; no 'module load cuda' needed)"
 $PIP install -q --upgrade pip
-$PIP install vllm sentence-transformers transformers huggingface_hub numpy
+$PIP install vllm sentence-transformers transformers huggingface_hub numpy peft accelerate
 
 echo "== downloading models into $HF_HOME"
 "$ENV/bin/python" - <<EOF

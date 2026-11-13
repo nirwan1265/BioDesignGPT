@@ -63,7 +63,8 @@ Fields:
 - outcome_text: the phenotype as the researcher wrote it, if any.
 - population: {{"mating", "generations", "filial_generation", "parents"}} for breeding/genetics, else null.
   mating one of selfing, sib_mating, backcross, diallel, nc_design, ril, nam, dh, biparental.
-- environments: ["greenhouse", "field"] style list when several settings are compared, else null.
+- environments: ["greenhouse", "field"] style list when several settings are compared, else null. "greenhouse" stands
+  for any controlled environment (greenhouse, glasshouse, growth chamber or room).
 - blocking_factors: e.g. ["bench"], ["cage"], ["library_batch"] when stated, else null.
 - sequencing: {{"instrument", "read_length", "layout", "depth_m"}} when stated, else null.
 - missing_questions: up to 3 short questions about missing facts that would change the design.
@@ -108,9 +109,9 @@ SHOTS = [
 ]
 
 
-def messages(question):
+def messages(question, shots=True):
     m = [{"role": "system", "content": INSTRUCTIONS}]
-    for q, a in SHOTS:
+    for q, a in (SHOTS if shots else []):
         m += [{"role": "user", "content": q}, {"role": "assistant", "content": json.dumps(a)}]
     m.append({"role": "user", "content": question})
     return m
@@ -258,29 +259,134 @@ def to_spec(d):
     return s
 
 
-def run_vllm(questions, model, max_len=8192, tp=1, eager=False):
-    # GPU nodes often have no nvcc: avoid FlashInfer's JIT-compiled kernels unless the user chose otherwise
-    os.environ.setdefault("VLLM_ATTENTION_BACKEND", "FLASH_ATTN")
-    os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
-    from vllm import LLM, SamplingParams
-    llm = LLM(model=model, dtype="bfloat16", max_model_len=max_len, tensor_parallel_size=tp, gpu_memory_utilization=0.90,
-              enforce_eager=eager)
-    tok = llm.get_tokenizer()
-    prompts = [tok.apply_chat_template(messages(q), tokenize=False, add_generation_prompt=True) for q in questions]
-    outs = llm.generate(prompts, SamplingParams(temperature=0.0, max_tokens=1200))
-    return [o.outputs[0].text for o in outs]
+class VLLMBackend:
+    """Loads the model once (optionally with a LoRA adapter from llm/train_lora.py) and answers batches."""
+
+    def __init__(self, model, adapter=None, max_len=8192, tp=1, eager=False):
+        # GPU nodes often have no nvcc: avoid FlashInfer's JIT-compiled kernels unless the user chose otherwise
+        os.environ.setdefault("VLLM_ATTENTION_BACKEND", "FLASH_ATTN")
+        os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
+        from vllm import LLM, SamplingParams
+        kw = {"enable_lora": True, "max_lora_rank": 64} if adapter else {}
+        self.llm = LLM(model=model, dtype="bfloat16", max_model_len=max_len, tensor_parallel_size=tp,
+                       gpu_memory_utilization=0.90, enforce_eager=eager, **kw)
+        self.tok = self.llm.get_tokenizer()
+        self.params = SamplingParams(temperature=0.0, max_tokens=1200)
+        self.lora = None
+        if adapter:
+            from vllm.lora.request import LoRARequest
+            self.lora = LoRARequest("biodes", 1, os.path.abspath(adapter))
+        self.shots = not adapter   # a fine-tuned reader learned the format; it is trained without the examples
+
+    def generate(self, questions):
+        prompts = [self.tok.apply_chat_template(messages(q, shots=self.shots), tokenize=False, add_generation_prompt=True)
+                   for q in questions]
+        outs = self.llm.generate(prompts, self.params, lora_request=self.lora)
+        return [o.outputs[0].text for o in outs]
+
+
+class ReplayBackend:
+    """Answers from saved raw outputs ({prompt: text}); for testing the server and R client without a GPU."""
+
+    def __init__(self, path):
+        self.raw = json.load(open(path, encoding="utf-8"))
+
+    def generate(self, questions):
+        return [self.raw.get(q, "{}") for q in questions]
+
+
+def make_backend(a):
+    if a.backend.startswith("replay:"):
+        return ReplayBackend(a.backend.split(":", 1)[1])
+    return VLLMBackend(a.model, adapter=a.adapter, tp=a.tp, eager=a.eager)
+
+
+def read(backend, questions):
+    raw = backend.generate(questions)
+    return [(to_spec(parse_json(t)), t) for t in raw]
+
+
+def serve(backend, a):
+    """Keep the model loaded and answer POST /read {"question": ...} -> {"spec": ..., "raw": ...}.
+    Requests must carry the token from the connection file (X-Biodes-Token); GET /health needs none."""
+    import secrets, socket, threading, time
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    token = secrets.token_hex(16)
+    lock = threading.Lock()
+    host = socket.gethostname()
+
+    class H(BaseHTTPRequestHandler):
+        def _send(self, code, obj):
+            body = json.dumps(obj).encode()
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            if self.path == "/health":
+                return self._send(200, {"ok": True, "model": a.model, "adapter": a.adapter})
+            self._send(404, {"error": "not found"})
+
+        def do_POST(self):
+            if self.path != "/read":
+                return self._send(404, {"error": "not found"})
+            if self.headers.get("X-Biodes-Token") != token:
+                return self._send(403, {"error": "bad token"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                q = json.loads(self.rfile.read(n) or b"{}").get("question", "")
+            except (ValueError, json.JSONDecodeError):
+                return self._send(400, {"error": "send JSON {\"question\": ...}"})
+            if not q.strip():
+                return self._send(400, {"error": "empty question"})
+            with lock:   # one generation at a time on the GPU
+                spec, raw = read(backend, [q])[0]
+            self._send(200, {"spec": spec, "raw": raw, "model": a.model, "adapter": a.adapter})
+
+        def log_message(self, fmt, *args):
+            sys.stderr.write("%s %s\n" % (time.strftime("%H:%M:%S"), fmt % args))
+
+    try:
+        srv = ThreadingHTTPServer(("0.0.0.0", a.port), H)
+    except OSError:   # port taken on this node: any free port (the connection file says which)
+        srv = ThreadingHTTPServer(("0.0.0.0", 0), H)
+    conn = {"url": f"http://{host}:{srv.server_address[1]}", "token": token, "model": a.model, "adapter": a.adapter,
+            "host": host, "port": srv.server_address[1], "started": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if a.conn_file:
+        os.makedirs(os.path.dirname(os.path.abspath(a.conn_file)), exist_ok=True)
+        fd = os.open(a.conn_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)   # token readable by you only
+        with os.fdopen(fd, "w") as f:
+            json.dump(conn, f, indent=1)
+    print(f"reader ready at {conn['url']}  (connection file: {a.conn_file or 'none'})", file=sys.stderr, flush=True)
+    print(f"from your laptop:  ssh -N -L {conn['port']}:{host}:{conn['port']} <you>@login.hpc.ncsu.edu", file=sys.stderr,
+          flush=True)
+    try:
+        srv.serve_forever()
+    finally:
+        if a.conn_file and os.path.exists(a.conn_file):
+            os.remove(a.conn_file)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=os.environ.get("READER", "Qwen/Qwen2.5-14B-Instruct"))
+    ap.add_argument("--adapter", default=os.environ.get("READER_ADAPTER") or None, help="LoRA adapter folder (llm/train_lora.py)")
+    ap.add_argument("--backend", default="vllm", help="vllm, or replay:<raw.json> for tests")
     ap.add_argument("--examples", nargs="*", default=[], help="jsonl files with a 'prompt' field")
     ap.add_argument("--text", default=None)
     ap.add_argument("--out", default=None, help="predictions json (one file) or folder (several example files)")
     ap.add_argument("--raw", action="store_true", help="also save raw model outputs")
     ap.add_argument("--tp", type=int, default=1, help="tensor parallel GPUs")
     ap.add_argument("--eager", action="store_true", help="no CUDA graphs / torch.compile (slower start-up problems)")
+    ap.add_argument("--serve", action="store_true", help="keep the model loaded and answer HTTP requests")
+    ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--conn-file", default=os.environ.get("BIODES_READER_CONN"), help="where to write url + token")
     a = ap.parse_args()
+    backend = make_backend(a)
+    if a.serve:
+        return serve(backend, a)
     sets = {}
     for f in a.examples:
         with open(f, encoding="utf-8") as fh:
@@ -288,8 +394,9 @@ def main():
     if a.text:
         sets["text"] = [a.text]
     allq = list(dict.fromkeys(q for qs in sets.values() for q in qs))
-    raw = dict(zip(allq, run_vllm(allq, a.model, tp=a.tp, eager=a.eager)))
-    specs = {q: to_spec(parse_json(t)) for q, t in raw.items()}
+    res = dict(zip(allq, read(backend, allq)))
+    specs = {q: r[0] for q, r in res.items()}
+    raw = {q: r[1] for q, r in res.items()}
     bad = sum(1 for q in allq if not specs[q])
     print(f"read {len(allq)} prompts; {bad} unparseable", file=sys.stderr)
     if a.text and not a.out:

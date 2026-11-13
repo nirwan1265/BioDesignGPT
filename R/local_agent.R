@@ -356,21 +356,31 @@ extract_spec_local <- function(question) {
 #' @param provider "local" (default) or "ollama".
 #' @param engine How the prompt is read: "rules" (default, pure R), "hybrid" (rules +
 #'   the bundled trained tagger; needs Python with torch and transformers, set
-#'   STUDYFORGE_PYTHON), or "auto" (hybrid when STUDYFORGE_PYTHON is set, else rules).
+#'   STUDYFORGE_PYTHON), "llm" (rules + the Biodes LLM reader on a GPU node, see
+#'   extract_spec_llm(); stated facts only), or "auto" (llm when a reader is reachable,
+#'   else hybrid when STUDYFORGE_PYTHON is set, else rules).
 #' @param model Ollama model name.
 #' @param ollama_endpoint Ollama generate endpoint.
 #' @param fix Named list of corrections applied to the extracted spec (see studyforge_fix()).
 #' @return An object of class `studyforge_answer`.
 #' @export
-studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c("rules", "hybrid", "auto"),
+studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c("rules", "hybrid", "llm", "auto"),
                            model = Sys.getenv("STUDYFORGE_OLLAMA_MODEL", "llama3.2"),
                            ollama_endpoint = Sys.getenv("STUDYFORGE_OLLAMA_ENDPOINT",
                                                         "http://localhost:11434/api/generate"),
                            fix = NULL) {
   provider <- match.arg(provider)
   engine <- match.arg(engine)
-  if (engine == "auto") engine <- if (nzchar(Sys.getenv("STUDYFORGE_PYTHON"))) "hybrid" else "rules"
+  if (engine == "auto") engine <- if (!is.null(.sf_reader_conf())) "llm" else if (nzchar(Sys.getenv("STUDYFORGE_PYTHON"))) "hybrid" else "rules"
+  reader_questions <- NULL
   spec <- if (engine == "hybrid") extract_spec_hybrid(question) else extract_spec_local(question)
+  if (engine == "llm") {
+    llm <- extract_spec_llm(question)
+    if (is.null(llm)) engine <- "rules" else {
+      reader_questions <- unlist(llm$missing_questions)
+      spec <- merge_specs(spec, llm, question)
+    }
+  }
   spec <- .sf_apply_fix(spec, fix)
   v <- validate_spec(spec)
   system <- spec$system %||% NA_character_
@@ -402,7 +412,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
 
   ans <- structure(list(
     question = question, provider = provider, engine = engine, fixes = fix, spec = spec, validation = v, audit = audit,
-    candidates = candidates, designs = designs, hazards = hazards,
+    candidates = candidates, designs = designs, hazards = hazards, reader_questions = reader_questions,
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
     practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
@@ -449,7 +459,8 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
     cat0("\n---- deterministic plan ----")
   }
   s <- x$spec
-  cat0("StudyForge (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger", ", free)\n")
+  cat0("StudyForge (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger",
+       if (identical(x$engine, "llm")) " + LLM reader", ", free)\n")
   cat0("Here's what I understood (fix anything wrong: studyforge_fix(answer, organism = \"...\", factors = \"name:levels\")):")
   for (l in .sf_skeleton_lines(s, x$fixes %||% list())) cat0(l)
   if (identical(s$goal, "analysis")) {
@@ -474,6 +485,10 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
   if (length(x$questions)) {
     cat0("\nQuestions that change the design:")
     for (q in x$questions) cat0("  - ", q)
+  }
+  if (length(x$reader_questions)) {
+    cat0("\nThe reader would also ask:")
+    for (q in utils::head(x$reader_questions, 4)) cat0("  - ", q)
   }
   if (length(x$designs)) {
     cat0("\nCandidate designs:")

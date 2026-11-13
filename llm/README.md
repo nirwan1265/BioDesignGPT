@@ -1,7 +1,43 @@
 # LLM reader
 
-A local open model (Qwen2.5-14B-Instruct via vLLM, no fine-tuning) reads a prompt and fills the StudySpec
-skeleton as JSON (`reader.py`). It runs offline on a GPU node (`sbatch llm/reader_eval.slurm`).
+A local open model (Qwen2.5 via vLLM) reads a prompt and fills the StudySpec skeleton as JSON (`reader.py`).
+It runs offline on the cluster's GPU nodes; nothing leaves NCSU.
+
+## One-time setup (login node, needs internet)
+
+    READER=Qwen/Qwen2.5-32B-Instruct bash retrieval/setup_cluster.sh /gpfs_common/share01/maize/ntanduk
+
+This adds peft/accelerate to the env and downloads the 32B model (~65 GB) into the HF cache.
+
+## Fine-tune the big reader (LoRA)
+
+    sbatch llm/finetune.slurm          # 32B on one H200; resubmits itself until done (max 6 rounds of 2 h)
+
+Steps (each leaves a file, so a resubmitted job skips what is done):
+1. `make_sft.py prompts`: ~4,000 labelled prompts. All 755 paraphrases, synthetic study types balanced by
+   type x organism, and prompts built from real studies. Test prompts and the held-out species are excluded.
+2. The base model reads them (self-distillation for the fields we have no labels for: method, tissue,
+   levels, outcome text, questions).
+3. `make_sft.py build`: targets = our labels + the distilled fields. Experimental unit only when the unit word
+   is in the prompt; environments only when settings are compared.
+4. `train_lora.py`: LoRA r=16 on all projection layers, answer tokens only, 1 epoch, checkpoints every 40
+   steps, stops before the 2-hour limit and resumes.
+5. Base and fine-tuned readers on every test set: `WORK/eval_base`, `WORK/eval_ft`.
+
+Then compare: `Rscript llm/score.R WORK/eval_base WORK/eval_ft`. Keep the adapter only if it beats the base
+model on the clean sets (fresh v4, v1, v2) without inventing values.
+
+## Use it from R
+
+    sbatch llm/reader_server.slurm     # keeps the model (+ adapter if trained) loaded for up to 2 h
+
+The server writes `~/.biodes/reader.json` (url + token, readable by you only). R on the cluster finds it:
+
+    studyforge_ask("I want to do a cre flux rat experiment for a gene of my choice", engine = "llm")
+
+`engine = "auto"` uses the reader whenever one is running. If it isn't reachable, R falls back to rules with a
+message. From a laptop, open the tunnel printed in `logs/biodes-reader.<job>.out`, then
+`Sys.setenv(BIODES_READER_URL = "http://localhost:8765", BIODES_READER_TOKEN = "<token>")`.
 
 ## How its output is used
 

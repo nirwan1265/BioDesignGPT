@@ -246,10 +246,11 @@ studyforge_fix <- function(answer, ...) {
                                       if (!is.null(sq$depth_m)) paste0(sq$depth_m, " M reads")), collapse = ", ") else hint("sequencing")
   rows <- c(
     Goal = if (identical(s$goal, "analysis")) "analyse data already collected" else "design a new study",
-    Organism = q(s$organism), Setting = q(s$system), `Assay / data` = q(s$assays), Tissue = tissue,
+    Organism = q(s$organism), Setting = q(s$system), `Assay / data` = q(s$assays),
+    `Method / resource` = q(s$method), Tissue = tissue,
     `Factors (levels)` = fx, `Outcome / phenotype` = outcome, `Experimental unit` = q(s$experimental_unit),
     `Replicates` = q(s$design$reps), `Locations / seasons` = paste(q(s$design$locations), "/", q(s$design$seasons)))
-  if (omics) rows <- append(rows, c(Sequencing = seqtxt), after = 5)
+  if (omics) rows <- append(rows, c(Sequencing = seqtxt), after = 6)
   c(sprintf("  %-20s %s%s", paste0(names(rows), ":"), rows,
             ifelse(names(rows) %in% c("Organism", "Replicates", "Tissue") & names(rows) %in% names(fixes), "  (corrected)", "")))
 }
