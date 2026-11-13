@@ -1,0 +1,111 @@
+{
+ "seed": 2026,
+ "dev_share": 0.3,
+ "unit": "paper (one question per paper)",
+ "stratified_by": "species x technique",
+ "files": {
+  "dev.jsonl": {
+   "n": 328,
+   "sha256": "c8c6cc7415e43b096379d80d66c4165e8845e7576fe2c08d21622eeeb60f070d",
+   "species": {
+    "rat": 28,
+    "arabidopsis": 26,
+    "mouse": 24,
+    "maize": 22,
+    "chicken": 20,
+    "fly": 18,
+    "tomato": 17,
+    "pig": 15,
+    "rice": 14,
+    "cattle": 13,
+    "worm": 12,
+    "human": 11,
+    "barley": 11,
+    "wheat": 11,
+    "yeast": 10,
+    "macaque": 9,
+    "grape": 8,
+    "sorghum": 8,
+    "soybean": 8,
+    "cotton": 7,
+    "potato": 6,
+    "apple": 6,
+    "medicago": 4,
+    "nbenthamiana": 4,
+    "brachypodium": 4,
+    "chlamydomonas": 4,
+    "citrus": 3,
+    "eucalyptus": 2,
+    "physcomitrium": 2,
+    "loblolly_pine": 1
+   },
+   "styles": {
+    "detailed": 129,
+    "question": 74,
+    "terse": 67,
+    "casual": 41,
+    "typo": 17
+   }
+  },
+  "test.jsonl": {
+   "n": 764,
+   "sha256": "7178183cf271ab29d09d922adbd22100174cc8164a3582e1f1f77c1475ea86b6",
+   "species": {
+    "mouse": 57,
+    "arabidopsis": 55,
+    "rat": 55,
+    "chicken": 44,
+    "fly": 42,
+    "maize": 40,
+    "pig": 38,
+    "human": 36,
+    "rice": 35,
+    "cattle": 33,
+    "wheat": 32,
+    "tomato": 30,
+    "barley": 28,
+    "worm": 27,
+    "yeast": 25,
+    "cotton": 25,
+    "potato": 23,
+    "soybean": 23,
+    "macaque": 23,
+    "grape": 14,
+    "apple": 14,
+    "nbenthamiana": 13,
+    "sorghum": 13,
+    "medicago": 9,
+    "brachypodium": 8,
+    "citrus": 8,
+    "chlamydomonas": 6,
+    "eucalyptus": 3,
+    "physcomitrium": 3,
+    "loblolly_pine": 2
+   },
+   "styles": {
+    "detailed": 315,
+    "terse": 176,
+    "question": 167,
+    "casual": 68,
+    "typo": 38
+   }
+  },
+  "test_heldout.jsonl": {
+   "n": 87,
+   "sha256": "3763d30e4d7adb5562b86276b4f85456963d7bac8c4fc784d2f201c93bc1557b",
+   "species": {
+    "zebrafish": 56,
+    "xenopus": 12,
+    "poplar": 10,
+    "setaria": 9
+   },
+   "styles": {
+    "detailed": 39,
+    "question": 29,
+    "terse": 13,
+    "casual": 5,
+    "typo": 1
+   }
+  }
+ }
+}
