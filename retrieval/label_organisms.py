@@ -101,6 +101,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--index", default="index")
     ap.add_argument("--species", default="", help="comma list of shards to relabel (specificity still uses every shard)")
+    ap.add_argument("--no-package", action="store_true", help="don't update inst/vocab/organism_names_dropped.tsv")
     a = ap.parse_args()
     names, src = load_names()
     maxn = max(len(k) for k in names)
@@ -139,7 +140,9 @@ def main():
             dropped.append((" ".join(k), org, round(own_rate, 3), round(ref, 3)))
     bad = {tuple(d[0].split()) for d in dropped}
     # also into the package, so the R extractor skips them in prompts (names are space-joined tokens)
-    for path in (os.path.join(a.index, "_names_dropped.tsv"), DROPPED):
+    # a small or test index can't judge specificity: only a full index (>= 10 shards) updates the package list
+    paths = [os.path.join(a.index, "_names_dropped.tsv")] + ([DROPPED] if len(shards) >= 10 and not a.no_package else [])
+    for path in paths:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write("name\torganism\town_shard_paper_rate\tmedian_other_rate\n")
