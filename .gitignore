@@ -17,3 +17,4 @@ inst/models/sf-tiny-r5/
 index/
 logs/
 llm/preds/
+training/paper_questions/raw/
