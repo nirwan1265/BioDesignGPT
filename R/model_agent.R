@@ -47,7 +47,10 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   rep_ok <- function(v) {
     w <- c(as.character(v), names(.sf_number_words)[.sf_number_words == v], if (v == 1) c("no", "one", "single"))
     re <- paste0("\\b(", paste(w, collapse = "|"), ")\\s+(?:\\w+\\s+){0,2}?(reps?|replicat\\w*|replications?|blocks?|benches|vials|dams|plants per combination)|",
-                 "\\b(", paste(w, collapse = "|"), ")\\s+(plot|row) (each|per)")
+                 "\\b(", paste(w, collapse = "|"), ")\\s+(plot|row) (each|per)|",
+                 # "6 pigs per diet", "four trees per treatment", "10 mice per group"
+                 "\\b(", paste(w, collapse = "|"), ")\\s+[a-z]+\\s+(per|in each|for each)\\s+",
+                 "(group|condition|treatment|diet|dose|genotype|cultivar|line|temperature|strain|sex|level|arm)\\b")
     rng <- paste0("\\b(", paste(w, collapse = "|"), ")\\s*(or|to|-)\\s*\\w+\\s+(reps?|replicat\\w*)|",
                   "\\b\\w+\\s*(or|to|-)\\s*(", paste(w, collapse = "|"), ")\\s+(reps?|replicat\\w*)")
     grepl(re, text, perl = TRUE) && !grepl(rng, text, perl = TRUE)   # "two or three reps" is a range, not 2

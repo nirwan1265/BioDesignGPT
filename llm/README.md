@@ -54,20 +54,26 @@ facts**:
 pick a primary outcome when the prompt names several. The deterministic engine decides those or asks the
 user. (`judgments = TRUE` turns this off, for comparison only.)
 
-## Results (Qwen2.5-14B, field recall %, examples with an invented must-ask value in brackets)
+## Results (field recall %; every merged column has 0 invented must-ask values)
 
-| set | n | rules | LLM alone | rules + LLM | tiny tagger hybrid (round 5b) |
-|---|---|---|---|---|---|
-| study_examples (dev) | 59 | 92.7 (0) | 77.6 (11) | **94.3 (0)** | 94.0 |
-| fresh v1 | 20 | 78.4 (0) | 84.0 (1) | **87.2 (0)** | |
-| fresh v2 | 22 | 95.8 (0) | 67.8 (0) | **98.3 (0)** | |
-| fresh v3 (dev) | 12 | 77.0 (0) | 73.8 (0) | **90.2 (0)** | 83.6 |
-| fresh v4 (clean test) | 21 | 79.8 (0) | 84.0 (0) | **89.9 (0)** | 88.2 |
-| grounded (held-out species) | 300 | 92.7 (0) | 88.5 (0) | **92.9 (0)** | 88.9 |
+| set | n | rules | 14B alone | 14B + rules | 32B alone | 32B + rules |
+|---|---|---|---|---|---|---|
+| study_examples (dev) | 59 | 92.7 | 77.6 | 94.3 | 80.4 | 94.0 |
+| fresh v1 | 20 | 79.2 | 84.0 | 88.0 | 83.2 | 88.8 |
+| fresh v2 | 22 | 95.8 | 67.8 | 98.3 | 77.1 | 98.3 |
+| fresh v3 (dev) | 12 | 77.0 | 73.8 | 90.2 | 80.3 | 90.2 |
+| fresh v4 (clean test) | 21 | 84.9 | 84.0 | 95.0 | 92.4 | **95.8** |
+| grounded (held-out species) | 300 | 97.8 | 88.5 | 98.7 | 92.3 | 98.6 |
 
-On its own, the LLM scores lower because it names fields its own way and makes design judgments
-(11 invented values on study_examples, mostly experimental units). Merged as facts only, it beats rules alone
-and the tiny tagger everywhere, with no invented values.
+The 32B (no fine-tuning yet) reads much better on its own than the 14B (v4 92.4 vs 84.0). Where the 32B
+alone beat the merge, the rules had real bugs, fixed as general rules:
+- spelled numbers above twelve ("thirty-six")
+- "N units per <treatment group>" states replication ("6 pigs per diet")
+- every "per" phrase is read ("15 flies per vial and 10 vials per diet")
+- flies -> fly
+
+Reader-first merging (reader wins, rules fill gaps) still loses to rules-first for the base 32B (89.4 vs 94.0
+on study_examples), because it doesn't know our schema's conventions yet. Re-test after fine-tuning.
 
 Re-score: put `preds_llm_*.json` in `llm/preds/` and run `merge_specs()` over each set with
 `evaluate_extraction()`.

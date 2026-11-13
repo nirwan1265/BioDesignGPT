@@ -15,6 +15,22 @@
 
 .sf_num_re <- "(\\d[\\d,]*|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty)"
 
+# spelled-out numbers above twelve ("thirty-six", "twenty one", "sixteen") -> digits before any pattern runs;
+# one to twelve stay words, since the rules read "one plant per pot" and "two or three reps" as words
+.sf_words_to_digits <- function(text) {
+  units <- c(one = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8, nine = 9)
+  teens <- c(thirteen = 13, fourteen = 14, fifteen = 15, sixteen = 16, seventeen = 17, eighteen = 18, nineteen = 19)
+  tens <- c(twenty = 20, thirty = 30, forty = 40, fifty = 50, sixty = 60, seventy = 70, eighty = 80, ninety = 90)
+  re <- paste0("\\b(", paste(names(tens), collapse = "|"), ")(?:[- ](", paste(names(units), collapse = "|"), "))?\\b")
+  m <- gregexpr(re, text, perl = TRUE)
+  regmatches(text, m) <- lapply(regmatches(text, m), function(x) vapply(x, function(w) {
+    p <- strsplit(w, "[- ]")[[1]]
+    as.character(tens[[p[1]]] + if (length(p) > 1) units[[p[2]]] else 0)
+  }, ""))
+  for (k in names(teens)) text <- gsub(paste0("\\b", k, "\\b"), teens[[k]], text, perl = TRUE)
+  text
+}
+
 # first number found immediately before any of the given nouns
 .sf_count_before <- function(text, nouns, prefix = "(?:about |around |roughly |~)?") {
   # up to two modifier words between the number and the noun, but never another
@@ -78,7 +94,7 @@
 #' @return A StudySpec list (see new_spec()).
 #' @export
 extract_spec_local <- function(question) {
-  text <- tolower(question)
+  text <- .sf_words_to_digits(tolower(question))
   spec <- new_spec()
   set <- function(path, value) if (!is.null(value) && !all(is.na(value))) spec <<- spec_set(spec, path, value)
 
@@ -161,19 +177,28 @@ extract_spec_local <- function(question) {
   pers <- regmatches(text, gregexpr(per_re, text, perl = TRUE))[[1]]
   for (per in pers) {
     parts <- regmatches(per, regexec(per_re, per, perl = TRUE))[[1]]
-    meas <- sub("(ies)$", "y", sub("(?<!s)s$", "", sub("aves$", "af", parts[3]), perl = TRUE))
+    meas <- sub("(?<!s)s$", "", sub("ies$", "y", sub("aves$", "af", parts[3])), perl = TRUE)   # flies -> fly
     meas <- c(panicle = "plant", pup = "pup", cell = "cell", leaf = "leaf", plant = "plant", mouse = "mouse",
               mice = "mouse", well = "well", neuron = "cell", fly = "fly")[meas] %|na|% meas
     exp <- sub("s$", "", parts[4])
     n_sub <- .sf_num(parts[2])
+    # "N units per <treatment group>" ("6 pigs per diet", "15 vials per diet", "four trees per treatment")
+    # states the replication, not subsampling: a factor word or group word after "per"
+    al <- .sf_alias_table()
+    group_word <- exp %in% c("group", "condition", "treatment", "genotype", "line", "entry", "cultivar", "variety") ||
+      exp %in% tolower(al$alias[al$category == "factor"])
+    if (group_word && !identical(n_sub, 1) && is.null(spec$design$reps) && !meas %in% c("sample", "replicate")) {
+      set("design.reps", n_sub)
+      next
+    }
     if (exp %in% c("combination", "batch", "day", "week", "run", "group", "condition", "treatment", "time",
                    "site", "year", "season", "location", "genotype", "line", "entry")) next
     if (meas %in% c("female", "male", "parent", "injection", "egg", "replicate", "sample") || meas == exp) next
     if (identical(n_sub, 1)) next   # "one plant per pot" just defines the pot
+    if (!is.null(spec$measurement_unit)) next   # units already read; keep looking only for "N units per group"
     set("measurement_unit", unname(meas))
     set("subsamples_per_unit", n_sub)
     set("experimental_unit", exp)
-    break
   }
   if (.sf_has(text, "one plant per pot")) set("experimental_unit", "pot")
   if (.sf_has(text, "per cage|mice per cage|housed \\d+ per cage")) {
