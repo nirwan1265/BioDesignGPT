@@ -906,6 +906,55 @@
         "ortholog_evidence"
       ],
       "source": "Design logic"
+    },
+    {
+      "id": "livestock_pen_unit",
+      "system": "livestock",
+      "hazard": "Diets or water treatments given to pens, but animals analysed as replicates.",
+      "consequence": "Animals within a pen are not independent; error degrees of freedom and significance are inflated.",
+      "mitigation": [
+        "n = number of pens per treatment",
+        "Several pens per treatment, randomised within rooms or weight blocks",
+        "Fit (1 | pen) if animals are measured individually"
+      ],
+      "record": [
+        "pen",
+        "room",
+        "initial_body_weight"
+      ],
+      "source": "Bello et al. 2016, J Dairy Sci 99:8871-8879, doi:10.3168/jds.2016-11516"
+    },
+    {
+      "id": "livestock_farm_confound",
+      "system": "livestock",
+      "hazard": "Each treatment on its own farm, herd, house or room (e.g. cage vs cage-free farms, pasture vs feedlot, one isolation room per infection).",
+      "consequence": "Treatment is confounded with everything else about that farm or room; there is no replication of the treatment.",
+      "mitigation": [
+        "Several farms, herds or rooms per treatment",
+        "Otherwise report the comparison as observational, not as a treatment effect"
+      ],
+      "record": [
+        "farm",
+        "herd",
+        "room"
+      ],
+      "source": "Hurlbert 1984, Ecol Monogr 54:187-211, doi:10.2307/1942661"
+    },
+    {
+      "id": "livestock_litter_sire",
+      "system": "livestock",
+      "hazard": "Animals from few litters or sires unevenly spread across treatments.",
+      "consequence": "Litter or sire effects can masquerade as treatment effects.",
+      "mitigation": [
+        "Allocate littermates across treatments (split-litter)",
+        "Block on litter or sire and record it"
+      ],
+      "record": [
+        "litter",
+        "sire",
+        "dam"
+      ],
+      "source": "Lazic, Clarke-Williams & Munafo 2018, PLoS Biol 16:e2005282, doi:10.1371/journal.pbio.2005282"
     }
   ]
 }

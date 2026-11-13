@@ -100,14 +100,14 @@ studyforge_tools <- function(state, outdir = "studyforge_run") {
     T(safely(function(system) json(system_questions(system))), name = "system_questions",
       description = "Consequential questions to ask for an experimental system.",
       arguments = list(system = ellmer::type_enum(
-        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila", "bulk_rnaseq",
+        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila", "livestock", "bulk_rnaseq",
                    "metabolomics_lipidomics", "single_cell", "breeding_genetics", "multi_environment",
                    "multi_omics", "ribo_seq", "atac_seq", "functional_validation")))),
 
     T(safely(function(system) json(setup_hazards(system))), name = "setup_hazards",
       description = "Setup problems for a system (borders, irrigation lines, doors, chamber corners, cages, fly density...) with mitigations and covariates to record.",
       arguments = list(system = ellmer::type_enum(
-        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila", "breeding_genetics",
+        values = c("field", "greenhouse", "growth_chamber", "mouse", "drosophila", "livestock", "breeding_genetics",
                    "multi_environment", "multi_omics", "ribo_seq", "atac_seq", "functional_validation")))),
 
     T(safely(function(query = "", system = NULL) json(protocol_notes(query, system))),

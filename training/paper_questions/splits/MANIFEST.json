@@ -6,7 +6,7 @@
  "files": {
   "dev.jsonl": {
    "n": 328,
-   "sha256": "c8c6cc7415e43b096379d80d66c4165e8845e7576fe2c08d21622eeeb60f070d",
+   "sha256": "e0848a83e803fccc8e7dacfa51bda4dd66e469c7e2a9df818a1d93f25843f29e",
    "species": {
     "rat": 28,
     "arabidopsis": 26,
@@ -45,11 +45,12 @@
     "terse": 67,
     "casual": 41,
     "typo": 17
-   }
+   },
+   "members_sha256": "ffab4ca527ffa8c88de8990abbf1958fae534df5201e6627c689a1410621d663"
   },
   "test.jsonl": {
    "n": 764,
-   "sha256": "7178183cf271ab29d09d922adbd22100174cc8164a3582e1f1f77c1475ea86b6",
+   "sha256": "5acaeac281e86b8d9983d83af631741bc5720c577fd1cfe956064720c04da0ce",
    "species": {
     "mouse": 57,
     "arabidopsis": 55,
@@ -88,11 +89,12 @@
     "question": 167,
     "casual": 68,
     "typo": 38
-   }
+   },
+   "members_sha256": "02f0c001440111b57cba796d4f165dc27ad804fcc22398810b4db73cb4ff10e1"
   },
   "test_heldout.jsonl": {
    "n": 87,
-   "sha256": "3763d30e4d7adb5562b86276b4f85456963d7bac8c4fc784d2f201c93bc1557b",
+   "sha256": "6e724d5a9116d94f7de8c5e6c6adc7c6d7bdba4487a26cd3dcc353a88a85eb7e",
    "species": {
     "zebrafish": 56,
     "xenopus": 12,
@@ -105,7 +107,9 @@
     "terse": 13,
     "casual": 5,
     "typo": 1
-   }
+   },
+   "members_sha256": "4a539f978c942cef0a13b8448cec5f4aaa6e24fdcca95b5ed43fa029b7ebc620"
   }
- }
+ },
+ "refreshed": 1
 }

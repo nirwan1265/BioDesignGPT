@@ -108,6 +108,48 @@
       "system": "drosophila",
       "typical_parent": "cohort",
       "note": "Source of flies; block by bottle."
+    },
+    {
+      "id": "pen",
+      "system": "livestock",
+      "typical_parent": "room",
+      "note": "Unit when feed, water or housing treatments are applied to a group of animals."
+    },
+    {
+      "id": "herd",
+      "system": "livestock",
+      "typical_parent": "farm",
+      "note": "Unit when a grazing system, ration or management practice is applied to a whole herd or paddock."
+    },
+    {
+      "id": "tank",
+      "system": "aquatic",
+      "typical_parent": "rack",
+      "note": "Fish sharing a tank share water, temperature and feeding; the tank is the unit for these treatments."
+    },
+    {
+      "id": "dish",
+      "system": "aquatic",
+      "typical_parent": "incubator",
+      "note": "Embryos or seeds treated together in one dish share the treatment; the dish is the unit."
+    },
+    {
+      "id": "flask",
+      "system": "cell_culture",
+      "typical_parent": "incubator",
+      "note": "Independent culture flask; the unit for treatments of microbial or algal cultures."
+    },
+    {
+      "id": "bioreactor",
+      "system": "cell_culture",
+      "typical_parent": "run",
+      "note": "Each bioreactor or chemostat is one unit; samples over time from one vessel are repeated measures."
+    },
+    {
+      "id": "bucket",
+      "system": "greenhouse",
+      "typical_parent": "bench",
+      "note": "Like a pot: plants sharing a bucket share soil and watering."
     }
   ]
 }

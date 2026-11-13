@@ -185,7 +185,7 @@ treatment	treatment	factor	curated terminology	high
 vehicle	treatment	factor	curated terminology	high
 saline	treatment	factor	curated terminology	high
 inhibitor	treatment	factor	curated terminology	high
-dose	treatment	factor	curated terminology	high
+dose	dose	factor	curated terminology	high
 sex	sex	factor	curated terminology	high
 male and female	sex	factor	curated terminology	high
 both sexes	sex	factor	curated terminology	high
@@ -422,7 +422,7 @@ transgene	genotype	factor	curated terminology (round 2)	high
 a treatment with a control	treatment	factor	curated terminology (round 2)	high
 treatment and control	treatment	factor	curated terminology (round 2)	high
 treatment groups	treatment	factor	curated terminology (round 2)	high
-dose groups	treatment	factor	curated terminology (round 2)	high
+dose groups	dose	factor	curated terminology (round 2)	high
 drug groups	treatment	factor	curated terminology (round 2)	high
 treatments	treatment	factor	curated terminology (round 2)	high
 water levels	water	factor	curated terminology (round 2)	high
@@ -695,7 +695,7 @@ age groups	age	factor	evidence layer (ENA/GEO studies)	high
 tissues	tissue	factor	evidence layer (ENA/GEO studies)	high
 organs	tissue	factor	evidence layer (ENA/GEO studies)	high
 tissue types	tissue	factor	evidence layer (ENA/GEO studies)	high
-cell types	tissue	factor	evidence layer (ENA/GEO studies)	high
+cell types	cell_type	factor	evidence layer (ENA/GEO studies)	high
 sample types	tissue	factor	evidence layer (ENA/GEO studies)	high
 disease groups	disease	factor	evidence layer (ENA/GEO studies)	high
 disease states	disease	factor	evidence layer (ENA/GEO studies)	high
@@ -704,8 +704,8 @@ patient groups	disease	factor	evidence layer (ENA/GEO studies)	high
 conditions	treatment	factor	evidence layer (ENA/GEO studies)	high
 experimental conditions	treatment	factor	evidence layer (ENA/GEO studies)	high
 stress treatments	treatment	factor	evidence layer (ENA/GEO studies)	high
-infection	treatment	factor	evidence layer (ENA/GEO studies)	high
-infection status	treatment	factor	evidence layer (ENA/GEO studies)	high
+infection	infection	factor	evidence layer (ENA/GEO studies)	high
+infection status	infection	factor	evidence layer (ENA/GEO studies)	high
 stimuli	treatment	factor	evidence layer (ENA/GEO studies)	high
 groups	treatment	factor	evidence layer (ENA/GEO studies)	high
 cell lines	genotype	factor	evidence layer (ENA/GEO studies)	high
@@ -732,7 +732,7 @@ scrna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
 single-cell rna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
 snrna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
 single-nucleus rna-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
-scatac-seq	single_cell	assay	evidence layer (ENA/GEO studies)	high
+scatac-seq	scatac_seq	assay	evidence layer (ENA/GEO studies)	high
 library batches	batch	blocking	evidence layer (ENA/GEO studies)	high
 sequencing batches	batch	blocking	evidence layer (ENA/GEO studies)	high
 s. cerevisiae	Saccharomyces cerevisiae	organism	evidence layer (ENA/GEO studies)	high
@@ -747,3 +747,302 @@ participants	Homo sapiens	organism	general extraction layer	high
 volunteers	Homo sapiens	organism	general extraction layer	high
 placebo	treatment	factor	general extraction layer	high
 placibo	treatment	factor	general extraction layer	high
+16s	amplicon	assay	curated terminology (paper questions)	high
+16s rrna	amplicon	assay	curated terminology (paper questions)	high
+16s rdna	amplicon	assay	curated terminology (paper questions)	high
+16s rrna gene	amplicon	assay	curated terminology (paper questions)	high
+16s amplicon	amplicon	assay	curated terminology (paper questions)	high
+16s sequencing	amplicon	assay	curated terminology (paper questions)	high
+16s/its	amplicon	assay	curated terminology (paper questions)	high
+its amplicon	amplicon	assay	curated terminology (paper questions)	high
+its sequencing	amplicon	assay	curated terminology (paper questions)	high
+its1	amplicon	assay	curated terminology (paper questions)	high
+its2	amplicon	assay	curated terminology (paper questions)	high
+18s amplicon	amplicon	assay	curated terminology (paper questions)	high
+amplicon sequencing	amplicon	assay	curated terminology (paper questions)	high
+rrna amplicon	amplicon	assay	curated terminology (paper questions)	high
+microbial amplicon	amplicon	assay	curated terminology (paper questions)	high
+merip-seq	m6a_seq	assay	curated terminology (paper questions)	high
+merip	m6a_seq	assay	curated terminology (paper questions)	high
+m6a-seq	m6a_seq	assay	curated terminology (paper questions)	high
+m6a seq	m6a_seq	assay	curated terminology (paper questions)	high
+m6a-merip	m6a_seq	assay	curated terminology (paper questions)	high
+m6a methylome	m6a_seq	assay	curated terminology (paper questions)	high
+m6a profiling	m6a_seq	assay	curated terminology (paper questions)	high
+methylated rna immunoprecipitation	m6a_seq	assay	curated terminology (paper questions)	high
+miclip	m6a_seq	assay	curated terminology (paper questions)	high
+iso-seq	long_read_rna	assay	curated terminology (paper questions)	high
+isoseq	long_read_rna	assay	curated terminology (paper questions)	high
+pacbio iso-seq	long_read_rna	assay	curated terminology (paper questions)	high
+nanopore direct rna	long_read_rna	assay	curated terminology (paper questions)	high
+direct rna-seq	long_read_rna	assay	curated terminology (paper questions)	high
+direct rna sequencing	long_read_rna	assay	curated terminology (paper questions)	high
+long-read rna-seq	long_read_rna	assay	curated terminology (paper questions)	high
+long-read rna	long_read_rna	assay	curated terminology (paper questions)	high
+nanopore rna-seq	long_read_rna	assay	curated terminology (paper questions)	high
+nanopore cdna	long_read_rna	assay	curated terminology (paper questions)	high
+full-length transcriptome	long_read_rna	assay	curated terminology (paper questions)	high
+paiso-seq	long_read_rna	assay	curated terminology (paper questions)	high
+flam-seq	long_read_rna	assay	curated terminology (paper questions)	high
+genotyping-by-sequencing	gbs	assay	curated terminology (paper questions)	high
+genotyping by sequencing	gbs	assay	curated terminology (paper questions)	high
+gbs	gbs	assay	curated terminology (paper questions)	high
+rad-seq	gbs	assay	curated terminology (paper questions)	high
+radseq	gbs	assay	curated terminology (paper questions)	high
+ddrad	gbs	assay	curated terminology (paper questions)	high
+ddradseq	gbs	assay	curated terminology (paper questions)	high
+slaf-seq	gbs	assay	curated terminology (paper questions)	high
+dart-seq	gbs	assay	curated terminology (paper questions)	high
+dartseq	gbs	assay	curated terminology (paper questions)	high
+mig-seq	gbs	assay	curated terminology (paper questions)	high
+degradome	degradome	assay	curated terminology (paper questions)	high
+degradome-seq	degradome	assay	curated terminology (paper questions)	high
+degradome sequencing	degradome	assay	curated terminology (paper questions)	high
+pare-seq	degradome	assay	curated terminology (paper questions)	high
+parallel analysis of rna ends	degradome	assay	curated terminology (paper questions)	high
+hi-c	hic	assay	curated terminology (paper questions)	high
+hichip	hic	assay	curated terminology (paper questions)	high
+in situ hi-c	hic	assay	curated terminology (paper questions)	high
+micro-c	hic	assay	curated terminology (paper questions)	high
+capture hi-c	hic	assay	curated terminology (paper questions)	high
+3d genome	hic	assay	curated terminology (paper questions)	high
+chromatin conformation capture	hic	assay	curated terminology (paper questions)	high
+scatac	scatac_seq	assay	curated terminology (paper questions)	high
+snatac-seq	scatac_seq	assay	curated terminology (paper questions)	high
+snatac	scatac_seq	assay	curated terminology (paper questions)	high
+single-cell atac	scatac_seq	assay	curated terminology (paper questions)	high
+single-cell atac-seq	scatac_seq	assay	curated terminology (paper questions)	high
+single-nucleus atac	scatac_seq	assay	curated terminology (paper questions)	high
+single cell atac	scatac_seq	assay	curated terminology (paper questions)	high
+multiome	scatac_seq	assay	curated terminology (paper questions)	high
+scmultiome	scatac_seq	assay	curated terminology (paper questions)	high
+10x multiome	scatac_seq	assay	curated terminology (paper questions)	high
+medip	medip	assay	curated terminology (paper questions)	high
+medip-seq	medip	assay	curated terminology (paper questions)	high
+hmedip	medip	assay	curated terminology (paper questions)	high
+hmedip-seq	medip	assay	curated terminology (paper questions)	high
+mbd-seq	medip	assay	curated terminology (paper questions)	high
+methylated dna immunoprecipitation	medip	assay	curated terminology (paper questions)	high
+methylation enrichment sequencing	medip	assay	curated terminology (paper questions)	high
+mnase-seq	mnase_seq	assay	curated terminology (paper questions)	high
+mnase seq	mnase_seq	assay	curated terminology (paper questions)	high
+nucleosome positioning	mnase_seq	assay	curated terminology (paper questions)	high
+nucleosome mapping	mnase_seq	assay	curated terminology (paper questions)	high
+pro-seq	nascent_rna	assay	curated terminology (paper questions)	high
+gro-seq	nascent_rna	assay	curated terminology (paper questions)	high
+net-seq	nascent_rna	assay	curated terminology (paper questions)	high
+pro-cap	nascent_rna	assay	curated terminology (paper questions)	high
+precision run-on	nascent_rna	assay	curated terminology (paper questions)	high
+nascent rna-seq	nascent_rna	assay	curated terminology (paper questions)	high
+nascent transcription	nascent_rna	assay	curated terminology (paper questions)	high
+tt-seq	nascent_rna	assay	curated terminology (paper questions)	high
+nascent rna	nascent_rna	assay	curated terminology (paper questions)	high
+butt-seq	nascent_rna	assay	curated terminology (paper questions)	high
+spatial transcriptomics	spatial	assay	curated terminology (paper questions)	high
+visium	spatial	assay	curated terminology (paper questions)	high
+stereo-seq	spatial	assay	curated terminology (paper questions)	high
+slide-seq	spatial	assay	curated terminology (paper questions)	high
+merfish	spatial	assay	curated terminology (paper questions)	high
+spatial transcriptome	spatial	assay	curated terminology (paper questions)	high
+exome sequencing	targeted_capture	assay	curated terminology (paper questions)	high
+exome capture	targeted_capture	assay	curated terminology (paper questions)	high
+whole-exome sequencing	targeted_capture	assay	curated terminology (paper questions)	high
+whole exome sequencing	targeted_capture	assay	curated terminology (paper questions)	high
+targeted capture	targeted_capture	assay	curated terminology (paper questions)	high
+sequence capture	targeted_capture	assay	curated terminology (paper questions)	high
+capture-seq	targeted_capture	assay	curated terminology (paper questions)	high
+rip-seq	rip_clip	assay	curated terminology (paper questions)	high
+clip-seq	rip_clip	assay	curated terminology (paper questions)	high
+iclip	rip_clip	assay	curated terminology (paper questions)	high
+eclip	rip_clip	assay	curated terminology (paper questions)	high
+par-clip	rip_clip	assay	curated terminology (paper questions)	high
+hits-clip	rip_clip	assay	curated terminology (paper questions)	high
+rna immunoprecipitation	rip_clip	assay	curated terminology (paper questions)	high
+shotgun metagenomics	metagenomics	assay	curated terminology (paper questions)	high
+metagenomics	metagenomics	assay	curated terminology (paper questions)	high
+metagenomic sequencing	metagenomics	assay	curated terminology (paper questions)	high
+shotgun metagenomic	metagenomics	assay	curated terminology (paper questions)	high
+metagenome sequencing	metagenomics	assay	curated terminology (paper questions)	high
+pool-seq	pool_seq	assay	curated terminology (paper questions)	high
+poolseq	pool_seq	assay	curated terminology (paper questions)	high
+pooled sequencing	pool_seq	assay	curated terminology (paper questions)	high
+bulked segregant	bsa_seq	assay	curated terminology (paper questions)	high
+bulked segregant analysis	bsa_seq	assay	curated terminology (paper questions)	high
+bsa-seq	bsa_seq	assay	curated terminology (paper questions)	high
+bsr-seq	bsa_seq	assay	curated terminology (paper questions)	high
+qtl-seq	bsa_seq	assay	curated terminology (paper questions)	high
+mutmap	bsa_seq	assay	curated terminology (paper questions)	high
+trap-seq	trap_seq	assay	curated terminology (paper questions)	high
+translating ribosome affinity purification	trap_seq	assay	curated terminology (paper questions)	high
+whole-genome sequencing	wgs	assay	curated terminology (paper questions)	high
+whole genome sequencing	wgs	assay	curated terminology (paper questions)	high
+wgs	wgs	assay	curated terminology (paper questions)	high
+resequencing	wgs	assay	curated terminology (paper questions)	high
+re-sequencing	wgs	assay	curated terminology (paper questions)	high
+whole-genome resequencing	wgs	assay	curated terminology (paper questions)	high
+cut&tag	chip_seq	assay	curated terminology (paper questions)	high
+cut&run	chip_seq	assay	curated terminology (paper questions)	high
+cut and tag	chip_seq	assay	curated terminology (paper questions)	high
+cut and run	chip_seq	assay	curated terminology (paper questions)	high
+cut&tag-seq	chip_seq	assay	curated terminology (paper questions)	high
+cut&run-seq	chip_seq	assay	curated terminology (paper questions)	high
+h3k27ac chip	chip_seq	assay	curated terminology (paper questions)	high
+dap-seq	chip_seq	assay	curated terminology (paper questions)	high
+lncrna-seq	rnaseq	assay	curated terminology (paper questions)	high
+lncrna sequencing	rnaseq	assay	curated terminology (paper questions)	high
+long noncoding rna-seq	rnaseq	assay	curated terminology (paper questions)	high
+circrna-seq	rnaseq	assay	curated terminology (paper questions)	high
+circrna sequencing	rnaseq	assay	curated terminology (paper questions)	high
+whole-transcriptome sequencing	rnaseq	assay	curated terminology (paper questions)	high
+ncrna-seq	rnaseq	assay	curated terminology (paper questions)	high
+total rna-seq	rnaseq	assay	curated terminology (paper questions)	high
+3' quantseq	rnaseq	assay	curated terminology (paper questions)	high
+3'quant mrna-seq	rnaseq	assay	curated terminology (paper questions)	high
+3' tag-seq of	rnaseq	assay	curated terminology (paper questions)	high
+tank	tank	unit	curated terminology (paper questions)	high
+tanks	tank	unit	curated terminology (paper questions)	high
+aquarium	tank	unit	curated terminology (paper questions)	high
+aquaria	tank	unit	curated terminology (paper questions)	high
+pen	pen	unit	curated terminology (paper questions)	high
+pens	pen	unit	curated terminology (paper questions)	high
+floor pen	pen	unit	curated terminology (paper questions)	high
+floor pens	pen	unit	curated terminology (paper questions)	high
+replicate pens	pen	unit	curated terminology (paper questions)	high
+flask	flask	unit	curated terminology (paper questions)	high
+flasks	flask	unit	curated terminology (paper questions)	high
+culture flask	flask	unit	curated terminology (paper questions)	high
+culture flasks	flask	unit	curated terminology (paper questions)	high
+petri dish	dish	unit	curated terminology (paper questions)	high
+petri dishes	dish	unit	curated terminology (paper questions)	high
+dish	dish	unit	curated terminology (paper questions)	high
+dishes	dish	unit	curated terminology (paper questions)	high
+bucket	bucket	unit	curated terminology (paper questions)	high
+buckets	bucket	unit	curated terminology (paper questions)	high
+herd	herd	unit	curated terminology (paper questions)	high
+herds	herd	unit	curated terminology (paper questions)	high
+paddock	herd	unit	curated terminology (paper questions)	high
+paddocks	herd	unit	curated terminology (paper questions)	high
+isolation room	room	unit	curated terminology (paper questions)	high
+isolation rooms	room	unit	curated terminology (paper questions)	high
+animal room	room	unit	curated terminology (paper questions)	high
+animal rooms	room	unit	curated terminology (paper questions)	high
+bioreactor	bioreactor	unit	curated terminology (paper questions)	high
+bioreactors	bioreactor	unit	curated terminology (paper questions)	high
+photobioreactor	bioreactor	unit	curated terminology (paper questions)	high
+photobioreactors	bioreactor	unit	curated terminology (paper questions)	high
+chemostat	bioreactor	unit	curated terminology (paper questions)	high
+chemostats	bioreactor	unit	curated terminology (paper questions)	high
+fermentor	bioreactor	unit	curated terminology (paper questions)	high
+fermentors	bioreactor	unit	curated terminology (paper questions)	high
+fish	fish	unit	curated terminology (paper questions)	high
+larva	fish	unit	curated terminology (paper questions)	high
+larvae	fish	unit	curated terminology (paper questions)	high
+embryo	embryo	unit	curated terminology (paper questions)	high
+embryos	embryo	unit	curated terminology (paper questions)	high
+pig	animal	unit	curated terminology (paper questions)	high
+pigs	animal	unit	curated terminology (paper questions)	high
+piglet	animal	unit	curated terminology (paper questions)	high
+piglets	animal	unit	curated terminology (paper questions)	high
+chick	animal	unit	curated terminology (paper questions)	high
+chicks	animal	unit	curated terminology (paper questions)	high
+broiler	animal	unit	curated terminology (paper questions)	high
+broilers	animal	unit	curated terminology (paper questions)	high
+hen	animal	unit	curated terminology (paper questions)	high
+hens	animal	unit	curated terminology (paper questions)	high
+bird	animal	unit	curated terminology (paper questions)	high
+birds	animal	unit	curated terminology (paper questions)	high
+cow	animal	unit	curated terminology (paper questions)	high
+cows	animal	unit	curated terminology (paper questions)	high
+calf	animal	unit	curated terminology (paper questions)	high
+calves	animal	unit	curated terminology (paper questions)	high
+steer	animal	unit	curated terminology (paper questions)	high
+steers	animal	unit	curated terminology (paper questions)	high
+heifer	animal	unit	curated terminology (paper questions)	high
+heifers	animal	unit	curated terminology (paper questions)	high
+litter	litter	blocking	curated terminology (paper questions)	high
+litters	litter	blocking	curated terminology (paper questions)	high
+littermates	litter	blocking	curated terminology (paper questions)	high
+within litter	litter	blocking	curated terminology (paper questions)	high
+donor	donor	blocking	curated terminology (paper questions)	high
+donors	donor	blocking	curated terminology (paper questions)	high
+blood donor	donor	blocking	curated terminology (paper questions)	high
+blood donors	donor	blocking	curated terminology (paper questions)	high
+clutch	clutch	blocking	curated terminology (paper questions)	high
+clutches	clutch	blocking	curated terminology (paper questions)	high
+spawning	clutch	blocking	curated terminology (paper questions)	high
+farm	farm	blocking	curated terminology (paper questions)	high
+farms	farm	blocking	curated terminology (paper questions)	high
+herd	herd	blocking	curated terminology (paper questions)	high
+herds	herd	blocking	curated terminology (paper questions)	high
+cell type	cell_type	factor	curated terminology (paper questions)	high
+sorted cell populations	cell_type	factor	curated terminology (paper questions)	high
+cell populations	cell_type	factor	curated terminology (paper questions)	high
+species	species	factor	curated terminology (paper questions)	high
+two species	species	factor	curated terminology (paper questions)	high
+generation	generation	factor	curated terminology (paper questions)	high
+generations	generation	factor	curated terminology (paper questions)	high
+transgenerational	generation	factor	curated terminology (paper questions)	high
+f1 to f3	generation	factor	curated terminology (paper questions)	high
+soil type	soil	factor	curated terminology (paper questions)	high
+soil types	soil	factor	curated terminology (paper questions)	high
+soils	soil	factor	curated terminology (paper questions)	high
+inoculation	infection	factor	curated terminology (paper questions)	high
+inoculated	infection	factor	curated terminology (paper questions)	high
+pathogen infection	infection	factor	curated terminology (paper questions)	high
+mock-inoculated	infection	factor	curated terminology (paper questions)	high
+virus infection	infection	factor	curated terminology (paper questions)	high
+infected vs mock	infection	factor	curated terminology (paper questions)	high
+doses	dose	factor	curated terminology (paper questions)	high
+dose levels	dose	factor	curated terminology (paper questions)	high
+dosage	dose	factor	curated terminology (paper questions)	high
+dose-response	dose	factor	curated terminology (paper questions)	high
+extreme phenotypes	phenotype_group	factor	curated terminology (paper questions)	high
+high and low	phenotype_group	factor	curated terminology (paper questions)	high
+high vs low	phenotype_group	factor	curated terminology (paper questions)	high
+resistant vs susceptible	phenotype_group	factor	curated terminology (paper questions)	high
+tolerant vs sensitive	phenotype_group	factor	curated terminology (paper questions)	high
+breed	genotype	factor	curated terminology (paper questions)	high
+livestock	livestock	system	curated terminology (paper questions)	high
+farm animals	livestock	system	curated terminology (paper questions)	high
+poultry	livestock	system	curated terminology (paper questions)	high
+broiler	livestock	system	curated terminology (paper questions)	high
+broilers	livestock	system	curated terminology (paper questions)	high
+broiler chickens	livestock	system	curated terminology (paper questions)	high
+laying hens	livestock	system	curated terminology (paper questions)	high
+layer hens	livestock	system	curated terminology (paper questions)	high
+weaned piglets	livestock	system	curated terminology (paper questions)	high
+weanling piglets	livestock	system	curated terminology (paper questions)	high
+weanling pigs	livestock	system	curated terminology (paper questions)	high
+nursery pigs	livestock	system	curated terminology (paper questions)	high
+growing pigs	livestock	system	curated terminology (paper questions)	high
+finishing pigs	livestock	system	curated terminology (paper questions)	high
+fattening pigs	livestock	system	curated terminology (paper questions)	high
+growing-finishing pigs	livestock	system	curated terminology (paper questions)	high
+dairy cows	livestock	system	curated terminology (paper questions)	high
+dairy cattle	livestock	system	curated terminology (paper questions)	high
+lactating cows	livestock	system	curated terminology (paper questions)	high
+beef cattle	livestock	system	curated terminology (paper questions)	high
+feedlot	livestock	system	curated terminology (paper questions)	high
+steers	livestock	system	curated terminology (paper questions)	high
+heifers	livestock	system	curated terminology (paper questions)	high
+sows	livestock	system	curated terminology (paper questions)	high
+gilts	livestock	system	curated terminology (paper questions)	high
+barrows	livestock	system	curated terminology (paper questions)	high
+m6a-ip	m6a_seq	assay	curated terminology (paper questions)	high
+m6a ip	m6a_seq	assay	curated terminology (paper questions)	high
+m6a immunoprecipitation	m6a_seq	assay	curated terminology (paper questions)	high
+acrip-seq	rip_clip	assay	curated terminology (paper questions)	high
+rip seq	rip_clip	assay	curated terminology (paper questions)	high
+ribotag	trap_seq	assay	curated terminology (paper questions)	high
+ribotag ip	trap_seq	assay	curated terminology (paper questions)	high
+nanopore transcriptome	long_read_rna	assay	curated terminology (paper questions)	high
+nanopore rna seq	long_read_rna	assay	curated terminology (paper questions)	high
+long-read nanopore transcriptome	long_read_rna	assay	curated terminology (paper questions)	high
+full-length transcript sequencing	long_read_rna	assay	curated terminology (paper questions)	high
+target-enrichment sequencing	targeted_capture	assay	curated terminology (paper questions)	high
+target enrichment sequencing	targeted_capture	assay	curated terminology (paper questions)	high
+target-enrichment	targeted_capture	assay	curated terminology (paper questions)	high
+mnase	mnase_seq	assay	curated terminology (paper questions)	high
+mnase hypersensitivity	mnase_seq	assay	curated terminology (paper questions)	high
+metagenomes	metagenomics	assay	curated terminology (paper questions)	high
+metagenome	metagenomics	assay	curated terminology (paper questions)	high

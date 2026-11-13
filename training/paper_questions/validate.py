@@ -5,7 +5,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "llm"))
 from reader import SYSTEMS, ASSAYS  # noqa: E402
 FACTORS = {"age", "antibiotic", "co2", "diet", "disease", "genotype", "injury", "light", "nitrogen", "nutrient", "phosphorus",
-           "salt", "sex", "stage", "temperature", "time", "tissue", "treatment", "water", "dose", "infection", "strain"}
+           "salt", "sex", "stage", "temperature", "time", "tissue", "treatment", "water", "dose", "infection", "cell_type",
+           "species", "generation", "soil", "phenotype_group"}
 OUTCOMES = {"behaviour", "biomass", "body_weight", "chromatin_accessibility", "disease_severity", "flowering_time",
             "forage_yield", "gca_sca", "gene_expression", "grain_yield", "leaf_growth", "lifespan", "lipid_content",
             "mechanical_threshold", "photosynthesis", "plant_height", "translation_efficiency", "wing_size"}

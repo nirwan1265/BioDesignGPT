@@ -138,7 +138,8 @@
                           "injury", "antibiotic", "sex", "disease")
 
 .SF_SYSTEM_BY_ASSAY <- c(rnaseq = "bulk_rnaseq", small_rnaseq = "bulk_rnaseq", atac_seq = "atac_seq",
-                         ribo_seq = "ribo_seq", single_cell = "single_cell")
+                         ribo_seq = "ribo_seq", single_cell = "single_cell", scatac_seq = "single_cell",
+                         long_read_rna = "bulk_rnaseq", trap_seq = "bulk_rnaseq", nascent_rna = "bulk_rnaseq")
 
 .sf_general_layer <- function(spec, text) {
   set <- function(path, value) if (!is.null(value) && !all(is.na(value))) spec <<- spec_set(spec, path, value)

@@ -220,6 +220,25 @@
         "generation"
       ],
       "guidance": "Validate with independent alleles and sibling controls; an in silico prediction prioritises but does not validate (design logic; Kaelin 2017 on validation pitfalls)."
+    },
+    {
+      "id": "livestock",
+      "consequential_questions": [
+        "How is the treatment given: in feed or water to a whole pen, cage or house (the pen is the unit) or to individual animals?",
+        "Animals per pen and pens per treatment; are pens blocked by room, barn position, litter or initial body weight?",
+        "Primary outcome (growth, feed efficiency, carcass, health score, microbiome) and its expected SD?",
+        "Where do the animals come from: litters, sires, farms or delivery batches? One breed or line?",
+        "Repeated measures over time, expected losses, and humane endpoints?"
+      ],
+      "default_blocking": [
+        "room",
+        "initial_body_weight",
+        "litter",
+        "batch"
+      ],
+      "reporting_checklist": "ARRIVE 2.0; FASS Guide for the Care and Use of Agricultural Animals in Research and Teaching",
+      "disclaimer": "Planning recommendation only; final designs require statistician, veterinarian and animal care committee review.",
+      "guidance": "When diets or water treatments are given to pens, the pen is the experimental unit and n is the number of pens (Bello et al. 2016, J Dairy Sci 99:8871-8879, doi:10.3168/jds.2016-11516)."
     }
   ]
 }

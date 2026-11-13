@@ -19,9 +19,11 @@ ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
 
 SYSTEMS = ["field", "greenhouse", "growth_chamber", "mouse", "drosophila", "cell_culture", "bulk_rnaseq", "single_cell",
            "ribo_seq", "atac_seq", "metabolomics_lipidomics", "multi_omics", "breeding_genetics", "multi_environment",
-           "functional_validation"]
+           "functional_validation", "livestock"]
 ASSAYS = ["rnaseq", "small_rnaseq", "single_cell", "atac_seq", "ribo_seq", "chip_seq", "methylation", "gwas", "eqtl",
-          "qtl_mapping", "lipidomics", "metabolomics", "crispr", "overexpression", "complementation", "heterologous", "in_silico"]
+          "qtl_mapping", "lipidomics", "metabolomics", "crispr", "overexpression", "complementation", "heterologous", "in_silico",
+          "scatac_seq", "amplicon", "m6a_seq", "long_read_rna", "gbs", "degradome", "hic", "medip", "mnase_seq", "nascent_rna",
+          "spatial", "targeted_capture", "rip_clip", "metagenomics", "pool_seq", "bsa_seq", "trap_seq", "wgs"]
 ORGANISMS = ["Sorghum bicolor", "Zea mays", "Arabidopsis thaliana", "Oryza sativa", "Triticum aestivum", "Hordeum vulgare",
              "Glycine max", "Solanum lycopersicum", "Solanum tuberosum", "Gossypium hirsutum", "Medicago truncatula",
              "Brachypodium distachyon", "Setaria viridis", "Nicotiana benthamiana", "Physcomitrium patens", "Vitis vinifera",
@@ -42,21 +44,29 @@ Fields:
   scRNA/snRNA-seq -> single_cell; ATAC-seq -> atac_seq; Ribo-seq -> ribo_seq; lipidomics/metabolomics ->
   metabolomics_lipidomics; GWAS together with expression/eQTL -> multi_omics; crosses, selfing, backcrossing, RILs, NAM,
   diallel, mutant populations -> breeding_genetics; the same entries over several locations/years for GxE or stability ->
-  multi_environment; validating candidate genes (CRISPR, complementation, another organism) -> functional_validation.
+  multi_environment; validating candidate genes (CRISPR, complementation, another organism) -> functional_validation;
+  farm animals in production settings (broilers, laying hens, pigs in pens, dairy or beef cattle, feedlots) -> livestock.
   ChIP-seq, CUT&Tag and methylome have no system of their own: use the setting and list the assay.
 - organism: scientific name, one of {ORGANISMS} or another scientific name. organisms: list when more than one.
 - method: the genetic tool, resource or approach named, in a few words (e.g. "Cre-lox conditional knockout",
   "EMS mutagenesis", "DGRP reference panel", "CRISPR knockout", "RNAi"), else null.
 - assays: list from {ASSAYS}.
+  Synonyms: 3' Tag-seq/QuantSeq, lncRNA-seq, circRNA-seq -> rnaseq; CUT&Tag, CUT&RUN -> chip_seq; WGBS/RRBS -> methylation;
+  MeDIP/hMeDIP -> medip; scATAC/snATAC/multiome -> scatac_seq; 16S/ITS amplicon -> amplicon; MeRIP/m6A-seq -> m6a_seq;
+  Iso-Seq/nanopore direct RNA -> long_read_rna; GBS/RAD-seq/SLAF-seq -> gbs; degradome/PARE -> degradome; Hi-C/HiChIP -> hic;
+  PRO-seq/GRO-seq/NET-seq -> nascent_rna; RIP-seq/CLIP-seq -> rip_clip; exome/sequence capture -> targeted_capture.
 - tissue: tissue or organ sampled/measured, else null.
 - factors: list of {{"name", "n_levels", "levels", "applied_to"}}. name: genotype (lines, cultivars, strains, mutants,
   accessions), treatment, water (drought/irrigation), temperature (cold/heat), salt, nitrogen, phosphorus, nutrient,
-  diet, light, co2, sex, time (time points), stage, age, tissue, disease, injury, antibiotic, environment, or one short word.
+  diet, light, co2, sex, time (time points), stage, age, tissue, cell_type, disease, infection (pathogen or mock inoculation),
+  injury, antibiotic, dose (dose series), species, generation, soil, phenotype_group (extreme groups chosen by phenotype,
+  e.g. resistant vs susceptible animals), environment, or one short word. Breeds, strains and lines are genotype.
   n_levels only if a count is stated or the levels are listed (e.g. "drought vs control" = 2). levels: the level
   names if listed. applied_to: "main_plot" when a field treatment is applied to whole plots (irrigation system, can't
-  randomize), "cage", "dam", "chamber", "mouse", "vial" when stated, else null.
+  randomize), "cage", "pen", "tank", "dam", "chamber", "mouse", "vial" when stated, else null.
 - design: {{"reps", "locations", "seasons"}} (replicates/blocks per treatment, sites, years/seasons).
-- experimental_unit, measurement_unit, subsamples_per_unit: e.g. 5 plants measured per plot -> "plot", "plant", 5.
+- experimental_unit, measurement_unit, subsamples_per_unit: e.g. 5 plants measured per plot -> "plot", "plant", 5;
+  25 chicks per pen with the diet given per pen -> "pen", "animal", 25; fish in tanks -> "tank", "fish".
 - primary_outcome: {{"name", "type"}} only if the measured outcome is stated; type one of continuous, binary, count,
   ordinal, survival. Use snake_case names such as grain_yield, flowering_time, plant_height, biomass, body_weight,
   lifespan, gene_expression, photosynthesis, lipid_content, disease_severity, translation_efficiency.
@@ -65,7 +75,7 @@ Fields:
   mating one of selfing, sib_mating, backcross, diallel, nc_design, ril, nam, dh, biparental.
 - environments: ["greenhouse", "field"] style list when several settings are compared, else null. "greenhouse" stands
   for any controlled environment (greenhouse, glasshouse, growth chamber or room).
-- blocking_factors: e.g. ["bench"], ["cage"], ["library_batch"] when stated, else null.
+- blocking_factors: e.g. ["bench"], ["cage"], ["litter"], ["donor"], ["clutch"], ["farm"], ["library_batch"] when stated, else null.
 - sequencing: {{"instrument", "read_length", "layout", "depth_m"}} when stated, else null.
 - missing_questions: up to 3 short questions about missing facts that would change the design.
 Return one JSON object and nothing else."""

@@ -13,6 +13,11 @@ refuses to overwrite an existing split unless --force is given, so the split can
 
     python3 freeze_split.py            # write splits/ (fails if it exists)
     python3 freeze_split.py --check    # verify the frozen files still match the manifest
+    python3 freeze_split.py --refresh  # labels changed (e.g. schema update): rewrite the files from batches/
+                                       # keeping exactly the same papers in each split
+
+The manifest keeps two hashes per file: members_sha256 (the sorted question ids, i.e. which papers are in the
+split; this must never change) and sha256 (the file contents, which change when labels are migrated).
 """
 import argparse, collections, glob, hashlib, json, os, random, sys
 
@@ -53,6 +58,10 @@ def split(qs):
     return dev, test, held
 
 
+def members(rows):
+    return hashlib.sha256("\n".join(sorted(r["id"] for r in rows)).encode()).hexdigest()
+
+
 def write(name, rows):
     path = os.path.join(OUT, name)
     with open(path, "w", encoding="utf-8") as f:
@@ -65,13 +74,32 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--refresh", action="store_true")
     a = ap.parse_args()
     man = os.path.join(OUT, "MANIFEST.json")
     if a.check:
         m = json.load(open(man))
         bad = [n for n, v in m["files"].items() if sha(os.path.join(OUT, n)) != v["sha256"]]
-        print("split intact" if not bad else f"CHANGED since freezing: {bad}")
-        sys.exit(1 if bad else 0)
+        moved = [n for n, v in m["files"].items() if "members_sha256" in v and
+                 members([json.loads(l) for l in open(os.path.join(OUT, n))]) != v["members_sha256"]]
+        print("split intact" if not bad and not moved else f"CHANGED since freezing: contents {bad}, membership {moved}")
+        sys.exit(1 if bad or moved else 0)
+    if a.refresh:
+        m = json.load(open(man))
+        by_id = {q["id"]: q for q in load()}
+        for n, v in m["files"].items():
+            ids = [json.loads(l)["id"] for l in open(os.path.join(OUT, n))]
+            if "members_sha256" in v and members([{"id": i} for i in ids]) != v["members_sha256"]:
+                sys.exit(f"{n}: membership no longer matches the manifest; refusing to refresh")
+            missing = [i for i in ids if i not in by_id]
+            if missing:
+                sys.exit(f"{n}: {len(missing)} frozen questions are no longer labelled (e.g. {missing[:3]})")
+            p = write(n, [by_id[i] for i in ids])
+            v.update({"sha256": sha(p), "members_sha256": members([{"id": i} for i in ids])})
+        m["refreshed"] = m.get("refreshed", 0) + 1
+        json.dump(m, open(man, "w"), indent=1)
+        print("refreshed contents; membership unchanged:", {n: v["n"] for n, v in m["files"].items()})
+        return
     if os.path.exists(man) and not a.force:
         sys.exit(f"{man} exists: the split is frozen (use --check to verify, --force only if you mean to re-freeze)")
     os.makedirs(OUT, exist_ok=True)
@@ -79,7 +107,7 @@ def main():
     files = {}
     for name, rows in (("dev.jsonl", dev), ("test.jsonl", test), ("test_heldout.jsonl", held)):
         p = write(name, rows)
-        files[name] = {"n": len(rows), "sha256": sha(p),
+        files[name] = {"n": len(rows), "sha256": sha(p), "members_sha256": members(rows),
                        "species": dict(collections.Counter(r["species"] for r in rows).most_common()),
                        "styles": dict(collections.Counter(r["style"] for r in rows).most_common())}
     json.dump({"seed": SEED, "dev_share": DEV_SHARE, "unit": "paper (one question per paper)",

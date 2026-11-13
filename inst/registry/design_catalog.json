@@ -17,7 +17,8 @@
         "growth_chamber",
         "cell_culture",
         "greenhouse",
-        "drosophila"
+        "drosophila",
+        "livestock"
       ]
     },
     {
@@ -38,7 +39,8 @@
         "growth_chamber",
         "mouse",
         "sequencing",
-        "drosophila"
+        "drosophila",
+        "livestock"
       ]
     },
     {
@@ -103,7 +105,8 @@
         "growth_chamber",
         "mouse",
         "cell_culture",
-        "drosophila"
+        "drosophila",
+        "livestock"
       ]
     },
     {
@@ -162,7 +165,8 @@
         "greenhouse",
         "mouse",
         "field",
-        "drosophila"
+        "drosophila",
+        "livestock"
       ]
     },
     {

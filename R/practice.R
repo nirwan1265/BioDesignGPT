@@ -23,7 +23,12 @@
                         atac_seq = "ATAC-seq")
 .SF_TECH_BY_ASSAY <- c(rnaseq = "Bulk RNA-seq", small_rnaseq = "small RNA-seq", single_cell = "scRNA/snRNA-seq",
                        ribo_seq = "Ribo-seq", atac_seq = "ATAC-seq", chip_seq = "ChIP-seq",
-                       methylation = "Bisulfite / methylome")
+                       methylation = "Bisulfite / methylome", scatac_seq = "scATAC-seq", amplicon = "Amplicon",
+                       m6a_seq = "m6A / MeRIP-seq", long_read_rna = "Long-read RNA (Iso-Seq/ONT)", gbs = "GBS / RAD-seq",
+                       degradome = "Degradome / PARE", hic = "3D genome (Hi-C/HiChIP)", medip = "Methylation (enrichment)",
+                       mnase_seq = "MNase-seq", nascent_rna = "Nascent RNA (GRO/PRO/NET)", spatial = "Spatial transcriptomics",
+                       targeted_capture = "Targeted capture", rip_clip = "RIP / CLIP-seq", trap_seq = "TRAP-seq",
+                       wgs = "WGS / resequencing")
 
 .sf_norm_tissue <- function(x) {
   t <- tolower(trimws(x))

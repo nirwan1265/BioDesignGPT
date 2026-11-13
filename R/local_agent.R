@@ -56,14 +56,15 @@
 .sf_systems <- list(
   functional_validation = "validat\\w* (?:them|candidates?|genes?|in vivo)|in silico and in vivo|crispr knockouts? in|complementation in|heterologous expression|confirm them",
   ribo_seq = "ribo-?seq|ribosome profiling|translation efficiency|translatome",
-  atac_seq = "atac-?seq|chromatin accessibility|accessible chromatin",
+  atac_seq = "(?<!sc)(?<!sn)(?<!single-cell )(?<!single-nucleus )atac-?seq|chromatin accessibility|accessible chromatin",
   multi_omics = "gwas.*(?:rna-?seq|transcriptom|eqtl)|(?:rna-?seq|transcriptom).*gwas|eqtl|twas|coloc",
   breeding_genetics = "diallel|nc ?ii|north carolina design|\\brils?\\b|recombinant inbred|\\bnam\\b|nested association|doubled haploid|backcross|brother-sister|sib[- ]mating|single seed descent|\\bself(?:ed|ing)?\\b.*\\bf\\d|\\bf\\d\\b.*heterozyg|introgress|inbred yet|call it inbred|treat it as inbred",
   multi_environment = "(?:greenhouse|growth chamber|glasshouse).*(?:field)|yield stability|genotype by environment|\\bgxe\\b|\\bmet\\b",
-  single_cell = "single[- ]?cell|scrna|\\bcells each\\b",
+  single_cell = "single[- ]?cell|single[- ]nucle|scrna|snrna|scatac|snatac|multiome|\\bcells each\\b",
   bulk_rnaseq = "rna-?seq|transcriptom",
   metabolomics_lipidomics = "lipidomic|metabolomic|lc-?ms|gc-?ms",
   drosophila = "drosophila|\\bfl(?:y|ies)\\b|\\bvials?\\b|dahomey|canton-s|gal4|wing size",
+  livestock = "livestock|poultry|broilers?|laying hens|layer hens|weanl\\w+ pig|weaned piglets|nursery pigs|finishing pigs|fattening pigs|dairy (?:cows|cattle)|beef cattle|lactating cows|feedlot|\\bsteers?\\b|\\bheifers?\\b|\\bsows\\b|\\bgilts\\b|\\bbarrows\\b|replicate pens|\\bpens of\\b|per pen\\b",
   mouse = "\\bmice\\b|\\bmouse\\b|\\bcages?\\b|\\blitters?\\b|\\bdams?\\b|\\bpups?\\b|\\brats?\\b",
   cell_culture = "hela|cell line|\\bwells?\\b(?!-)|dmso|\\bneurons\\b",
   growth_chamber = "growth chambers?|\\bchambers?\\b|\\btrays?\\b|growth room",
@@ -173,7 +174,7 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, "one plot each|one plot per|no replication|unreplicated|can't replicate|cannot replicate")) set("design.reps", 1)
 
   # units: "<n> <meas> per <exp>"; take the first match that names real units
-  per_re <- paste0(.sf_num_re, "\\s+(?:tagged |bagged |spaced )?([a-z]+)\\s+(?:per|each|in each|from each)\\s+([a-z]+)")
+  per_re <- paste0(.sf_num_re, "\\s+(?:tagged |bagged |spaced )?([a-z]+)\\s+(?:per|each|in each|from each)\\s+(?:of\\s+(?:the\\s+)?(?:\\d+\\s+)?)?(?:replicate\\s+)?([a-z]+)")
   pers <- regmatches(text, gregexpr(per_re, text, perl = TRUE))[[1]]
   for (per in pers) {
     parts <- regmatches(per, regexec(per_re, per, perl = TRUE))[[1]]
@@ -230,6 +231,17 @@ extract_spec_local <- function(question) {
     if (.sf_has(text, "pups?")) set("measurement_unit", "pup")
   }
   if (.sf_has(text, "one (?:set|chamber) (?:to|per) each|chambers?, one|one chamber per|identical chambers")) set("experimental_unit", "chamber")
+  # animals sharing a pen or fish sharing a tank share the treatment when it is given in feed, water or the tank itself
+  if (is.null(spec$experimental_unit) && .sf_has(text, "\\bpens?\\b") && .sf_has(text, "diet|feed|drinking water|supplement|challenge")) {
+    set("experimental_unit", "pen"); set("measurement_unit", "animal")
+    n_pen <- .sf_count_before(text, c("per pen"), prefix = "(?:of )?")
+    pens_of <- regmatches(text, regexpr(paste0("pens? of ", .sf_num_re), text, perl = TRUE))
+    if (is.na(n_pen) && length(pens_of)) n_pen <- .sf_num(sub("^pens? of ", "", pens_of))
+    if (!is.na(n_pen) && n_pen > 1) set("subsamples_per_unit", n_pen)
+  }
+  if (is.null(spec$experimental_unit) && .sf_has(text, "\\btanks?\\b|\\baquari") && .sf_has(text, "fish|larvae|zebrafish|tadpoles|xenopus")) {
+    set("experimental_unit", "tank"); set("measurement_unit", "fish")
+  }
   if (is.null(spec$experimental_unit)) {
     if (identical(spec$system, "field")) set("experimental_unit", if (.sf_has(text, "single-plant|spaced plants")) "plant" else "plot")
     if (identical(spec$system, "greenhouse") && .sf_has(text, "\\bpots?\\b|carts?|imaging platform")) set("experimental_unit", "pot")
@@ -338,6 +350,9 @@ extract_spec_local <- function(question) {
     cand <- c(cand, "atac_replicated", "rcbd")
   } else if (sys == "functional_validation") {
     cand <- c(cand, "cross_species_validation", "rcbd")
+  } else if (sys == "livestock") {
+    q <- tolower(spec$question %||% "")
+    cand <- c(cand, if (length(f) > 1) "factorial", if (.sf_has(q, "weekly|over time|days? \\d+ and|repeated")) "repeated_measures", "rcbd", "crd")
   } else if (sys == "drosophila") {
     cand <- c(cand, if (identical(spec$primary_outcome$name, "lifespan") || .sf_has(tolower(spec$question %||% ""), "lifespan|diet|yeast")) "vial_lifespan", "rcbd")
   } else {

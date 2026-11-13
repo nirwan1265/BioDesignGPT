@@ -104,6 +104,34 @@
       "applies_when": "treatment set per chamber",
       "message": "Plants in one chamber are subsamples for chamber-level treatments; replicate chambers or runs.",
       "source": "Potvin et al. 1990, Can J Bot 68:499-504; Porter et al. 2015, doi:10.1186/s13007-015-0088-0"
+    },
+    {
+      "id": "animals_within_pen",
+      "measurement_unit": "animal",
+      "nested_in": "pen",
+      "message": "Animals sharing a pen share the diet, water and housing; with pen-level treatments the pen is the experimental unit (average within pen or fit (1 | pen)).",
+      "source": "Bello et al. 2016, J Dairy Sci 99:8871-8879, doi:10.3168/jds.2016-11516"
+    },
+    {
+      "id": "animals_within_herd",
+      "measurement_unit": "animal",
+      "nested_in": "herd",
+      "message": "When a grazing system or ration is applied to a whole herd, cows are subsamples; with one herd per treatment, treatment and herd are confounded.",
+      "source": "Bello et al. 2016, J Dairy Sci 99:8871-8879, doi:10.3168/jds.2016-11516"
+    },
+    {
+      "id": "fish_within_tank",
+      "measurement_unit": "fish",
+      "nested_in": "tank",
+      "message": "Fish sharing a tank share water, temperature and feeding; the tank is the experimental unit for tank-level treatments.",
+      "source": "Hurlbert 1984, Ecol Monogr 54:187-211, doi:10.2307/1942661"
+    },
+    {
+      "id": "embryos_within_dish",
+      "measurement_unit": "embryo",
+      "nested_in": "dish",
+      "message": "Embryos exposed together in one dish are subsamples of that dish; replicate dishes (and clutches), not embryos.",
+      "source": "Hurlbert 1984, Ecol Monogr 54:187-211, doi:10.2307/1942661"
     }
   ]
 }

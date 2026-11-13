@@ -2,6 +2,7 @@
 """Append labelled questions to batches/batch_NN.jsonl, filling paper metadata from the sample.
    python write_batch.py NN labels.py   (labels.py defines L = [dict(paper=..., style=..., prompt=..., spec=..., ask=..., gaps=..., note=...)])"""
 import gzip, json, os, runpy, sys
+from normalise import normalise
 HERE = os.path.dirname(os.path.abspath(__file__))
 papers = {r["id"]: r for r in map(json.loads, gzip.open(os.path.join(HERE, "raw", "papers_sample.jsonl.gz"), "rt"))}
 nn, src = sys.argv[1], sys.argv[2]
@@ -17,5 +18,5 @@ with open(out, "w", encoding="utf-8") as f:
         else:
             rec.update({"style": x["style"], "prompt": x["prompt"], "expected_spec": x["spec"], "must_ask": x.get("ask", []),
                         "gaps": x.get("gaps", []), "paper_design": x.get("note", "")})
-        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        f.write(json.dumps(normalise(rec), ensure_ascii=False) + "\n")
 print(f"wrote {len(L)} -> {out}")
