@@ -13,7 +13,8 @@ import argparse, collections, glob, json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 NORMALISE = {"assay:hi_c": "assay:hic", "assay:rip_clip_seq": "assay:rip_clip", "assay:spatial_transcriptomics": "assay:spatial",
              "system:livestock": "setting:livestock", "synonym:cut&run": "synonym:CUT&Tag", "unit:cage(poultry)": "unit:cage",
-             "assay:virus_metagenomics": "assay:metagenomics"}
+             "assay:virus_metagenomics": "assay:metagenomics",
+             "assay:m6a": "assay:m6a_merip", "assay:long_read": "assay:long_read_rna"}
 
 
 def key(g):
