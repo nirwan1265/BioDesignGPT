@@ -49,6 +49,7 @@ From the shell: `Rscript inst/scripts/studyforge_cli.R "120 maize lines, drought
 |---|---|---|---|
 | `local` (default) | free | nothing | Rule-based extraction + the full deterministic engine: unit audit, candidate designs, setup checks, published-methods notes, starter layout code |
 | `ollama` | free | [Ollama](https://ollama.com) installed locally | Same plan, rephrased by a local LLM that is told not to change any number |
+| `llm` / `auto` | free | the local reader running on a GPU (`sbatch llm/reader_server.slurm`) | Rules first, then the fine-tuned Qwen2.5 reader fills stated facts the rules missed (see [How Biodes was built](#how-biodes-was-built-and-trained)) |
 | `studyforge_chat()` | free with Ollama (default); paid if you pick `anthropic`/`openai` | `ellmer` + a tool-capable model (e.g. `qwen2.5`) | Multi-turn conversational agent calling the same 16 tools |
 
 ### Optional: trained prompt tagger
@@ -63,7 +64,7 @@ Needs Python with `torch` and `transformers` (`conda env create -f environment.y
 
 ```r
 studyforge_ask("Cold stress on rice: 15 C vs 28 C, one chamber per temperature, 24 seedlings per chamber", engine = "hybrid")
-studyforge_alias("milo")   # "Sorghum bicolor" -- 595 aliases, SimItAll-style
+studyforge_alias("milo")   # "Sorghum bicolor" -- ~3,250 aliases in inst/agent/rules.tsv
 ```
 
 On the 49 paper-grounded examples the free `local` engine recovers **92% of expected spec fields**, suggests a matching design for **98%**, and fills **zero** must-ask values (it never invents effect sizes, variances or unit counts). Reproduce with `evaluate_extraction()` or `Rscript inst/scripts/eval_extraction.R`.
@@ -161,6 +162,104 @@ Current harvest: 95,403 studies across 34 species; about 57,000 designed studies
 structures for 36,732 studies, and methods extracted from 32,606 open-access papers. Only extracted facts and DOIs ship
 with the package; full texts stay local.
 
+## How Biodes was built and trained
+
+Biodes reads a question with two readers and then hands a structured plan to deterministic statistics. The
+language side was built from real studies and real papers; the numbers never come from a model.
+
+```
+question --> rule extractor (R, rules.tsv) ----------+
+         \-> LLM reader (Qwen2.5-32B + LoRA, local) -+--> merge: rules first, reader fills stated facts only
+                                                          --> StudySpec --> engine: unit audit, designs, power,
+                                                                            randomization, layouts
+```
+
+### 1. Evidence: what published studies actually did
+
+Public run and sample metadata (ENA/SRA, GEO) for 34 species: **95,403 studies**, about 57,000 of them designed
+experiments. 43,933 were linked to their papers, the factor structure was recovered for 36,732, and growth
+conditions, replication, pooling and statistics were extracted from **32,606 open-access methods sections**. This
+layer supplies the published-practice tables above and the material for steps 3 and 4.
+
+### 2. Rules and vocabulary: one table, no hard-coded words
+
+Everything Biodes knows about words lives in [`inst/agent/rules.tsv`](inst/agent/rules.tsv): **4,030 rows** in 60
+categories, covering 235 organisms, 319 outcomes, assays, factors, units, settings, the named patterns the rule
+extractor uses, and the reader's vocabulary. R and Python read the same file; the statistics live in code.
+Rows can be proposed by anyone, including other AIs: `training/rules_tool.py` checks them and fires each one on
+~48,600 labelled training prompts, and rows that disagree with the labels are rejected. The latest batch of 2,804
+ChatGPT/DeepSeek proposals gave 2,221 rows and 580 rejections, each with a reason
+(`training/rules_review/`). See [`inst/agent/README.md`](inst/agent/README.md).
+
+### 3. Paper questions: real studies, labelled by hand
+
+**3,200 open-access papers** were sampled from the methods index, stratified by species x technique (34 species,
+42 techniques). Each paper was read and, where it describes a designed study, turned into the question a researcher
+would have asked *before* doing it ("RNA-seq of maize leaves under drought, how many replicates?"). The gold
+StudySpec records only what the question states, and fields the question leaves open are marked must-ask. Papers
+about methods, mechanisms or atlases were skipped, so about 60% of papers gave a question: **1,939 questions**.
+
+| split | questions | use |
+|---|---|---|
+| dev | 328 | tuning rules, prompts and the reader |
+| test | 764 | scored once, at the end |
+| test, held-out species | 87 | Setaria, poplar, zebrafish and Xenopus: never used in any training |
+| training pool | 760 | reader training only (never dev or test) |
+
+The split is by paper and frozen with a manifest of hashes, and training data is leak-checked against it. Many
+questions are design-teaching cases: pseudoreplication (cage, pen, tank, litter, plot, donor), unreplicated
+designs, confounded site and cultivar, split-plot and augmented layouts.
+
+### 4. Training data for the reader
+
+About **5,300 labelled prompts**:
+
+- 760 paper questions (step 3)
+- 755 paraphrases written by a local Llama 3.1, kept only when every labelled span survived
+- 2,474 synthetic prompts, balanced by study type x organism (from 14,000 generated with labels correct by construction)
+- 1,350 prompts built from real designed studies (from ~33,000 generated from the evidence layer)
+
+Every label follows one convention: the system is the stated setting, and assays are listed separately. Test
+prompts and held-out species are excluded.
+
+### 5. The reader: Qwen2.5-32B-Instruct with a LoRA adapter
+
+The model runs locally with vLLM on one GPU (RTX 6000 Pro, 96 GB); nothing leaves the cluster. Training
+(`llm/finetune.slurm`):
+
+1. The base model reads every training prompt. This self-distillation supplies the fields we have no labels
+   for: method, tissue, level names, outcome text.
+2. Targets are built from our labels plus the distilled fields. The experimental unit is included only when the
+   prompt names it.
+3. LoRA (rank 16, all projection layers, loss on answer tokens only, 1 epoch), resumable across 2-hour GPU jobs.
+4. The base and fine-tuned readers are evaluated on every set.
+
+The first adapter was trained on 4,396 examples (validation loss 0.047). A second, on the expanded data above, is
+training now.
+
+### 6. Merging: the reader states facts, the engine makes judgments
+
+The rule extractor goes first. The reader fills gaps only with facts the question states: numbers must appear in
+the text, and organisms, assays and outcomes must be named. The experimental unit, the primary outcome when
+several are named, and anything a keyword cannot settle ("pups kept with their dams": treated through the mother
+or each pup?) are decided by the engine or asked. Fewer than 3 replicates per condition is flagged.
+
+### Results so far
+
+Field recall: the share of the fields a question states that come out right. "Invented" counts must-ask fields
+filled in anyway.
+
+| set | rules alone | reader alone | rules + reader |
+|---|---|---|---|
+| paper questions, dev (328) | 64.7% | 82.3% | **85.7%** (11 invented) |
+| study examples, dev (59) | 92.7% | 90.6% | 94.0% |
+| fresh v4, clean test (21) | 84.9% | 95.0% | **95.8%** |
+| real studies of held-out species (300) | 97.8% | 98.6% | 98.6% |
+
+Paper-question dev uses the current reader's predictions; the other rows use the first fine-tuned 32B reader
+(details in [`llm/README.md`](llm/README.md)). The paper-question test sets have not been scored yet: they are
+scored once, after the reader is chosen on dev.
+
 ## What's inside
 
 | Component | Purpose |
@@ -172,7 +271,10 @@ with the package; full texts stay local.
 | `R/layouts.R` | Tray (augmented-by-tray), field coordinates with borders, mouse cage and fly vial allocation, resource equation, hazard and protocol lookups |
 | `R/local_agent.R` | Free offline engine: `extract_spec_local()`, `studyforge_ask()`, `launch_studyforge()` |
 | `R/practice.R` | `published_practice()`: what designed studies did per organism x technique x tissue, with citable examples |
-| `R/general_extract.R` | Table-driven extraction layer (any organism/assay/factor word in the alias table, generic counts), the plan skeleton, `studyforge_fix()` |
+| `R/general_extract.R` | Table-driven extraction layer (any organism/assay/factor word in `rules.tsv`, generic counts), the plan skeleton, `studyforge_fix()` |
+| `inst/agent/rules.tsv` | The one table of words and patterns (aliases, cues, word lists, lookups) read by R and Python |
+| `llm/` | The local LLM reader: prompts, fine-tuning (`finetune.slurm`), the server R talks to |
+| `training/paper_questions/` | Paper-grounded questions: sampler, labels, frozen dev/test/held-out split, scorer |
 | `R/traits.R` + `inst/registry/traits.json` | `suggest_traits()`: traits by organ and stress with method, tools, design note and source |
 | `R/eval.R` | `evaluate_extraction()`: scores any extractor against the examples |
 | `R/agent.R` | Optional ellmer agent (Ollama by default): system prompt + 16 tools |
