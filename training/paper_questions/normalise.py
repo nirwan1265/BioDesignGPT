@@ -1,7 +1,7 @@
 """Bring hand-written labels up to the current schema (applied by write_batch.py to every record).
 
 The labels were written while the schema lacked some assays and a livestock setting; the gaps were logged per
-question (`gaps`). Now that inst/agent/aliases.tsv and llm/reader.py have them, this fills them in, using the
+question (`gaps`). Now that inst/agent/rules.tsv and llm/reader.py have them, this fills them in, using the
 same rule as the R extractor: an assay is added only when one of its aliases appears in the question, so the
 gold spec still contains only what the question states.
     schema 2: new assays (amplicon, m6a_seq, long_read_rna, gbs, degradome, hic, scatac_seq, medip, mnase_seq,
@@ -13,14 +13,13 @@ gold spec still contains only what the question states.
 import csv, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ALIASES = os.path.join(HERE, "..", "..", "inst", "agent", "aliases.tsv")
 sys.path.insert(0, os.path.join(HERE, ".."))
 import setting  # noqa: E402
 SCHEMA = 3
 import rules  # noqa: E402   inst/agent/rules.tsv
 NEW_ASSAYS = set(rules.keys("schema2_assay"))
 # a specific assay replaces the generic label used for it before, unless the generic one is also stated on its own
-STANDS_IN_FOR = {k: set(v) for k, v in rules.groups("generic_assay").items()}
+STANDS_IN_FOR = {k: set(v) for k, v in rules.lookup_all("generic_assay").items()}
 FACTOR_RENAME = rules.mapping("factor_rename")
 _TABLE = None
 
@@ -28,9 +27,7 @@ _TABLE = None
 def _table(category):
     global _TABLE
     if _TABLE is None:
-        with open(ALIASES, encoding="utf-8") as f:
-            _TABLE = [(r["alias"].strip().lower(), r["canonical_term"].strip(), r["category"].strip())
-                      for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE)]
+        _TABLE = [(r["alias"].strip().lower(), r["canonical_term"].strip(), r["category"].strip()) for r in rules.alias_rows()]
     return sorted(((a, c) for a, c, cat in _TABLE if cat == category), key=lambda x: -len(x[0]))
 
 

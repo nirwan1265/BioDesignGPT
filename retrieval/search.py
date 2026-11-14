@@ -38,12 +38,11 @@ def species_key(organism, index_dir):
         return o.lower()
     if o in SPECIES:
         return SPECIES[o]
-    al = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
-    if os.path.exists(al):
-        with open(al, encoding="utf-8") as f:
-            for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE):
-                if r["category"] == "organism" and r["alias"].lower() == o.lower():
-                    return SPECIES.get(r["canonical_term"], o.lower())
+    sys.path.insert(0, os.path.join(HERE, "..", "inst", "python"))
+    import rulebook   # inst/agent/rules.tsv
+    for r in rulebook.alias_rows():
+        if r["category"] == "organism" and r["alias"].lower() == o.lower():
+            return SPECIES.get(r["canonical_term"], o.lower())
     return o.lower()
 
 

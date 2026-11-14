@@ -27,8 +27,9 @@ def build_tiny(train, out, vocab_size=4000, hidden=192, layers=3, heads=4):
     tk.pre_tokenizer = pre_tokenizers.BertPreTokenizer()
     trainer = trainers.WordPieceTrainer(vocab_size=vocab_size, special_tokens=["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"])
     # vocabulary from training text plus the alias table so unseen synonyms are still in-vocab
-    alias_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "inst", "agent", "aliases.tsv")
-    corpus = [d["text"] for d in train] + [l.split("\t")[0] for l in open(alias_path)][1:] * 5
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "inst", "python"))
+    import rulebook   # inst/agent/rules.tsv
+    corpus = [d["text"] for d in train] + [r["alias"] for r in rulebook.alias_rows()] * 5
     tk.train_from_iterator(corpus, trainer)
     from tokenizers.processors import TemplateProcessing
     tk.post_processor = TemplateProcessing(single="[CLS] $A [SEP]", special_tokens=[("[CLS]", tk.token_to_id("[CLS]")), ("[SEP]", tk.token_to_id("[SEP]"))])

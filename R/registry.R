@@ -67,10 +67,13 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
            (norm(r$nested_in) == e || e == ""), rules)
 }
 
-# ---- rule tables (data, not code) ---------------------------------------------------------------------------
-# inst/agent/rules.tsv holds the extractor's pattern tables (organism, system, setting, outcome, genotype_noun) and
-# factor synonyms; inst/registry/experimental_systems.json says what each system is (setting / assay / study).
-# Python (training/setting.py, llm/make_sft.py) reads the same files, so R and Python follow one set of rules.
+# ---- the rule table (data, not code) -------------------------------------------------------------------------
+# inst/agent/rules.tsv is the one table of words and patterns: category | term | match | pattern | note | source.
+#   match = word   a literal phrase searched in the text (an alias: pattern -> term); .sf_alias_table(), .sf_find_all()
+#           regex  a regular expression searched in the text; .sf_rules() (category -> term = pattern), .sf_cue() (by name)
+#           value  a literal the code uses: word lists (.sf_list), lookups (.sf_map), groups (.sf_group, .sf_groups)
+# Order within a category is priority. inst/registry/experimental_systems.json says what each system is.
+# Python reads the same file (inst/python/rulebook.py), so R and Python follow one set of rules.
 .sf_rules_cache <- new.env(parent = emptyenv())
 
 .sf_rules_table <- function() {
@@ -82,31 +85,48 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   .sf_rules_cache$t
 }
 
-.sf_rules_rows <- function(table) {
+.sf_rules_rows <- function(category, match = NULL) {
   t <- .sf_rules_table()
-  t <- t[t$table == table, ]
-  if (!nrow(t)) stop("rules.tsv has no table '", table, "'", call. = FALSE)
+  t <- t[t$category == category & (is.null(match) | t$match %in% match), ]
+  if (!nrow(t)) stop("rules.tsv has no rows for category '", category, "'", call. = FALSE)
   t
 }
 
-# pattern table as a named list (key -> regex) in file order; order is priority
-.sf_rules <- function(table) {
-  t <- .sf_rules_rows(table)
-  stats::setNames(as.list(t$value), t$key)
+# regex rows of a category as a named list (term -> pattern), in file order; order is priority
+.sf_rules <- function(category) {
+  t <- .sf_rules_rows(category, "regex")
+  stats::setNames(as.list(t$pattern), t$term)
 }
 
-# word list (the keys of a table), in file order
-.sf_list <- function(table) .sf_rules_rows(table)$key
+# word list: the patterns of a category, in file order
+.sf_list <- function(category) .sf_rules_rows(category)$pattern
 
-# lookup table as a named character vector (key -> value)
-.sf_map <- function(table) {
-  t <- .sf_rules_rows(table)
-  stats::setNames(t$value, t$key)
+# lookup: named character vector (pattern -> term)
+.sf_map <- function(category) {
+  t <- .sf_rules_rows(category)
+  stats::setNames(t$term, t$pattern)
 }
 
-# one named pattern from the cue table; {N} stands for a number (digits or a number word)
+# the patterns that belong to one term (e.g. the nouns that count water levels)
+.sf_group <- function(category, term) {
+  t <- .sf_rules_rows(category)
+  v <- t$pattern[t$term == term]
+  if (!length(v)) stop("rules.tsv category '", category, "' has no term '", term, "'", call. = FALSE)
+  v
+}
+
+# pattern -> all its terms (e.g. a specific assay -> the generic labels it stands in for)
+.sf_groups <- function(category) {
+  t <- .sf_rules_rows(category)
+  split(t$term, factor(t$pattern, levels = unique(t$pattern)))
+}
+
+# one named pattern (category cue); {N} stands for a number (digits or a number word)
 .sf_cue <- function(name) {
-  if (is.null(.sf_rules_cache$cue)) .sf_rules_cache$cue <- .sf_map("cue")
+  if (is.null(.sf_rules_cache$cue)) {
+    t <- .sf_rules_rows("cue", "regex")
+    .sf_rules_cache$cue <- stats::setNames(t$pattern, t$term)
+  }
   v <- .sf_rules_cache$cue[name]
   if (is.na(v)) stop("rules.tsv has no cue '", name, "'", call. = FALSE)
   v <- unname(v)
@@ -124,16 +144,4 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   s <- .sf_rules_cache$systems
   ok <- vapply(s, function(x) all(vapply(names(want), function(k) identical(x[[k]], want[[k]]), logical(1))), logical(1))
   vapply(s[ok], `[[`, "", "id")
-}
-
-# table with several rows per key: the values of one key (file order), or all keys as a named list
-.sf_group <- function(table, key) {
-  t <- .sf_rules_rows(table)
-  v <- t$value[t$key == key]
-  if (!length(v)) stop("rules.tsv table '", table, "' has no key '", key, "'", call. = FALSE)
-  v
-}
-.sf_groups <- function(table) {
-  t <- .sf_rules_rows(table)
-  split(t$value, factor(t$key, levels = unique(t$key)))
 }

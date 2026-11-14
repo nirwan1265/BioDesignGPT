@@ -136,7 +136,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   # A unit is not a factor ("pup", "mouse", "biological replicate").
   canon <- function(nm) {
     nm <- tolower(nm %||% "")
-    if (nm %in% names(.sf_rules("factor_synonym"))) return(.sf_rules("factor_synonym")[[nm]])
+    if (nm %in% names(.sf_map("factor_synonym"))) return(.sf_map("factor_synonym")[[nm]])
     c <- .sf_factor_name(gsub("_", " ", nm))
     if (is.na(c)) nm else gsub(" ", "_", c)
   }
@@ -183,8 +183,11 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
 .sf_alias_cache <- new.env()
 .sf_alias_table <- function() {
   if (is.null(.sf_alias_cache$t)) {
-    f <- system.file("agent", "aliases.tsv", package = "studyforge")
-    t <- utils::read.delim(f, quote = "", stringsAsFactors = FALSE)
+    r <- .sf_rules_table()
+    r <- r[r$match == "word", ]   # word rows of rules.tsv are the aliases
+    t <- data.frame(alias = r$pattern, canonical_term = r$term, category = r$category, source = r$source,
+                    confidence = ifelse(grepl("confidence: medium", r$note, fixed = TRUE), "medium", "high"),
+                    stringsAsFactors = FALSE)
     .sf_alias_cache$t <- rbind(t, .sf_vocab_aliases(t))
   }
   .sf_alias_cache$t
@@ -207,7 +210,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     v <- v[!tok %in% bad, ]
   }
   n <- suppressWarnings(as.integer(v$n_studies))
-  keep <- v$source != "aliases.tsv" &
+  keep <- !v$source %in% c("rules.tsv", "aliases.tsv") &   # curated rows are already in the table
     (v$source != "biosample" | (!grepl("^[a-z]+$", v$name) & !is.na(n) & n >= 3)) &
     !tolower(v$name) %in% tolower(t$alias[t$category == "organism"])
   v <- v[keep, ]

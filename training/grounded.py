@@ -28,10 +28,10 @@ csv.field_size_limit(10 ** 9)
 
 # vocabulary from inst/agent/rules.tsv (training/rules.py), never lists in this script
 _PHRASES = rules.groups("technique_phrase")
-TECH = {t: (sysn, _PHRASES[t]) for t, sysn in rules.table("technique_system")}   # technique -> (system, assay phrases)
+TECH = {t: (sysn, _PHRASES[t]) for t, sysn in rules.mapping("technique_system").items()}   # technique -> (system, assay phrases)
 OUTCOME_BY_TECH = rules.groups("technique_outcome")      # the measured outcome each assay implies
 ROLE = rules.mapping("attribute_role")                   # BioSample attribute -> factor role
-NAME_RULES = rules.table("level_role")                   # level values -> role, for sample-name factors
+NAME_RULES = [(t, p.pattern) for t, p in rules.patterns("level_role")]                   # level values -> role, for sample-name factors
 NOUN = rules.groups("role_noun")                         # how a prompt names a factor of each role
 GENO_NOUN = rules.groups("genotype_phrase")              # by organism kind
 REP_NOUN = rules.groups("replicate_phrase")              # by organism kind
@@ -235,7 +235,7 @@ def main():
     ap.add_argument("--out", default=os.path.join(HERE, "data"))
     ap.add_argument("--per-study", type=int, default=2)
     ap.add_argument("--seed", type=int, default=7)
-    ap.add_argument("--holdout", default=",".join(k for k, _ in rules.table("held_out_species")))   # inst/agent/rules.tsv
+    ap.add_argument("--holdout", default=",".join(rules.keys("held_out_species")))   # inst/agent/rules.tsv
     ap.add_argument("--max-per-species", type=int, default=1500, help="cap so mouse/human don't dominate")
     ap.add_argument("--eval-n", type=int, default=300)
     a = ap.parse_args()

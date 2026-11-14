@@ -3,7 +3,7 @@
 A small BERT-style model that reads a researcher's description and tags the pieces StudyForge needs
 (organism, counts of genotypes/checks/reps/locations/seasons, subsamples, measurement and experimental
 units, factors and their levels, how a treatment is applied, outcome, blocking) plus the experimental
-system. Tags are decoded into a StudySpec with the alias table (`inst/agent/aliases.tsv`).
+system. Tags are decoded into a StudySpec with the word rows of `inst/agent/rules.tsv`.
 
 This is **supervised learning**: the generator writes each sentence from labelled clause templates, so
 every tag is correct by construction. The improvement loop is hard-example mining, not reinforcement

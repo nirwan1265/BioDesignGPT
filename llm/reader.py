@@ -17,7 +17,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import rules as _rules  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
 
 # the reader's vocabulary (systems, assays, organisms, in prompt order) lives in inst/agent/rules.tsv
 SYSTEMS = _rules.keys("reader_system")
@@ -160,11 +159,9 @@ def canon_organism(x):
         return None
     if _ORG is None:
         _ORG = {}
-        if os.path.exists(ALIASES):
-            with open(ALIASES, encoding="utf-8") as f:
-                for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE):
-                    if r["category"] == "organism":
-                        _ORG[r["alias"].lower()] = r["canonical_term"]
+        for r in _rules.alias_rows():
+            if r["category"] == "organism":
+                _ORG[r["alias"].lower()] = r["canonical_term"]
         for o in ORGANISMS:
             _ORG[o.lower()] = o
     return _ORG.get(str(x).strip().lower(), str(x).strip())

@@ -9,7 +9,7 @@ Sources
                   (subspecies, groups, strains), plus the "Z. mays" abbreviation
   BioSample/SRA   strain / cultivar / ecotype / breed / cell-line values recorded in our harvested studies
                   (all_species_by_study.tsv `genotypes`, all_species_study_factors.tsv `fixed`)
-  aliases.tsv     the curated organism rows (win any conflict)
+  rules.tsv       the curated organism rows (word rows; win any conflict)
 
 General filters, applied the same way to every organism (no per-organism rules):
   missing-value markers ("not applicable", "wild type", "control") are not names
@@ -29,7 +29,7 @@ import argparse, collections, csv, io, os, re, sys, tarfile, urllib.request
 csv.field_size_limit(10 ** 9)
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..", "..")
-ALIASES = os.path.join(ROOT, "inst", "agent", "aliases.tsv")
+ALIASES = os.path.join(ROOT, "inst", "agent", "rules.tsv")
 OUT = os.path.join(ROOT, "inst", "vocab", "organism_names.tsv")
 TAXDUMP_URL = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz"
 
@@ -179,11 +179,11 @@ def evidence_names(evidence):
 
 def curated_aliases():
     out = {}
-    if os.path.exists(ALIASES):
-        with open(ALIASES, encoding="utf-8") as f:
-            for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE):
-                if r["category"] == "organism":
-                    out[norm(r["alias"])] = r["canonical_term"]
+    sys.path.insert(0, os.path.join(ROOT, "inst", "python"))
+    import rulebook   # inst/agent/rules.tsv (word rows)
+    for r in rulebook.alias_rows():
+        if r["category"] == "organism":
+            out[norm(r["alias"])] = r["canonical_term"]
     return out
 
 
@@ -201,7 +201,7 @@ def build(evidence, taxdump):
         rows[name] = (name, org, kind, source, n, share)
 
     for name, org in curated_aliases().items():
-        add(name, org, "alias", "aliases.tsv")
+        add(name, org, "alias", "rules.tsv")
     if taxdump:
         for name, (org, kind) in taxonomy_names(taxdump, SPECIES).items():
             if too_ambiguous(toks(name)):

@@ -9,10 +9,11 @@ negatives (numbers that are not counts, undecided counts, look-alike words).
     python training/generate.py --n 500  --out training/data/dev.jsonl   --seed 2
     python training/generate.py --weights training/data/family_weights.json ...   # hard-example loop
 """
-import argparse, csv, json, os, random, re
+import argparse, csv, json, os, random, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
+sys.path.insert(0, os.path.join(HERE, "..", "inst", "python"))
+import rulebook  # noqa: E402   inst/agent/rules.tsv
 
 TAGS = ["ORG", "GENO_N", "CHECK_N", "REPS_N", "LOC_N", "SEASON_N", "SUB_N", "MEAS", "EXP",
         "FACTOR", "LEVELS_N", "APPLY", "OUTCOME", "BLOCK", "GEN_N", "PARENT_N", "MATING", "ASSAY", "ENV"]
@@ -30,9 +31,8 @@ def tokenize(text):
 
 def load_aliases():
     by = {}
-    with open(ALIASES) as f:
-        for r in csv.DictReader(f, delimiter="\t"):
-            by.setdefault((r["category"], r["canonical_term"]), []).append(r["alias"])
+    for r in rulebook.alias_rows():
+        by.setdefault((r["category"], r["canonical_term"]), []).append(r["alias"])
     return by
 
 

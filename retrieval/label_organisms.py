@@ -19,11 +19,11 @@ the same for every organism:
     python retrieval/label_organisms.py --index index              # every shard
     python retrieval/label_organisms.py --index index --species rat
 """
-import argparse, collections, csv, json, os, re, statistics
+import argparse, collections, csv, json, os, re, statistics, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VOCAB = os.path.join(HERE, "..", "inst", "vocab", "organism_names.tsv")
-ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
+ALIASES = os.path.join(HERE, "..", "inst", "agent", "rules.tsv")   # word rows of category organism
 DROPPED = os.path.join(HERE, "..", "inst", "vocab", "organism_names_dropped.tsv")
 SHARD_ORGANISM = {"sorghum": "Sorghum bicolor", "maize": "Zea mays", "arabidopsis": "Arabidopsis thaliana", "rice": "Oryza sativa",
                   "wheat": "Triticum aestivum", "barley": "Hordeum vulgare", "soybean": "Glycine max",
@@ -61,17 +61,17 @@ def abbreviations(name):
 def load_names():
     names = {}
     src = VOCAB if os.path.exists(VOCAB) else ALIASES
-    with open(src, encoding="utf-8") as f:
-        for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE):
-            if src == ALIASES:
-                if r["category"] != "organism":
-                    continue
-                name, org = r["alias"], r["canonical_term"]
-            else:
-                name, org = r["name"], r["organism"]
-            t = tuple(toks(name))
-            if t and not (len(t) == 1 and len(t[0]) <= 2):
-                names.setdefault(t, org)
+    if src == ALIASES:   # curated organism word rows of rules.tsv
+        sys.path.insert(0, os.path.join(HERE, "..", "inst", "python"))
+        import rulebook
+        recs = [(r["alias"], r["canonical_term"]) for r in rulebook.alias_rows() if r["category"] == "organism"]
+    else:
+        with open(src, encoding="utf-8") as f:
+            recs = [(r["name"], r["organism"]) for r in csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE)]
+    for name, org in recs:
+        t = tuple(toks(name))
+        if t and not (len(t) == 1 and len(t[0]) <= 2):
+            names.setdefault(t, org)
     if src == ALIASES:   # no vocab built yet: at least the scientific names and abbreviations
         for org in set(SHARD_ORGANISM.values()):
             for n in {org} | abbreviations(org):

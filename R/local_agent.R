@@ -90,7 +90,7 @@ extract_spec_local <- function(question) {
     if (!is.null(applied_to)) f$applied_to <- applied_to
     factors[[length(factors) + 1]] <<- f
   }
-  n_geno <- .sf_count_before(text, .sf_list("genotype_noun"))
+  n_geno <- .sf_count_before(text, .sf_list("genotype_count_noun"))
   if (!is.na(n_geno)) add_factor("genotype", n_geno)
   n_chk <- .sf_count_before(text, .sf_group("count_noun", "check"))
   if (!is.na(n_chk)) add_factor("check", n_chk)

@@ -3,7 +3,7 @@ test_that("alias table maps synonyms to canonical terms", {
   expect_equal(studyforge_alias("Glasshouse", "system"), "greenhouse")
   expect_equal(studyforge_alias("von frey"), "mechanical_threshold")
   expect_true(is.na(studyforge_alias("not a term")))
-  t <- utils::read.delim(system.file("agent", "aliases.tsv", package = "studyforge"), quote = "")
+  t <- .sf_alias_table()
   expect_gte(nrow(t), 400)
   expect_named(t, c("alias", "canonical_term", "category", "source", "confidence"))
 })

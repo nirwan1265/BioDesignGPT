@@ -3,7 +3,7 @@
   if (is.null(f)) return(character())
   vapply(f, function(x) {
     nm <- x$name %||% ""
-    syn <- .sf_rules("factor_synonym")
+    syn <- .sf_map("factor_synonym")
     nm <- if (nm %in% names(syn)) syn[[nm]] else nm
     paste0(nm, ":", x$n_levels %||% "?")
   }, "")

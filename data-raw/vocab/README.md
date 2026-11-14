@@ -7,7 +7,7 @@ built from sources instead of typed by hand.
 |---|---|
 | NCBI Taxonomy (`taxdump.tar.gz`) | scientific names, synonyms, common names of each species and every taxon below it, "Z. mays" abbreviations |
 | our harvested studies (BioSample/SRA) | strain, cultivar, ecotype, breed and cell-line values: B73, Col-0, C57BL/6J, Sprague-Dawley, HEK293T |
-| `inst/agent/aliases.tsv` | curated organism rows; they win any conflict |
+| `inst/agent/rules.tsv` | curated organism rows (word rows); they win any conflict |
 
 The same filters apply to every organism: missing-value markers ("not applicable", "wild type") are dropped;
 so are very short or numeric tokens ("SD", "X1"), descriptions over 5 words, values used as tissue, stage,

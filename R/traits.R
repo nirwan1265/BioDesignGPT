@@ -46,7 +46,7 @@ suggest_traits <- function(organ = NULL, stress = NULL, organism = NULL, n = 8) 
   tr <- load_registry("traits")$traits
   grp <- .sf_group_of(organism)
   org <- if (!is.null(organ) && nzchar(organ)) .sf_norm_tissue(organ) else NULL
-  if (!is.null(org) && org %in% names(.sf_groups("organ_also"))) org <- c(org, .sf_group("organ_also", org))
+  if (!is.null(org) && org %in% names(.sf_groups("organ_also"))) org <- c(org, .sf_groups("organ_also")[[org]])
   score <- vapply(tr, function(t) {
     if (!is.na(grp) && !t$group %in% c(grp, "any")) return(-Inf)
     to <- unlist(t$organ)

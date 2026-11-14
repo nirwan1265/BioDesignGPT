@@ -1,7 +1,7 @@
 # General, table-driven extraction layer.
 #
 # Runs after the hand-written rules in extract_spec_local() and only fills gaps, so it can't undo tuned
-# behaviour. Everything here is driven by the alias table (inst/agent/aliases.tsv) and a few generic
+# behaviour. Everything here is driven by the word rows of inst/agent/rules.tsv and a few generic
 # patterns, so new organisms, assays or factor words need new table rows, not new code:
 #   organism  any organism alias, longest match first
 #   assays    any assay alias (in every system)

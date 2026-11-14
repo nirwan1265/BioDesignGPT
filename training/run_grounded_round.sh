@@ -13,7 +13,7 @@ EVIDENCE=${EVIDENCE:?set EVIDENCE to the folder with the all_species_*.tsv files
 PY=${PY:-python}
 GROUNDED_N=${GROUNDED_N:-8000}     # how many grounded prompts to mix with the template data
 EPOCHS=${EPOCHS:-8}
-HOLDOUT=${HOLDOUT:-$($PY -c 'import sys; sys.path.insert(0, "training"); import rules; print(",".join(k for k, _ in rules.table("held_out_species")))')}   # inst/agent/rules.tsv
+HOLDOUT=${HOLDOUT:-$($PY -c 'import sys; sys.path.insert(0, "training"); import rules; print(",".join(rules.keys("held_out_species")))')}   # inst/agent/rules.tsv
 D=training/data
 NEW=inst/models/sf-tiny-r5
 mkdir -p "$D"

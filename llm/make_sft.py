@@ -37,12 +37,12 @@ PQ = os.path.join(HERE, "..", "training", "paper_questions", "splits")
 PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl"]
 # vocabulary and system kinds come from the rule files (training/rules.py), never from lists in this script
 SYSTEM_ASSAY = {i: sy["assay"] for i, sy in rules.systems().items() if sy.get("kind") == "assay"}   # old system -> its assay
-HOLDOUT_ORGS = {v for _, v in rules.table("held_out_species")}
+HOLDOUT_ORGS = set(rules.mapping("held_out_species").values())
 SYN = rules.mapping("factor_synonym")
 
 
 def unit_stated(unit, text):
-    """The unit word (or any alias of that unit in inst/agent/aliases.tsv) is in the prompt."""
+    """The unit word (or any alias of that unit in inst/agent/rules.tsv) is in the prompt."""
     words = set(rules.aliases("unit").get(unit, [])) | {unit.replace("_", " ")}
     return any(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?:e?s)?(?![a-z0-9])", text) for w in words)
 

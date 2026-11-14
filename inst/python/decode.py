@@ -1,5 +1,5 @@
 """Turn tagged spans + system label into a StudySpec (mirrors R's extract_spec_local defaults)."""
-import csv, os, re
+import csv, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
@@ -11,14 +11,12 @@ _AL = None
 def aliases():
     global _AL
     if _AL is None:
-        for path in (os.path.join(HERE, "..", "agent", "aliases.tsv"),            # installed package / inst
-                     os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")):  # repo root
-            if os.path.exists(path):
-                break
+        if HERE not in sys.path:
+            sys.path.insert(0, HERE)
+        import rulebook   # inst/python/rulebook.py: reads inst/agent/rules.tsv
         _AL = {}
-        with open(path) as f:
-            for r in csv.DictReader(f, delimiter="\t"):
-                _AL.setdefault(r["category"], []).append((r["alias"].lower(), r["canonical_term"]))
+        for r in rulebook.alias_rows():
+            _AL.setdefault(r["category"], []).append((r["alias"].lower(), r["canonical_term"]))
         for k in _AL:
             _AL[k].sort(key=lambda x: -len(x[0]))  # longest alias first
     return _AL
