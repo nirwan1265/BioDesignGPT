@@ -3401,7 +3401,7 @@ cue	maternal_treatment	regex	given to pregnant|pregnant dams|maternal treatment	
 cue	pup_word	regex	pups?	pups measured	rules
 cue	one_chamber_per_treatment	regex	one (?:set|chamber) (?:to|per) each|chambers?, one|one chamber per|identical chambers	one chamber per treatment (chamber is the unit)	rules
 cue	pen_word	regex	\bpens?\b	animals kept in pens	rules
-cue	pen_level_treatment	regex	diet|feed|drinking water|supplement|challenge	treatment given per pen (pen is the unit)	rules
+cue	pen_level_treatment	regex	\b(?:diets?|feed|fed|drinking water|supplement\w*|in the water)\b	treatment given in the pen's feed or water (the pen is the unit); a challenge or injection is per animal	rules
 cue	tank_word	regex	\btanks?\b|\baquari	animals kept in tanks / aquaria	rules
 cue	aquatic_animal	regex	fish|larvae|zebrafish|tadpoles|xenopus	aquatic animals (tank is the unit)	rules
 cue	single_plant_plots	regex	single-plant|spaced plants	single-plant plots (plant is the unit)	rules
@@ -3428,6 +3428,8 @@ cue	mapping_intent	regex	qtl|mapping|inbred	QTL mapping / inbred population	rule
 cue	controlled_setting_mention	regex	greenhouse|chamber	greenhouse or chamber mentioned (greenhouse-to-field validation)	rules
 cue	repeated_over_time_animals	regex	weekly|over time|days? \d+ and|repeated	animals measured repeatedly over time	rules
 cue	vial_lifespan_study	regex	lifespan|diet|yeast	fly lifespan / diet study in vials	rules
+cue	delivered_via_mother	regex	given to pregnant|pregnant (?:dams|females|mice|rats|sows|ewes|gilts|cows)|maternal (?:treatment|diet|exposure|supplementation|obesity|infection|immune activation|hyperglycemia|separation|care)|\b(?:dams?|mothers?|sows|ewes)\b[^.;?]{0,40}?\b(?:fed|treated|given|exposed|injected|dosed|inoculated|supplemented|vaccinated)\b|\b(?:fed|given|treated|exposed|dosed|injected)\b[^.;?]{0,30}?\b(?:pregnant|gestating|lactating)\b|during (?:pregnancy|gestation|lactation)|\bin utero\b|prenatal(?:ly)? expos	treatment reaches the offspring through the mother (the litter / dam is the unit)	rules
+cue	tank_level_treatment	regex	in (?:the )?(?:tank |system )?water|waterborne|\bexpos\w*|\bbath\b|immersion|\bdiets?\b|\bfeed\b|\bfed\b|temperature|salinity|stocking density|light regime	treatment applied to the tank's water, diet or conditions (the tank is the unit)	rules
 genotype_count_noun		regex	lines?	regex noun counted as genotype entries ("120 lines")	rules
 genotype_count_noun		regex	accessions?	regex noun counted as genotype entries ("120 lines")	rules
 genotype_count_noun		regex	genotypes?	regex noun counted as genotype entries ("120 lines")	rules
@@ -4023,3 +4025,7 @@ factor_rename	phenotype_group	value	phenotype	factor names renamed in label sche
 factor_rename	genotype	value	strain	factor names renamed in label schema 2	rules
 ambiguous_organism	Nicotiana benthamiana	word	tobacco	could mean either species; ask which	rules
 ambiguous_organism	Nicotiana tabacum	word	tobacco	could mean either species; ask which	rules
+unit_question	litter	value	Was the treatment given to the mothers (then the litter is the unit) or to each offspring (then the offspring is the unit and the litter a block)?	asked when animals share housing but the text does not say how the treatment was given	rules
+unit_question	cage	value	Was the treatment given to each animal (the animal is the unit, the cage a block) or to the whole cage, e.g. in food or water (the cage is the unit)?	asked when animals share housing but the text does not say how the treatment was given	rules
+unit_question	pen	value	Was the treatment given in the pen's feed or water (the pen is the unit) or to each animal (the animal is the unit, the pen a block)?	asked when animals share housing but the text does not say how the treatment was given	rules
+unit_question	tank	value	Was the treatment applied to the tank (water, diet, conditions: the tank is the unit) or to each fish (the fish is the unit, the tank a block)?	asked when animals share housing but the text does not say how the treatment was given	rules

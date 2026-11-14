@@ -201,7 +201,9 @@ extract_spec_local <- function(question) {
     factors[[length(factors) + 1]] <- list(name = "treatment", n_levels = 2, applied_to = "dam")
     spec$factors <- factors
   }
-  if (.sf_has(text, .sf_cue("maternal"))) {
+  # the litter is the unit only when the text says the treatment went through the mother; maternal words alone
+  # ("pups kept with their dams") raise the question instead (.sf_text_questions)
+  if (.sf_has(text, .sf_cue("delivered_via_mother"))) {
     set("experimental_unit", "litter")
     if (.sf_has(text, .sf_cue("pup_word"))) set("measurement_unit", "pup")
   }
@@ -214,7 +216,8 @@ extract_spec_local <- function(question) {
     if (is.na(n_pen) && length(pens_of)) n_pen <- .sf_num(sub("^pens? of ", "", pens_of))
     if (!is.na(n_pen) && n_pen > 1) set("subsamples_per_unit", n_pen)
   }
-  if (is.null(spec$experimental_unit) && .sf_has(text, .sf_cue("tank_word")) && .sf_has(text, .sf_cue("aquatic_animal"))) {
+  if (is.null(spec$experimental_unit) && .sf_has(text, .sf_cue("tank_word")) && .sf_has(text, .sf_cue("aquatic_animal")) &&
+      .sf_has(text, .sf_cue("tank_level_treatment"))) {
     set("experimental_unit", "tank"); set("measurement_unit", "fish")
   }
   if (is.null(spec$experimental_unit)) {
@@ -305,9 +308,20 @@ extract_spec_local <- function(question) {
          " Use at least 3, and set the final number by power; published studies often use more.")
 }
 
-# Questions the wording itself raises: a name that could mean several organisms (rules.tsv ambiguous_organism)
+# Questions the wording itself raises: a name that could mean several organisms (rules.tsv ambiguous_organism);
+# animals sharing housing when the text does not say how the treatment was given (rules.tsv unit_question)
 .sf_text_questions <- function(spec, text) {
   out <- character()
+  t0 <- .sf_words_to_digits(tolower(text))
+  if (is.null(spec$experimental_unit)) {
+    q <- .sf_map("unit_question")
+    has <- function(cue) .sf_has(t0, .sf_cue(cue))
+    open <- c(litter = has("maternal") && !has("delivered_via_mother"),
+              cage = has("housed_per_cage") && !has("given_to_whole_cage") && !has("dosed_individually"),
+              pen = has("pen_word") && !has("pen_level_treatment"),
+              tank = has("tank_word") && has("aquatic_animal") && !has("tank_level_treatment"))
+    out <- c(out, unname(names(q)[match(names(open)[open], q)]))
+  }
   if (is.null(spec$organism)) {
     amb <- .sf_rules_rows("ambiguous_organism")
     t <- tolower(text)

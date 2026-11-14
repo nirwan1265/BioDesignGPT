@@ -66,3 +66,14 @@ test_that("shiny app ships and parses", {
   expect_true(file.exists(app))
   expect_no_error(parse(app))
 })
+
+test_that("shared housing without a stated delivery raises a question instead of setting the unit", {
+  a <- studyforge_ask("Rat pups after hypoxia-ischaemia vs sham, kept with litters and dams, 8 per group.")
+  expect_null(a$spec$experimental_unit)
+  expect_match(a$questions[1], "mothers .* or to each offspring")
+  expect_equal(studyforge_ask("Valproic acid given to pregnant dams, then I test four pups per litter.")$spec$experimental_unit, "litter")
+  expect_match(studyforge_ask("Mice housed 4 per cage, drug vs vehicle, 10 per group.")$questions[1], "whole cage")
+  expect_equal(studyforge_ask("Mice housed 4 per cage, drug in drinking water vs plain water.")$spec$experimental_unit, "cage")
+  expect_match(studyforge_ask("RNA-seq of agroinfiltrated tobacco leaves, effector vs empty vector, 3 replicates.")$questions[1],
+               "Nicotiana benthamiana or Nicotiana tabacum")
+})
