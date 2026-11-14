@@ -36,9 +36,10 @@ def alias_rows():
              "confidence": "medium" if "confidence: medium" in r["note"] else "high"} for r in rows() if r["match"] == "word"]
 
 
+@functools.lru_cache(None)
 def regex_rows(category):
-    """[(term, compiled regex), ...] of a category's regex rows (none is fine), for the alias lookups"""
-    return [(r["term"], re.compile(r["pattern"])) for r in rows() if r["category"] == category and r["match"] == "regex"]
+    """((term, compiled regex), ...) of a category's regex rows (none is fine), for the alias lookups"""
+    return tuple((r["term"], re.compile(r["pattern"])) for r in rows() if r["category"] == category and r["match"] == "regex")
 
 
 def patterns(category):

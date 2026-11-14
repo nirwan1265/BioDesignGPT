@@ -6,6 +6,7 @@ WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven"
          "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "this": 1, "single": 1, "a": 1, "no": 1}
 
 _AL = None
+_RX = {}
 
 
 def aliases():
@@ -22,12 +23,19 @@ def aliases():
     return _AL
 
 
+def _alias_rx(cat):
+    """the category's aliases compiled once (thousands of aliases overflow re's own cache)"""
+    if cat not in _RX:
+        _RX[cat] = [(re.compile(r"(?<![a-z])" + re.escape(a) + r"(?![a-z])"), c) for a, c in aliases().get(cat, [])]
+    return _RX[cat]
+
+
 def canon(text, *cats):
     # spans are tokens joined by spaces: "c . elegans", "v . vinifera" -> "c. elegans"
     t = " " + re.sub(r"\s+([.,])", r"\1", text.lower()) + " "
     for cat in cats:
-        for a, c in aliases().get(cat, []):
-            if re.search(r"(?<![a-z])" + re.escape(a) + r"(?![a-z])", t):
+        for rx, c in _alias_rx(cat):
+            if rx.search(t):
                 return c
     for cat in cats:   # regex rows of rules.tsv (abbreviations, context patterns)
         if HERE not in sys.path:

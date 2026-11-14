@@ -24,11 +24,18 @@ FACTOR_RENAME = rules.mapping("factor_rename")
 _TABLE = None
 
 
+_BYCAT = {}
+
+
 def _table(category):
+    """(compiled alias, canonical) for one category, longest alias first, compiled once"""
     global _TABLE
     if _TABLE is None:
         _TABLE = [(r["alias"].strip().lower(), r["canonical_term"].strip(), r["category"].strip()) for r in rules.alias_rows()]
-    return sorted(((a, c) for a, c, cat in _TABLE if cat == category), key=lambda x: -len(x[0]))
+    if category not in _BYCAT:
+        _BYCAT[category] = [(re.compile(r"(?<![a-z0-9])" + re.escape(a) + r"(?![a-z0-9])"), c) for a, c in
+                            sorted(((a, c) for a, c, cat in _TABLE if cat == category), key=lambda x: -len(x[0]))]
+    return _BYCAT[category]
 
 
 def find_all(text, category):
@@ -36,8 +43,8 @@ def find_all(text, category):
     text = text.lower()
     taken = [False] * len(text)
     hits = []
-    for alias, canon in _table(category):
-        for m in re.finditer(r"(?<![a-z0-9])" + re.escape(alias) + r"(?![a-z0-9])", text):
+    for rx, canon in _table(category):
+        for m in rx.finditer(text):
             if any(taken[m.start():m.end()]):
                 continue
             taken[m.start():m.end()] = [True] * (m.end() - m.start())
