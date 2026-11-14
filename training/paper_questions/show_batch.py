@@ -2,7 +2,8 @@
 """Print papers compactly for labelling: python show_batch.py START COUNT"""
 import gzip, json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
-rows = [json.loads(l) for l in gzip.open(os.path.join(HERE, "raw", "papers_sample.jsonl.gz"), "rt")]
+rows = sorted((json.loads(l) for f in sorted(__import__("glob").glob(os.path.join(HERE, "raw", "papers_sample*.jsonl.gz")))
+               for l in gzip.open(f, "rt")), key=lambda r: r["id"])   # START is the paper number
 s, n = int(sys.argv[1]), int(sys.argv[2])
 for r in rows[s:s + n]:
     md = "; ".join(" ".join(f"{k}={v}" for k, v in m.items() if k not in ("organism",))[:220] for m in r["study_metadata"][:2])

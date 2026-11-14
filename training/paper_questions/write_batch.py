@@ -4,7 +4,8 @@
 import gzip, json, os, runpy, sys
 from normalise import normalise
 HERE = os.path.dirname(os.path.abspath(__file__))
-papers = {r["id"]: r for r in map(json.loads, gzip.open(os.path.join(HERE, "raw", "papers_sample.jsonl.gz"), "rt"))}
+papers = {r["id"]: r for f in sorted(__import__("glob").glob(os.path.join(HERE, "raw", "papers_sample*.jsonl.gz")))
+          for r in map(json.loads, gzip.open(f, "rt"))}
 nn, src = sys.argv[1], sys.argv[2]
 L = runpy.run_path(src)["L"]
 out = os.path.join(HERE, "batches", f"batch_{int(nn):02d}.jsonl")
