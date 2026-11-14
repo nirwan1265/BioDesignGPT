@@ -1,0 +1,581 @@
+category	term	match	pattern	note	source	reason
+outcome	body_weight	word	average daily gain	Common scientific phrasing or spelling variant	chatgpt_rules_file	average daily gain is its own outcome (DeepSeek's row)
+outcome	disease_severity	word	disease incidence	Common scientific phrasing or spelling variant	chatgpt_rules_file	incidence and severity are different outcomes
+factor	water	word	well watered	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+factor	light	word	light cycle	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+factor	nutrient	word	fertilizer regime	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+factor	stage	word	seedling stage	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+unit	tray	word	cell tray	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+unit	room	word	growth room	Common scientific phrasing or spelling variant	chatgpt_rules_file	misfires on ordinary text / names a disease or a level, not this term
+environment	growth_chamber	word	phytochamber		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	conviron		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	walk-in chamber		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	walk-in chambers		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	growth cabinet		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	growth cabinets		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	climate chamber		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	climate chambers		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	environmental chamber		deepseek	growth chambers are a system, not an environment value
+environment	growth_chamber	word	environmental chambers		deepseek	growth chambers are a system, not an environment value
+environment	field	word	paddy		deepseek	misfires on ordinary text / names a disease or a level, not this term
+environment	field	word	paddies		deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Aspergillus fumigatus	word	aspergillus fumigatus	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Aspergillus flavus	word	aspergillus flavus	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Trichoderma reesei	word	trichoderma reesei	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Trichoderma harzianum	word	trichoderma harzianum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Fusarium graminearum	word	fusarium graminearum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Fusarium oxysporum	word	fusarium oxysporum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Fusarium verticillioides	word	fusarium verticillioides	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Magnaporthe oryzae	word	magnaporthe oryzae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Magnaporthe oryzae	word	rice blast fungus	common name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Botrytis cinerea	word	botrytis cinerea	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Botrytis cinerea	word	gray mold	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Ustilago maydis	word	ustilago maydis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Ustilago maydis	word	corn smut	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Puccinia graminis	word	puccinia graminis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Puccinia triticina	word	puccinia triticina	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Puccinia striiformis	word	stripe rust	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Puccinia striiformis	word	puccinia striiformis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Blumeria graminis	word	blumeria graminis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Phytophthora infestans	word	phytophthora infestans	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Phytophthora infestans	word	late blight	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Phytophthora sojae	word	phytophthora sojae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Plasmopara viticola	word	plasmopara viticola	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Rhizoctonia solani	word	rhizoctonia solani	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Sclerotinia sclerotiorum	word	sclerotinia sclerotiorum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Verticillium dahliae	word	verticillium dahliae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Colletotrichum graminicola	word	colletotrichum graminicola	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Alternaria brassicicola	word	alternaria brassicicola	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Zymoseptoria tritici	word	zymoseptoria tritici	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Candida albicans	word	candida albicans	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Candida glabrata	word	candida glabrata	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Candida auris	word	candida auris	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Cryptococcus neoformans	word	cryptococcus neoformans	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Escherichia coli	word	escherichia coli	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Escherichia coli	word	e. coli	common abbreviation	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Bacillus thuringiensis	word	bacillus thuringiensis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Pseudomonas aeruginosa	word	pseudomonas aeruginosa	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Pseudomonas syringae	word	pseudomonas syringae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Xanthomonas campestris	word	xanthomonas campestris	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Xanthomonas oryzae	word	xanthomonas oryzae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Ralstonia solanacearum	word	ralstonia solanacearum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Agrobacterium tumefaciens	word	agrobacterium tumefaciens	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Rhizobium leguminosarum	word	rhizobium leguminosarum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Sinorhizobium meliloti	word	sinorhizobium meliloti	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Bradyrhizobium japonicum	word	bradyrhizobium japonicum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Azospirillum brasilense	word	azospirillum brasilense	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Staphylococcus aureus	word	staphylococcus aureus	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Staphylococcus aureus	word	s. aureus	common abbreviation	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Staphylococcus aureus	word	mrsa	common abbreviation	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Streptococcus pneumoniae	word	streptococcus pneumoniae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Streptococcus pyogenes	word	streptococcus pyogenes	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Streptococcus mutans	word	streptococcus mutans	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Lactococcus lactis	word	lactococcus lactis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Lactobacillus plantarum	word	lactobacillus plantarum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Lactobacillus reuteri	word	lactobacillus reuteri	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Lactobacillus rhamnosus	word	lactobacillus rhamnosus	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Lactobacillus acidophilus	word	lactobacillus acidophilus	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Bifidobacterium longum	word	bifidobacterium longum	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Enterococcus faecalis	word	enterococcus faecalis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Enterococcus faecium	word	enterococcus faecium	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Listeria monocytogenes	word	listeria monocytogenes	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Clostridium difficile	word	clostridium difficile	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Clostridium perfringens	word	clostridium perfringens	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Mycobacterium tuberculosis	word	mycobacterium tuberculosis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Mycobacterium tuberculosis	word	m. tuberculosis	common abbreviation	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Vibrio cholerae	word	vibrio cholerae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Salmonella enterica	word	salmonella enterica	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Salmonella typhimurium	word	salmonella typhimurium	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Shigella flexneri	word	shigella flexneri	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Klebsiella pneumoniae	word	klebsiella pneumoniae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Yersinia pestis	word	yersinia pestis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Campylobacter jejuni	word	campylobacter jejuni	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Helicobacter pylori	word	helicobacter pylori	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Borrelia burgdorferi	word	borrelia burgdorferi	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Chlamydia trachomatis	word	chlamydia trachomatis	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Mycoplasma pneumoniae	word	mycoplasma pneumoniae	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Legionella pneumophila	word	legionella pneumophila	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+organism	Acinetobacter baumannii	word	acinetobacter baumannii	scientific name	deepseek	usually the pathogen, symbiont or probiotic given as a treatment, not the studied organism
+blocking	day	word	day		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	day	word	days		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	week	word	week		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	week	word	weeks		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	month	word	month		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	month	word	months		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	year	word	year		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	year	word	years		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	room	word	room		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	room	word	rooms		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	greenhouse_block	word	greenhouse		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	greenhouse_block	word	greenhouses		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	field_block	word	field block		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	field_block	word	field blocks		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	site	word	site		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	site	word	sites		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	trial	word	trial		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	trial	word	trials		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	experiment	word	experiment		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	experiment	word	experiments		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	visit	word	visit		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	visit	word	visits		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	time_of_day	word	time of day		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	time_of_day	word	time-of-day		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	am_pm	word	morning		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	am_pm	word	afternoon		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	generation	word	generation		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	generation	word	generations		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	crop_cycle	word	crop cycle		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	crop_cycle	word	crop cycles		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	site_year	word	site-year		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	site_year	word	site-year interaction		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	location_year	word	location-year		deepseek	too generic as a block word (time, place or setting words are handled elsewhere)
+blocking	environment_block	word	environment		deepseek	misfires on ordinary text / names a disease or a level, not this term
+blocking	environment_block	word	environments		deepseek	misfires on ordinary text / names a disease or a level, not this term
+mating	half_sib	word	half-sib		deepseek	the engine has no such population / mating type
+mating	half_sib	word	half sib		deepseek	the engine has no such population / mating type
+mating	full_sib	word	full-sib		deepseek	the engine has no such population / mating type
+mating	full_sib	word	full sib		deepseek	the engine has no such population / mating type
+mating	haploid	word	haploid		deepseek	the engine has no such population / mating type
+mating	haploid	word	haploids		deepseek	the engine has no such population / mating type
+mating	triploid	word	triploid		deepseek	the engine has no such population / mating type
+mating	tetraploid	word	tetraploid		deepseek	the engine has no such population / mating type
+mating	polyploid	word	polyploid		deepseek	the engine has no such population / mating type
+mating	dihaploid	word	dihaploid		deepseek	the engine has no such population / mating type
+mating	three_way_cross	word	three-way cross		deepseek	the engine has no such population / mating type
+mating	single_cross	word	single cross		deepseek	the engine has no such population / mating type
+mating	double_cross	word	double cross		deepseek	the engine has no such population / mating type
+mating	modified_single_cross	word	modified single cross		deepseek	the engine has no such population / mating type
+mating	intercross	word	intercross		deepseek	the engine has no such population / mating type
+mating	intercross	word	intercrossing		deepseek	the engine has no such population / mating type
+mating	f2_population	word	f2 population		deepseek	the engine has no such population / mating type
+mating	nil	regex	\bnil\b	near isogenic line	deepseek	misfires: the word 'nil'
+mating	nil	word	near isogenic line		deepseek	the engine has no such population / mating type
+mating	nil	word	near-isogenic line		deepseek	the engine has no such population / mating type
+mating	introgression_line	word	introgression line		deepseek	the engine has no such population / mating type
+mating	introgression_line	word	introgression lines		deepseek	the engine has no such population / mating type
+mating	magic	regex	\bmagic\b	multiparent advanced generation intercross	deepseek	the engine has no such population / mating type
+mating	magic	word	multiparent advanced generation intercross		deepseek	the engine has no such population / mating type
+mating	ampril	word	ampril		deepseek	the engine has no such population / mating type
+mating	cc	regex	\bcc\b	collaborative cross	deepseek	misfires: 'cc' (cubic centimetres)
+mating	cc	word	collaborative cross		deepseek	the engine has no such population / mating type
+mating	do	regex	\bdo\b	diversity outbred	deepseek	misfires: the English word 'do'
+mating	do	word	diversity outbred		deepseek	the engine has no such population / mating type
+mating	ail	regex	\bail\b	advanced intercross line	deepseek	the engine has no such population / mating type
+mating	ail	word	advanced intercross line		deepseek	the engine has no such population / mating type
+mating	outbred	word	outbred		deepseek	the engine has no such population / mating type
+mating	outcross	word	outcross		deepseek	the engine has no such population / mating type
+mating	outcross	word	outcrossing		deepseek	the engine has no such population / mating type
+mating	random_mating	word	random mating		deepseek	the engine has no such population / mating type
+mating	assortative_mating	word	assortative mating		deepseek	the engine has no such population / mating type
+mating	disassortative_mating	word	disassortative mating		deepseek	the engine has no such population / mating type
+mating	mate_choice	word	mate choice		deepseek	the engine has no such population / mating type
+mating	monogamous	word	monogamous		deepseek	the engine has no such population / mating type
+mating	polygamous	word	polygamous		deepseek	the engine has no such population / mating type
+mating	harem	word	harem		deepseek	the engine has no such population / mating type
+mating	breeding_pair	word	breeding pair		deepseek	the engine has no such population / mating type
+mating	breeding_pair	word	breeding pairs		deepseek	the engine has no such population / mating type
+mating	trio	word	trio mating		deepseek	the engine has no such population / mating type
+mating	group_mating	word	group mating		deepseek	the engine has no such population / mating type
+mating	mass_mating	word	mass mating		deepseek	the engine has no such population / mating type
+mating	mass_selection	word	mass selection		deepseek	the engine has no such population / mating type
+mating	recurrent_selection	word	recurrent selection		deepseek	the engine has no such population / mating type
+mating	half_sib_family	word	half-sib family selection		deepseek	the engine has no such population / mating type
+mating	full_sib_family	word	full-sib family selection		deepseek	the engine has no such population / mating type
+mating	s1_selection	word	s1 selection		deepseek	the engine has no such population / mating type
+mating	s2_selection	word	s2 selection		deepseek	the engine has no such population / mating type
+mating	ear_to_row	word	ear-to-row		deepseek	the engine has no such population / mating type
+mating	ear_to_row	word	ear to row		deepseek	the engine has no such population / mating type
+mating	bulk_breeding	word	bulk breeding		deepseek	the engine has no such population / mating type
+mating	bulk_population	word	bulk population		deepseek	the engine has no such population / mating type
+mating	pedigree_breeding	word	pedigree breeding		deepseek	the engine has no such population / mating type
+mating	mas	regex	\bmas\b	marker-assisted selection	deepseek	misfires: too ambiguous
+mating	mas	word	marker-assisted selection		deepseek	the engine has no such population / mating type
+mating	genomic_selection	word	genomic selection		deepseek	the engine has no such population / mating type
+mating	genomic_selection	word	genomic prediction		deepseek	the engine has no such population / mating type
+mating	phenotypic_selection	word	phenotypic selection		deepseek	the engine has no such population / mating type
+mating	participatory_breeding	word	participatory breeding		deepseek	the engine has no such population / mating type
+mating	shuttle_breeding	word	shuttle breeding		deepseek	the engine has no such population / mating type
+outcome	cfu	regex	\bcfus?\b	colony forming units	deepseek	misfires: CFU is usually the inoculum dose
+outcome	crp	regex	\bcrp\b	c-reactive protein	deepseek	misfires: too ambiguous
+outcome	il6	regex	\bil-?6\b	interleukin 6	deepseek	misfires: cytokines are often the treatment
+outcome	tnf_alpha	regex	\btnf-?[αa]\b	tumor necrosis factor alpha	deepseek	misfires: cytokines are often the treatment
+outcome	il1beta	regex	\bil-?1[βb]\b	interleukin 1 beta	deepseek	misfires: cytokines are often the treatment
+outcome	ifn_gamma	regex	\bifn-?[γg]\b	interferon gamma	deepseek	misfires: cytokines are often the treatment
+outcome	homa_ir	regex	\bhoma-?ir\b	homa-insulin resistance	deepseek	misfires: often a grouping
+outcome	hba1c	regex	\bhba1c\b	glycated hemoglobin	deepseek	misfires: often a grouping (diabetic status)
+outcome	ldl	regex	\bldl\b	low-density lipoprotein	deepseek	misfires: LDL is often the treatment (oxidised LDL)
+outcome	hdl	regex	\bhdl\b	high-density lipoprotein	deepseek	misfires: often a treatment or covariate
+outcome	bmi	regex	\bbmi\b	body mass index	deepseek	misfires: BMI is usually a grouping or covariate
+outcome	memory	word	memory		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	learning	word	learning		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	balance	word	balance		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	coordination	word	coordination		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	sleep	word	sleep		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	bun	regex	\bbun\b	blood urea nitrogen	deepseek	misfires: the word 'bun'
+outcome	alt	regex	\balt\b	alanine aminotransferase	deepseek	misfires: too ambiguous
+outcome	ast	regex	\bast\b	aspartate aminotransferase	deepseek	misfires: too ambiguous
+outcome	alp	regex	\balp\b	alkaline phosphatase	deepseek	misfires: too ambiguous
+outcome	mcv	regex	\bmcv\b	mean corpuscular volume	deepseek	misfires: too ambiguous
+outcome	texture	word	texture		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	pcoa	regex	\bpcoa\b	principal coordinates analysis	deepseek	misfires: an analysis, not an outcome
+outcome	km	regex	\bkm\b	michaelis constant	deepseek	misfires: kilometres
+outcome	vmax	regex	\bvmax\b	maximum velocity	deepseek	misfires: kinetic parameter
+outcome	kcat	regex	\bkcat\b	catalytic constant	deepseek	misfires: kinetic parameter
+outcome	kd	regex	\bkd\b	dissociation constant	deepseek	misfires: knockdown
+outcome	ic50	regex	\bic50\b	half maximal inhibitory concentration	deepseek	misfires: a derived value, not a measured outcome
+outcome	ec50	regex	\bec50\b	half maximal effective concentration	deepseek	misfires: a derived value
+outcome	ld50	regex	\bld50\b	median lethal dose	deepseek	misfires: a dose
+outcome	mic	regex	\bmic\b	minimum inhibitory concentration	deepseek	misfires: too ambiguous
+outcome	mbc	regex	\bmbc\b	minimum bactericidal concentration	deepseek	misfires: too ambiguous
+outcome	swimming	word	swimming		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	twitching	word	twitching		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	basic_reproduction_number	regex	\br0\b	basic reproduction number	deepseek	misfires: too ambiguous
+outcome	migration	word	migration		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	invasion	word	invasion		deepseek	misfires on ordinary text / names a disease or a level, not this term
+outcome	ros	regex	\bros\b	reactive oxygen species	deepseek	misfires: ROS is usually a mechanism, not the outcome
+outcome	mda	regex	\bmda\b	malondialdehyde	deepseek	misfires: matches MDA-MB-231 cell lines
+outcome	sod	regex	\bsod\b	superoxide dismutase	deepseek	misfires: the word 'sod'
+outcome	cat	regex	\bcat\b	catalase	deepseek	misfires: the animal
+outcome	gpx	regex	\bgpx\b	glutathione peroxidase	deepseek	misfires: a gene family name
+outcome	gsh	regex	\bgsh\b	reduced glutathione	deepseek	misfires: too ambiguous
+outcome	tac	regex	\btac\b	total antioxidant capacity	deepseek	misfires: too ambiguous
+outcome	electron_transport_rate	regex	\betr\b	electron transport rate	deepseek	misfires: ETR gene family (ethylene receptor)
+outcome	relative_water_content	regex	\rwc\b	relative water content	deepseek	misfires: broken regex (\r)
+outcome	radiation_use_efficiency	regex	\rue\b	radiation use efficiency	deepseek	misfires: broken regex (\r)
+unit	plot	word	transect		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plot	word	transects		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plot	word	hectare		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plot	word	hectares		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	tiller		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	tillers		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	individual		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	individuals		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	hill		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	hills		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	row		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	plant	word	rows		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	leaf	word	meristem		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	leaf	word	meristems		deepseek	misfires on ordinary text / names a disease or a level, not this term
+unit	ear	word	ear		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	ear	word	ears		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cob	word	cob		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cob	word	cobs		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tassel	word	tassel		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tassel	word	tassels		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	silk	word	silk		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	root	word	root		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	root	word	roots		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	nodule	word	nodule		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	nodule	word	nodules		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	seed		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	seeds		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	kernel		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	kernels		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	grain		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed	word	grains		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	berry	word	berry		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	berry	word	berries		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	berry	word	drupe		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	berry	word	drupes		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	fruit	word	achene		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	fruit	word	achenes		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	silique	word	silique		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	silique	word	siliques		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	pod	word	pod		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	pod	word	pods		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed_lot	word	seed lot		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	seed_lot	word	seed lots		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	population	word	population		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	population	word	populations		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	population	word	subpopulation		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	population	word	subpopulations		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	family	word	family		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	family	word	families		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	callus	word	callus		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	callus	word	calli		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	protoplast	word	protoplast		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	protoplast	word	protoplasts		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microspore	word	microspore		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microspore	word	microspores		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	pollen	word	pollen grain		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	pollen	word	pollen grains		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	ovule	word	ovule		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	ovule	word	ovules		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	endosperm	word	endosperm		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	plate		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	plates		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	multiwell plate		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	multiwell plates		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	96-well plate		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	plate	word	384-well plate		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	tube		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	tubes		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	microtube		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	microtubes		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	eppendorf tube		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	tube	word	eppendorf tubes		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cryovial	word	cryovial		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cryovial	word	cryovials		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	aliquot	word	aliquot		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	aliquot	word	aliquots		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	biopsy	word	biopsy		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	biopsy	word	biopsies		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	section	word	section		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	section	word	sections		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	slice	word	slice		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	slice	word	slices		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	organoid	word	organoid		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	organoid	word	organoids		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	spheroid	word	spheroid		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	spheroid	word	spheroids		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	explant	word	explant		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	explant	word	explants		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	primary_culture	word	primary culture		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	primary_culture	word	primary cultures		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	roller_bottle	word	roller bottle		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	roller_bottle	word	roller bottles		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microcarrier	word	microcarrier		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microcarrier	word	microcarriers		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	bead	word	bead		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	bead	word	beads		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	droplet	word	droplet		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	droplet	word	droplets		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	emulsion	word	emulsion		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	emulsion	word	emulsions		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	hive	word	hive		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	hive	word	hives		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	colony	word	colony		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	colony	word	colonies		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	nest	word	nest		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	nest	word	nests		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	burrow	word	burrow		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	burrow	word	burrows		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cage_rack	word	cage rack		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	cage_rack	word	cage racks		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	mesocosm	word	mesocosm		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	mesocosm	word	mesocosms		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microcosm	word	microcosm		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	microcosm	word	microcosms		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	rack	word	rack		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+unit	rack	word	racks		deepseek	an organ, sample or container the engine does not treat as an experimental unit
+design	bibd	regex	\bbibd\b	balanced incomplete block design	deepseek	the engine has no such design
+design	bibd	word	balanced incomplete block		deepseek	the engine has no such design
+design	bibd	word	balanced incomplete block design		deepseek	the engine has no such design
+design	latin_square	word	latin square		deepseek	the engine has no such design
+design	latin_square	word	latin square design		deepseek	the engine has no such design
+design	graeco_latin	word	graeco-latin square		deepseek	the engine has no such design
+design	youden	word	youden square		deepseek	the engine has no such design
+design	strip_plot	word	strip-plot		deepseek	the engine has no such design
+design	strip_plot	word	strip plot		deepseek	the engine has no such design
+design	strip_plot	word	strip-block		deepseek	the engine has no such design
+design	nested	word	nested design		deepseek	the engine has no such design
+design	nested	word	hierarchical design		deepseek	the engine has no such design
+design	crossover	word	crossover design		deepseek	the engine has no such design
+design	crossover	word	cross-over design		deepseek	the engine has no such design
+design	longitudinal	word	longitudinal design		deepseek	the engine has no such design
+design	fractional_factorial	word	fractional factorial		deepseek	the engine has no such design
+design	fractional_factorial	word	fractional factorial design		deepseek	the engine has no such design
+design	response_surface	word	response surface		deepseek	the engine has no such design
+design	response_surface	word	response surface design		deepseek	the engine has no such design
+design	ccd	regex	\bccd\b	central composite design	deepseek	the engine has no such design
+design	ccd	word	central composite design		deepseek	the engine has no such design
+design	box_behnken	word	box-behnken		deepseek	the engine has no such design
+design	box_behnken	word	box behnken		deepseek	the engine has no such design
+design	plackett_burman	word	plackett-burman		deepseek	the engine has no such design
+design	d_optimal	word	d-optimal		deepseek	the engine has no such design
+design	d_optimal	word	d optimal		deepseek	the engine has no such design
+design	a_optimal	word	a-optimal		deepseek	the engine has no such design
+design	g_optimal	word	g-optimal		deepseek	the engine has no such design
+design	optimal_design	word	optimal design		deepseek	the engine has no such design
+design	sequential	word	sequential design		deepseek	the engine has no such design
+design	group_sequential	word	group sequential		deepseek	the engine has no such design
+design	adaptive	word	adaptive design		deepseek	the engine has no such design
+design	cluster_randomized	word	cluster randomized		deepseek	the engine has no such design
+design	cluster_randomized	word	cluster randomised		deepseek	the engine has no such design
+design	stepped_wedge	word	stepped-wedge		deepseek	the engine has no such design
+design	parallel_group	word	parallel group		deepseek	the engine has no such design
+design	split_split_plot	word	split-split-plot		deepseek	the engine has no such design
+design	split_split_plot	word	split-split plot		deepseek	the engine has no such design
+design	strip_split_plot	word	strip-split-plot		deepseek	the engine has no such design
+design	honeycomb	word	honeycomb design		deepseek	the engine has no such design
+design	matched_pairs	word	matched pairs		deepseek	the engine has no such design
+design	paired	word	paired design		deepseek	the engine has no such design
+design	paired	word	paired experiment		deepseek	the engine has no such design
+design	multi_arm	word	multi-arm		deepseek	the engine has no such design
+design	multi_arm	word	multiarm		deepseek	the engine has no such design
+design	mams	regex	\bmams\b	multi-arm multi-stage	deepseek	the engine has no such design
+design	platform_trial	word	platform trial		deepseek	the engine has no such design
+design	umbrella_trial	word	umbrella trial		deepseek	the engine has no such design
+design	basket_trial	word	basket trial		deepseek	the engine has no such design
+design	dose_escalation	word	dose escalation		deepseek	the engine has no such design
+design	three_plus_three	word	3+3 design		deepseek	the engine has no such design
+design	crm	regex	\bcrm\b	continual reassessment method	deepseek	the engine has no such design
+system_by_assay	metabolomics_lipidomics	value	metabolomics	assay -> system family	deepseek	lipidomics deliberately does not set the system (assay_advice_family)
+system_by_assay	metabolomics_lipidomics	value	lipidomics	assay -> system family	deepseek	lipidomics deliberately does not set the system (assay_advice_family)
+tech_by_assay	Proteomics	value	proteomics	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Phosphoproteomics	value	phosphoproteomics	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Metabolomics	value	metabolomics	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Lipidomics	value	lipidomics	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Fluxomics	value	fluxomics	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	qPCR	value	qpcr	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Digital PCR	value	dpcr	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Western blot	value	western	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Northern blot	value	northern	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Southern blot	value	southern	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	ELISA	value	elisa	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Flow cytometry	value	flow_cytometry	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Immunofluorescence	value	immunofluorescence	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Immunohistochemistry	value	immunohistochemistry	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Microscopy	value	microscopy	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Crystallography	value	crystallography	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	NMR	value	nmr	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Yeast two-hybrid	value	yeast_two_hybrid	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	BiFC	value	bifc	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Co-IP	value	coip	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	EMSA	value	emsa	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	CRISPR screen	value	crispr	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	RNAi	value	rnai	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	TILLING	value	tilling	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Transposon sequencing	value	tn_seq	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	KASP	value	genotyping	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	SNP array	value	genotyping	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Phenotyping	value	phenotyping	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Imaging	value	imaging	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Behaviour	value	behaviour	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Electrophysiology	value	electrophysiology	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+tech_by_assay	Physiology	value	physiology	assay -> evidence-table technique label	deepseek	pattern is not an assay id and the label is not an evidence-table technique
+organism	Oryza rufipogon	word	wild rice	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Triticum spelta	word	spelt	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Eragrostis tef	word	teff	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Nicotiana tabacum	word	tobacco	common name	deepseek	'tobacco' already maps to N. benthamiana (agroinfiltration usage)
+organism	Ficus carica	word	fig	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Ficus carica	word	figs	plural	deepseek	misfires on ordinary text / names a disease or a level, not this term
+organism	Phleum pratense	word	timothy	common name	deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	ph	regex	\bph\b	ph	deepseek	misfires: pH of any medium, not a factor by itself
+factor	alkalinity	word	alkalinity		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	residue	word	crop residue		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	monoculture	word	monoculture		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	transplanting	word	transplanting		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	direct_seeding	word	direct seeding		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	priming	word	priming		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	stratification	word	stratification		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	scarification	word	scarification		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	cold_stratification	word	cold stratification		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	blue_light	word	blue light		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	competition	word	competition		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	allelopathy	word	allelopathy		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	pruning	word	pruning		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	thinning	word	thinning		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	grafting	word	grafting		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	scion	word	scion		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	pollination	word	pollination		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	hand_pollination	word	hand pollination		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	open_pollination	word	open pollination		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	cross_pollination	word	cross-pollination		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	emasculation	word	emasculation		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	sorbitol	word	sorbitol		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	xray	regex	\x-rays?\b	x-ray	deepseek	misfires: broken regex
+factor	microwave	word	microwave		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	magnetic_field	word	magnetic field		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	electric_field	word	electric field		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	ultrasound	word	ultrasound		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	vibration	word	vibration		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	noise	word	noise		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	fasting	word	fasting		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	refeeding	word	refeeding		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	fiber	word	dietary fiber		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	protein	word	dietary protein		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	carbohydrate	word	dietary carbohydrate		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	fat	word	dietary fat		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	supplement	word	supplement		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	fecal_transplant	word	fmt	fecal microbiota transplant	deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	gavage	word	gavage		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	oral	word	oral administration		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intravenous	word	intravenous		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intraperitoneal	word	intraperitoneal		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	subcutaneous	word	subcutaneous		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intramuscular	word	intramuscular		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	topical	word	topical		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intranasal	word	intranasal		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intratracheal	word	intratracheal		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intracranial	word	intracranial		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	intrathecal	word	intrathecal		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	tail_vein	word	tail vein		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	retro_orbital	word	retro-orbital		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	osmotic_pump	word	osmotic pump		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	minipump	word	minipump		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	injection	word	injection		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	infusion	word	infusion		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	controlled_release	word	controlled release		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	nanoparticle	word	nanoparticle		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	pbs	regex	\bpbs\b	phosphate buffered saline	deepseek	misfires: a buffer
+factor	dmso	regex	\bdmso\b	dimethyl sulfoxide	deepseek	misfires: a vehicle
+factor	ethanol	word	ethanol		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	corn_oil	word	corn oil		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	tween	word	tween		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	cyclodextrin	word	cyclodextrin		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	cpg	regex	\bcpg\b	cpg oligonucleotide	deepseek	misfires: CpG sites (methylation)
+factor	serum	word	serum		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	fbs	regex	\bfbs\b	fetal bovine serum	deepseek	misfires: fetal bovine serum is a medium, not a factor
+factor	serum_free	word	serum-free		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	glucose_concentration	word	glucose concentration		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	insulin	word	insulin		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	glucagon	word	glucagon		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	igf1	regex	\bigf-?1\b	insulin-like growth factor 1	deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	ghrelin	word	ghrelin		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	adiponectin	word	adiponectin		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	resistin	word	resistin		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	spf	regex	\bspf\b	specific pathogen free	deepseek	misfires: SPF is a housing status, rarely a factor
+factor	cohoused	word	co-housed		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	cohoused	word	cohoused		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	littermate	word	littermate		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	littermates	word	littermates		deepseek	not an experimental factor here: a route, vehicle, sample type, generic word or outcome
+factor	phenotype_group	word	wild-type versus mutant		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	phenotype_group	word	wild type versus mutant		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	phenotype_group	word	overexpressor versus wild type		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	phenotype_group	word	knockout versus wild type		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	neonatal		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	juvenile		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	adult		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	aged		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	old		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	young		deepseek	misfires on ordinary text / names a disease or a level, not this term
+factor	age	word	middle-aged		deepseek	misfires on ordinary text / names a disease or a level, not this term
+cue	seed_priming_cue	regex	seed priming|priming treatment	seed priming named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	vernalization_cue	regex	vernalization|vernalisation	vernalization named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	transplant_cue	regex	transplant(?:ed|ing)?|transplanting	transplanting named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	competition_cue	regex	competition|competing|weedy|weed pressure	competition named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	multi_season_cue	regex	multi-?season|multi-?year|across years|over years	multiple seasons/years named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	multi_site_cue	regex	multi-?site|multi-?location|across sites|across locations	multiple sites named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	genotype_by_environment_cue	regex	gxe|g by e|genotype x environment	genotype by environment named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	single_seed_descent_cue	regex	single seed descent|\bssd\b	single seed descent	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	genomic_selection_cue	regex	genomic selection|genomic prediction|gs	genomic selection named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	marker_assisted_cue	regex	marker-assisted|marker assisted|\bmas\b	marker assisted selection	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	backcross_cue	regex	backcross|\bbc\d\b|introgress	backcrossing named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	diallel_cue	regex	diallel	diallel named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	testcross_cue	regex	testcross|test cross|topcross|line x tester	testcross named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	augmented_cue	regex	augmented design|augmented block|augmented trial	augmented design named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	alpha_lattice_cue	regex	alpha lattice|alpha-lattice|incomplete block design	alpha lattice named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	row_column_cue	regex	row-column|row column design|latinized	row-column design named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	factorial_cue	regex	factorial|full factorial	factorial design named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	split_plot_cue	regex	split[- ]plot|split plot	split plot named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	repeated_measures_cue	regex	repeated measures|repeated measurements|longitudinal	repeated measures named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	crossover_cue	regex	crossover|cross-over	crossover design named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	multi_arm_cue	regex	multi-arm|multiple arms|mams	multiple arms named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	dose_escalation_cue	regex	dose escalation|3\+3|continual reassessment	dose escalation named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	paired_cue	regex	paired|matched pairs|matched-pair	paired design named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	genotype_by_sex_cue	regex	male and female|both sexes|males and females	both sexes named as design	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	developmental_stage_cue	regex	juvenile|adult|aged|larval|nymph|seedling stage	developmental stage named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	infection_dose_cue	regex	multiplicity of infection|\bmoi\b|infect(?:ed|ion) dose|inoculum dose	infection dose named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	light_quality_cue	regex	red light|blue light|far-red|uv-b|uvb	light quality named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	root_sample_cue	regex	root samples?|root tips?|root tissue	root sampled	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	leaf_sample_cue	regex	leaf samples?|leaf tissue|leaf disc	leaf sampled	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	seed_sample_cue	regex	seed samples?|grain samples?|kernel samples	seed sampled	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	protein_abundance_cue	regex	protein abundance|protein level|protein expression	protein measured	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	enzyme_activity_cue	regex	enzyme activity|enzymatic activity	enzyme measured	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	n_founders_cue	regex	{N}\s+founders	{N} founders (parents = founders + 1)	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	n_parents_cue	regex	{N}\s+parents	{N} parents named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	n_lines_per_panel_cue	regex	{N}\s+(?:[a-z-]+\s+)?(?:panel|population|collection)\s+of\s+lines	panel size stated	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	species_panel_cue	regex	multi-?species|across species|species panel	multi-species panel named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	isolate_panel_cue	regex	isolates? panel|pathogen isolates?|bacterial isolates?	isolate panel named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)
+cue	population_size_cue	regex	population size|effective population size|\bne\b	population size named	deepseek	new cue name: no code asks for it (ideas kept in rejected.tsv)

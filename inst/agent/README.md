@@ -65,18 +65,18 @@ count_noun  water                    value   irrigation levels?        noun afte
 
 | category | rows | match | terms / what it holds |
 |---|---|---|---|
-| `organism` | 178 | regex/word | `Sorghum bicolor`, `Zea mays`, `Triticum aestivum`, `Hordeum vulgare`, `Glycine max`, `Oryza sativa`, `Arabidopsis thaliana`, `Solanum lycopersicum`, `Brassica napus`, `Mus musculus`, `Drosophila melanogaster`, `Saccharomyces cerevisiae`, `Saccharum spp.`, `Pennisetum glaucum`, `Gossypium hirsutum`, `Rattus norvegicus`, `Nicotiana benthamiana`, `Caenorhabditis elegans`, `Danio rerio`, `Setaria viridis`, `Brachypodium distachyon`, `Solanum tuberosum`, `Medicago truncatula`, `Physcomitrium patens`, `Vitis vinifera`, `Populus trichocarpa`, `Eucalyptus grandis`, `Pinus taeda`, `Malus domestica`, `Citrus sinensis`, `Chlamydomonas reinhardtii`, `Homo sapiens`, `Xenopus laevis`, `Gallus gallus`, `Sus scrofa`, `Bos taurus`, `Macaca mulatta` |
-| `system` | 128 | regex/word | `functional_validation`, `ribo_seq`, `atac_seq`, `multi_omics`, `breeding_genetics`, `multi_environment`, `single_cell`, `bulk_rnaseq`, `metabolomics_lipidomics`, `drosophila`, `livestock`, `mouse`, `cell_culture`, `growth_chamber`, `greenhouse`, `field` |
+| `organism` | 701 | regex/word | `Sorghum bicolor`, `Zea mays`, `Triticum aestivum`, `Hordeum vulgare`, `Glycine max`, `Oryza sativa`, `Arabidopsis thaliana`, `Solanum lycopersicum`, `Brassica napus`, `Mus musculus`, `Drosophila melanogaster`, `Saccharomyces cerevisiae`, `Saccharum spp.`, `Pennisetum glaucum`, `Gossypium hirsutum`, `Rattus norvegicus`, `Nicotiana benthamiana`, `Caenorhabditis elegans`, `Danio rerio`, `Setaria viridis`, `Brachypodium distachyon`, `Solanum tuberosum`, `Medicago truncatula`, `Physcomitrium patens`, `Vitis vinifera` ... (235 terms) |
+| `system` | 213 | regex/word | `functional_validation`, `ribo_seq`, `atac_seq`, `multi_omics`, `breeding_genetics`, `multi_environment`, `single_cell`, `bulk_rnaseq`, `metabolomics_lipidomics`, `drosophila`, `livestock`, `mouse`, `cell_culture`, `growth_chamber`, `greenhouse`, `field` |
 | `setting` | 8 | regex | `cell_culture`, `mouse`, `drosophila`, `livestock`, `growth_chamber`, `greenhouse`, `field` |
-| `environment` | 9 | word | `greenhouse`, `field` |
-| `assay` | 246 | word | `gwas`, `rnaseq`, `eqtl`, `atac_seq`, `ribo_seq`, `chip_seq`, `methylation`, `crispr`, `overexpression`, `complementation`, `heterologous`, `in_silico`, `qtl_mapping`, `lipidomics`, `small_rnaseq`, `single_cell`, `scatac_seq`, `amplicon`, `m6a_seq`, `long_read_rna`, `gbs`, `degradome`, `hic`, `medip`, `mnase_seq`, `nascent_rna`, `spatial`, `targeted_capture`, `rip_clip`, `metagenomics`, `pool_seq`, `bsa_seq`, `trap_seq`, `wgs`, `metabolomics` |
-| `outcome` | 85 | regex/word | `grain_yield`, `flowering_time`, `plant_height`, `forage_yield`, `biomass`, `lifespan`, `wing_size`, `body_weight`, `leptin`, `microbiome`, `fasting_blood_glucose`, `firing_rate`, `viability`, `lipid_content`, `mechanical_threshold`, `leaf_growth`, `gene_expression`, `photosynthesis`, `disease_severity`, `behaviour`, `translation_efficiency`, `chromatin_accessibility`, `gca_sca` |
-| `factor` | 154 | word | `water`, `nitrogen`, `phosphorus`, `temperature`, `co2`, `salt`, `light`, `diet`, `antibiotic`, `treatment`, `dose`, `sex`, `genotype`, `nutrient`, `injury`, `time`, `stage`, `age`, `tissue`, `cell_type`, `disease`, `infection`, `species`, `generation`, `soil`, `phenotype_group` |
+| `environment` | 24 | word | `greenhouse`, `field` |
+| `assay` | 556 | word | `gwas`, `rnaseq`, `eqtl`, `atac_seq`, `ribo_seq`, `chip_seq`, `methylation`, `crispr`, `overexpression`, `complementation`, `heterologous`, `in_silico`, `qtl_mapping`, `lipidomics`, `small_rnaseq`, `single_cell`, `scatac_seq`, `amplicon`, `m6a_seq`, `long_read_rna`, `gbs`, `degradome`, `hic`, `medip`, `mnase_seq`, `nascent_rna`, `spatial`, `targeted_capture`, `rip_clip`, `metagenomics`, `pool_seq`, `bsa_seq`, `trap_seq`, `wgs`, `metabolomics` |
+| `outcome` | 595 | regex/word | `grain_yield`, `flowering_time`, `plant_height`, `forage_yield`, `biomass`, `lifespan`, `wing_size`, `body_weight`, `leptin`, `microbiome`, `fasting_blood_glucose`, `firing_rate`, `viability`, `lipid_content`, `mechanical_threshold`, `leaf_growth`, `days_to_anthesis`, `gene_expression`, `photosynthesis`, `disease_severity`, `behaviour`, `translation_efficiency`, `chromatin_accessibility`, `gca_sca`, `days_to_silking` ... (319 terms) |
+| `factor` | 525 | regex/word | `water`, `nitrogen`, `phosphorus`, `temperature`, `co2`, `salt`, `light`, `diet`, `antibiotic`, `treatment`, `dose`, `sex`, `genotype`, `nutrient`, `injury`, `time`, `stage`, `age`, `tissue`, `cell_type`, `disease`, `infection`, `species`, `generation`, `soil`, `phenotype_group`, `tillage`, `mulch`, `cover_crop`, `rotation`, `intercropping`, `planting_density`, `row_spacing`, `sowing_date`, `vernalization`, `rootstock` |
 | `genotype_noun` | 20 | word | `genotype` |
-| `unit` | 126 | word | `plot`, `main_plot`, `plant`, `leaf`, `pot`, `tray`, `cell`, `chamber`, `cage`, `mouse`, `litter`, `pup`, `vial`, `fly`, `well`, `pool`, `tank`, `pen`, `flask`, `dish`, `bucket`, `herd`, `room`, `bioreactor`, `fish`, `embryo`, `animal` |
-| `blocking` | 39 | word | `bench`, `shelf`, `batch`, `experimenter`, `cage`, `rearing_bottle`, `litter`, `donor`, `clutch`, `farm`, `herd` |
-| `design` | 28 | word | `alpha`, `rcbd`, `split`, `augmented`, `prep`, `row_column`, `factorial`, `crd` |
-| `mating` | 42 | word | `selfing`, `sib_mating`, `backcross`, `diallel`, `nc_design`, `testcross`, `biparental`, `nam`, `ril`, `dh` |
+| `unit` | 316 | regex/word | `plot`, `main_plot`, `plant`, `leaf`, `pot`, `tray`, `cell`, `chamber`, `cage`, `mouse`, `litter`, `pup`, `vial`, `fly`, `well`, `pool`, `tank`, `pen`, `flask`, `dish`, `bucket`, `herd`, `room`, `bioreactor`, `fish`, `embryo`, `animal`, `culture_passage` |
+| `blocking` | 130 | word | `bench`, `shelf`, `batch`, `experimenter`, `cage`, `rearing_bottle`, `litter`, `donor`, `clutch`, `farm`, `herd` |
+| `design` | 82 | word | `alpha`, `rcbd`, `split`, `augmented`, `prep`, `row_column`, `factorial`, `crd`, `repeated_measures` |
+| `mating` | 114 | regex/word | `selfing`, `sib_mating`, `backcross`, `diallel`, `nc_design`, `testcross`, `biparental`, `nam`, `ril`, `dh` |
 | `application` | 36 | word | `main_plot`, `distance_from_line`, `cage`, `dam`, `chamber`, `vial`, `individual`, `tray` |
 | `check` | 7 | word | `check` |
 | `cue` | 95 | regex | 95 named patterns (see the file; each row's note says what it detects) |
@@ -132,9 +132,14 @@ detects. Extend a cue by editing its pattern; a new cue name does nothing until 
 
 1. Write the rows in a separate file, `proposed.tsv`, same six columns.
 2. Check them: `python3 training/rules_tool.py check proposed.tsv`
-   (unknown category, regex that does not compile, uppercase in a regex, conflicts with existing rows, new terms).
-3. Add them: `python3 training/rules_tool.py add proposed.tsv`
-4. Measure on the dev split (never the test split): `Rscript training/paper_questions/score.R`
+   (unknown category, regex that does not compile or has a typo escape like `\r`, uppercase in a regex, a term the
+   engine does not know in an id category (design, unit, mating, blocking ...), conflicts with existing rows or
+   within the proposal, very short abbreviations).
+3. See how they read real prompts: `python3 training/rules_tool.py precision proposed.tsv report.tsv`
+   fires every row on ~48,000 labelled training prompts and reports rows whose hits disagree with the label
+   (a row that fires on "cell trays" but the label says the unit is the cell is wrong). Drop those.
+4. Add them: `python3 training/rules_tool.py add proposed.tsv`
+5. Measure on the dev split (never the test split): `Rscript training/paper_questions/score.R`
    and run `tests/testthat/test-rules.R`. Keep the rows if dev recall does not drop and nothing is invented.
 
 What makes a good row:
@@ -145,6 +150,10 @@ What makes a good row:
 - **Keeps distinct things distinct.** Days to anthesis (male flowering), days to silking (female) and the
   anthesis-silking interval are different maize traits: separate terms, not all `flowering_time`.
 - **Uses an existing term** when one fits; a new term (a new outcome, a new unit) also needs the engine to know it.
+- **Follows the labels' conventions.** An applied stress or chemical (cadmium, hypoxia, LPS, mannitol) is the factor
+  `treatment`; diets are `diet`; a pathogen or probiotic named in a host study is the infection, not the organism.
+- **Is not a treatment in disguise.** "oxidised LDL", "BMI groups", "10^8 CFU" name a treatment or grouping, so
+  LDL, BMI and CFU are not outcome rows.
 - **Never a new category** without the code that reads it.
 
 ## Prompt for another AI
@@ -171,6 +180,10 @@ Upload `inst/agent/rules.tsv` (or paste the categories table above) and give it 
 > 4. Do not merge different things under one term (days to anthesis != days to silking).
 > 5. No duplicates of rows already in the file.
 > 6. Put your name in `source` (e.g. `chatgpt`) and a short reason or example sentence in `note`.
+> 7. Terms in design, unit, mating, blocking, environment and system must be terms already in the file.
+> 8. An applied stress or chemical is the factor `treatment` (not a new factor per chemical); a diet is `diet`.
+>    A pathogen, symbiont or probiotic is the treatment in a host study, not the organism.
+> 9. No 2-3 letter abbreviations that are also ordinary words or other terms (kd = knockdown, km = kilometres).
 > Output ONLY the new rows as tab-separated lines, no header, no commentary.
 
 Every proposal goes through `rules_tool.py check`, then a dev-split measurement, before it is committed.
