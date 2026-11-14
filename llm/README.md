@@ -56,7 +56,35 @@ facts**:
 pick a primary outcome when the prompt names several. The deterministic engine decides those or asks the
 user. (`judgments = TRUE` turns this off, for comparison only.)
 
-## Results (field recall %; every merged column has 0 invented must-ask values)
+## Current reader: 32B + v2 adapter (chosen on paper-question dev)
+
+v2: LoRA r=16, alpha 32, lr 1e-4, 1 epoch on 5,126 examples (including the paper-question training pool),
+val loss 0.045. Both readers were scored with today's labels and merge, so the columns compare directly.
+
+| set | n | rules | base alone | base + rules | **v2 alone** | **v2 + rules** |
+|---|---|---|---|---|---|---|
+| paper questions dev | 328 | 64.7 | 85.6 | 87.3 | 86.0 | 86.6 |
+| study_examples (dev) | 59 | 92.7 | 82.2 | 94.6 | 85.8 | 94.6 |
+| fresh v1 | 20 | 83.2 | 85.6 | 90.4 | 88.8 | **96.0** |
+| fresh v2 | 22 | 95.8 | 78.8 | 98.3 | 91.5 | 98.3 |
+| fresh v3 (dev) | 12 | 77.0 | 82.0 | 91.8 | **96.7** | 93.4 |
+| fresh v4 (clean test) | 21 | 86.6 | 89.9 | 96.6 | 93.3 | **97.5** |
+| grounded (held-out species) | 300 | 98.2 | 81.7 | 99.0 | 98.1 | 99.1 |
+
+Invented must-ask values on paper-question dev: rules 4; base 13 alone / 8 merged; v2 5 alone / 8 merged. On
+every other set, the merged columns have 0, except base on study_examples (1).
+
+Choice: on dev the two are within noise. Paired bootstrap over questions, v2 - base: merged -0.7 (95% CI -1.8 to
++0.4), alone +0.4 (-1.1 to +1.9). v2 is kept because it invents less on its own and because it meets the
+keep-the-adapter rule (fresh v1/v2/v4 equal or better, 0 invented). v2 is weaker on the experimental unit
+(17/24 vs 20/24 on dev) and on factor levels (73.1 vs 76.6 merged): the targets for the next training round.
+The v1 numbers below were scored before the one-system label convention, so they don't compare directly with
+this table.
+
+    Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
+    Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
+
+## v1 results (field recall %; every merged column has 0 invented must-ask values)
 
 | set | n | rules | 14B alone | 14B + rules | 32B alone | 32B + rules | **32B fine-tuned alone** | **32B fine-tuned + rules** |
 |---|---|---|---|---|---|---|---|---|

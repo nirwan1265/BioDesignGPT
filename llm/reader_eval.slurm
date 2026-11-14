@@ -26,8 +26,14 @@ PY=$BASE/envs/biodes-gpu/bin/python
 cd "$SLURM_SUBMIT_DIR"; mkdir -p logs llm/preds
 nvidia-smi --query-gpu=name,memory.total --format=csv
 echo "nvcc: $(command -v nvcc || echo none)  attention: $VLLM_ATTENTION_BACKEND"
-$PY llm/reader.py --out llm/preds --raw --examples \
-  inst/examples/study_examples.jsonl training/data/fresh_test.jsonl training/data/fresh_test_v2.jsonl \
-  training/data/fresh_test_v3.jsonl training/data/fresh_test_v4.jsonl training/data/grounded_eval.jsonl \
-  training/data/user_prompts_dev.jsonl training/paper_questions/splits/dev.jsonl
-ls -la llm/preds
+# EXAMPLES / OUT / READER / ADAPTER override the defaults, e.g. the one-time final scoring of the test splits:
+#   READER=Qwen/Qwen2.5-32B-Instruct ADAPTER=$WORK/adapter OUT=llm/preds_test \
+#   EXAMPLES="training/paper_questions/splits/test.jsonl training/paper_questions/splits/test_heldout.jsonl" \
+#   sbatch --gres=gpu:h200:1 llm/reader_eval.slurm
+EXAMPLES=${EXAMPLES:-"inst/examples/study_examples.jsonl training/data/fresh_test.jsonl training/data/fresh_test_v2.jsonl
+  training/data/fresh_test_v3.jsonl training/data/fresh_test_v4.jsonl training/data/grounded_eval.jsonl
+  training/data/user_prompts_dev.jsonl training/paper_questions/splits/dev.jsonl"}
+OUT=${OUT:-llm/preds}; mkdir -p "$OUT"
+EXTRA=(); [ -n "${READER:-}" ] && EXTRA+=(--model "$READER"); [ -n "${ADAPTER:-}" ] && EXTRA+=(--adapter "$ADAPTER")
+$PY llm/reader.py ${EXTRA[@]+"${EXTRA[@]}"} --out "$OUT" --raw --examples $EXAMPLES
+ls -la "$OUT"

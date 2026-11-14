@@ -234,8 +234,16 @@ The model runs locally with vLLM on one GPU (RTX 6000 Pro, 96 GB); nothing leave
 3. LoRA (rank 16, all projection layers, loss on answer tokens only, 1 epoch), resumable across 2-hour GPU jobs.
 4. The base and fine-tuned readers are evaluated on every set.
 
-The first adapter was trained on 4,396 examples (validation loss 0.047). A second, on the expanded data above, is
-training now.
+The first adapter was trained on 4,396 examples (validation loss 0.047). The second (v2), on 5,126 examples
+including the hand-labelled paper-question training pool, reached validation loss 0.045. **The current reader is
+Qwen2.5-32B-Instruct + the v2 adapter.**
+
+It was chosen on paper-question dev only. Rules + reader: base 87.3%, v2 86.6%. Reader alone: base 85.6%, v2
+86.0%. Neither gap is significant: a paired bootstrap over the 328 questions gives v2 - base = -0.7 points
+(95% CI -1.8 to +0.4) merged and +0.4 (-1.1 to +1.9) alone. Two tie-breakers favour v2. On its own it invents a
+must-ask value in 5 questions, against 13 for the base model. It also matches or beats the base model on the
+clean sets (fresh v1, v2 and v4) with no invented values, which was the rule set in advance for keeping an
+adapter. Where it is weaker: experimental unit (17/24 vs 20/24) and factor levels (73% vs 77%).
 
 ### 6. Merging: the reader states facts, the engine makes judgments
 
@@ -251,14 +259,14 @@ filled in anyway.
 
 | set | rules alone | reader alone | rules + reader |
 |---|---|---|---|
-| paper questions, dev (328) | 64.7% | 82.3% | **85.7%** (11 invented) |
-| study examples, dev (59) | 92.7% | 90.6% | 94.0% |
-| fresh v4, clean test (21) | 84.9% | 95.0% | **95.8%** |
-| real studies of held-out species (300) | 97.8% | 98.6% | 98.6% |
+| paper questions, dev (328) | 64.7% | 86.0% (5 invented) | **86.6%** (8 invented) |
+| study examples, dev (59) | 92.7% | 85.8% | 94.6% |
+| fresh v4, clean test (21) | 86.6% | 93.3% | **97.5%** |
+| real studies of held-out species (300) | 98.2% | 98.1% | **99.1%** |
 
-Paper-question dev uses the current reader's predictions; the other rows use the first fine-tuned 32B reader
-(details in [`llm/README.md`](llm/README.md)). The paper-question test sets have not been scored yet: they are
-scored once, after the reader is chosen on dev.
+Reader = Qwen2.5-32B + v2 adapter. The rules alone invent a must-ask value in 4 of the 328 dev questions. The
+paper-question test sets (test, test_heldout) have not been scored yet: they are scored once, now that the
+reader is fixed. Per-set details and the base-model comparison are in [`llm/README.md`](llm/README.md).
 
 ## What's inside
 
