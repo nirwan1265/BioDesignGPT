@@ -18,6 +18,8 @@
 # Every finished step leaves a file, so a resubmitted job skips it.
 #   sbatch llm/finetune.slurm                                   (32B on an RTX 6000 Pro, 96 GB)
 #   READER=Qwen/Qwen2.5-14B-Instruct sbatch --gres=gpu:l40s:1 llm/finetune.slurm
+#   WORK=$BASE/llm_ft/Qwen2.5-32B-Instruct-v2 sbatch llm/finetune.slurm   (a new WORK regenerates the training data
+#                                                from the current rules.tsv and keeps the old adapter for comparison)
 set -euo pipefail
 T0=$(date +%s); DEADLINE=$(( T0 + 115 * 60 ))
 left() { echo $(( DEADLINE - $(date +%s) )); }
@@ -43,14 +45,14 @@ need() { if [ "$(left)" -lt "$1" ]; then echo "== $(( $(left) / 60 )) min left, 
 
 SETS="inst/examples/study_examples.jsonl training/data/fresh_test.jsonl training/data/fresh_test_v2.jsonl
       training/data/fresh_test_v3.jsonl training/data/fresh_test_v4.jsonl training/data/grounded_eval.jsonl
-      training/data/user_prompts_dev.jsonl"
+      training/data/user_prompts_dev.jsonl training/paper_questions/splits/dev.jsonl"
 
 # training prompts are generated (git-ignored); into WORK/gen so the committed test sets are never touched
 EVIDENCE=${EVIDENCE:-$BASE/design/evidence}
 export SFT_DATA=$WORK/gen; mkdir -p "$SFT_DATA"
 [ -s "$SFT_DATA/train.jsonl" ] || $PY training/generate.py --n 14000 --seed 1 --out "$SFT_DATA/train.jsonl"
 [ -s "$SFT_DATA/grounded_train.jsonl" ] || $PY training/grounded.py --evidence "$EVIDENCE" --out "$SFT_DATA" \
-    --per-study 2 --seed 7 --holdout setaria,poplar,zebrafish,xenopus
+    --per-study 2 --seed 7   # held-out species: inst/agent/rules.tsv
 [ -s "$WORK/prompts.jsonl" ] || $PY llm/make_sft.py prompts --out "$WORK"
 if [ ! -s "$WORK/preds_llm_prompts_raw.json" ]; then
   need 1800 "distillation"; echo "== distil: base model reads the training prompts"

@@ -6,7 +6,7 @@
      grounded_train.jsonl               prompts built from real ENA/BioSample studies (training/grounded.py)
      training/data/para.jsonl           LLM paraphrases (the most natural wording we have)
      paper_questions/splits/train.jsonl questions written from real papers (hand-labelled training pool; all used)
-   (found in $SFT_DATA or training/data). Excluded: every prompt in a test/dev set, and the held-out species (setaria, poplar, zebrafish, xenopus), so
+   (found in $SFT_DATA or training/data). Excluded: every prompt in a test/dev set, and the held-out species (rules.tsv held_out_species), so
    grounded_eval stays a test of unseen organisms. Paper-question dev/test/test_heldout prompts are excluded too.
    Every gold spec follows one system convention (training/setting.py): the stated setting (greenhouse, mice,
    flies, cell lines ...) is the system and the assay goes in assays, so older generated labels are converted.
