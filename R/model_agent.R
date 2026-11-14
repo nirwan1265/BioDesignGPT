@@ -67,7 +67,8 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   # Each field goes to whichever source the question supports better. The reader is better at stating what the
   # text says; the rules are better where they encode a specific convention (study types, "use the panicles as
   # replicates" = 1 rep, lifespan = survival, Dahomey = fly), so:
-  #   system      tiers: study type > setting named outright > assay family > weaker cue (pots, plots); the
+  #   system      tiers: validation / multi-environment > a field, greenhouse or chamber named outright >
+  #               breeding / multi-omics > other named settings > assay family > weaker cue (pots, plots); the
   #               reader's system replaces the rules' only from a higher tier, and fills when the rules found none
   #   assays      the reader's list when every assay in it is named in the text (plus any other measurement the
   #               rules found, e.g. eQTL), else the rules', else the reader's
@@ -83,8 +84,11 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   tier <- function(s) {
     if (is.null(s) || !nzchar(s)) return(0)
     hit <- function(p) !is.null(p) && grepl(p, text, perl = TRUE)
-    if (s %in% .SF_STUDY_SYSTEMS) return(if (hit(.sf_systems[[s]])) 4 else 0)
-    if (hit(.sf_settings_stated[[s]])) return(3)
+    if (s %in% c("functional_validation", "multi_environment")) return(if (hit(.sf_systems[[s]])) 5 else 0)
+    stated <- any(vapply(.sf_settings_stated[names(.sf_settings_stated) == s], hit, logical(1)))
+    if (stated && s %in% c("growth_chamber", "greenhouse", "field")) return(4)   # outranks breeding / multi-omics
+    if (s %in% .SF_STUDY_SYSTEMS) return(if (hit(.sf_systems[[s]])) 3.5 else 0)
+    if (stated) return(3)
     if (s %in% .sf_system_set(list(assays = assays_said))) return(2)
     if (hit(.sf_systems[[s]])) return(1)
     0

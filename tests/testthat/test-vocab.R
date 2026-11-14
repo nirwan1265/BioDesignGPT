@@ -71,3 +71,14 @@ test_that("fish sharing a tank: the tank is the unit", {
   expect_equal(s$subsamples_per_unit, 16)
   expect_length(match_pseudoreplication_rules("fish", "tank"), 1)
 })
+
+test_that("settings: cells in culture, lab growth systems, and a named field beat breeding / assay cues", {
+  sys <- function(q) extract_spec_local(q)$system
+  expect_equal(sys("rat hippocampal neuron cultures treated with picrotoxin vs untreated, RNA-seq."), "cell_culture")
+  expect_equal(sys("circRNA-seq of BRL-3A rat liver cells under hypoxia vs normoxia."), "cell_culture")
+  expect_equal(sys("CUT&Tag of CD8 T cells sorted from mice infected with LCMV."), "mouse")          # in vivo
+  expect_equal(sys("Ribo-seq of rice shoots after 24 h of 150 mM NaCl in hydroponics."), "growth_chamber")
+  expect_equal(sys("Grafted tomato in hydroponic channels in one glasshouse compartment, RNA-seq."), "greenhouse")
+  expect_equal(sys("IBM recombinant inbred lines in a randomised complete block in the field, two reps."), "field")
+  expect_equal(sys("Newborn calves each in their own pen, fed live yeast or not, rumen RNA-seq."), "livestock")
+})

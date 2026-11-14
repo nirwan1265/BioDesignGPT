@@ -76,13 +76,14 @@
 # settings named outright: these beat the assay family ("RNA-seq of leaves in a growth chamber" is a growth-chamber
 # study with an RNA-seq assay). Cell lines first ("mouse ES cells", "Drosophila S2 cells" are cultures).
 .sf_settings_stated <- list(
-  cell_culture = "cell lines?|immortali[sz]ed|organoids?|\\b(?:[a-z]+\\d[\\w.-]*|\\d+[a-z][\\w.-]*) (?:cells|macrophages)\\b|\\bipscs?\\b|yeast(?! (?:concentrations?|extract|paste|food|diets?|media|medium))|\\b(?:es|ips|s2|hek293t?|hela|cho) cells\\b|\\bcells? (?:were |are )?(?:cultured|treated with)|\\bhela\\b",
+  cell_culture = "\\bcultures\\b|\\bprimary (?:[\\w-]+ ){0,3}cells\\b|\\b(?:cells|macrophages|monocytes|pbmcs|neurons|astrocytes|fibroblasts|hepatocytes|keratinocytes|explants)\\b(?:(?!\\b(?:mice|rats?|pigs?|piglets|animals|cattle|cows|birds|chickens|patients|donors)\\b)[^.;]){0,60}\\b(?:treated|stimulated|infected|uninfected|pulsed|exposed|transfected|incubated|challenged)\\b|\\b(?:treating|stimulating|infecting|transfecting)\\b[^.;]{0,40}\\bcells\\b|cell lines?|immortali[sz]ed|organoids?|\\b(?:[a-z]+\\d[\\w.-]*|\\d+[a-z][\\w.-]*)(?: [a-z-]+){0,2} (?:cells|macrophages)\\b|\\bipscs?\\b|(?<!live )(?<!dietary )(?<!fed )yeast(?! (?:concentrations?|extract|paste|food|diets?|media|medium|supplement\\w*))|\\b(?:es|ips|s2|hek293t?|hela|cho) cells\\b|\\bcells? (?:were |are )?(?:cultured|treated with)|\\bhela\\b",
   mouse = "\\bmice\\b|\\bmouse\\b|\\brats?\\b",
   drosophila = "\\bflies\\b|\\bfly\\b|drosophila",
   livestock = "\\bpigs?\\b|piglets?|\\bsows?\\b|broilers?|\\bhens?\\b|\\bcocks?\\b|\\bchickens\\b|\\bcattle\\b|\\bcows?\\b|\\bcalves\\b|\\bsteers?\\b|\\bheifers?\\b|\\bsheep\\b|\\blambs?\\b|\\bgoats?\\b",
   growth_chamber = "growth[- ]chambers?|growth rooms?|climate chambers?|phytotron|controlled[- ]environment chambers?",
   greenhouse = "greenhouses?|glasshouses?|net ?house|screen ?house|polytunnel",
-  field = "\\bfield[- ]grown\\b|\\bin (?:a |the )?(?:paddy )?field\\b|\\bfield (?:trials?|plots?|sites?|conditions|experiment)\\b|\\bpaddy\\b|\\borchards?\\b"
+  field = "\\bfield[- ]grown\\b|\\bin (?:a |the )?(?:paddy )?field\\b|\\bfield (?:trials?|plots?|sites?|conditions|experiment)\\b|\\bpaddy\\b|\\borchards?\\b",
+  growth_chamber = "hydropon|aeroponic|\\b(?:1/2 |half[- ]strength )?ms (?:medium|agar|plates?)\\b|murashige|hoagland|yoshida|agar plates?|petri dish|paper rolls?"   # lab growth systems, when no facility is named
 )
 
 .sf_outcomes <- list(
@@ -118,7 +119,10 @@ extract_spec_local <- function(question) {
   sys <- names(.sf_systems)[vapply(.sf_systems, function(p) .sf_has(text, p), logical(1))]
   study <- intersect(sys, .SF_STUDY_SYSTEMS)
   stated <- names(.sf_settings_stated)[vapply(.sf_settings_stated, function(p) .sf_has(text, p), logical(1))]
-  if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
+  site <- intersect(stated, c("growth_chamber", "greenhouse", "field"))
+  if (length(intersect(study, c("functional_validation", "multi_environment")))) set("system", study[1]) else
+    if (length(study) && length(site)) set("system", site[1]) else   # "RILs in an RCBD in the field": a field trial
+    if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
     if (length(sys)) set("system", sys[1]) else if (.sf_has(text, "vehicle|strains?|\\bmales?\\b|\\bfemales?\\b")) set("system", "mouse")
   org <- names(.sf_organisms)[vapply(.sf_organisms, function(p) .sf_has(text, p), logical(1))]
   if (length(org)) set("organism", org[1])
