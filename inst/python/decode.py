@@ -29,6 +29,13 @@ def canon(text, *cats):
         for a, c in aliases().get(cat, []):
             if re.search(r"(?<![a-z])" + re.escape(a) + r"(?![a-z])", t):
                 return c
+    for cat in cats:   # regex rows of rules.tsv (abbreviations, context patterns)
+        if HERE not in sys.path:
+            sys.path.insert(0, HERE)
+        import rulebook
+        for c, rx in rulebook.regex_rows(cat):
+            if rx.search(t):
+                return c
     return None
 
 

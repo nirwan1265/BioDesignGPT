@@ -30,9 +30,11 @@ test_that("goal, phenotype text and tissue are captured for confirmation", {
   s <- extract_spec_local("i have some human rnaseq data. how to find DE genes")
   expect_equal(s$goal, "analysis")
   expect_equal(extract_spec_local("we plan to grow sorghum under drought")$goal, "design")
-  s2 <- extract_spec_local("drought on sorghum, measuring leaf chlorophyll content in the greenhouse")
-  expect_match(s2$outcome_text, "chlorophyll")
+  s2 <- extract_spec_local("drought on sorghum, measuring leaf wax bloom in the greenhouse")
+  expect_match(s2$outcome_text, "wax bloom")
   expect_null(s2$primary_outcome$name)                                          # free text is never a stated outcome
+  s3 <- extract_spec_local("drought on sorghum, measuring leaf chlorophyll content in the greenhouse")
+  expect_equal(s3$primary_outcome$name, "chlorophyll_content")                  # a vocabulary outcome in that phrase is
   expect_equal(extract_spec_local("how cold affects arabidopsis roots")$tissue, "root")
 })
 

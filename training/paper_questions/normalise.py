@@ -42,6 +42,11 @@ def find_all(text, category):
                 continue
             taken[m.start():m.end()] = [True] * (m.end() - m.start())
             hits.append((m.start(), canon))
+    for canon, rx in rules.regex_rows(category):   # abbreviations / context patterns, on what is left
+        for m in rx.finditer(text):
+            if m.end() > m.start() and not any(taken[m.start():m.end()]):
+                taken[m.start():m.end()] = [True] * (m.end() - m.start())
+                hits.append((m.start(), canon))
     out = []
     for _, c in sorted(hits):
         if c not in out:

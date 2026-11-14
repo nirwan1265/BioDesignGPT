@@ -84,13 +84,13 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   tier <- function(s) {
     if (is.null(s) || !nzchar(s)) return(0)
     hit <- function(p) !is.null(p) && grepl(p, text, perl = TRUE)
-    if (s %in% .sf_systems_where(keeps_type_over_setting = TRUE)) return(if (hit(.sf_rules("system")[[s]])) 5 else 0)
-    stated <- any(vapply(.sf_rules("setting")[names(.sf_rules("setting")) == s], hit, logical(1)))
+    if (s %in% .sf_systems_where(keeps_type_over_setting = TRUE)) return(if (.sf_rule_hit("system", s, text)) 5 else 0)
+    stated <- .sf_rule_hit("setting", s, text)
     if (stated && s %in% .sf_systems_where(plant_site = TRUE)) return(4)   # outranks breeding / multi-omics
-    if (s %in% .sf_systems_where(kind = "study")) return(if (hit(.sf_rules("system")[[s]])) 3.5 else 0)
+    if (s %in% .sf_systems_where(kind = "study")) return(if (.sf_rule_hit("system", s, text)) 3.5 else 0)
     if (stated) return(3)
     if (s %in% .sf_system_set(list(assays = assays_said))) return(2)
-    if (hit(.sf_rules("system")[[s]])) return(1)
+    if (.sf_rule_hit("system", s, text)) return(1)
     0
   }
   # a number is a count of something else when every mention of it is followed by a non-replicate noun

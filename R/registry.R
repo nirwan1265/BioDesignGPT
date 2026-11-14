@@ -92,10 +92,45 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   t
 }
 
-# regex rows of a category as a named list (term -> pattern), in file order; order is priority
+# every row of a category as a pattern, named by term: regex rows as written (file order = priority), then each
+# term's word rows as one whole-word alternation, so the rule extractor sees the same vocabulary as the alias lookups
 .sf_rules <- function(category) {
-  t <- .sf_rules_rows(category, "regex")
-  stats::setNames(as.list(t$pattern), t$term)
+  key <- paste0("rules:", category)
+  if (is.null(.sf_rules_cache[[key]])) {
+    t <- .sf_rules_rows(category, c("regex", "word"))
+    rx <- t[t$match == "regex", ]
+    w <- t[t$match == "word", ]
+    wl <- lapply(split(w$pattern, factor(w$term, levels = unique(w$term))), function(a)
+      paste0("(?<![a-z0-9])(?:", paste(vapply(tolower(a), .sf_re_escape, ""), collapse = "|"), ")(?![a-z0-9])"))
+    .sf_rules_cache[[key]] <- c(stats::setNames(as.list(rx$pattern), rx$term), wl)
+  }
+  .sf_rules_cache[[key]]
+}
+
+# the term a text names first: a written pattern (regex row) wins, else the earliest word-row match in the text
+# ("Friesian calves fed grape pomace" names the calves first)
+.sf_first_named <- function(text, category) {
+  t <- .sf_rules_rows(category, c("regex", "word"))
+  rx <- unique(t$term[t$match == "regex"])
+  p <- .sf_rules(category)
+  pos <- vapply(seq_along(p), function(i) { m <- regexpr(p[[i]], text, perl = TRUE); if (m > 0) as.numeric(m) else Inf }, 0)
+  hit <- which(is.finite(pos))
+  if (!length(hit)) return(character())
+  written <- hit[names(p)[hit] %in% rx & seq_along(p)[hit] <= sum(t$match == "regex")]
+  if (length(written)) return(names(p)[written[1]])
+  names(p)[hit[which.min(pos[hit])]]
+}
+
+# TRUE if any pattern of `term` in `category` matches
+.sf_rule_hit <- function(category, term, text) {
+  p <- .sf_rules(category)
+  any(vapply(p[names(p) == term], function(x) grepl(x, text, perl = TRUE), logical(1)))
+}
+
+# regex rows of a category (none is fine), for the alias lookups
+.sf_regex_rows <- function(category) {
+  t <- .sf_rules_table()
+  t[t$category == category & t$match == "regex", ]
 }
 
 # word list: the patterns of a category, in file order

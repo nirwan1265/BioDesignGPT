@@ -10,7 +10,7 @@ import functools, json, os, sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 sys.path.insert(0, os.path.join(ROOT, "inst", "python"))
-from rulebook import (rows, of, alias_rows, patterns, keys, pairs, mapping, groups, lookup_all)  # noqa: E402,F401
+from rulebook import (rows, of, alias_rows, regex_rows, patterns, keys, pairs, mapping, groups, lookup_all)  # noqa: E402,F401
 SYSTEMS = os.path.join(ROOT, "inst", "registry", "experimental_systems.json")
 
 

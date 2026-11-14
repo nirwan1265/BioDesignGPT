@@ -65,18 +65,23 @@ extract_spec_local <- function(question) {
   # system: the study type (validation, breeding, multi-environment, multi-omics) if one applies, else the setting
   # the question states (growth chamber, mice, a cell line ...), else the assay family, else weaker setting cues
   # (pots, plots, cages); the assays stay listed separately either way
-  sys <- names(.sf_rules("system"))[vapply(.sf_rules("system"), function(p) .sf_has(text, p), logical(1))]
+  sys <- unique(names(.sf_rules("system"))[vapply(.sf_rules("system"), function(p) .sf_has(text, p), logical(1))])
   study <- intersect(sys, .sf_systems_where(kind = "study"))
-  stated <- names(.sf_rules("setting"))[vapply(.sf_rules("setting"), function(p) .sf_has(text, p), logical(1))]
+  stated <- unique(names(.sf_rules("setting"))[vapply(.sf_rules("setting"), function(p) .sf_has(text, p), logical(1))])
   site <- intersect(stated, .sf_systems_where(plant_site = TRUE))
   if (length(intersect(study, .sf_systems_where(keeps_type_over_setting = TRUE)))) set("system", study[1]) else
     if (length(study) && length(site)) set("system", site[1]) else   # "RILs in an RCBD in the field": a field trial
     if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
     if (length(sys)) set("system", sys[1]) else if (.sf_has(text, .sf_cue("animal_study_fallback"))) set("system", "mouse")
-  org <- names(.sf_rules("organism"))[vapply(.sf_rules("organism"), function(p) .sf_has(text, p), logical(1))]
-  if (length(org)) set("organism", org[1])
+  org <- .sf_first_named(text, "organism")
+  if (length(org)) set("organism", org)
 
-  out <- names(.sf_rules("outcome"))[vapply(.sf_rules("outcome"), function(p) .sf_has(text, p), logical(1))]
+  # the primary outcome: a written outcome pattern anywhere, or a vocabulary outcome inside the phrase that frames
+  # the outcome ("measure X", "effects on X", "outcome is X"); a trait merely mentioned is not the outcome
+  orx <- .sf_regex_rows("outcome")
+  out <- unique(orx$term[vapply(orx$pattern, function(p) .sf_has(text, p), logical(1))])
+  phrase <- .sf_outcome_text(text)
+  if (!length(out) && !is.null(phrase)) out <- unique(.sf_find_all(phrase, "outcome"))
   if (length(out) == 1) {
     set("primary_outcome.name", out)
     set("primary_outcome.type", if (out == "lifespan") "survival" else "continuous")
@@ -262,7 +267,7 @@ extract_spec_local <- function(question) {
   if (identical(spec$system, "multi_environment") && .sf_has(text, .sf_cue("controlled_environment")) && .sf_has(text, .sf_cue("field_word"))) {
     set("environments", c("greenhouse", "field"))
   }
-  if (.sf_has(text, .sf_rules("system")$ribo_seq) && .sf_has(text, .sf_cue("translation_efficiency"))) {   # the assay, whatever the setting
+  if (.sf_rule_hit("system", "ribo_seq", text) && .sf_has(text, .sf_cue("translation_efficiency"))) {   # the assay, whatever the setting
     set("primary_outcome.name", "translation_efficiency"); set("primary_outcome.type", "continuous")
   }
   if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, .sf_cue("yield_stability"))) {

@@ -32,6 +32,19 @@
       hits[[length(hits) + 1]] <- c(pos = m[k], term = t$canonical_term[i])
     }
   }
+  # regex rows of the category (abbreviations, context patterns) after the literal aliases, on what is left
+  rx <- .sf_regex_rows(cat)
+  lt <- tolower(text)
+  for (i in seq_len(nrow(rx))) {
+    m <- gregexpr(rx$pattern[i], lt, perl = TRUE)[[1]]
+    for (k in seq_along(m)) {
+      if (m[k] < 0) next
+      rng <- m[k]:(m[k] + max(attr(m, "match.length")[k], 1) - 1)
+      if (any(taken[rng])) next
+      taken[rng] <- TRUE
+      hits[[length(hits) + 1]] <- c(pos = m[k], term = rx$term[i])
+    }
+  }
   if (!length(hits)) return(character())
   h <- do.call(rbind, hits)
   unique(h[order(as.integer(h[, "pos"])), "term"])
