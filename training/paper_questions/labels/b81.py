@@ -9,7 +9,7 @@ dict(paper="paper_2001", style="question", prompt="small RNA-seq of heart, liver
 dict(paper="paper_2002", skip="mechanism, mixed assays"),
 dict(paper="paper_2003", skip="detection method"),
 dict(paper="paper_2004", skip="mutational scanning library"),
-dict(paper="paper_2005", style="question", prompt="GWAS of spike fertility in 236 soft wheat lines under heat stress, field trials in a randomized augmented block design with unreplicated entries and three repeated checks. Is that enough without replicating entries?",
+dict(paper="paper_2005", style="question", prompt="GWAS of spike fertility in 236 soft wheat lines under heat stress, field trials in a randomized augmented block design with one plot per entry and three repeated checks. Is that enough without replicating entries?",
      spec=dict(system="field", organism="Triticum aestivum", assays=["gbs"], factors=[dict(name="genotype", n_levels=236)], design=dict(reps=1), experimental_unit="plot"),
      ask=[P], note="augmented, unreplicated"),
 dict(paper="paper_2006", skip="allele inventory"),
