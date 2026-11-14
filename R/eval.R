@@ -1,14 +1,10 @@
-.sf_factor_synonyms <- c(
-  accession = "genotype", line = "genotype", hybrid = "genotype", variety = "genotype",
-  cultivar = "genotype", family = "genotype", entry = "genotype", mutant = "genotype",
-  strain = "genotype", irrigation = "water", injury = "treatment", drug = "treatment"
-)
-
+# factor synonyms: inst/agent/rules.tsv (table factor_synonym)
 .sf_canon_factors <- function(f) {
   if (is.null(f)) return(character())
   vapply(f, function(x) {
     nm <- x$name %||% ""
-    nm <- if (nm %in% names(.sf_factor_synonyms)) .sf_factor_synonyms[[nm]] else nm
+    syn <- .sf_rules("factor_synonym")
+    nm <- if (nm %in% names(syn)) syn[[nm]] else nm
     paste0(nm, ":", x$n_levels %||% "?")
   }, "")
 }

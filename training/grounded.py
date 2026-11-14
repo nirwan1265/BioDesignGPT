@@ -21,6 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "inst", "python"))
 import generate as G          # noqa: E402  clause machinery, tokenizer, aliases
+import rules                   # noqa: E402  rule files (held-out species)
 import decode as D            # noqa: E402  tags -> StudySpec, exactly as at inference
 
 csv.field_size_limit(10 ** 9)
@@ -287,7 +288,7 @@ def main():
     ap.add_argument("--out", default=os.path.join(HERE, "data"))
     ap.add_argument("--per-study", type=int, default=2)
     ap.add_argument("--seed", type=int, default=7)
-    ap.add_argument("--holdout", default="setaria,poplar,zebrafish,xenopus")
+    ap.add_argument("--holdout", default=",".join(k for k, _ in rules.table("held_out_species")))   # inst/agent/rules.tsv
     ap.add_argument("--max-per-species", type=int, default=1500, help="cap so mouse/human don't dominate")
     ap.add_argument("--eval-n", type=int, default=300)
     a = ap.parse_args()

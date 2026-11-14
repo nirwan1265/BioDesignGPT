@@ -24,7 +24,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   org <- rule$organism %||% (if (is.character(model$organism)) model$organism)
   if (!is.null(model$system) && !is.null(org) && is.null(rule$system)) {
     grp <- .sf_group_of(org)
-    bad <- (model$system %in% c("field", "greenhouse", "growth_chamber") && identical(grp, "animal")) ||
+    bad <- (model$system %in% .sf_systems_where(plant_site = TRUE) && identical(grp, "animal")) ||
       (model$system == "mouse" && (identical(grp, "plant") || org == "Homo sapiens")) ||
       (model$system == "drosophila" && org != "Drosophila melanogaster")
     if (isTRUE(bad)) model$system <- NULL
@@ -84,13 +84,13 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   tier <- function(s) {
     if (is.null(s) || !nzchar(s)) return(0)
     hit <- function(p) !is.null(p) && grepl(p, text, perl = TRUE)
-    if (s %in% c("functional_validation", "multi_environment")) return(if (hit(.sf_systems[[s]])) 5 else 0)
-    stated <- any(vapply(.sf_settings_stated[names(.sf_settings_stated) == s], hit, logical(1)))
-    if (stated && s %in% c("growth_chamber", "greenhouse", "field")) return(4)   # outranks breeding / multi-omics
-    if (s %in% .SF_STUDY_SYSTEMS) return(if (hit(.sf_systems[[s]])) 3.5 else 0)
+    if (s %in% .sf_systems_where(keeps_type_over_setting = TRUE)) return(if (hit(.sf_rules("system")[[s]])) 5 else 0)
+    stated <- any(vapply(.sf_rules("setting")[names(.sf_rules("setting")) == s], hit, logical(1)))
+    if (stated && s %in% .sf_systems_where(plant_site = TRUE)) return(4)   # outranks breeding / multi-omics
+    if (s %in% .sf_systems_where(kind = "study")) return(if (hit(.sf_rules("system")[[s]])) 3.5 else 0)
     if (stated) return(3)
     if (s %in% .sf_system_set(list(assays = assays_said))) return(2)
-    if (hit(.sf_systems[[s]])) return(1)
+    if (hit(.sf_rules("system")[[s]])) return(1)
     0
   }
   # a number is a count of something else when every mention of it is followed by a non-replicate noun
@@ -136,7 +136,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   # A unit is not a factor ("pup", "mouse", "biological replicate").
   canon <- function(nm) {
     nm <- tolower(nm %||% "")
-    if (nm %in% names(.sf_factor_synonyms)) return(.sf_factor_synonyms[[nm]])
+    if (nm %in% names(.sf_rules("factor_synonym"))) return(.sf_rules("factor_synonym")[[nm]])
     c <- .sf_factor_name(gsub("_", " ", nm))
     if (is.na(c)) nm else gsub(" ", "_", c)
   }

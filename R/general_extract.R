@@ -250,7 +250,7 @@ studyforge_fix <- function(answer, ...) {
     if (!is.null(s$outcome_text)) paste0("\"", s$outcome_text, "\" (as written; confirm)") else "?"
   hint <- function(what) { h <- tryCatch(.sf_practice_hint(s, what), error = function(e) NULL); if (is.null(h)) "?" else paste0("? (", h, ")") }
   tissue <- if (!is.null(s$tissue)) s$tissue else hint("tissue")
-  omics <- length(s$assays) || isTRUE(s$system %in% c("bulk_rnaseq", "single_cell", "ribo_seq", "atac_seq", "multi_omics"))
+  omics <- length(s$assays) || isTRUE(s$system %in% .sf_systems_where(sequencing = TRUE))
   sq <- s$sequencing
   seqtxt <- if (!is.null(sq)) paste(c(sq$instrument, if (!is.null(sq$read_length)) paste0(sq$layout %||% "", if (!is.null(sq$layout)) " ", sq$read_length, " bp"),
                                       if (!is.null(sq$depth_m)) paste0(sq$depth_m, " M reads")), collapse = ", ") else hint("sequencing")

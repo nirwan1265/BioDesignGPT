@@ -1,0 +1,89 @@
+table	key	value	note
+organism	Sorghum bicolor	sorghum	regex; first match in this order wins
+organism	Zea mays	\bmaize\b|\bcorn\b	regex; first match in this order wins
+organism	Triticum aestivum	\bwheat\b	regex; first match in this order wins
+organism	Hordeum vulgare	\bbarley\b	regex; first match in this order wins
+organism	Glycine max	soybean	regex; first match in this order wins
+organism	Oryza sativa	\brice\b	regex; first match in this order wins
+organism	Arabidopsis thaliana	arabidopsis	regex; first match in this order wins
+organism	Solanum lycopersicum	tomato	regex; first match in this order wins
+organism	Brassica napus	oilseed rape|canola	regex; first match in this order wins
+organism	Mus musculus	\bmice\b|\bmouse\b|c57bl|balb	regex; first match in this order wins
+organism	Drosophila melanogaster	drosophila|\bfl(?:y|ies)\b|dahomey|canton-s|oregon-r|gal4|\bvials?\b	regex; first match in this order wins
+organism	Saccharomyces cerevisiae	yeast(?! concentration)	regex; first match in this order wins
+system	functional_validation	validat\w* (?:them|candidates?|genes?|in vivo)|in silico and in vivo|crispr knockouts? in|complementation in|heterologous expression|confirm them	regex cue for a system; order = priority
+system	ribo_seq	ribo-?seq|ribosome profiling|translation efficiency|translatome	regex cue for a system; order = priority
+system	atac_seq	(?<!sc)(?<!sn)(?<!single-cell )(?<!single-nucleus )atac-?seq|chromatin accessibility|accessible chromatin	regex cue for a system; order = priority
+system	multi_omics	gwas.*(?:rna-?seq|transcriptom|eqtl)|(?:rna-?seq|transcriptom).*gwas|eqtl|twas|coloc	regex cue for a system; order = priority
+system	breeding_genetics	diallel|nc ?ii|north carolina design|\brils?\b|recombinant inbred|\bnam\b|nested association|doubled haploid|backcross|brother-sister|sib[- ]mating|single seed descent|\bself(?:ed|ing)?\b.*\bf\d|\bf\d\b.*heterozyg|introgress|inbred yet|call it inbred|treat it as inbred	regex cue for a system; order = priority
+system	multi_environment	(?:greenhouse|growth chamber|glasshouse).*(?:field)|yield stability|genotype by environment|\bgxe\b|\bmet\b	regex cue for a system; order = priority
+system	single_cell	single[- ]?cell|single[- ]nucle|scrna|snrna|scatac|snatac|multiome|\bcells each\b	regex cue for a system; order = priority
+system	bulk_rnaseq	rna-?seq|transcriptom	regex cue for a system; order = priority
+system	metabolomics_lipidomics	lipidomic|metabolomic|lc-?ms|gc-?ms	regex cue for a system; order = priority
+system	drosophila	drosophila|\bfl(?:y|ies)\b|\bvials?\b|dahomey|canton-s|gal4|wing size	regex cue for a system; order = priority
+system	livestock	livestock|poultry|broilers?|laying hens|layer hens|weanl\w+ pig|weaned piglets|nursery pigs|finishing pigs|fattening pigs|dairy (?:cows|cattle)|beef cattle|lactating cows|feedlot|\bsteers?\b|\bheifers?\b|\bsows\b|\bgilts\b|\bbarrows\b|replicate pens|\bpens of\b|per pen\b	regex cue for a system; order = priority
+system	mouse	\bmice\b|\bmouse\b|\bcages?\b|\blitters?\b|\bdams?\b|\bpups?\b|\brats?\b	regex cue for a system; order = priority
+system	cell_culture	hela|cell line|\bwells?\b(?!-)|dmso|\bneurons\b	regex cue for a system; order = priority
+system	growth_chamber	growth chambers?|\bchambers?\b|\btrays?\b|growth room	regex cue for a system; order = priority
+system	greenhouse	greenhouse|glasshouse|\bbench(?:es)?\b|\bpots?\b|smarthouse|imaging platform|conveyor	regex cue for a system; order = priority
+system	field	\bfield\b|\bplots?\b|\bsites?\b|locations?|environments|nursery|progeny rows|irrigation|sprinkler|drip|hybrids|varieties|cultivars	regex cue for a system; order = priority
+setting	cell_culture	\bcultures\b|\bprimary (?:[\w-]+ ){0,3}cells\b|\b(?:cells|macrophages|monocytes|pbmcs|neurons|astrocytes|fibroblasts|hepatocytes|keratinocytes|explants)\b(?:(?!\b(?:mice|rats?|pigs?|piglets|animals|cattle|cows|birds|chickens|patients|donors)\b)[^.;]){0,60}\b(?:treated|stimulated|infected|uninfected|pulsed|exposed|transfected|incubated|challenged)\b|\b(?:treating|stimulating|infecting|transfecting)\b[^.;]{0,40}\bcells\b|cell lines?|immortali[sz]ed|organoids?|\b(?!cd\d)(?:[a-z]+\d[\w.-]*|\d+[a-z][\w.-]*)(?: [a-z-]+){0,2} (?:cells|macrophages)\b|\bipscs?\b|(?<!live )(?<!dietary )(?<!fed )yeast(?! (?:concentrations?|extract|paste|food|diets?|media|medium|supplement\w*))|\b(?:es|ips|s2|hek293t?|hela|cho) cells\b|\bcells? (?:were |are )?(?:cultured|treated with)|\bhela\b	regex: setting named outright; beats the assay family; order = priority
+setting	mouse	\bmice\b|\bmouse\b|\brats?\b	regex: setting named outright; beats the assay family; order = priority
+setting	drosophila	\bflies\b|\bfly\b|drosophila	regex: setting named outright; beats the assay family; order = priority
+setting	livestock	\bpigs?\b|piglets?|\bsows?\b|broilers?|\bhens?\b|\bcocks?\b|\bchickens\b|\bcattle\b|\bcows?\b|\bcalves\b|\bsteers?\b|\bheifers?\b|\bsheep\b|\blambs?\b|\bgoats?\b	regex: setting named outright; beats the assay family; order = priority
+setting	growth_chamber	growth[- ]chambers?|growth rooms?|climate chambers?|phytotron|controlled[- ]environment chambers?	regex: setting named outright; beats the assay family; order = priority
+setting	greenhouse	greenhouses?|glasshouses?|net ?house|screen ?house|polytunnel	regex: setting named outright; beats the assay family; order = priority
+setting	field	\bfield[- ]grown\b|\bin (?:a |the )?(?:paddy )?field\b|\bfield (?:trials?|plots?|sites?|conditions|experiment)\b|\bpaddy\b|\borchards?\b	regex: setting named outright; beats the assay family; order = priority
+setting	growth_chamber	hydropon|aeroponic|\b(?:1/2 |half[- ]strength )?ms (?:medium|agar|plates?)\b|murashige|hoagland|yoshida|agar plates?|petri dish|paper rolls?	regex: setting named outright; beats the assay family; order = priority
+outcome	grain_yield	grain yield|\byield\b(?! trial)	regex for a named primary outcome
+outcome	flowering_time	flowering time|days to flowering	regex for a named primary outcome
+outcome	plant_height	plant height	regex for a named primary outcome
+outcome	forage_yield	forage yield	regex for a named primary outcome
+outcome	biomass	biomass	regex for a named primary outcome
+outcome	lifespan	lifespan|life span|longevity|lives? \S+ longer	regex for a named primary outcome
+outcome	wing_size	wing size	regex for a named primary outcome
+outcome	body_weight	body weight	regex for a named primary outcome
+outcome	leptin	leptin	regex for a named primary outcome
+outcome	microbiome	microbiome(?! study)	regex for a named primary outcome
+outcome	fasting_blood_glucose	blood glucose|glucose	regex for a named primary outcome
+outcome	firing_rate	firing rate	regex for a named primary outcome
+outcome	viability	viability	regex for a named primary outcome
+outcome	lipid_content	lipid content	regex for a named primary outcome
+outcome	mechanical_threshold	von frey|pain threshold	regex for a named primary outcome
+outcome	leaf_growth	leaf growth	regex for a named primary outcome
+genotype_noun	lines?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	accessions?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	genotypes?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	hybrids?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	test-cross hybrids		regex noun counted as genotype entries ("120 lines")
+genotype_noun	varieties		regex noun counted as genotype entries ("120 lines")
+genotype_noun	cultivars?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	famil(?:y|ies)		regex noun counted as genotype entries ("120 lines")
+genotype_noun	entries		regex noun counted as genotype entries ("120 lines")
+genotype_noun	landraces		regex noun counted as genotype entries ("120 lines")
+genotype_noun	strains?		regex noun counted as genotype entries ("120 lines")
+genotype_noun	mutants?		regex noun counted as genotype entries ("120 lines")
+factor_synonym	accession	genotype	factor name -> canonical factor name
+factor_synonym	line	genotype	factor name -> canonical factor name
+factor_synonym	hybrid	genotype	factor name -> canonical factor name
+factor_synonym	variety	genotype	factor name -> canonical factor name
+factor_synonym	cultivar	genotype	factor name -> canonical factor name
+factor_synonym	family	genotype	factor name -> canonical factor name
+factor_synonym	entry	genotype	factor name -> canonical factor name
+factor_synonym	mutant	genotype	factor name -> canonical factor name
+factor_synonym	strain	genotype	factor name -> canonical factor name
+factor_synonym	irrigation	water	factor name -> canonical factor name
+factor_synonym	injury	treatment	factor name -> canonical factor name
+factor_synonym	drug	treatment	factor name -> canonical factor name
+factor_synonym	organ	tissue	factor name -> canonical factor name
+factor_synonym	tissue_type	tissue	factor name -> canonical factor name
+factor_synonym	sampling_time	time	factor name -> canonical factor name
+factor_synonym	time_point	time	factor name -> canonical factor name
+factor_synonym	timepoint	time	factor name -> canonical factor name
+factor_synonym	developmental_stage	stage	factor name -> canonical factor name
+factor_synonym	growth_stage	stage	factor name -> canonical factor name
+factor_synonym	inbred	genotype	factor name -> canonical factor name
+held_out_species	setaria	Setaria viridis	species kept out of all training; scored as unseen organisms
+held_out_species	poplar	Populus trichocarpa	species kept out of all training; scored as unseen organisms
+held_out_species	zebrafish	Danio rerio	species kept out of all training; scored as unseen organisms
+held_out_species	xenopus	Xenopus laevis	species kept out of all training; scored as unseen organisms

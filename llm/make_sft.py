@@ -28,24 +28,23 @@ sys.path.insert(0, HERE)
 import reader  # noqa: E402
 sys.path.insert(0, os.path.join(HERE, "..", "training"))
 import setting  # noqa: E402
+import rules  # noqa: E402
 
 DATA = os.path.join(HERE, "..", "training", "data")
 EVAL_FILES = ["fresh_test.jsonl", "fresh_test_v2.jsonl", "fresh_test_v3.jsonl", "fresh_test_v4.jsonl", "grounded_eval.jsonl",
               "user_prompts_dev.jsonl", os.path.join("..", "..", "inst", "examples", "study_examples.jsonl")]
 PQ = os.path.join(HERE, "..", "training", "paper_questions", "splits")
 PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl"]
-# assay implied by an old assay-family system, kept when the system becomes the stated setting
-SYSTEM_ASSAY = {"bulk_rnaseq": "rnaseq", "single_cell": "single_cell", "atac_seq": "atac_seq", "ribo_seq": "ribo_seq",
-                "metabolomics_lipidomics": "metabolomics"}
-HOLDOUT_ORGS = {"Setaria viridis", "Populus trichocarpa", "Danio rerio", "Xenopus laevis"}
-SYN = {"accession": "genotype", "line": "genotype", "hybrid": "genotype", "variety": "genotype", "cultivar": "genotype",
-       "family": "genotype", "entry": "genotype", "mutant": "genotype", "strain": "genotype", "inbred": "genotype",
-       "irrigation": "water", "organ": "tissue", "tissue_type": "tissue", "sampling_time": "time", "time_point": "time",
-       "timepoint": "time", "developmental_stage": "stage", "growth_stage": "stage"}
-UNIT_WORDS = {"plot": r"plots?", "pot": r"pots?", "plant": r"plants?", "tray": r"trays?", "chamber": r"chambers?",
-              "cage": r"cages?", "mouse": r"mice|mouse", "rat": r"rats?", "litter": r"litters?|dams?", "vial": r"vials?",
-              "fly": r"fl(y|ies)", "well": r"wells?", "culture": r"cultures?", "tree": r"trees?", "bench": r"bench(es)?",
-              "cart": r"carts?", "pig": r"pigs?", "person": r"people|patients?|participants?|persons?"}
+# vocabulary and system kinds come from the rule files (training/rules.py), never from lists in this script
+SYSTEM_ASSAY = {i: sy["assay"] for i, sy in rules.systems().items() if sy.get("kind") == "assay"}   # old system -> its assay
+HOLDOUT_ORGS = {v for _, v in rules.table("held_out_species")}
+SYN = rules.mapping("factor_synonym")
+
+
+def unit_stated(unit, text):
+    """The unit word (or any alias of that unit in inst/agent/aliases.tsv) is in the prompt."""
+    words = set(rules.aliases("unit").get(unit, [])) | {unit.replace("_", " ")}
+    return any(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?:e?s)?(?![a-z0-9])", text) for w in words)
 
 
 # generated training files (git-ignored) are looked for in SFT_DATA first (the slurm job regenerates them
@@ -157,7 +156,7 @@ def target(prompt, gold, distilled):
             g["levels"] = [str(x) for x in lv]
         factors.append(g)
     unit = gold.get("experimental_unit")
-    if unit and not re.search(r"\b(" + UNIT_WORDS.get(unit, re.escape(unit)) + r")\b", text):
+    if unit and not unit_stated(unit, text):
         unit = None   # inferred, not stated: a design judgment the reader must leave to the engine
     des = gold.get("design") or {}
     pop = gold.get("population") or {}

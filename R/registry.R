@@ -66,3 +66,35 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   Filter(function(r) norm(r$measurement_unit) == m &&
            (norm(r$nested_in) == e || e == ""), rules)
 }
+
+# ---- rule tables (data, not code) ---------------------------------------------------------------------------
+# inst/agent/rules.tsv holds the extractor's pattern tables (organism, system, setting, outcome, genotype_noun) and
+# factor synonyms; inst/registry/experimental_systems.json says what each system is (setting / assay / study).
+# Python (training/setting.py, llm/make_sft.py) reads the same files, so R and Python follow one set of rules.
+.sf_rules_cache <- new.env(parent = emptyenv())
+
+.sf_rules_table <- function() {
+  if (is.null(.sf_rules_cache$t)) {
+    f <- system.file("agent", "rules.tsv", package = "studyforge")
+    .sf_rules_cache$t <- utils::read.delim(f, quote = "", comment.char = "", stringsAsFactors = FALSE,
+                                           colClasses = "character", na.strings = character())
+  }
+  .sf_rules_cache$t
+}
+
+# one table as a named list (key -> value) in file order; order is priority. genotype_noun is a vector of keys.
+.sf_rules <- function(table) {
+  t <- .sf_rules_table()
+  t <- t[t$table == table, ]
+  if (table == "genotype_noun") return(t$key)
+  stats::setNames(as.list(t$value), t$key)
+}
+
+# system ids by registry property, e.g. .sf_systems_where(kind = "study"), .sf_systems_where(plant_site = TRUE)
+.sf_systems_where <- function(...) {
+  want <- list(...)
+  if (is.null(.sf_rules_cache$systems)) .sf_rules_cache$systems <- load_registry("experimental_systems")$systems
+  s <- .sf_rules_cache$systems
+  ok <- vapply(s, function(x) all(vapply(names(want), function(k) identical(x[[k]], want[[k]]), logical(1))), logical(1))
+  vapply(s[ok], `[[`, "", "id")
+}

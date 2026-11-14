@@ -44,59 +44,8 @@
 
 .sf_has <- function(text, pattern) grepl(pattern, text, perl = TRUE)
 
-.sf_organisms <- list(
-  "Sorghum bicolor" = "sorghum", "Zea mays" = "\\bmaize\\b|\\bcorn\\b", "Triticum aestivum" = "\\bwheat\\b",
-  "Hordeum vulgare" = "\\bbarley\\b", "Glycine max" = "soybean", "Oryza sativa" = "\\brice\\b",
-  "Arabidopsis thaliana" = "arabidopsis", "Solanum lycopersicum" = "tomato",
-  "Brassica napus" = "oilseed rape|canola", "Mus musculus" = "\\bmice\\b|\\bmouse\\b|c57bl|balb",
-  "Drosophila melanogaster" = "drosophila|\\bfl(?:y|ies)\\b|dahomey|canton-s|oregon-r|gal4|\\bvials?\\b",
-  "Saccharomyces cerevisiae" = "yeast(?! concentration)"
-)
-
-.sf_systems <- list(
-  functional_validation = "validat\\w* (?:them|candidates?|genes?|in vivo)|in silico and in vivo|crispr knockouts? in|complementation in|heterologous expression|confirm them",
-  ribo_seq = "ribo-?seq|ribosome profiling|translation efficiency|translatome",
-  atac_seq = "(?<!sc)(?<!sn)(?<!single-cell )(?<!single-nucleus )atac-?seq|chromatin accessibility|accessible chromatin",
-  multi_omics = "gwas.*(?:rna-?seq|transcriptom|eqtl)|(?:rna-?seq|transcriptom).*gwas|eqtl|twas|coloc",
-  breeding_genetics = "diallel|nc ?ii|north carolina design|\\brils?\\b|recombinant inbred|\\bnam\\b|nested association|doubled haploid|backcross|brother-sister|sib[- ]mating|single seed descent|\\bself(?:ed|ing)?\\b.*\\bf\\d|\\bf\\d\\b.*heterozyg|introgress|inbred yet|call it inbred|treat it as inbred",
-  multi_environment = "(?:greenhouse|growth chamber|glasshouse).*(?:field)|yield stability|genotype by environment|\\bgxe\\b|\\bmet\\b",
-  single_cell = "single[- ]?cell|single[- ]nucle|scrna|snrna|scatac|snatac|multiome|\\bcells each\\b",
-  bulk_rnaseq = "rna-?seq|transcriptom",
-  metabolomics_lipidomics = "lipidomic|metabolomic|lc-?ms|gc-?ms",
-  drosophila = "drosophila|\\bfl(?:y|ies)\\b|\\bvials?\\b|dahomey|canton-s|gal4|wing size",
-  livestock = "livestock|poultry|broilers?|laying hens|layer hens|weanl\\w+ pig|weaned piglets|nursery pigs|finishing pigs|fattening pigs|dairy (?:cows|cattle)|beef cattle|lactating cows|feedlot|\\bsteers?\\b|\\bheifers?\\b|\\bsows\\b|\\bgilts\\b|\\bbarrows\\b|replicate pens|\\bpens of\\b|per pen\\b",
-  mouse = "\\bmice\\b|\\bmouse\\b|\\bcages?\\b|\\blitters?\\b|\\bdams?\\b|\\bpups?\\b|\\brats?\\b",
-  cell_culture = "hela|cell line|\\bwells?\\b(?!-)|dmso|\\bneurons\\b",
-  growth_chamber = "growth chambers?|\\bchambers?\\b|\\btrays?\\b|growth room",
-  greenhouse = "greenhouse|glasshouse|\\bbench(?:es)?\\b|\\bpots?\\b|smarthouse|imaging platform|conveyor",
-  field = "\\bfield\\b|\\bplots?\\b|\\bsites?\\b|locations?|environments|nursery|progeny rows|irrigation|sprinkler|drip|hybrids|varieties|cultivars"
-)
-
-.SF_STUDY_SYSTEMS <- c("functional_validation", "multi_omics", "breeding_genetics", "multi_environment")
-# settings named outright: these beat the assay family ("RNA-seq of leaves in a growth chamber" is a growth-chamber
-# study with an RNA-seq assay). Cell lines first ("mouse ES cells", "Drosophila S2 cells" are cultures).
-.sf_settings_stated <- list(
-  cell_culture = "\\bcultures\\b|\\bprimary (?:[\\w-]+ ){0,3}cells\\b|\\b(?:cells|macrophages|monocytes|pbmcs|neurons|astrocytes|fibroblasts|hepatocytes|keratinocytes|explants)\\b(?:(?!\\b(?:mice|rats?|pigs?|piglets|animals|cattle|cows|birds|chickens|patients|donors)\\b)[^.;]){0,60}\\b(?:treated|stimulated|infected|uninfected|pulsed|exposed|transfected|incubated|challenged)\\b|\\b(?:treating|stimulating|infecting|transfecting)\\b[^.;]{0,40}\\bcells\\b|cell lines?|immortali[sz]ed|organoids?|\\b(?!cd\\d)(?:[a-z]+\\d[\\w.-]*|\\d+[a-z][\\w.-]*)(?: [a-z-]+){0,2} (?:cells|macrophages)\\b|\\bipscs?\\b|(?<!live )(?<!dietary )(?<!fed )yeast(?! (?:concentrations?|extract|paste|food|diets?|media|medium|supplement\\w*))|\\b(?:es|ips|s2|hek293t?|hela|cho) cells\\b|\\bcells? (?:were |are )?(?:cultured|treated with)|\\bhela\\b",
-  mouse = "\\bmice\\b|\\bmouse\\b|\\brats?\\b",
-  drosophila = "\\bflies\\b|\\bfly\\b|drosophila",
-  livestock = "\\bpigs?\\b|piglets?|\\bsows?\\b|broilers?|\\bhens?\\b|\\bcocks?\\b|\\bchickens\\b|\\bcattle\\b|\\bcows?\\b|\\bcalves\\b|\\bsteers?\\b|\\bheifers?\\b|\\bsheep\\b|\\blambs?\\b|\\bgoats?\\b",
-  growth_chamber = "growth[- ]chambers?|growth rooms?|climate chambers?|phytotron|controlled[- ]environment chambers?",
-  greenhouse = "greenhouses?|glasshouses?|net ?house|screen ?house|polytunnel",
-  field = "\\bfield[- ]grown\\b|\\bin (?:a |the )?(?:paddy )?field\\b|\\bfield (?:trials?|plots?|sites?|conditions|experiment)\\b|\\bpaddy\\b|\\borchards?\\b",
-  growth_chamber = "hydropon|aeroponic|\\b(?:1/2 |half[- ]strength )?ms (?:medium|agar|plates?)\\b|murashige|hoagland|yoshida|agar plates?|petri dish|paper rolls?"   # lab growth systems, when no facility is named
-)
-
-.sf_outcomes <- list(
-  grain_yield = "grain yield|\\byield\\b(?! trial)", flowering_time = "flowering time|days to flowering",
-  plant_height = "plant height", forage_yield = "forage yield", biomass = "biomass",
-  lifespan = "lifespan|life span|longevity|lives? \\S+ longer", wing_size = "wing size", body_weight = "body weight",
-  leptin = "leptin", microbiome = "microbiome(?! study)",
-  fasting_blood_glucose = "blood glucose|glucose", firing_rate = "firing rate", viability = "viability",
-  lipid_content = "lipid content", mechanical_threshold = "von frey|pain threshold", leaf_growth = "leaf growth"
-)
-
-.sf_genotype_nouns <- c("lines?", "accessions?", "genotypes?", "hybrids?", "test-cross hybrids", "varieties",
-                        "cultivars?", "famil(?:y|ies)", "entries", "landraces", "strains?", "mutants?")
+# Pattern tables (organism, system, setting, outcome, genotype nouns) live in inst/agent/rules.tsv and what each
+# system is (setting / assay family / study type) in inst/registry/experimental_systems.json: see .sf_rules().
 
 # Extract a StudySpec from free text without any language model
 #' Extract a StudySpec from plain language (offline, rule-based)
@@ -116,18 +65,18 @@ extract_spec_local <- function(question) {
   # system: the study type (validation, breeding, multi-environment, multi-omics) if one applies, else the setting
   # the question states (growth chamber, mice, a cell line ...), else the assay family, else weaker setting cues
   # (pots, plots, cages); the assays stay listed separately either way
-  sys <- names(.sf_systems)[vapply(.sf_systems, function(p) .sf_has(text, p), logical(1))]
-  study <- intersect(sys, .SF_STUDY_SYSTEMS)
-  stated <- names(.sf_settings_stated)[vapply(.sf_settings_stated, function(p) .sf_has(text, p), logical(1))]
-  site <- intersect(stated, c("growth_chamber", "greenhouse", "field"))
-  if (length(intersect(study, c("functional_validation", "multi_environment")))) set("system", study[1]) else
+  sys <- names(.sf_rules("system"))[vapply(.sf_rules("system"), function(p) .sf_has(text, p), logical(1))]
+  study <- intersect(sys, .sf_systems_where(kind = "study"))
+  stated <- names(.sf_rules("setting"))[vapply(.sf_rules("setting"), function(p) .sf_has(text, p), logical(1))]
+  site <- intersect(stated, .sf_systems_where(plant_site = TRUE))
+  if (length(intersect(study, .sf_systems_where(keeps_type_over_setting = TRUE)))) set("system", study[1]) else
     if (length(study) && length(site)) set("system", site[1]) else   # "RILs in an RCBD in the field": a field trial
     if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
     if (length(sys)) set("system", sys[1]) else if (.sf_has(text, "vehicle|strains?|\\bmales?\\b|\\bfemales?\\b")) set("system", "mouse")
-  org <- names(.sf_organisms)[vapply(.sf_organisms, function(p) .sf_has(text, p), logical(1))]
+  org <- names(.sf_rules("organism"))[vapply(.sf_rules("organism"), function(p) .sf_has(text, p), logical(1))]
   if (length(org)) set("organism", org[1])
 
-  out <- names(.sf_outcomes)[vapply(.sf_outcomes, function(p) .sf_has(text, p), logical(1))]
+  out <- names(.sf_rules("outcome"))[vapply(.sf_rules("outcome"), function(p) .sf_has(text, p), logical(1))]
   if (length(out) == 1) {
     set("primary_outcome.name", out)
     set("primary_outcome.type", if (out == "lifespan") "survival" else "continuous")
@@ -141,7 +90,7 @@ extract_spec_local <- function(question) {
     if (!is.null(applied_to)) f$applied_to <- applied_to
     factors[[length(factors) + 1]] <<- f
   }
-  n_geno <- .sf_count_before(text, .sf_genotype_nouns)
+  n_geno <- .sf_count_before(text, .sf_rules("genotype_noun"))
   if (!is.na(n_geno)) add_factor("genotype", n_geno)
   n_chk <- .sf_count_before(text, c("checks?", "check varieties", "commercial checks"))
   if (!is.na(n_chk)) add_factor("check", n_chk)
@@ -315,7 +264,7 @@ extract_spec_local <- function(question) {
   if (identical(spec$system, "multi_environment") && .sf_has(text, "greenhouse|growth chamber|glasshouse|controlled environment") && .sf_has(text, "field")) {
     set("environments", c("greenhouse", "field"))
   }
-  if (.sf_has(text, .sf_systems$ribo_seq) && .sf_has(text, "translation(?:al)? efficiency")) {   # the assay, whatever the setting
+  if (.sf_has(text, .sf_rules("system")$ribo_seq) && .sf_has(text, "translation(?:al)? efficiency")) {   # the assay, whatever the setting
     set("primary_outcome.name", "translation_efficiency"); set("primary_outcome.type", "continuous")
   }
   if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, "yield stability")) {
@@ -512,7 +461,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
     practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
     traits = tryCatch({
-      omics <- length(spec$assays) || isTRUE(spec$system %in% c("bulk_rnaseq", "single_cell", "ribo_seq", "atac_seq", "multi_omics"))
+      omics <- length(spec$assays) || isTRUE(spec$system %in% .sf_systems_where(sequencing = TRUE))
       if (grepl(.SF_ASKS_TRAITS, tolower(question), perl = TRUE) || (is.null(spec$primary_outcome$name) && !omics && !identical(spec$goal, "analysis")))
         suggest_traits(spec$tissue, .sf_stresses(spec, question), spec$organism, n = 6)
     }, error = function(e) NULL),

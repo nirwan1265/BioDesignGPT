@@ -22,7 +22,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 from label_organisms import SHARD_ORGANISM  # noqa: E402
 
 csv.field_size_limit(10 ** 9)
-HELD_OUT = {"setaria", "poplar", "zebrafish", "xenopus"}
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+import rules  # noqa: E402
+HELD_OUT = {k for k, _ in rules.table("held_out_species")}   # inst/agent/rules.tsv
 
 
 import re
