@@ -38,14 +38,18 @@ Never invent numbers: every count must appear in the text (digits or words). Do 
 
 Fields:
 - goal: "design" (planning a new study) or "analysis" (data already collected; asks which test, how to analyse).
-- system: the experimental setting, one of {SYSTEMS}.
-  Choose by the main activity: outdoor plots -> field; greenhouse/glasshouse -> greenhouse; growth chamber/room/cabinet
-  -> growth_chamber; mice or rats -> mouse; flies -> drosophila; cell lines -> cell_culture; bulk RNA-seq -> bulk_rnaseq;
-  scRNA/snRNA-seq -> single_cell; ATAC-seq -> atac_seq; Ribo-seq -> ribo_seq; lipidomics/metabolomics ->
-  metabolomics_lipidomics; GWAS together with expression/eQTL -> multi_omics; crosses, selfing, backcrossing, RILs, NAM,
-  diallel, mutant populations -> breeding_genetics; the same entries over several locations/years for GxE or stability ->
-  multi_environment; validating candidate genes (CRISPR, complementation, another organism) -> functional_validation;
-  farm animals in production settings (broilers, laying hens, pigs in pens, dairy or beef cattle, feedlots) -> livestock.
+- system: one of {SYSTEMS}. Decide in this order and stop at the first that applies:
+  1. study type: validating candidate genes (CRISPR, complementation, another organism) -> functional_validation;
+     GWAS together with expression/eQTL -> multi_omics; crosses, selfing, backcrossing, RILs, NAM, diallel, mutant
+     populations -> breeding_genetics; the same entries over several locations/years for GxE or stability, or a
+     greenhouse/chamber screen checked against the field -> multi_environment.
+  2. the setting, when the text names it: growth chamber/room/climate chamber -> growth_chamber; greenhouse/glasshouse/
+     net house -> greenhouse; field/paddy/orchard -> field; mice or rats -> mouse; flies/Drosophila -> drosophila;
+     cell lines, ES/iPS cells, organoids, yeast or algal cultures -> cell_culture; farm animals (pigs, cattle, chickens,
+     broilers, hens, sheep, goats) -> livestock. The assay still goes in assays: RNA-seq of leaves in a growth chamber
+     is system growth_chamber with assays ["rnaseq"].
+  3. only when no setting is named, the assay family: bulk/small/long-read RNA-seq -> bulk_rnaseq; scRNA/snRNA/scATAC
+     -> single_cell; ATAC-seq -> atac_seq; Ribo-seq -> ribo_seq; lipidomics/metabolomics -> metabolomics_lipidomics.
   ChIP-seq, CUT&Tag and methylome have no system of their own: use the setting and list the assay.
 - organism: scientific name, one of {ORGANISMS} or another scientific name. organisms: list when more than one.
 - method: the genetic tool, resource or approach named, in a few words (e.g. "Cre-lox conditional knockout",
@@ -90,7 +94,7 @@ SHOTS = [
       "outcome_text": "heading date", "population": None, "environments": None, "blocking_factors": None, "sequencing": None,
       "missing_questions": ["How many seasons?", "Plot size and seed per line?"]}),
     ("I already have liver RNA-seq from knockout and wild-type mice on two diets, 4 mice per group. Which model finds DE genes?",
-     {"goal": "analysis", "system": "bulk_rnaseq", "organism": "Mus musculus", "organisms": None, "method": "knockout",
+     {"goal": "analysis", "system": "mouse", "organism": "Mus musculus", "organisms": None, "method": "knockout",
       "assays": ["rnaseq"], "tissue": "liver",
       "factors": [{"name": "genotype", "n_levels": 2, "levels": ["knockout", "wild-type"], "applied_to": None},
                   {"name": "diet", "n_levels": 2, "levels": None, "applied_to": None}],

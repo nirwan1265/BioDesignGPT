@@ -72,6 +72,19 @@
   field = "\\bfield\\b|\\bplots?\\b|\\bsites?\\b|locations?|environments|nursery|progeny rows|irrigation|sprinkler|drip|hybrids|varieties|cultivars"
 )
 
+.SF_STUDY_SYSTEMS <- c("functional_validation", "multi_omics", "breeding_genetics", "multi_environment")
+# settings named outright: these beat the assay family ("RNA-seq of leaves in a growth chamber" is a growth-chamber
+# study with an RNA-seq assay). Cell lines first ("mouse ES cells", "Drosophila S2 cells" are cultures).
+.sf_settings_stated <- list(
+  cell_culture = "cell lines?|immortali[sz]ed|organoids?|\\b(?:[a-z]+\\d[\\w.-]*|\\d+[a-z][\\w.-]*) (?:cells|macrophages)\\b|\\bipscs?\\b|yeast(?! (?:concentrations?|extract|paste|food|diets?|media|medium))|\\b(?:es|ips|s2|hek293t?|hela|cho) cells\\b|\\bcells? (?:were |are )?(?:cultured|treated with)|\\bhela\\b",
+  mouse = "\\bmice\\b|\\bmouse\\b|\\brats?\\b",
+  drosophila = "\\bflies\\b|\\bfly\\b|drosophila",
+  livestock = "\\bpigs?\\b|piglets?|\\bsows?\\b|broilers?|\\bhens?\\b|\\bcocks?\\b|\\bchickens\\b|\\bcattle\\b|\\bcows?\\b|\\bcalves\\b|\\bsteers?\\b|\\bheifers?\\b|\\bsheep\\b|\\blambs?\\b|\\bgoats?\\b",
+  growth_chamber = "growth[- ]chambers?|growth rooms?|climate chambers?|phytotron|controlled[- ]environment chambers?",
+  greenhouse = "greenhouses?|glasshouses?|net ?house|screen ?house|polytunnel",
+  field = "\\bfield[- ]grown\\b|\\bin (?:a |the )?(?:paddy )?field\\b|\\bfield (?:trials?|plots?|sites?|conditions|experiment)\\b|\\bpaddy\\b|\\borchards?\\b"
+)
+
 .sf_outcomes <- list(
   grain_yield = "grain yield|\\byield\\b(?! trial)", flowering_time = "flowering time|days to flowering",
   plant_height = "plant height", forage_yield = "forage yield", biomass = "biomass",
@@ -99,9 +112,14 @@ extract_spec_local <- function(question) {
   spec <- new_spec()
   set <- function(path, value) if (!is.null(value) && !all(is.na(value))) spec <<- spec_set(spec, path, value)
 
-  # system: most specific first
+  # system: the study type (validation, breeding, multi-environment, multi-omics) if one applies, else the setting
+  # the question states (growth chamber, mice, a cell line ...), else the assay family, else weaker setting cues
+  # (pots, plots, cages); the assays stay listed separately either way
   sys <- names(.sf_systems)[vapply(.sf_systems, function(p) .sf_has(text, p), logical(1))]
-  if (length(sys)) set("system", sys[1]) else if (.sf_has(text, "vehicle|strains?|\\bmales?\\b|\\bfemales?\\b")) set("system", "mouse")
+  study <- intersect(sys, .SF_STUDY_SYSTEMS)
+  stated <- names(.sf_settings_stated)[vapply(.sf_settings_stated, function(p) .sf_has(text, p), logical(1))]
+  if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
+    if (length(sys)) set("system", sys[1]) else if (.sf_has(text, "vehicle|strains?|\\bmales?\\b|\\bfemales?\\b")) set("system", "mouse")
   org <- names(.sf_organisms)[vapply(.sf_organisms, function(p) .sf_has(text, p), logical(1))]
   if (length(org)) set("organism", org[1])
 
@@ -192,6 +210,7 @@ extract_spec_local <- function(question) {
       set("design.reps", n_sub)
       next
     }
+    if (group_word) next   # a treatment group is never the experimental unit
     if (exp %in% c("combination", "batch", "day", "week", "run", "group", "condition", "treatment", "time",
                    "site", "year", "season", "location", "genotype", "line", "entry")) next
     if (meas %in% c("female", "male", "parent", "injection", "egg", "replicate", "sample") || meas == exp) next
@@ -292,7 +311,7 @@ extract_spec_local <- function(question) {
   if (identical(spec$system, "multi_environment") && .sf_has(text, "greenhouse|growth chamber|glasshouse|controlled environment") && .sf_has(text, "field")) {
     set("environments", c("greenhouse", "field"))
   }
-  if (identical(spec$system, "ribo_seq") && .sf_has(text, "translation(?:al)? efficiency")) {
+  if (.sf_has(text, .sf_systems$ribo_seq) && .sf_has(text, "translation(?:al)? efficiency")) {   # the assay, whatever the setting
     set("primary_outcome.name", "translation_efficiency"); set("primary_outcome.type", "continuous")
   }
   if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, "yield stability")) {
@@ -305,6 +324,15 @@ extract_spec_local <- function(question) {
 }
 
 `%|na|%` <- function(a, b) if (length(a) == 0 || is.na(a)) b else a
+
+# The system plus the families of the stated assays: the setting decides the layout, and each assay brings its own
+# designs, hazards and questions (a greenhouse ATAC-seq study gets greenhouse and ATAC advice).
+.sf_system_set <- function(spec) {
+  fam <- unname(.SF_SYSTEM_BY_ASSAY[unlist(spec$assays)])
+  if (any(unlist(spec$assays) %in% c("metabolomics", "lipidomics"))) fam <- c(fam, "metabolomics_lipidomics")
+  s <- unique(c(spec$system, fam[!is.na(fam)]))
+  s[nzchar(s)]
+}
 
 # Choose candidate designs with simple, transparent rules
 .sf_candidates <- function(spec) {
@@ -358,6 +386,10 @@ extract_spec_local <- function(question) {
   } else {
     cand <- c(cand, "rcbd", "crd")
   }
+  # assay families add their own designs after the setting's
+  fam <- setdiff(.sf_system_set(spec), sys)
+  if ("ribo_seq" %in% fam) cand <- c(cand, "riboseq_rnaseq")
+  if ("atac_seq" %in% fam) cand <- c(cand, "atac_replicated")
   unique(cand)
 }
 
@@ -431,7 +463,8 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   candidates <- .sf_candidates(spec)
   designs <- lapply(candidates, lookup_design)
-  hazards <- if (!is.na(system)) setup_hazards(system) else list()
+  sysset <- .sf_system_set(spec)
+  hazards <- if (length(sysset)) setup_hazards(sysset) else list()
   if (length(hazards)) {
     # most relevant first: hazards sharing words with the question
     qwords <- unique(strsplit(gsub("[^a-z ]", " ", tolower(question)), "\\s+")[[1]])
@@ -442,8 +475,10 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     }, numeric(1))
     hazards <- hazards[order(-score)]
   }
-  questions <- if (!is.na(system) && system %in% vapply(load_registry("experimental_systems")$systems, `[[`, "", "id")) system_questions(system) else character()
-  notes <- protocol_notes(system = system)
+  known <- vapply(load_registry("experimental_systems")$systems, `[[`, "", "id")
+  questions <- unique(unlist(lapply(intersect(sysset, known), system_questions)))
+  if (is.null(questions)) questions <- character()
+  notes <- if (length(sysset)) protocol_notes(system = sysset) else list()
   org_word <- tolower(strsplit(spec$organism %||% "", " ")[[1]][1])
   if (!is.na(org_word) && nzchar(org_word)) {
     hits <- Filter(function(n) grepl(org_word, tolower(paste(n$citation, paste(unlist(n$tags), collapse = " "), n$lesson))), notes)

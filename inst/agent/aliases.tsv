@@ -1046,3 +1046,10 @@ mnase	mnase_seq	assay	curated terminology (paper questions)	high
 mnase hypersensitivity	mnase_seq	assay	curated terminology (paper questions)	high
 metagenomes	metagenomics	assay	curated terminology (paper questions)	high
 metagenome	metagenomics	assay	curated terminology (paper questions)	high
+small rna	small_rnaseq	assay	curated terminology (paper questions)	medium
+small rna seq	small_rnaseq	assay	curated terminology (paper questions)	high
+atac	atac_seq	assay	curated terminology (paper questions)	high
+metabolomics	metabolomics	assay	curated terminology (paper questions)	high
+metabolome	metabolomics	assay	curated terminology (paper questions)	high
+metabolite profiling	metabolomics	assay	curated terminology (paper questions)	high
+untargeted metabolomics	metabolomics	assay	curated terminology (paper questions)	high

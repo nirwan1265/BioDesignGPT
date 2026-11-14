@@ -7,12 +7,16 @@ gold spec still contains only what the question states.
     schema 2: new assays (amplicon, m6a_seq, long_read_rna, gbs, degradome, hic, scatac_seq, medip, mnase_seq,
               nascent_rna, spatial, targeted_capture, rip_clip, metagenomics, pool_seq, bsa_seq, trap_seq, wgs),
               system "livestock", factor names phenotype -> phenotype_group and strain -> genotype.
+    schema 3: system is the stated setting (growth chamber, greenhouse, field, mice/rats, flies, farm animals,
+              cell lines) rather than the assay family when the question names one (training/setting.py).
 """
-import csv, os, re
+import csv, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALIASES = os.path.join(HERE, "..", "..", "inst", "agent", "aliases.tsv")
-SCHEMA = 2
+sys.path.insert(0, os.path.join(HERE, ".."))
+import setting  # noqa: E402
+SCHEMA = 3
 NEW_ASSAYS = {"amplicon", "m6a_seq", "long_read_rna", "gbs", "degradome", "hic", "scatac_seq", "medip", "mnase_seq",
               "nascent_rna", "spatial", "targeted_capture", "rip_clip", "metagenomics", "pool_seq", "bsa_seq", "trap_seq", "wgs"}
 # a specific assay replaces the generic label used for it before, unless the generic one is also stated on its own
@@ -67,5 +71,6 @@ def normalise(rec):
         f["name"] = FACTOR_RENAME.get(f["name"], f["name"])
     if not spec.get("system") and any(g.startswith("setting:livestock") for g in rec.get("gaps", [])):
         spec["system"] = "livestock"
+    setting.apply(spec, rec["prompt"])
     rec["schema"] = SCHEMA
     return rec

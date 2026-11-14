@@ -232,15 +232,17 @@ def build(row, R, n_variants):
         oc = OUTCOME_BY_TECH.get(row["technique"])
         if oc and G.maybe(0.35):
             pieces.append(lambda: e.say(G.pick(["to look at", "to compare", "to measure", "for"]), (G.pick(oc), "OUTCOME")))
+        sys_v = sysname
         if kd == "plant" and env and G.maybe(0.6):
             et = {"greenhouse": ["greenhouse", "glasshouse"], "growth_chamber": ["growth chamber", "growth chambers"],
                   "field": ["field", "the field"]}.get(env)
             if et:
                 pieces.append(lambda: e.say(G.pick(["plants grown in a", "grown in the", "in a"]), (G.pick(et), "ENV")))
+                sys_v = env   # a stated setting is the system; the assay stays in assays (training/setting.py)
         G.join(e, pieces)
         ex = e.render()
         ex["text"] = re.sub(r"\s{2,}", " ", ex["text"]).strip()
-        spec = D.to_spec(ex["tokens"], ex["tags"], sysname, ex["text"])
+        spec = D.to_spec(ex["tokens"], ex["tags"], sys_v, ex["text"])
         spec.pop("status", None)
         ex["spec"] = spec
         ex["truth"] = {"species": row["species"], "study_group": row["study_group"], "technique": row["technique"],
