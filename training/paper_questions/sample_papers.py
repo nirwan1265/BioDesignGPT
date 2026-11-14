@@ -11,6 +11,10 @@ species x technique. The held-out species (setaria, poplar, zebrafish, xenopus) 
 trained on them.
 
     python training/paper_questions/sample_papers.py --index INDEX --evidence EVIDENCE --n 1300 --out papers_sample.jsonl
+
+A later draw (e.g. a training pool) excludes papers already sampled and continues the ids:
+
+    ... --n 1500 --seed 2027 --exclude papers_sample_1700.jsonl.gz --id-start 1700 --no-held-out --out papers_sample_train.jsonl
 """
 import argparse, collections, csv, json, os, random, sys
 
@@ -61,7 +65,17 @@ def main():
     ap.add_argument("--passages", type=int, default=4, help="first N passages of each paper's methods")
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--out", default="papers_sample.jsonl")
+    ap.add_argument("--exclude", nargs="*", default=[],
+                    help="jsonl files (earlier samples or label batches) whose pmcids must not be drawn again")
+    ap.add_argument("--no-held-out", action="store_true", help="skip the held-out species (for a training pool)")
+    ap.add_argument("--id-start", type=int, default=0, help="first paper number, so ids continue past earlier samples")
     a = ap.parse_args()
+    seen = set()
+    for path in a.exclude:
+        opener = __import__("gzip").open if path.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as f:
+            seen.update(json.loads(l).get("pmcid") for l in f if l.strip())
+    seen.discard(None)
     rnd = random.Random(a.seed)
     titles = {r["pmcid"]: r for r in read_tsv(os.path.join(a.evidence, "all_species_papers.tsv")) if r.get("pmcid")}
     mfields = ("environment", "temperature", "photoperiod", "age_stage", "sampling_time", "design", "blocks_or_field_reps",
@@ -85,6 +99,10 @@ def main():
                 by_paper[m["pmcid"]].append(m)
         for pmcid, ms in by_paper.items():
             ms.sort(key=lambda m: m["chunk"])
+            if a.no_held_out and sp in HELD_OUT:
+                continue
+            if pmcid in seen:
+                continue   # already sampled for an earlier batch
             if ms[0].get("organism_main") != SHARD_ORGANISM.get(sp):
                 continue   # only papers whose own methods are about this shard's organism (label_organisms.py)
             techs = ms[0].get("techniques") or ["?"]
@@ -112,7 +130,7 @@ def main():
                 for r in studies.get((p["species"], g), [])[:2]:
                     meta.append({k: r.get(k) for k in ("technique", "organism", "tissues", "treatment", "dev_stage", "genotypes",
                                                          "n_samples", "n_runs", "instrument") if r.get(k)})
-            p.update({"id": f"paper_{i:04d}", "title": t.get("title", ""), "journal": t.get("journal", ""),
+            p.update({"id": f"paper_{a.id_start + i:04d}", "title": t.get("title", ""), "journal": t.get("journal", ""),
                       "held_out_species": p["species"] in HELD_OUT, "study_metadata": meta,
                       "method_fields": methods_by.get(p["pmcid"], {}), "digest": digest(p["methods"])})
             f.write(json.dumps(p, ensure_ascii=False) + "\n")

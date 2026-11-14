@@ -13,7 +13,8 @@ refuses to overwrite an existing split unless --force is given, so the split can
 
     python3 freeze_split.py            # write splits/ (fails if it exists)
     python3 freeze_split.py --check    # verify the frozen files still match the manifest
-    python3 freeze_split.py --refresh  # labels changed (e.g. schema update): rewrite the files from batches/
+    python3 freeze_split.py --refresh  # labels changed (e.g. schema update): rewrite the files from batches/;
+                                       # questions labelled after the freeze go to train.jsonl (never dev/test)
                                        # keeping exactly the same papers in each split
 
 The manifest keeps two hashes per file: members_sha256 (the sorted question ids, i.e. which papers are in the
@@ -99,6 +100,19 @@ def main():
         m["refreshed"] = m.get("refreshed", 0) + 1
         json.dump(m, open(man, "w"), indent=1)
         print("refreshed contents; membership unchanged:", {n: v["n"] for n, v in m["files"].items()})
+        # everything labelled after the freeze is training data: never in dev/test, rewritten on every refresh
+        frozen = {json.loads(l)["id"] for n in m["files"] for l in open(os.path.join(OUT, n))}
+        train = [q for q in by_id.values() if q["id"] not in frozen]
+        leak = [q["id"] for q in train if q.get("held_out_species")]
+        if leak:
+            sys.exit(f"held-out species in the training pool: {leak[:5]}")
+        frozen_papers = {json.loads(l).get("pmcid") for n in m["files"] for l in open(os.path.join(OUT, n))} - {None}
+        shared = [q["id"] for q in train if q.get("pmcid") in frozen_papers]
+        if shared:
+            sys.exit(f"training questions from papers already in dev/test: {shared[:5]}")
+        if train:
+            write("train.jsonl", train)
+            print(f"train.jsonl: {len(train)} questions (not frozen)")
         return
     if os.path.exists(man) and not a.force:
         sys.exit(f"{man} exists: the split is frozen (use --check to verify, --force only if you mean to re-freeze)")
