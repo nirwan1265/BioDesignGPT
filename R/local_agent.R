@@ -300,6 +300,21 @@ extract_spec_local <- function(question) {
          " Use at least 3, and set the final number by power; published studies often use more.")
 }
 
+# Questions the wording itself raises: a name that could mean several organisms (rules.tsv ambiguous_organism)
+.sf_text_questions <- function(spec, text) {
+  out <- character()
+  if (is.null(spec$organism)) {
+    amb <- .sf_rules_rows("ambiguous_organism")
+    t <- tolower(text)
+    for (w in unique(amb$pattern)) {
+      if (grepl(paste0("(?<![a-z0-9])", .sf_re_escape(tolower(w)), "(?![a-z0-9])"), t, perl = TRUE)) {
+        out <- c(out, sprintf("Which species do you mean by '%s': %s?", w, paste(amb$term[amb$pattern == w], collapse = " or ")))
+      }
+    }
+  }
+  out
+}
+
 # Choose candidate designs with simple, transparent rules
 .sf_candidates <- function(spec) {
   sys <- spec$system %||% ""
@@ -444,6 +459,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   known <- vapply(load_registry("experimental_systems")$systems, `[[`, "", "id")
   questions <- unique(unlist(lapply(intersect(sysset, known), system_questions)))
   if (is.null(questions)) questions <- character()
+  questions <- unique(c(.sf_text_questions(spec, question), questions))   # what the words leave open comes first
   notes <- if (length(sysset)) protocol_notes(system = sysset) else list()
   org_word <- tolower(strsplit(spec$organism %||% "", " ")[[1]][1])
   if (!is.na(org_word) && nzchar(org_word)) {

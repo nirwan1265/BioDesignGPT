@@ -2665,7 +2665,6 @@ western european house mouse	Mus musculus	subtaxon_common	ncbi_taxonomy
 benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
 n. benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
 nicotiana benthamiana	Nicotiana benthamiana	alias	aliases.tsv		
-tobacco	Nicotiana benthamiana	alias	aliases.tsv		
 16c	Nicotiana benthamiana	strain_or_line	biosample	4	1.0
 lab strain	Nicotiana benthamiana	strain_or_line	biosample	2	1.0
 lab360	Nicotiana benthamiana	strain_or_line	biosample	3	1.0

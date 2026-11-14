@@ -75,7 +75,6 @@ organism	Saccharomyces cerevisiae	word	budding yeast		curated terminology
 organism	Nicotiana benthamiana	word	nicotiana benthamiana		curated terminology (round 3)
 organism	Nicotiana benthamiana	word	benthamiana		curated terminology (round 3)
 organism	Nicotiana benthamiana	word	n. benthamiana		curated terminology (round 3)
-organism	Nicotiana benthamiana	word	tobacco		curated terminology (round 3)
 organism	Caenorhabditis elegans	word	c. elegans		curated terminology (round 3)
 organism	Caenorhabditis elegans	word	worms		curated terminology (round 3)
 organism	Caenorhabditis elegans	word	nematodes		curated terminology (round 3)
@@ -551,6 +550,14 @@ organism	Solanum pennellii	word	solanum pennellii	scientific name	deepseek
 organism	Solanum habrochaites	word	solanum habrochaites	scientific name	deepseek
 organism	Solanum phureja	word	solanum phureja	scientific name	deepseek
 organism	Nicotiana tabacum	word	nicotiana tabacum	scientific name	deepseek
+organism	Nicotiana tabacum	word	n. tabacum	abbreviated name	rules
+organism	Nicotiana tabacum	word	by-2	BY-2 tobacco cell line	rules
+organism	Nicotiana tabacum	word	by-2 cells	BY-2 tobacco cell line	rules
+organism	Nicotiana tabacum	word	xanthi	N. tabacum cultivar	rules
+organism	Nicotiana tabacum	word	samsun	N. tabacum cultivar	rules
+organism	Nicotiana tabacum	word	burley	burley tobacco	rules
+organism	Nicotiana tabacum	word	flue-cured tobacco	N. tabacum market type	rules
+organism	Nicotiana tabacum	word	virginia tobacco	N. tabacum market type	rules
 organism	Ipomoea batatas	word	sweet potato	common name	deepseek
 organism	Ipomoea batatas	word	ipomoea batatas	scientific name	deepseek
 organism	Manihot esculenta	word	cassava	common name	deepseek
@@ -4014,3 +4021,5 @@ schema2_assay		value	trap_seq	assays added to the label schema in version 2 (fil
 schema2_assay		value	wgs	assays added to the label schema in version 2 (filled into older labels when stated)	rules
 factor_rename	phenotype_group	value	phenotype	factor names renamed in label schema 2	rules
 factor_rename	genotype	value	strain	factor names renamed in label schema 2	rules
+ambiguous_organism	Nicotiana benthamiana	word	tobacco	could mean either species; ask which	rules
+ambiguous_organism	Nicotiana tabacum	word	tobacco	could mean either species; ask which	rules
