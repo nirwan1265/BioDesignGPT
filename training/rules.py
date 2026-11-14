@@ -54,3 +54,16 @@ def aliases(category):
             if r["category"].strip() == category:
                 out.setdefault(r["canonical_term"].strip(), []).append(r["alias"].strip().lower())
     return out
+
+
+def groups(name):
+    """{key: [value, ...]} for a table with several rows per key, values in file order."""
+    out = {}
+    for k, v in table(name):
+        out.setdefault(k, []).append(v)
+    return out
+
+
+def keys(name):
+    """the keys of a word-list table, in file order"""
+    return [k for k, _ in table(name)]

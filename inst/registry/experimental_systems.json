@@ -86,6 +86,7 @@
       "kind": "assay",
       "assay": "rnaseq",
       "sequencing": true,
+      "lists_assays": true,
       "consequential_questions": [
         "What is a biological replicate (plant, pool of plants, animal, culture)?",
         "Conditions and time points; is sampling destructive?",
@@ -153,6 +154,7 @@
       "id": "breeding_genetics",
       "kind": "study",
       "keeps_type_over_setting": false,
+      "lists_assays": true,
       "consequential_questions": [
         "What population: inbred panel, F2, RILs (SSD), NAM, backcross, diallel, North Carolina design, or sib-mated animal lines?",
         "How many parents/founders, and how many generations of selfing or sib mating are planned?",
@@ -189,6 +191,8 @@
       "kind": "study",
       "keeps_type_over_setting": false,
       "sequencing": true,
+      "lists_assays": true,
+      "rnaseq_gwas_are_assays": true,
       "consequential_questions": [
         "Which layers (GWAS, RNA-seq/eQTL, ATAC, Ribo-seq, metabolomics) and on the same individuals/tissue/time?",
         "How many genotypes for the eQTL/GWAS part (power) vs how many replicates for the differential part?",
@@ -207,6 +211,8 @@
       "kind": "assay",
       "assay": "ribo_seq",
       "sequencing": true,
+      "lists_assays": true,
+      "rnaseq_gwas_are_assays": true,
       "consequential_questions": [
         "Is matched RNA-seq from the same lysate planned (needed for translation efficiency)?",
         "How will translation be arrested: flash freezing vs cycloheximide (initiation-site artifacts)?",
@@ -224,6 +230,8 @@
       "kind": "assay",
       "assay": "atac_seq",
       "sequencing": true,
+      "lists_assays": true,
+      "rnaseq_gwas_are_assays": true,
       "consequential_questions": [
         "Tissue and nuclei isolation method (crude, FANS sorting, INTACT)?",
         "Biological replicates (>= 2) and target depth?",
@@ -240,6 +248,8 @@
       "id": "functional_validation",
       "kind": "study",
       "keeps_type_over_setting": true,
+      "lists_assays": true,
+      "rnaseq_gwas_are_assays": true,
       "consequential_questions": [
         "What is the candidate evidence (GWAS hit, eQTL, ATAC peak) and how many candidates?",
         "Validation route in each organism: CRISPR knockout, mutant alleles, overexpression, complementation, heterologous expression?",

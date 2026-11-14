@@ -97,7 +97,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   # ("two sites", "3 time points", "120 lines")
   other_count <- function(v) {
     w <- paste(c(as.character(v), names(.sf_number_words)[.sf_number_words == v]), collapse = "|")
-    nouns <- paste(c(.SF_LEVEL_NOUNS, .SF_GENO_NOUNS, "sites?", "locations?", "environments?", "years?", "seasons?",
+    nouns <- paste(c(.sf_list("level_noun"), .sf_list("genotype_noun_general"), .sf_list("location_noun"), .sf_list("season_noun"),
                      "generations?", "weeks?", "days?", "hours?", "h", "months?", "regions?", "farms?", "populations?",
                      "parents?", "founders?"), collapse = "|")
     all_m <- gregexpr(paste0("(?<![\\d.])\\b(?:", w, ")\\b(?![\\d.])"), text, perl = TRUE)[[1]]
@@ -105,7 +105,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     all_m[1] > 0 && other[1] > 0 && length(other) >= length(all_m)
   }
   rep_said <- function(v) stated(v) && !rep_range(v) && !other_count(v) &&
-    (v != 1 || grepl("\\bonly (?:one|1)\\b|\\b(?:one|single|1) (?:plot|sample|replicate|rep|pool|library)\\b|\\bno (?:replicat|biological rep)|unreplicated|\\bn ?= ?1\\b", text, perl = TRUE))
+    (v != 1 || grepl(.sf_cue("one_replicate_stated"), text, perl = TRUE))
   unit_counted <- function(u) {
     w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
     n <- paste0("(?:\\d+|", paste(names(.sf_number_words), collapse = "|"), ")")
@@ -117,7 +117,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   if (!is.null(model$system) && (is.null(rule$system) || tier(model$system) > tier(rule$system))) out$system <- model$system
   ma <- unlist(model$assays)
   if (length(ma) && (all(ma %in% assays_said) || is.null(rule$assays)))
-    out$assays <- as.list(unique(c(ma, setdiff(unlist(rule$assays), c(ma, .sf_generic_of(ma), .SF_METHOD_ASSAYS)))))
+    out$assays <- as.list(unique(c(ma, setdiff(unlist(rule$assays), c(ma, .sf_generic_of(ma), .sf_list("method_assay"))))))
   if (is.null(out$design$reps) && !is.null(model$design$reps) && rep_said(model$design$reps)) out <- spec_set(out, "design.reps", model$design$reps)
   if (is.null(out$experimental_unit) && !is.null(model$experimental_unit) && unit_counted(model$experimental_unit))
     out$experimental_unit <- model$experimental_unit
@@ -141,7 +141,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     if (is.na(c)) nm else gsub(" ", "_", c)
   }
   units <- c(unlist(lapply(load_registry("experimental_units")$units, `[[`, "id")),
-             "pup", "mouse", "rat", "fly", "plant", "cell", "replicate", "biological_replicate", "sample", "individual")
+             .sf_list("unit_word_extra"))
   named <- function(f) {
     lv <- unlist(f$levels)
     length(lv) >= 2 && all(vapply(tolower(lv), function(l) agrepl(l, text, max.distance = 0.2, fixed = TRUE), logical(1)))
@@ -157,7 +157,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   # counted, or its levels are
   canon_said <- unique(c(vapply(.sf_find_all(text, "factor"), canon, ""),
                          if (length(.sf_find_all(text, "genotype_noun"))) "genotype",
-                         if (grepl("\\b\\d+ ?(?:h|hr|hrs|hours?|min|days?|d|dpi|hpi|dai|weeks?|wk|months?)\\b|time ?points?|time course|diurnal|sampled at|harvested at",
+                         if (grepl(.sf_cue("time_stated"),
                                    text, perl = TRUE)) "time"))
   said <- function(f) word_in(f$name) || canon(f$name) %in% canon_said || named(f) || count_ok(f) ||
     any(vapply(unlist(f$levels), function(l) agrepl(tolower(l), text, max.distance = 0.2, fixed = TRUE), logical(1)))
@@ -273,9 +273,10 @@ extract_spec_hybrid <- function(question, model_dir = Sys.getenv("STUDYFORGE_MOD
 .sf_re_escape <- function(x) gsub("([][{}()+*^$|\\\\?.])", "\\\\\\1", x)
 
 # generic assay labels a specific one stands in for (an MeDIP study is not also "methylation" unless both are said)
-.sf_generic_of <- function(a) unique(unlist(list(medip = "methylation", scatac_seq = c("single_cell", "atac_seq"),
-  long_read_rna = "rnaseq", trap_seq = "rnaseq", nascent_rna = "rnaseq", m6a_seq = "rnaseq")[intersect(a, c("medip", "scatac_seq",
-  "long_read_rna", "trap_seq", "nascent_rna", "m6a_seq"))]))
+.sf_generic_of <- function(a) {
+  g <- .sf_groups("generic_assay")
+  unique(unlist(g[intersect(a, names(g))]))
+}
 
 # how genotypes were made or analysed, not what is measured: never added to a list on the rules' word alone
-.SF_METHOD_ASSAYS <- c("overexpression", "crispr", "heterologous", "complementation", "in_silico", "qtl_mapping")
+

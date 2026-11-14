@@ -14,7 +14,7 @@ test_that("assays added from the paper-question gaps resolve to their own canoni
 test_that("assays in a question map to evidence techniques", {
   s <- extract_spec_local("MeRIP-seq and CUT&Tag of HEK293T cells, knockdown vs control.")
   expect_true(all(c("m6a_seq", "chip_seq") %in% unlist(s$assays)))
-  expect_equal(unname(.SF_TECH_BY_ASSAY["m6a_seq"]), "m6A / MeRIP-seq")
+  expect_equal(unname(.sf_map("tech_by_assay")["m6a_seq"]), "m6A / MeRIP-seq")
 })
 
 test_that("single-cell ATAC is a single-cell study, not bulk ATAC; a named setting comes first", {

@@ -13,24 +13,16 @@ Output format matches inst/python/predict.py: {prompt: spec}, so the same scorin
 rules, the tagger and this reader.
 """
 import argparse, csv, json, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "training"))
+import rules as _rules  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALIASES = os.path.join(HERE, "..", "inst", "agent", "aliases.tsv")
 
-SYSTEMS = ["field", "greenhouse", "growth_chamber", "mouse", "drosophila", "cell_culture", "bulk_rnaseq", "single_cell",
-           "ribo_seq", "atac_seq", "metabolomics_lipidomics", "multi_omics", "breeding_genetics", "multi_environment",
-           "functional_validation", "livestock"]
-ASSAYS = ["rnaseq", "small_rnaseq", "single_cell", "atac_seq", "ribo_seq", "chip_seq", "methylation", "gwas", "eqtl",
-          "qtl_mapping", "lipidomics", "metabolomics", "crispr", "overexpression", "complementation", "heterologous", "in_silico",
-          "scatac_seq", "amplicon", "m6a_seq", "long_read_rna", "gbs", "degradome", "hic", "medip", "mnase_seq", "nascent_rna",
-          "spatial", "targeted_capture", "rip_clip", "metagenomics", "pool_seq", "bsa_seq", "trap_seq", "wgs"]
-ORGANISMS = ["Sorghum bicolor", "Zea mays", "Arabidopsis thaliana", "Oryza sativa", "Triticum aestivum", "Hordeum vulgare",
-             "Glycine max", "Solanum lycopersicum", "Solanum tuberosum", "Gossypium hirsutum", "Medicago truncatula",
-             "Brachypodium distachyon", "Setaria viridis", "Nicotiana benthamiana", "Physcomitrium patens", "Vitis vinifera",
-             "Populus trichocarpa", "Eucalyptus grandis", "Pinus taeda", "Malus domestica", "Citrus sinensis",
-             "Chlamydomonas reinhardtii", "Brassica napus", "Pennisetum glaucum", "Homo sapiens", "Mus musculus",
-             "Rattus norvegicus", "Danio rerio", "Drosophila melanogaster", "Caenorhabditis elegans", "Xenopus laevis",
-             "Gallus gallus", "Sus scrofa", "Bos taurus", "Macaca mulatta", "Saccharomyces cerevisiae"]
+# the reader's vocabulary (systems, assays, organisms, in prompt order) lives in inst/agent/rules.tsv
+SYSTEMS = _rules.keys("reader_system")
+ASSAYS = _rules.keys("reader_assay")
+ORGANISMS = _rules.keys("reader_organism")
 
 INSTRUCTIONS = f"""You read a researcher's description of an experiment and fill a fixed JSON skeleton.
 Fill ONLY what the researcher stated or what follows directly from their words. Use null when it is not stated.

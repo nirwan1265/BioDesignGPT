@@ -1,32 +1,29 @@
 # Trait suggestions ("what can I measure?") and sequencing details for the plan skeleton.
 
-.SF_STRESS_FROM_FACTOR <- c(water = "drought", salt = "salt", nitrogen = "nutrient", phosphorus = "nutrient",
-                            nutrient = "nutrient", diet = "diet", light = "light", disease = "disease", co2 = "any")
-
 # stresses implied by a spec and question ("cold" vs "heat" for a temperature factor)
 .sf_stresses <- function(spec, text = "") {
   text <- tolower(text %||% "")
   f <- vapply(spec$factors %||% list(), `[[`, "", "name")
-  s <- unname(.SF_STRESS_FROM_FACTOR[f])
-  if ("temperature" %in% f || grepl("\\bcold\\b|chill|freez|low temperature|\\bheat\\b|high temperature", text)) {
-    if (grepl("\\bcold\\b|chill|freez|low temperature|\\d+ ?c (?:vs|versus) ", text)) s <- c(s, "cold")
-    if (grepl("\\bheat\\b|high temperature|thermotoleran", text)) s <- c(s, "heat")
+  s <- unname(.sf_map("stress_from_factor")[f])
+  if ("temperature" %in% f || grepl(.sf_cue("temperature_stress"), text)) {
+    if (grepl(.sf_cue("cold_stress"), text)) s <- c(s, "cold")
+    if (grepl(.sf_cue("heat_stress"), text)) s <- c(s, "heat")
     if (!any(c("cold", "heat") %in% s)) s <- c(s, "cold", "heat")
   }
-  if (grepl("pathogen|infect|disease|fung|blight|rust\\b|lesion", text)) s <- c(s, "disease")
-  if (grepl("drought|water stress|water deficit", text)) s <- c(s, "drought")
-  if (grepl("\\bsalt|salin|nacl", text)) s <- c(s, "salt")
+  if (grepl(.sf_cue("disease_stress"), text)) s <- c(s, "disease")
+  if (grepl(.sf_cue("drought_stress"), text)) s <- c(s, "drought")
+  if (grepl(.sf_cue("salt_stress"), text)) s <- c(s, "salt")
   unique(s[!is.na(s)])
 }
 
 .sf_group_of <- function(organism, system = NULL) {
-  if (!is.null(system) && system %in% c("mouse", "drosophila", "cell_culture")) return("animal")
+  if (!is.null(system) && identical(unname(.sf_map("system_organism_group")[system]), "animal")) return("animal")
   p <- tryCatch(.sf_practice_tables()$practice, error = function(e) NULL)
   if (!is.null(organism) && !is.null(p) && "group" %in% names(p)) {
     g <- p$group[match(organism, p$organism)]
-    if (length(g) && !is.na(g)) return(if (g %in% c("plant", "tree", "alga")) "plant" else if (g == "fungus") "other" else "animal")
+    if (length(g) && !is.na(g)) return(unname(.sf_map("taxon_group")[g]) %|na|% "animal")
   }
-  if (!is.null(system) && system %in% c("field", "greenhouse", "growth_chamber", "breeding_genetics", "multi_environment")) return("plant")
+  if (!is.null(system) && identical(unname(.sf_map("system_organism_group")[system]), "plant")) return("plant")
   NA_character_
 }
 
@@ -49,7 +46,7 @@ suggest_traits <- function(organ = NULL, stress = NULL, organism = NULL, n = 8) 
   tr <- load_registry("traits")$traits
   grp <- .sf_group_of(organism)
   org <- if (!is.null(organ) && nzchar(organ)) .sf_norm_tissue(organ) else NULL
-  if (!is.null(org) && org %in% c("rosette", "seedling")) org <- c(org, "leaf", "whole plant")
+  if (!is.null(org) && org %in% names(.sf_groups("organ_also"))) org <- c(org, .sf_group("organ_also", org))
   score <- vapply(tr, function(t) {
     if (!is.na(grp) && !t$group %in% c(grp, "any")) return(-Inf)
     to <- unlist(t$organ)
@@ -75,27 +72,22 @@ suggest_traits <- function(organ = NULL, stress = NULL, organism = NULL, n = 8) 
     stringsAsFactors = FALSE)
 }
 
-.SF_ASKS_TRAITS <- "what (?:phenotyp\\w*|traits?)|which (?:phenotyp\\w*|traits?)|what (?:can|should|could) (?:i|we) (?:measure|phenotype|score|take)|what to (?:measure|phenotype|score)|phenotype traits"
+
 
 # sequencing details stated in the prompt
 .sf_sequencing <- function(text) {
   out <- list()
-  inst <- regmatches(text, regexpr(paste0("novaseq(?: x(?: plus)?| ?\\d{4})?|hiseq(?: x(?: ten)?| ?\\d{4})?|nextseq(?: ?\\d{3,4})?|miseq|",
-                                          "dnbseq(?:-?[gt]\\d+)?|bgiseq(?:-?\\d+)?|mgiseq(?:-?\\d+)?|pacbio(?: (?:sequel|revio)\\w*)?|",
-                                          "promethion|gridion|minion|nanopore|element aviti|aviti|ion torrent"), text, perl = TRUE))
+  inst <- regmatches(text, regexpr(.sf_cue("sequencer"), text, perl = TRUE))
   if (length(inst)) {
-    nice <- c(novaseq = "NovaSeq", hiseq = "HiSeq", nextseq = "NextSeq", miseq = "MiSeq", dnbseq = "DNBSEQ", bgiseq = "BGISEQ",
-              mgiseq = "MGISEQ", pacbio = "PacBio", promethion = "PromethION", gridion = "GridION", minion = "MinION",
-              nanopore = "Nanopore", aviti = "AVITI", "element aviti" = "Element AVITI", "ion torrent" = "Ion Torrent",
-              sequel = "Sequel", revio = "Revio", x = "X", plus = "Plus", ten = "Ten")
+    nice <- .sf_map("sequencer_name")
     w <- strsplit(inst, " ")[[1]]
     out$instrument <- paste(ifelse(w %in% names(nice), nice[w], toupper(w)), collapse = " ")
   }
-  rl <- regmatches(text, regexec("\\b(?:pe|2 ?x ?)(\\d{2,3})\\b|\\b(\\d{2,3}) ?(?:bp|nt|base)s? (?:paired|single)", text, perl = TRUE))[[1]]
+  rl <- regmatches(text, regexec(.sf_cue("read_length"), text, perl = TRUE))[[1]]
   if (length(rl)) out$read_length <- as.numeric(rl[nzchar(rl)][2])
-  if (grepl("paired[- ]end|\\bpe\\d{2,3}\\b|\\b2 ?x ?\\d{2,3}\\b", text, perl = TRUE)) out$layout <- "paired"
-  else if (grepl("single[- ]end|\\bse\\d{2,3}\\b", text, perl = TRUE)) out$layout <- "single"
-  dp <- regmatches(text, regexec("(\\d+(?:\\.\\d+)?) ?(?:m|million) (?:reads|read pairs|fragments)", text, perl = TRUE))[[1]]
+  if (grepl(.sf_cue("paired_end"), text, perl = TRUE)) out$layout <- "paired"
+  else if (grepl(.sf_cue("single_end"), text, perl = TRUE)) out$layout <- "single"
+  dp <- regmatches(text, regexec(.sf_cue("read_depth"), text, perl = TRUE))[[1]]
   if (length(dp)) out$depth_m <- as.numeric(dp[2])
   if (length(out)) out else NULL
 }
@@ -104,7 +96,7 @@ suggest_traits <- function(organ = NULL, stress = NULL, organism = NULL, n = 8) 
 .sf_practice_hint <- function(spec, what = c("tissue", "sequencing")) {
   what <- match.arg(what)
   if (is.null(spec$organism)) return(NULL)
-  techs <- c(unname(.SF_TECH_BY_ASSAY[unlist(spec$assays)]), unname(.SF_TECH_BY_SYSTEM[spec$system %||% ""]))
+  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[spec$system %||% ""]))
   techs <- unique(techs[!is.na(techs)])
   if (!length(techs)) return(NULL)
   p <- .sf_practice_tables()$practice

@@ -49,24 +49,13 @@
 }
 
 # words that are counted levels of something
-.SF_LEVEL_NOUNS <- c(
-  "conditions?", "treatments?", "treatment groups?", "experimental groups?", "groups?", "levels?", "doses?",
-  "dose groups?", "concentrations?", "rates?", "regimes?", "diets?", "temperatures?", "time ?points?",
-  "timepoints?", "sampling times?", "harvest times?", "stages?", "developmental stages?", "growth stages?",
-  "tissues?", "organs?", "tissue types?", "cell types?", "ages?", "age groups?", "photoperiods?",
-  "light levels?", "salinity levels?", "salt levels?", "water levels?", "irrigation levels?", "watering regimes?",
-  "fertilizer levels?", "nitrogen rates?", "nitrogen levels?", "media", "medium types?", "soil types?",
-  "inoculations?", "pathogens?", "isolates?", "drugs?", "compounds?", "hormones?", "stresses", "stress treatments?",
-  "types", "kinds", "variants?")
-.SF_GENO_NOUNS <- c("genotypes?", "lines", "cultivars?", "varieties", "accessions?", "strains?", "hybrids?",
-                    "landraces", "ecotypes?", "inbreds?", "mutants?", "cell lines?", "breeds?", "families", "clones?")
 # not factor levels: replication, space, sampling, units
-.SF_NOT_LEVELS <- "^(reps?|replicates?|replications?|blocks?|plots?|pots?|plants?|sites?|locations?|years?|seasons?|samples?|cells?|mice|animals?|individuals?|benches?|trays?|cages?|vials?|chambers?|weeks?|days?|hours?|minutes?|times|people|patients?|participants?)$"
+
 
 .sf_generic_factors <- function(text) {
   stop <- paste0("(?!(?:per|at|in|on|for|this|each|from|and|with|of|to|by|or|than|reps?|replicates?|plants?|plots?|",
                  "were|was|are|is|be|been|got|get|received|receive|had|have|has|given|took|take|people|patients?|mice|animals?)\\b)")
-  nouns <- paste(c(.SF_GENO_NOUNS, .SF_LEVEL_NOUNS), collapse = "|")
+  nouns <- paste(c(.sf_list("genotype_noun_general"), .sf_list("level_noun")), collapse = "|")
   out <- list()
   # P2: "<X> at|with|across <N> levels|doses|concentrations|rates|temperatures"
   re2 <- paste0("([a-z][a-z-]*(?:\\s+[a-z][a-z-]*)?)\\s+(?:at|with|across|in)\\s+", .sf_num_re,
@@ -77,7 +66,7 @@
     n <- .sf_num(g[3]); x <- sub("^(the|a|an|of|and|with|different)\\s+", "", g[2])
     if (is.na(n) || n < 2) next
     nm <- .sf_factor_name(x)
-    if (is.na(nm) || grepl(.SF_NOT_LEVELS, nm)) next
+    if (is.na(nm) || grepl(.sf_cue("not_a_level"), nm)) next
     out[[length(out) + 1]] <- list(name = nm, n = n, phrase = m)
   }
   # P1: "<N> [m1 m2] <noun> [of|for <X>]"
@@ -88,42 +77,33 @@
     g <- regmatches(m, regexec(re1, m, perl = TRUE))[[1]]
     n <- .sf_num(g[2]); mods <- trimws(g[3]); noun <- g[4]; of_x <- if (length(g) >= 5) g[5] else ""
     if (is.na(n) || n < 2 || n > 5000) next
-    if (grepl(paste0("^(", paste(.SF_GENO_NOUNS, collapse = "|"), ")$"), noun)) {
+    if (grepl(paste0("^(", paste(.sf_list("genotype_noun_general"), collapse = "|"), ")$"), noun)) {
       out[[length(out) + 1]] <- list(name = "genotype", n = n, phrase = m); next
     }
-    phrase <- if (nzchar(of_x) && grepl("^(conditions?|levels?|groups?|types|kinds|variants?|treatments?)$", noun)) of_x else
+    phrase <- if (nzchar(of_x) && grepl(.sf_cue("generic_level_noun"), noun)) of_x else
       trimws(paste(mods, noun))
-    if (grepl(.SF_NOT_LEVELS, phrase)) next
+    if (grepl(.sf_cue("not_a_level"), phrase)) next
     nm <- .sf_factor_name(phrase)
-    if (is.na(nm) || grepl(.SF_NOT_LEVELS, nm)) next
+    if (is.na(nm) || grepl(.sf_cue("not_a_level"), nm)) next
     out[[length(out) + 1]] <- list(name = nm, n = n, phrase = m)
   }
   out
 }
 
-.SF_ANALYSIS_RE <- paste0(
-  "\\b(?:already (?:have|collected|ran|did)|i have (?:some |the |my )?(?:\\w+ )?data|we have (?:some |the )?(?:\\w+ )?data|",
-  "data (?:is|are) (?:collected|in)|(?:what|which) (?:statistical )?(?:test|analysis|model)|how (?:do i|to|should i) ",
-  "(?:analy[sz]e|find|test|compare)|find (?:the )?de genes|differentially expressed|p-?values?|significan(?:t|ce) test)")
-
-.sf_goal <- function(text) if (grepl(.SF_ANALYSIS_RE, text, perl = TRUE)) "analysis" else "design"
+.sf_goal <- function(text) if (grepl(.sf_cue("analysis_intent"), text, perl = TRUE)) "analysis" else "design"
 
 # phenotype / outcome exactly as written (shown for confirmation; never counted as a stated canonical outcome)
 .sf_outcome_text <- function(text) {
-  re <- paste0("(?:measur\\w*|scor\\w*|phenotyp\\w*|quantif\\w*|record\\w*|look(?:ing)? at|effects? (?:on|of)|",
-               "affects?|impact on|response of|traits? (?:like|such as)|primary outcome is|outcome is)\\s+",
-               "(?:the |its |their |how )?([a-z][a-z -]{2,40}?)(?=[.,;?!]|\\s+(?:and|in|under|of|from|at|with|for|using)\\b|$)")
+  re <- .sf_cue("outcome_phrase")
   m <- regmatches(text, regexec(re, text, perl = TRUE))[[1]]
   if (length(m) < 2) return(NULL)
   v <- trimws(m[2])
-  if (!nzchar(v) || grepl("^(the|it|them|this|that|what|which|data|results?)$", v)) NULL else v
+  if (!nzchar(v) || grepl(.sf_cue("not_an_outcome"), v)) NULL else v
 }
 
 .sf_tissue_text <- function(text) {
   p <- tryCatch(.sf_practice_tables()$practice, error = function(e) NULL)
-  vocab <- c("leaf", "root", "shoot", "stem", "seed", "flower", "fruit", "seedling", "panicle", "ear", "tassel",
-             "anther", "pollen", "endosperm", "embryo", "kernel", "tuber", "berry", "bud", "liver", "brain", "blood",
-             "muscle", "heart", "kidney", "lung", "skin", "intestine", "colon", "spleen", "adipose", "bone marrow")
+  vocab <- .sf_list("tissue_word")
   if (!is.null(p)) vocab <- unique(c(vocab, p$tissue[p$tissue != "all" & nchar(p$tissue) <= 20 & !grepl("[^a-z ]", p$tissue)]))
   words <- strsplit(gsub("[^a-z ]", " ", text), "\\s+")[[1]]
   words <- words[nzchar(words)]
@@ -134,13 +114,6 @@
 }
 
 # factor words specific enough to count as a stated factor even without a number
-.SF_SPECIFIC_FACTORS <- c("temperature", "water", "salt", "nitrogen", "phosphorus", "nutrient", "diet", "co2", "light",
-                          "injury", "antibiotic", "sex", "disease", "infection")
-
-.SF_SYSTEM_BY_ASSAY <- c(rnaseq = "bulk_rnaseq", small_rnaseq = "bulk_rnaseq", atac_seq = "atac_seq",
-                         ribo_seq = "ribo_seq", single_cell = "single_cell", scatac_seq = "single_cell",
-                         long_read_rna = "bulk_rnaseq", trap_seq = "bulk_rnaseq", nascent_rna = "bulk_rnaseq")
-
 .sf_general_layer <- function(spec, text) {
   set <- function(path, value) if (!is.null(value) && !all(is.na(value))) spec <<- spec_set(spec, path, value)
   if (is.null(spec$organism)) {
@@ -153,7 +126,7 @@
     if (length(a)) set("assays", a)
   }
   if (is.null(spec$system) && length(spec$assays)) {
-    s <- unname(.SF_SYSTEM_BY_ASSAY[unlist(spec$assays)])
+    s <- unname(.sf_map("system_by_assay")[unlist(spec$assays)])
     s <- s[!is.na(s)]
     if (length(s)) set("system", s[1])
   }
@@ -178,15 +151,15 @@
   # specific factor words stated without a count ("cold", "drought", "placebo"): factor with unknown levels
   fx <- spec$factors %||% list()
   have <- vapply(fx, function(f) { c <- .sf_factor_name(f$name); if (is.na(c)) f$name else c }, "")
-  spec_words <- intersect(.sf_find_all(text, "factor"), .SF_SPECIFIC_FACTORS)
+  spec_words <- intersect(.sf_find_all(text, "factor"), .sf_list("specific_factor"))
   # one sex only ("male mice") is a constant, not a factor
-  if (!grepl("\\bmales?\\b.*\\bfemales?\\b|\\bfemales?\\b.*\\bmales?\\b|both sexes|\\bsexes\\b|\\bsex\\b", text, perl = TRUE))
+  if (!grepl(.sf_cue("both_sexes"), text, perl = TRUE))
     spec_words <- setdiff(spec_words, "sex")
   # a mock or uninfected control next to a pathogen defines an infection factor, not a generic treatment
-  if (grepl("\\bmock\\b|uninfected|non-?infected|non-?inoculated", text, perl = TRUE) &&
-      grepl("infect|inocul|virus|pathogen|challenge", text, perl = TRUE)) {
+  if (grepl(.sf_cue("mock_control"), text, perl = TRUE) &&
+      grepl(.sf_cue("infection_word"), text, perl = TRUE)) {
     spec_words <- union(spec_words, "infection")
-  } else if (grepl("\\bplac[ei]bo\\b|\\bvehicle\\b|\\bsham\\b|\\bmock\\b", text, perl = TRUE)) {
+  } else if (grepl(.sf_cue("placebo_control"), text, perl = TRUE)) {
     spec_words <- union(spec_words, "treatment")
   }
   for (w in setdiff(spec_words, have)) fx[[length(fx) + 1]] <- list(name = w)

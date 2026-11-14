@@ -82,12 +82,39 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   .sf_rules_cache$t
 }
 
-# one table as a named list (key -> value) in file order; order is priority. genotype_noun is a vector of keys.
-.sf_rules <- function(table) {
+.sf_rules_rows <- function(table) {
   t <- .sf_rules_table()
   t <- t[t$table == table, ]
-  if (table == "genotype_noun") return(t$key)
+  if (!nrow(t)) stop("rules.tsv has no table '", table, "'", call. = FALSE)
+  t
+}
+
+# pattern table as a named list (key -> regex) in file order; order is priority
+.sf_rules <- function(table) {
+  t <- .sf_rules_rows(table)
   stats::setNames(as.list(t$value), t$key)
+}
+
+# word list (the keys of a table), in file order
+.sf_list <- function(table) .sf_rules_rows(table)$key
+
+# lookup table as a named character vector (key -> value)
+.sf_map <- function(table) {
+  t <- .sf_rules_rows(table)
+  stats::setNames(t$value, t$key)
+}
+
+# one named pattern from the cue table; {N} stands for a number (digits or a number word)
+.sf_cue <- function(name) {
+  if (is.null(.sf_rules_cache$cue)) .sf_rules_cache$cue <- .sf_map("cue")
+  v <- .sf_rules_cache$cue[name]
+  if (is.na(v)) stop("rules.tsv has no cue '", name, "'", call. = FALSE)
+  v <- unname(v)
+  repeat {
+    i <- regexpr("{N}", v, fixed = TRUE)
+    if (i < 0) return(v)
+    v <- paste0(substr(v, 1, i - 1), .sf_num_re, substr(v, i + 3, nchar(v)))
+  }
 }
 
 # system ids by registry property, e.g. .sf_systems_where(kind = "study"), .sf_systems_where(plant_site = TRUE)
@@ -97,4 +124,16 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
   s <- .sf_rules_cache$systems
   ok <- vapply(s, function(x) all(vapply(names(want), function(k) identical(x[[k]], want[[k]]), logical(1))), logical(1))
   vapply(s[ok], `[[`, "", "id")
+}
+
+# table with several rows per key: the values of one key (file order), or all keys as a named list
+.sf_group <- function(table, key) {
+  t <- .sf_rules_rows(table)
+  v <- t$value[t$key == key]
+  if (!length(v)) stop("rules.tsv table '", table, "' has no key '", key, "'", call. = FALSE)
+  v
+}
+.sf_groups <- function(table) {
+  t <- .sf_rules_rows(table)
+  split(t$value, factor(t$key, levels = unique(t$key)))
 }

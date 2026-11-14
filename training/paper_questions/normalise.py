@@ -17,12 +17,11 @@ ALIASES = os.path.join(HERE, "..", "..", "inst", "agent", "aliases.tsv")
 sys.path.insert(0, os.path.join(HERE, ".."))
 import setting  # noqa: E402
 SCHEMA = 3
-NEW_ASSAYS = {"amplicon", "m6a_seq", "long_read_rna", "gbs", "degradome", "hic", "scatac_seq", "medip", "mnase_seq",
-              "nascent_rna", "spatial", "targeted_capture", "rip_clip", "metagenomics", "pool_seq", "bsa_seq", "trap_seq", "wgs"}
+import rules  # noqa: E402   inst/agent/rules.tsv
+NEW_ASSAYS = set(rules.keys("schema2_assay"))
 # a specific assay replaces the generic label used for it before, unless the generic one is also stated on its own
-STANDS_IN_FOR = {"medip": {"methylation"}, "scatac_seq": {"single_cell", "atac_seq"}, "long_read_rna": {"rnaseq"},
-                 "trap_seq": {"rnaseq"}, "nascent_rna": {"rnaseq"}}
-FACTOR_RENAME = {"phenotype": "phenotype_group", "strain": "genotype"}
+STANDS_IN_FOR = {k: set(v) for k, v in rules.groups("generic_assay").items()}
+FACTOR_RENAME = rules.mapping("factor_rename")
 _TABLE = None
 
 

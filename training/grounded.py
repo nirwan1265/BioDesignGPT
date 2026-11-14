@@ -26,74 +26,21 @@ import decode as D            # noqa: E402  tags -> StudySpec, exactly as at inf
 
 csv.field_size_limit(10 ** 9)
 
-# technique -> (system, assay phrases)
-TECH = {
-    "Bulk RNA-seq": ("bulk_rnaseq", ["RNA-seq", "bulk RNA-seq", "RNA-seq", "transcriptome profiling", "mRNA-seq"]),
-    "3' Tag-seq": ("bulk_rnaseq", ["3' Tag-seq", "QuantSeq 3' mRNA-seq", "Tag-seq"]),
-    "small RNA-seq": ("bulk_rnaseq", ["small RNA-seq", "sRNA-seq", "miRNA-seq"]),
-    "Long-read RNA (Iso-Seq/ONT)": ("bulk_rnaseq", ["RNA-seq"]),
-    "scRNA/snRNA-seq": ("single_cell", ["scRNA-seq", "single-cell RNA-seq", "snRNA-seq"]),
-    "scATAC-seq": ("single_cell", ["scATAC-seq"]),
-    "Ribo-seq": ("ribo_seq", ["Ribo-seq", "ribosome profiling"]),
-    "ATAC-seq": ("atac_seq", ["ATAC-seq", "ATAC-seq"]),
-}
-
-# the measured outcome each assay implies (decodes via the outcome aliases)
-OUTCOME_BY_TECH = {t: ["gene expression", "differential expression", "transcript abundance"]
-                   for t in ("Bulk RNA-seq", "3' Tag-seq", "Long-read RNA (Iso-Seq/ONT)")}
-OUTCOME_BY_TECH["Ribo-seq"] = ["translation efficiency", "translational efficiency"]
-OUTCOME_BY_TECH["ATAC-seq"] = ["accessible regions"]
-
-# factor attribute -> role
-ROLE = {}
-for k in ["genotype", "cultivar", "strain", "ecotype", "line", "breed", "genetic_mod", "population", "variety",
-          "accession", "genetic background", "background", "cell_line", "cell line"]:
-    ROLE[k] = "genotype"
-for k in ["treatment", "condition", "group", "stress", "compound", "stimulus", "growth condition", "growth_protocol",
-          "sample group", "experiment", "agent", "drug", "infection", "diet", "temp", "temperature"]:
-    ROLE[k] = "treatment"
-for k in ["time", "timepoint", "time point", "collection_date", "sampling time point", "time after treatment"]:
-    ROLE[k] = "time"
-for k in ["dev_stage", "stage", "developmental stage", "generation"]:
-    ROLE[k] = "stage"
-ROLE["age"] = "age"
-for k in ["tissue", "cell_type", "cell type", "sample_type", "cell_subtype", "isolation_source", "organism part", "organ"]:
-    ROLE[k] = "tissue"
-for k in ["disease", "disease_stage", "health_state", "phenotype", "disease state"]:
-    ROLE[k] = "disease"
-ROLE["sex"] = "sex"
-ROLE["batch"] = "batch"
-ROLE["geo_loc_name"] = "location"
-
-NAME_RULES = [  # for name_partN factors, classify by the level values
-    ("genotype", r"^(wt|wild[- ]?type|col-?0|ler|b73|mo17|ko|kd|oe|ox|mut|mutant|cr|crispr|ri|rnai|nil)\b|-\d+$|^[a-z]{2,5}\d{1,3}$"),
-    ("time", r"^(\d+(\.\d+)?\s?(h|hr|hrs|d|dae|dap|dpa|dpi|hpi|hpa|wk|w|min|m|day|days|weeks?)|[tdh]\d{1,3}|day\s?\d+|0h|zt\d+)$"),
-    ("treatment", r"^(ctrl|ck|control|mock|treat(ed)?|drought|ww|ds|wd|heat|ht|cold|ct|salt|nacl|aba|ja|meja|sa|eth|n\d|p\d|low|high|lp|hp|ln|hn|nn|sn|infected|uninfected|inf|pb|cd|as)$"),
-    ("tissue", r"^(leaf|leaves|root|roots|stem|seed|seeds|flower|shoot|ear|tassel|bud|fruit|liver|brain|muscle|kidney|heart|lung|embryo|endosperm|anther|pollen|callus|panicle|silk|husk)$"),
-]
-
-NOUN = {  # (k, noun) phrasing per role -> FACTOR span text (aliases resolve these)
-    "treatment": ["treatments", "conditions", "treatment groups", "stress treatments"],
-    "time": ["time points", "timepoints", "harvest times", "sampling times"],
-    "stage": ["developmental stages", "growth stages", "stages"],
-    "age": ["ages", "age groups"],
-    "tissue": ["tissues", "organs", "tissue types"],
-    "disease": ["disease groups", "disease states"],
-}
-GENO_NOUN = {"plant": ["genotypes", "lines", "cultivars", "accessions"], "animal": ["strains", "genotypes", "lines", "breeds"],
-             "cell": ["cell lines", "genotypes"], "micro": ["strains", "genotypes"]}
-REP_NOUN = {"plant": ["biological replicates", "replicates", "reps", "biological reps", "replicate plants"],
-            "animal": ["animals per group", "biological replicates", "replicates", "individuals per group"],
-            "human": ["donors per group", "biological replicates", "replicates", "samples per group"],
-            "micro": ["biological replicates", "replicate cultures", "replicates"]}
+# vocabulary from inst/agent/rules.tsv (training/rules.py), never lists in this script
+_PHRASES = rules.groups("technique_phrase")
+TECH = {t: (sysn, _PHRASES[t]) for t, sysn in rules.table("technique_system")}   # technique -> (system, assay phrases)
+OUTCOME_BY_TECH = rules.groups("technique_outcome")      # the measured outcome each assay implies
+ROLE = rules.mapping("attribute_role")                   # BioSample attribute -> factor role
+NAME_RULES = rules.table("level_role")                   # level values -> role, for sample-name factors
+NOUN = rules.groups("role_noun")                         # how a prompt names a factor of each role
+GENO_NOUN = rules.groups("genotype_phrase")              # by organism kind
+REP_NOUN = rules.groups("replicate_phrase")              # by organism kind
 ORG_ALIASES = collections.defaultdict(list)
 for (cat, canon), al in G.AL.items():
     if cat == "organism":
         ORG_ALIASES[canon] += al
 
-CLEAN_TISSUE = {"leaves": "leaf", "roots": "root", "seedlings": "seedling", "seeds": "seed", "shoots": "shoot",
-                "flowers": "flower", "fruits": "fruit", "stems": "stem", "whole plant": "whole plant", "whole plants": "whole plant",
-                "embryos": "embryo", "buds": "bud", "panicles": "panicle", "berries": "berry", "tubers": "tuber"}
+CLEAN_TISSUE = rules.mapping("tissue_singular")
 
 
 def kind(group, organism):

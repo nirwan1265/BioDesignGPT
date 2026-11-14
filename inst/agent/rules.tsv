@@ -87,3 +87,655 @@ held_out_species	setaria	Setaria viridis	species kept out of all training; score
 held_out_species	poplar	Populus trichocarpa	species kept out of all training; scored as unseen organisms
 held_out_species	zebrafish	Danio rerio	species kept out of all training; scored as unseen organisms
 held_out_species	xenopus	Xenopus laevis	species kept out of all training; scored as unseen organisms
+cue	n_genotypes_vs_control	{N}\s+(?:mutants?|lines|genotypes)\s+(?:vs\.?|versus|and)\s+(?:a|the|one)\s+(?:control|wild[- ]type)	"two mutants vs the wild type" ({N} = a number)
+cue	n_treated_and_n_control	{N}\s+treated and\s+{N}\s+control	"5 treated and 5 control"
+cue	n_units_per_unit	{N}\s+(?:tagged |bagged |spaced )?([a-z]+)\s+(?:per|each|in each|from each)\s+(?:of\s+(?:the\s+)?(?:\d+\s+)?)?(?:replicate\s+)?([a-z]+)	"<N> <measured unit> per <experimental unit>" ("5 plants per plot")
+cue	n_cells_per_animal	{N}\s+(?:neurons|cells)\s+(?:from|per|each|of)\s+(?:one\s+)?(?:[a-z-]+\s+)?(?:mouse|animal|donor|sample)|(?:about |~)?{N}\s+cells each	cells sampled per animal or donor (single cell)
+cue	n_and_n_mice	(?:from )?{N}\s+[a-z-]+\s+and\s+\d+\s+[a-z-]+\s+mice	"4 treated and 4 control mice"
+cue	pens_of_n	pens? of {N}	"pens of 10" (animals per pen)
+cue	n_generations	(?:for|after)\s+{N}\s+generations	"for 6 generations"
+cue	filial_generation	(?:to|until|the|at|in) (?:the )?f(\d+)\b	"to the F6" (filial generation)
+cue	n_males_and_n_females	{N}\s+males and\s+{N}\s+females	parents: "10 males and 20 females"
+cue	n_founders	{N}\s+founders	NAM founders (parents = founders + 1)
+cue	among_n	among\s+{N}\s+	"crosses among 8 parents"
+cue	not_a_level	^(reps?|replicates?|replications?|blocks?|plots?|pots?|plants?|sites?|locations?|years?|seasons?|samples?|cells?|mice|animals?|individuals?|benches?|trays?|cages?|vials?|chambers?|weeks?|days?|hours?|minutes?|times|people|patients?|participants?)$	a counted word that is replication, space or sampling, not factor levels
+cue	generic_level_noun	^(conditions?|levels?|groups?|types|kinds|variants?|treatments?)$	"3 levels of X": the factor is X, not the noun
+cue	analysis_intent	\b(?:already (?:have|collected|ran|did)|i have (?:some |the |my )?(?:\w+ )?data|we have (?:some |the )?(?:\w+ )?data|data (?:is|are) (?:collected|in)|(?:what|which) (?:statistical )?(?:test|analysis|model)|how (?:do i|to|should i) (?:analy[sz]e|find|test|compare)|find (?:the )?de genes|differentially expressed|p-?values?|significan(?:t|ce) test)	the user already has data (goal = analysis)
+cue	outcome_phrase	(?:measur\w*|scor\w*|phenotyp\w*|quantif\w*|record\w*|look(?:ing)? at|effects? (?:on|of)|affects?|impact on|response of|traits? (?:like|such as)|primary outcome is|outcome is)\s+(?:the |its |their |how )?([a-z][a-z -]{2,40}?)(?=[.,;?!]|\s+(?:and|in|under|of|from|at|with|for|using)\b|$)	outcome written after measure / score / effects on ... (shown for confirmation)
+cue	not_an_outcome	^(the|it|them|this|that|what|which|data|results?)$	captured words that are not an outcome
+cue	both_sexes	\bmales?\b.*\bfemales?\b|\bfemales?\b.*\bmales?\b|both sexes|\bsexes\b|\bsex\b	both sexes named (one sex only is a constant)
+cue	mock_control	\bmock\b|uninfected|non-?infected|non-?inoculated	a mock / uninfected control
+cue	infection_word	infect|inocul|virus|pathogen|challenge	a pathogen or infection (with a mock control: infection factor)
+cue	placebo_control	\bplac[ei]bo\b|\bvehicle\b|\bsham\b|\bmock\b	a placebo / vehicle / sham control (treatment factor)
+cue	one_replicate_stated	\bonly (?:one|1)\b|\b(?:one|single|1) (?:plot|sample|replicate|rep|pool|library)\b|\bno (?:replicat|biological rep)|unreplicated|\bn ?= ?1\b	one replicate stated outright
+cue	time_stated	\b\d+ ?(?:h|hr|hrs|hours?|min|days?|d|dpi|hpi|dai|weeks?|wk|months?)\b|time ?points?|time course|diurnal|sampled at|harvested at	sampling times stated (time is a factor)
+cue	temperature_stress	\bcold\b|chill|freez|low temperature|\bheat\b|high temperature	temperature stress named
+cue	cold_stress	\bcold\b|chill|freez|low temperature|\d+ ?c (?:vs|versus) 	cold stress
+cue	heat_stress	\bheat\b|high temperature|thermotoleran	heat stress
+cue	disease_stress	pathogen|infect|disease|fung|blight|rust\b|lesion	disease / pathogen
+cue	drought_stress	drought|water stress|water deficit	drought
+cue	salt_stress	\bsalt|salin|nacl	salt
+cue	asks_traits	what (?:phenotyp\w*|traits?)|which (?:phenotyp\w*|traits?)|what (?:can|should|could) (?:i|we) (?:measure|phenotype|score|take)|what to (?:measure|phenotype|score)|phenotype traits	the user asks what to measure
+cue	sequencer	novaseq(?: x(?: plus)?| ?\d{4})?|hiseq(?: x(?: ten)?| ?\d{4})?|nextseq(?: ?\d{3,4})?|miseq|dnbseq(?:-?[gt]\d+)?|bgiseq(?:-?\d+)?|mgiseq(?:-?\d+)?|pacbio(?: (?:sequel|revio)\w*)?|promethion|gridion|minion|nanopore|element aviti|aviti|ion torrent	sequencing instrument named
+cue	read_length	\b(?:pe|2 ?x ?)(\d{2,3})\b|\b(\d{2,3}) ?(?:bp|nt|base)s? (?:paired|single)	read length (PE150, 2x100, 150 bp paired)
+cue	paired_end	paired[- ]end|\bpe\d{2,3}\b|\b2 ?x ?\d{2,3}\b	paired-end reads
+cue	single_end	single[- ]end|\bse\d{2,3}\b	single-end reads
+cue	read_depth	(\d+(?:\.\d+)?) ?(?:m|million) (?:reads|read pairs|fragments)	sequencing depth in millions of reads
+cue	animal_study_fallback	vehicle|strains?|\bmales?\b|\bfemales?\b	no other system cue: these words point to an animal (mouse) study
+cue	whole_plot_irrigation	linear-move|pivot|can't randomi|cannot randomi|drip|laterals?|sprinkler line|whole plots?	irrigation applied to whole plots (main-plot factor)
+cue	water_factor	irrigation|drought|water(?:ed|ing)? (?:levels?|regimes?|treatments?)|well-watered|water-stressed|water stress	a water / drought factor is stated
+cue	water_two_levels	vs\.? |versus|drought plots|control and drought|well-watered	water factor stated as a two-level contrast
+cue	line_source	sprinkler line|line-source|line source	line-source irrigation gradient
+cue	nitrogen_factor	nitrogen	a nitrogen factor is stated
+cue	temperature_factor	\d+ ?c (?:vs|versus)|temperature|heat stress	a temperature factor is stated
+cue	chamber_word	chamber	chambers mentioned (temperature/CO2 applied per chamber)
+cue	co2_factor	co2	a CO2 factor is stated
+cue	nutrient_factor	nutrient solutions?|nutrient treatments?	a nutrient factor is stated
+cue	antibiotic_factor	antibiotic	an antibiotic factor is stated
+cue	given_in_water_or_diet	drinking water|diet	treatment given in drinking water or diet (applied per cage)
+cue	diet_factor	high-fat|low-fat|maternal .*diet|diet	a diet factor is stated
+cue	maternal	pregnan|maternal|dams	treatment through the mother (dam / litter is the unit)
+cue	dose_factor	\bdoses?\b	a dose factor is stated
+cue	sex_factor	male and female|both sexes|males? .* females?	both sexes studied
+cue	injury_factor	injur(?:ed|y) (?:and|vs\.?|versus) (?:un-?injured|sham)|injured and uninjured	injured vs uninjured / sham
+cue	treatment_vs_control	\bdrug\b|compound|treatment (?:vs|versus|with a) control|vs\.? vehicle|versus vehicle|vs\.? saline|versus saline	a treatment-vs-control contrast
+cue	dosed_per_animal	dosed individually|individually dosed|injection|gavage	treatment given to each animal (animal is the unit)
+cue	genotype_vs_wildtype	knockout|mutant (?:line )?(?:lives|vs|versus|and)|than canton|than wild|(?:compare|vs\.?|versus) (?:to )?wild[- ]type|overexpress	mutant / knockout vs wild type (two genotypes)
+cue	greenhouse_word	greenhouse	greenhouse mentioned (benches count as replicates)
+cue	one_season	this season|one season|single season	one season
+cue	unreplicated	one plot each|one plot per|no replication|unreplicated|can't replicate|cannot replicate	unreplicated (one replicate)
+cue	one_plant_per_pot	one plant per pot	one plant per pot (pot is the unit)
+cue	housed_per_cage	per cage|mice per cage|housed \d+ per cage	animals housed together in cages
+cue	given_to_whole_cage	drinking water|in the diet|chow	treatment reaches the whole cage (cage is the unit)
+cue	donor_word	donor	cells from donors (donor is the unit)
+cue	from_one	from one 	cells from one animal (one replicate)
+cue	dosed_individually	dosed individually|individually dosed|each mouse dosed	each animal dosed individually
+cue	within_cages	within cages	randomised within cages (cage is a block)
+cue	maternal_treatment	given to pregnant|pregnant dams|maternal treatment	treatment given to pregnant dams
+cue	pup_word	pups?	pups measured
+cue	one_chamber_per_treatment	one (?:set|chamber) (?:to|per) each|chambers?, one|one chamber per|identical chambers	one chamber per treatment (chamber is the unit)
+cue	pen_word	\bpens?\b	animals kept in pens
+cue	pen_level_treatment	diet|feed|drinking water|supplement|challenge	treatment given per pen (pen is the unit)
+cue	tank_word	\btanks?\b|\baquari	animals kept in tanks / aquaria
+cue	aquatic_animal	fish|larvae|zebrafish|tadpoles|xenopus	aquatic animals (tank is the unit)
+cue	single_plant_plots	single-plant|spaced plants	single-plant plots (plant is the unit)
+cue	greenhouse_pot_unit	\bpots?\b|carts?|imaging platform	pots / carts in a greenhouse (pot is the unit)
+cue	pots_word	\bpots\b	pots in a growth chamber (pot is the unit)
+cue	cell_tray	-cell trays?|cell trays?|\btrays?\b	plants in cell trays (cell is the unit)
+cue	fly_vial_study	lifespan|diet|yeast|wing	fly study run in vials (vial is the unit)
+cue	bench_word	\bbench(?:es)?\b	greenhouse benches (bench is a block)
+cue	shelf_word	shelves	shelves (shelf is a block)
+cue	experimenter_word	technicians?|experimenters?	several experimenters (experimenter is a block)
+cue	batch_word	\bbatch(?:es)?\b	batches (batch is a block)
+cue	library_word	librar	library batches
+cue	combining_ability	gca|sca|combining ability|heterosis	diallel / combining-ability study
+cue	controlled_environment	greenhouse|growth chamber|glasshouse|controlled environment	a controlled environment (with a field: greenhouse-to-field)
+cue	field_word	field	field mentioned
+cue	translation_efficiency	translation(?:al)? efficiency	translation efficiency is the outcome
+cue	yield_stability	yield stability	yield stability is the outcome
+cue	mixed_height	tall .*short|short .*tall|mix of tall	tall and short entries (split plot by height)
+cue	early_generation_trial	early-generation|\d\.\d plots? per	early-generation trial (p-rep / augmented)
+cue	repeated_over_time_plants	every day|daily|over time|track growth|time course	plants measured repeatedly over time
+cue	bench_mention	bench	benches mentioned (split plot by bench)
+cue	tray_mention	tray	trays mentioned (augmented tray design)
+cue	mapping_intent	qtl|mapping|inbred	QTL mapping / inbred population
+cue	controlled_setting_mention	greenhouse|chamber	greenhouse or chamber mentioned (greenhouse-to-field validation)
+cue	repeated_over_time_animals	weekly|over time|days? \d+ and|repeated	animals measured repeatedly over time
+cue	vial_lifespan_study	lifespan|diet|yeast	fly lifespan / diet study in vials
+reps_noun	reps?		noun after a number that states replicates
+reps_noun	replicates?		noun after a number that states replicates
+reps_noun	replications?		noun after a number that states replicates
+reps_noun	blocks		noun after a number that states replicates
+reps_noun	dams per		noun after a number that states replicates
+reps_noun_greenhouse	benches		in a greenhouse, benches also state replicates
+location_noun	locations?		noun after a number that states locations
+location_noun	sites?		noun after a number that states locations
+location_noun	environments?		noun after a number that states locations
+season_noun	seasons?		noun after a number that states seasons
+season_noun	years?		noun after a number that states seasons
+measured_unit_word	panicle	plant	word in "N <word> per ..." -> measured unit
+measured_unit_word	pup	pup	word in "N <word> per ..." -> measured unit
+measured_unit_word	cell	cell	word in "N <word> per ..." -> measured unit
+measured_unit_word	leaf	leaf	word in "N <word> per ..." -> measured unit
+measured_unit_word	plant	plant	word in "N <word> per ..." -> measured unit
+measured_unit_word	mouse	mouse	word in "N <word> per ..." -> measured unit
+measured_unit_word	mice	mouse	word in "N <word> per ..." -> measured unit
+measured_unit_word	well	well	word in "N <word> per ..." -> measured unit
+measured_unit_word	neuron	cell	word in "N <word> per ..." -> measured unit
+measured_unit_word	fly	fly	word in "N <word> per ..." -> measured unit
+group_word	group		"N per <group word>" states replicates, not subsamples
+group_word	condition		"N per <group word>" states replicates, not subsamples
+group_word	treatment		"N per <group word>" states replicates, not subsamples
+group_word	genotype		"N per <group word>" states replicates, not subsamples
+group_word	line		"N per <group word>" states replicates, not subsamples
+group_word	entry		"N per <group word>" states replicates, not subsamples
+group_word	cultivar		"N per <group word>" states replicates, not subsamples
+group_word	variety		"N per <group word>" states replicates, not subsamples
+not_experimental_unit	combination		word after "per" that is never the experimental unit
+not_experimental_unit	batch		word after "per" that is never the experimental unit
+not_experimental_unit	day		word after "per" that is never the experimental unit
+not_experimental_unit	week		word after "per" that is never the experimental unit
+not_experimental_unit	run		word after "per" that is never the experimental unit
+not_experimental_unit	group		word after "per" that is never the experimental unit
+not_experimental_unit	condition		word after "per" that is never the experimental unit
+not_experimental_unit	treatment		word after "per" that is never the experimental unit
+not_experimental_unit	time		word after "per" that is never the experimental unit
+not_experimental_unit	site		word after "per" that is never the experimental unit
+not_experimental_unit	year		word after "per" that is never the experimental unit
+not_experimental_unit	season		word after "per" that is never the experimental unit
+not_experimental_unit	location		word after "per" that is never the experimental unit
+not_experimental_unit	genotype		word after "per" that is never the experimental unit
+not_experimental_unit	line		word after "per" that is never the experimental unit
+not_experimental_unit	entry		word after "per" that is never the experimental unit
+not_measurement_unit	female		word before "per" that is never the measured unit
+not_measurement_unit	male		word before "per" that is never the measured unit
+not_measurement_unit	parent		word before "per" that is never the measured unit
+not_measurement_unit	injection		word before "per" that is never the measured unit
+not_measurement_unit	egg		word before "per" that is never the measured unit
+not_measurement_unit	replicate		word before "per" that is never the measured unit
+not_measurement_unit	sample		word before "per" that is never the measured unit
+context_assay	rnaseq		assays a system usually takes for granted; listed only where the registry says rnaseq_gwas_are_assays
+context_assay	gwas		assays a system usually takes for granted; listed only where the registry says rnaseq_gwas_are_assays
+level_noun	conditions?		noun after a number that counts levels of a factor
+level_noun	treatments?		noun after a number that counts levels of a factor
+level_noun	treatment groups?		noun after a number that counts levels of a factor
+level_noun	experimental groups?		noun after a number that counts levels of a factor
+level_noun	groups?		noun after a number that counts levels of a factor
+level_noun	levels?		noun after a number that counts levels of a factor
+level_noun	doses?		noun after a number that counts levels of a factor
+level_noun	dose groups?		noun after a number that counts levels of a factor
+level_noun	concentrations?		noun after a number that counts levels of a factor
+level_noun	rates?		noun after a number that counts levels of a factor
+level_noun	regimes?		noun after a number that counts levels of a factor
+level_noun	diets?		noun after a number that counts levels of a factor
+level_noun	temperatures?		noun after a number that counts levels of a factor
+level_noun	time ?points?		noun after a number that counts levels of a factor
+level_noun	timepoints?		noun after a number that counts levels of a factor
+level_noun	sampling times?		noun after a number that counts levels of a factor
+level_noun	harvest times?		noun after a number that counts levels of a factor
+level_noun	stages?		noun after a number that counts levels of a factor
+level_noun	developmental stages?		noun after a number that counts levels of a factor
+level_noun	growth stages?		noun after a number that counts levels of a factor
+level_noun	tissues?		noun after a number that counts levels of a factor
+level_noun	organs?		noun after a number that counts levels of a factor
+level_noun	tissue types?		noun after a number that counts levels of a factor
+level_noun	cell types?		noun after a number that counts levels of a factor
+level_noun	ages?		noun after a number that counts levels of a factor
+level_noun	age groups?		noun after a number that counts levels of a factor
+level_noun	photoperiods?		noun after a number that counts levels of a factor
+level_noun	light levels?		noun after a number that counts levels of a factor
+level_noun	salinity levels?		noun after a number that counts levels of a factor
+level_noun	salt levels?		noun after a number that counts levels of a factor
+level_noun	water levels?		noun after a number that counts levels of a factor
+level_noun	irrigation levels?		noun after a number that counts levels of a factor
+level_noun	watering regimes?		noun after a number that counts levels of a factor
+level_noun	fertilizer levels?		noun after a number that counts levels of a factor
+level_noun	nitrogen rates?		noun after a number that counts levels of a factor
+level_noun	nitrogen levels?		noun after a number that counts levels of a factor
+level_noun	media		noun after a number that counts levels of a factor
+level_noun	medium types?		noun after a number that counts levels of a factor
+level_noun	soil types?		noun after a number that counts levels of a factor
+level_noun	inoculations?		noun after a number that counts levels of a factor
+level_noun	pathogens?		noun after a number that counts levels of a factor
+level_noun	isolates?		noun after a number that counts levels of a factor
+level_noun	drugs?		noun after a number that counts levels of a factor
+level_noun	compounds?		noun after a number that counts levels of a factor
+level_noun	hormones?		noun after a number that counts levels of a factor
+level_noun	stresses		noun after a number that counts levels of a factor
+level_noun	stress treatments?		noun after a number that counts levels of a factor
+level_noun	types		noun after a number that counts levels of a factor
+level_noun	kinds		noun after a number that counts levels of a factor
+level_noun	variants?		noun after a number that counts levels of a factor
+genotype_noun_general	genotypes?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	lines		noun after a number that counts genotypes (general layer)
+genotype_noun_general	cultivars?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	varieties		noun after a number that counts genotypes (general layer)
+genotype_noun_general	accessions?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	strains?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	hybrids?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	landraces		noun after a number that counts genotypes (general layer)
+genotype_noun_general	ecotypes?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	inbreds?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	mutants?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	cell lines?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	breeds?		noun after a number that counts genotypes (general layer)
+genotype_noun_general	families		noun after a number that counts genotypes (general layer)
+genotype_noun_general	clones?		noun after a number that counts genotypes (general layer)
+tissue_word	leaf		tissue words (plus tissues seen in the evidence tables)
+tissue_word	root		tissue words (plus tissues seen in the evidence tables)
+tissue_word	shoot		tissue words (plus tissues seen in the evidence tables)
+tissue_word	stem		tissue words (plus tissues seen in the evidence tables)
+tissue_word	seed		tissue words (plus tissues seen in the evidence tables)
+tissue_word	flower		tissue words (plus tissues seen in the evidence tables)
+tissue_word	fruit		tissue words (plus tissues seen in the evidence tables)
+tissue_word	seedling		tissue words (plus tissues seen in the evidence tables)
+tissue_word	panicle		tissue words (plus tissues seen in the evidence tables)
+tissue_word	ear		tissue words (plus tissues seen in the evidence tables)
+tissue_word	tassel		tissue words (plus tissues seen in the evidence tables)
+tissue_word	anther		tissue words (plus tissues seen in the evidence tables)
+tissue_word	pollen		tissue words (plus tissues seen in the evidence tables)
+tissue_word	endosperm		tissue words (plus tissues seen in the evidence tables)
+tissue_word	embryo		tissue words (plus tissues seen in the evidence tables)
+tissue_word	kernel		tissue words (plus tissues seen in the evidence tables)
+tissue_word	tuber		tissue words (plus tissues seen in the evidence tables)
+tissue_word	berry		tissue words (plus tissues seen in the evidence tables)
+tissue_word	bud		tissue words (plus tissues seen in the evidence tables)
+tissue_word	liver		tissue words (plus tissues seen in the evidence tables)
+tissue_word	brain		tissue words (plus tissues seen in the evidence tables)
+tissue_word	blood		tissue words (plus tissues seen in the evidence tables)
+tissue_word	muscle		tissue words (plus tissues seen in the evidence tables)
+tissue_word	heart		tissue words (plus tissues seen in the evidence tables)
+tissue_word	kidney		tissue words (plus tissues seen in the evidence tables)
+tissue_word	lung		tissue words (plus tissues seen in the evidence tables)
+tissue_word	skin		tissue words (plus tissues seen in the evidence tables)
+tissue_word	intestine		tissue words (plus tissues seen in the evidence tables)
+tissue_word	colon		tissue words (plus tissues seen in the evidence tables)
+tissue_word	spleen		tissue words (plus tissues seen in the evidence tables)
+tissue_word	adipose		tissue words (plus tissues seen in the evidence tables)
+tissue_word	bone marrow		tissue words (plus tissues seen in the evidence tables)
+specific_factor	temperature		factor words specific enough to count as stated without a number
+specific_factor	water		factor words specific enough to count as stated without a number
+specific_factor	salt		factor words specific enough to count as stated without a number
+specific_factor	nitrogen		factor words specific enough to count as stated without a number
+specific_factor	phosphorus		factor words specific enough to count as stated without a number
+specific_factor	nutrient		factor words specific enough to count as stated without a number
+specific_factor	diet		factor words specific enough to count as stated without a number
+specific_factor	co2		factor words specific enough to count as stated without a number
+specific_factor	light		factor words specific enough to count as stated without a number
+specific_factor	injury		factor words specific enough to count as stated without a number
+specific_factor	antibiotic		factor words specific enough to count as stated without a number
+specific_factor	sex		factor words specific enough to count as stated without a number
+specific_factor	disease		factor words specific enough to count as stated without a number
+specific_factor	infection		factor words specific enough to count as stated without a number
+system_by_assay	rnaseq	bulk_rnaseq	assay -> its assay-family system
+system_by_assay	small_rnaseq	bulk_rnaseq	assay -> its assay-family system
+system_by_assay	atac_seq	atac_seq	assay -> its assay-family system
+system_by_assay	ribo_seq	ribo_seq	assay -> its assay-family system
+system_by_assay	single_cell	single_cell	assay -> its assay-family system
+system_by_assay	scatac_seq	single_cell	assay -> its assay-family system
+system_by_assay	long_read_rna	bulk_rnaseq	assay -> its assay-family system
+system_by_assay	trap_seq	bulk_rnaseq	assay -> its assay-family system
+system_by_assay	nascent_rna	bulk_rnaseq	assay -> its assay-family system
+unit_word_extra	pup		units that are never factors (besides the unit registry)
+unit_word_extra	mouse		units that are never factors (besides the unit registry)
+unit_word_extra	rat		units that are never factors (besides the unit registry)
+unit_word_extra	fly		units that are never factors (besides the unit registry)
+unit_word_extra	plant		units that are never factors (besides the unit registry)
+unit_word_extra	cell		units that are never factors (besides the unit registry)
+unit_word_extra	replicate		units that are never factors (besides the unit registry)
+unit_word_extra	biological_replicate		units that are never factors (besides the unit registry)
+unit_word_extra	sample		units that are never factors (besides the unit registry)
+unit_word_extra	individual		units that are never factors (besides the unit registry)
+method_assay	overexpression		how genotypes were made or analysed, not a measured assay
+method_assay	crispr		how genotypes were made or analysed, not a measured assay
+method_assay	heterologous		how genotypes were made or analysed, not a measured assay
+method_assay	complementation		how genotypes were made or analysed, not a measured assay
+method_assay	in_silico		how genotypes were made or analysed, not a measured assay
+method_assay	qtl_mapping		how genotypes were made or analysed, not a measured assay
+stress_from_factor	water	drought	factor -> the stress it implies (trait suggestions)
+stress_from_factor	salt	salt	factor -> the stress it implies (trait suggestions)
+stress_from_factor	nitrogen	nutrient	factor -> the stress it implies (trait suggestions)
+stress_from_factor	phosphorus	nutrient	factor -> the stress it implies (trait suggestions)
+stress_from_factor	nutrient	nutrient	factor -> the stress it implies (trait suggestions)
+stress_from_factor	diet	diet	factor -> the stress it implies (trait suggestions)
+stress_from_factor	light	light	factor -> the stress it implies (trait suggestions)
+stress_from_factor	disease	disease	factor -> the stress it implies (trait suggestions)
+stress_from_factor	co2	any	factor -> the stress it implies (trait suggestions)
+sequencer_name	novaseq	NovaSeq	instrument word -> display name
+sequencer_name	hiseq	HiSeq	instrument word -> display name
+sequencer_name	nextseq	NextSeq	instrument word -> display name
+sequencer_name	miseq	MiSeq	instrument word -> display name
+sequencer_name	dnbseq	DNBSEQ	instrument word -> display name
+sequencer_name	bgiseq	BGISEQ	instrument word -> display name
+sequencer_name	mgiseq	MGISEQ	instrument word -> display name
+sequencer_name	pacbio	PacBio	instrument word -> display name
+sequencer_name	promethion	PromethION	instrument word -> display name
+sequencer_name	gridion	GridION	instrument word -> display name
+sequencer_name	minion	MinION	instrument word -> display name
+sequencer_name	nanopore	Nanopore	instrument word -> display name
+sequencer_name	aviti	AVITI	instrument word -> display name
+sequencer_name	element aviti	Element AVITI	instrument word -> display name
+sequencer_name	ion torrent	Ion Torrent	instrument word -> display name
+sequencer_name	sequel	Sequel	instrument word -> display name
+sequencer_name	revio	Revio	instrument word -> display name
+sequencer_name	x	X	instrument word -> display name
+sequencer_name	plus	Plus	instrument word -> display name
+sequencer_name	ten	Ten	instrument word -> display name
+tech_by_system	bulk_rnaseq	Bulk RNA-seq	system -> evidence-table technique label
+tech_by_system	single_cell	scRNA/snRNA-seq	system -> evidence-table technique label
+tech_by_system	ribo_seq	Ribo-seq	system -> evidence-table technique label
+tech_by_system	atac_seq	ATAC-seq	system -> evidence-table technique label
+tech_by_assay	rnaseq	Bulk RNA-seq	assay -> evidence-table technique label
+tech_by_assay	small_rnaseq	small RNA-seq	assay -> evidence-table technique label
+tech_by_assay	single_cell	scRNA/snRNA-seq	assay -> evidence-table technique label
+tech_by_assay	ribo_seq	Ribo-seq	assay -> evidence-table technique label
+tech_by_assay	atac_seq	ATAC-seq	assay -> evidence-table technique label
+tech_by_assay	chip_seq	ChIP-seq	assay -> evidence-table technique label
+tech_by_assay	methylation	Bisulfite / methylome	assay -> evidence-table technique label
+tech_by_assay	scatac_seq	scATAC-seq	assay -> evidence-table technique label
+tech_by_assay	amplicon	Amplicon	assay -> evidence-table technique label
+tech_by_assay	m6a_seq	m6A / MeRIP-seq	assay -> evidence-table technique label
+tech_by_assay	long_read_rna	Long-read RNA (Iso-Seq/ONT)	assay -> evidence-table technique label
+tech_by_assay	gbs	GBS / RAD-seq	assay -> evidence-table technique label
+tech_by_assay	degradome	Degradome / PARE	assay -> evidence-table technique label
+tech_by_assay	hic	3D genome (Hi-C/HiChIP)	assay -> evidence-table technique label
+tech_by_assay	medip	Methylation (enrichment)	assay -> evidence-table technique label
+tech_by_assay	mnase_seq	MNase-seq	assay -> evidence-table technique label
+tech_by_assay	nascent_rna	Nascent RNA (GRO/PRO/NET)	assay -> evidence-table technique label
+tech_by_assay	spatial	Spatial transcriptomics	assay -> evidence-table technique label
+tech_by_assay	targeted_capture	Targeted capture	assay -> evidence-table technique label
+tech_by_assay	rip_clip	RIP / CLIP-seq	assay -> evidence-table technique label
+tech_by_assay	trap_seq	TRAP-seq	assay -> evidence-table technique label
+tech_by_assay	wgs	WGS / resequencing	assay -> evidence-table technique label
+technique_system	Bulk RNA-seq	bulk_rnaseq	evidence technique -> assay-family system (grounded prompts)
+technique_system	3' Tag-seq	bulk_rnaseq	evidence technique -> assay-family system (grounded prompts)
+technique_system	small RNA-seq	bulk_rnaseq	evidence technique -> assay-family system (grounded prompts)
+technique_system	Long-read RNA (Iso-Seq/ONT)	bulk_rnaseq	evidence technique -> assay-family system (grounded prompts)
+technique_system	scRNA/snRNA-seq	single_cell	evidence technique -> assay-family system (grounded prompts)
+technique_system	scATAC-seq	single_cell	evidence technique -> assay-family system (grounded prompts)
+technique_system	Ribo-seq	ribo_seq	evidence technique -> assay-family system (grounded prompts)
+technique_system	ATAC-seq	atac_seq	evidence technique -> assay-family system (grounded prompts)
+technique_phrase	Bulk RNA-seq	RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Bulk RNA-seq	bulk RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Bulk RNA-seq	RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Bulk RNA-seq	transcriptome profiling	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Bulk RNA-seq	mRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	3' Tag-seq	3' Tag-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	3' Tag-seq	QuantSeq 3' mRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	3' Tag-seq	Tag-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	small RNA-seq	small RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	small RNA-seq	sRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	small RNA-seq	miRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Long-read RNA (Iso-Seq/ONT)	RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	scRNA/snRNA-seq	scRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	scRNA/snRNA-seq	single-cell RNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	scRNA/snRNA-seq	snRNA-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	scATAC-seq	scATAC-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Ribo-seq	Ribo-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	Ribo-seq	ribosome profiling	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	ATAC-seq	ATAC-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_phrase	ATAC-seq	ATAC-seq	how a prompt names the technique (one row per phrase; repeats weight the choice)
+technique_outcome	Bulk RNA-seq	gene expression	outcome a technique implies (grounded prompts)
+technique_outcome	Bulk RNA-seq	differential expression	outcome a technique implies (grounded prompts)
+technique_outcome	Bulk RNA-seq	transcript abundance	outcome a technique implies (grounded prompts)
+technique_outcome	3' Tag-seq	gene expression	outcome a technique implies (grounded prompts)
+technique_outcome	3' Tag-seq	differential expression	outcome a technique implies (grounded prompts)
+technique_outcome	3' Tag-seq	transcript abundance	outcome a technique implies (grounded prompts)
+technique_outcome	Long-read RNA (Iso-Seq/ONT)	gene expression	outcome a technique implies (grounded prompts)
+technique_outcome	Long-read RNA (Iso-Seq/ONT)	differential expression	outcome a technique implies (grounded prompts)
+technique_outcome	Long-read RNA (Iso-Seq/ONT)	transcript abundance	outcome a technique implies (grounded prompts)
+technique_outcome	Ribo-seq	translation efficiency	outcome a technique implies (grounded prompts)
+technique_outcome	Ribo-seq	translational efficiency	outcome a technique implies (grounded prompts)
+technique_outcome	ATAC-seq	accessible regions	outcome a technique implies (grounded prompts)
+attribute_role	genotype	genotype	BioSample attribute -> factor role
+attribute_role	cultivar	genotype	BioSample attribute -> factor role
+attribute_role	strain	genotype	BioSample attribute -> factor role
+attribute_role	ecotype	genotype	BioSample attribute -> factor role
+attribute_role	line	genotype	BioSample attribute -> factor role
+attribute_role	breed	genotype	BioSample attribute -> factor role
+attribute_role	genetic_mod	genotype	BioSample attribute -> factor role
+attribute_role	population	genotype	BioSample attribute -> factor role
+attribute_role	variety	genotype	BioSample attribute -> factor role
+attribute_role	accession	genotype	BioSample attribute -> factor role
+attribute_role	genetic background	genotype	BioSample attribute -> factor role
+attribute_role	background	genotype	BioSample attribute -> factor role
+attribute_role	cell_line	genotype	BioSample attribute -> factor role
+attribute_role	cell line	genotype	BioSample attribute -> factor role
+attribute_role	treatment	treatment	BioSample attribute -> factor role
+attribute_role	condition	treatment	BioSample attribute -> factor role
+attribute_role	group	treatment	BioSample attribute -> factor role
+attribute_role	stress	treatment	BioSample attribute -> factor role
+attribute_role	compound	treatment	BioSample attribute -> factor role
+attribute_role	stimulus	treatment	BioSample attribute -> factor role
+attribute_role	growth condition	treatment	BioSample attribute -> factor role
+attribute_role	growth_protocol	treatment	BioSample attribute -> factor role
+attribute_role	sample group	treatment	BioSample attribute -> factor role
+attribute_role	experiment	treatment	BioSample attribute -> factor role
+attribute_role	agent	treatment	BioSample attribute -> factor role
+attribute_role	drug	treatment	BioSample attribute -> factor role
+attribute_role	infection	treatment	BioSample attribute -> factor role
+attribute_role	diet	treatment	BioSample attribute -> factor role
+attribute_role	temp	treatment	BioSample attribute -> factor role
+attribute_role	temperature	treatment	BioSample attribute -> factor role
+attribute_role	time	time	BioSample attribute -> factor role
+attribute_role	timepoint	time	BioSample attribute -> factor role
+attribute_role	time point	time	BioSample attribute -> factor role
+attribute_role	collection_date	time	BioSample attribute -> factor role
+attribute_role	sampling time point	time	BioSample attribute -> factor role
+attribute_role	time after treatment	time	BioSample attribute -> factor role
+attribute_role	dev_stage	stage	BioSample attribute -> factor role
+attribute_role	stage	stage	BioSample attribute -> factor role
+attribute_role	developmental stage	stage	BioSample attribute -> factor role
+attribute_role	generation	stage	BioSample attribute -> factor role
+attribute_role	age	age	BioSample attribute -> factor role
+attribute_role	tissue	tissue	BioSample attribute -> factor role
+attribute_role	cell_type	tissue	BioSample attribute -> factor role
+attribute_role	cell type	tissue	BioSample attribute -> factor role
+attribute_role	sample_type	tissue	BioSample attribute -> factor role
+attribute_role	cell_subtype	tissue	BioSample attribute -> factor role
+attribute_role	isolation_source	tissue	BioSample attribute -> factor role
+attribute_role	organism part	tissue	BioSample attribute -> factor role
+attribute_role	organ	tissue	BioSample attribute -> factor role
+attribute_role	disease	disease	BioSample attribute -> factor role
+attribute_role	disease_stage	disease	BioSample attribute -> factor role
+attribute_role	health_state	disease	BioSample attribute -> factor role
+attribute_role	phenotype	disease	BioSample attribute -> factor role
+attribute_role	disease state	disease	BioSample attribute -> factor role
+attribute_role	sex	sex	BioSample attribute -> factor role
+attribute_role	batch	batch	BioSample attribute -> factor role
+attribute_role	geo_loc_name	location	BioSample attribute -> factor role
+level_role	genotype	^(wt|wild[- ]?type|col-?0|ler|b73|mo17|ko|kd|oe|ox|mut|mutant|cr|crispr|ri|rnai|nil)\b|-\d+$|^[a-z]{2,5}\d{1,3}$	regex on level values -> factor role (sample-name factors); order = priority
+level_role	time	^(\d+(\.\d+)?\s?(h|hr|hrs|d|dae|dap|dpa|dpi|hpi|hpa|wk|w|min|m|day|days|weeks?)|[tdh]\d{1,3}|day\s?\d+|0h|zt\d+)$	regex on level values -> factor role (sample-name factors); order = priority
+level_role	treatment	^(ctrl|ck|control|mock|treat(ed)?|drought|ww|ds|wd|heat|ht|cold|ct|salt|nacl|aba|ja|meja|sa|eth|n\d|p\d|low|high|lp|hp|ln|hn|nn|sn|infected|uninfected|inf|pb|cd|as)$	regex on level values -> factor role (sample-name factors); order = priority
+level_role	tissue	^(leaf|leaves|root|roots|stem|seed|seeds|flower|shoot|ear|tassel|bud|fruit|liver|brain|muscle|kidney|heart|lung|embryo|endosperm|anther|pollen|callus|panicle|silk|husk)$	regex on level values -> factor role (sample-name factors); order = priority
+role_noun	treatment	treatments	how a prompt names a factor of this role
+role_noun	treatment	conditions	how a prompt names a factor of this role
+role_noun	treatment	treatment groups	how a prompt names a factor of this role
+role_noun	treatment	stress treatments	how a prompt names a factor of this role
+role_noun	time	time points	how a prompt names a factor of this role
+role_noun	time	timepoints	how a prompt names a factor of this role
+role_noun	time	harvest times	how a prompt names a factor of this role
+role_noun	time	sampling times	how a prompt names a factor of this role
+role_noun	stage	developmental stages	how a prompt names a factor of this role
+role_noun	stage	growth stages	how a prompt names a factor of this role
+role_noun	stage	stages	how a prompt names a factor of this role
+role_noun	age	ages	how a prompt names a factor of this role
+role_noun	age	age groups	how a prompt names a factor of this role
+role_noun	tissue	tissues	how a prompt names a factor of this role
+role_noun	tissue	organs	how a prompt names a factor of this role
+role_noun	tissue	tissue types	how a prompt names a factor of this role
+role_noun	disease	disease groups	how a prompt names a factor of this role
+role_noun	disease	disease states	how a prompt names a factor of this role
+genotype_phrase	plant	genotypes	how a prompt names genotypes, by organism kind
+genotype_phrase	plant	lines	how a prompt names genotypes, by organism kind
+genotype_phrase	plant	cultivars	how a prompt names genotypes, by organism kind
+genotype_phrase	plant	accessions	how a prompt names genotypes, by organism kind
+genotype_phrase	animal	strains	how a prompt names genotypes, by organism kind
+genotype_phrase	animal	genotypes	how a prompt names genotypes, by organism kind
+genotype_phrase	animal	lines	how a prompt names genotypes, by organism kind
+genotype_phrase	animal	breeds	how a prompt names genotypes, by organism kind
+genotype_phrase	cell	cell lines	how a prompt names genotypes, by organism kind
+genotype_phrase	cell	genotypes	how a prompt names genotypes, by organism kind
+genotype_phrase	micro	strains	how a prompt names genotypes, by organism kind
+genotype_phrase	micro	genotypes	how a prompt names genotypes, by organism kind
+replicate_phrase	plant	biological replicates	how a prompt names replicates, by organism kind
+replicate_phrase	plant	replicates	how a prompt names replicates, by organism kind
+replicate_phrase	plant	reps	how a prompt names replicates, by organism kind
+replicate_phrase	plant	biological reps	how a prompt names replicates, by organism kind
+replicate_phrase	plant	replicate plants	how a prompt names replicates, by organism kind
+replicate_phrase	animal	animals per group	how a prompt names replicates, by organism kind
+replicate_phrase	animal	biological replicates	how a prompt names replicates, by organism kind
+replicate_phrase	animal	replicates	how a prompt names replicates, by organism kind
+replicate_phrase	animal	individuals per group	how a prompt names replicates, by organism kind
+replicate_phrase	human	donors per group	how a prompt names replicates, by organism kind
+replicate_phrase	human	biological replicates	how a prompt names replicates, by organism kind
+replicate_phrase	human	replicates	how a prompt names replicates, by organism kind
+replicate_phrase	human	samples per group	how a prompt names replicates, by organism kind
+replicate_phrase	micro	biological replicates	how a prompt names replicates, by organism kind
+replicate_phrase	micro	replicate cultures	how a prompt names replicates, by organism kind
+replicate_phrase	micro	replicates	how a prompt names replicates, by organism kind
+tissue_singular	leaves	leaf	tissue word -> singular form
+tissue_singular	roots	root	tissue word -> singular form
+tissue_singular	seedlings	seedling	tissue word -> singular form
+tissue_singular	seeds	seed	tissue word -> singular form
+tissue_singular	shoots	shoot	tissue word -> singular form
+tissue_singular	flowers	flower	tissue word -> singular form
+tissue_singular	fruits	fruit	tissue word -> singular form
+tissue_singular	stems	stem	tissue word -> singular form
+tissue_singular	whole plant	whole plant	tissue word -> singular form
+tissue_singular	whole plants	whole plant	tissue word -> singular form
+tissue_singular	embryos	embryo	tissue word -> singular form
+tissue_singular	buds	bud	tissue word -> singular form
+tissue_singular	panicles	panicle	tissue word -> singular form
+tissue_singular	berries	berry	tissue word -> singular form
+tissue_singular	tubers	tuber	tissue word -> singular form
+reader_system	field		systems shown to the LLM reader, in prompt order
+reader_system	greenhouse		systems shown to the LLM reader, in prompt order
+reader_system	growth_chamber		systems shown to the LLM reader, in prompt order
+reader_system	mouse		systems shown to the LLM reader, in prompt order
+reader_system	drosophila		systems shown to the LLM reader, in prompt order
+reader_system	cell_culture		systems shown to the LLM reader, in prompt order
+reader_system	bulk_rnaseq		systems shown to the LLM reader, in prompt order
+reader_system	single_cell		systems shown to the LLM reader, in prompt order
+reader_system	ribo_seq		systems shown to the LLM reader, in prompt order
+reader_system	atac_seq		systems shown to the LLM reader, in prompt order
+reader_system	metabolomics_lipidomics		systems shown to the LLM reader, in prompt order
+reader_system	multi_omics		systems shown to the LLM reader, in prompt order
+reader_system	breeding_genetics		systems shown to the LLM reader, in prompt order
+reader_system	multi_environment		systems shown to the LLM reader, in prompt order
+reader_system	functional_validation		systems shown to the LLM reader, in prompt order
+reader_system	livestock		systems shown to the LLM reader, in prompt order
+reader_assay	rnaseq		assays shown to the LLM reader, in prompt order
+reader_assay	small_rnaseq		assays shown to the LLM reader, in prompt order
+reader_assay	single_cell		assays shown to the LLM reader, in prompt order
+reader_assay	atac_seq		assays shown to the LLM reader, in prompt order
+reader_assay	ribo_seq		assays shown to the LLM reader, in prompt order
+reader_assay	chip_seq		assays shown to the LLM reader, in prompt order
+reader_assay	methylation		assays shown to the LLM reader, in prompt order
+reader_assay	gwas		assays shown to the LLM reader, in prompt order
+reader_assay	eqtl		assays shown to the LLM reader, in prompt order
+reader_assay	qtl_mapping		assays shown to the LLM reader, in prompt order
+reader_assay	lipidomics		assays shown to the LLM reader, in prompt order
+reader_assay	metabolomics		assays shown to the LLM reader, in prompt order
+reader_assay	crispr		assays shown to the LLM reader, in prompt order
+reader_assay	overexpression		assays shown to the LLM reader, in prompt order
+reader_assay	complementation		assays shown to the LLM reader, in prompt order
+reader_assay	heterologous		assays shown to the LLM reader, in prompt order
+reader_assay	in_silico		assays shown to the LLM reader, in prompt order
+reader_assay	scatac_seq		assays shown to the LLM reader, in prompt order
+reader_assay	amplicon		assays shown to the LLM reader, in prompt order
+reader_assay	m6a_seq		assays shown to the LLM reader, in prompt order
+reader_assay	long_read_rna		assays shown to the LLM reader, in prompt order
+reader_assay	gbs		assays shown to the LLM reader, in prompt order
+reader_assay	degradome		assays shown to the LLM reader, in prompt order
+reader_assay	hic		assays shown to the LLM reader, in prompt order
+reader_assay	medip		assays shown to the LLM reader, in prompt order
+reader_assay	mnase_seq		assays shown to the LLM reader, in prompt order
+reader_assay	nascent_rna		assays shown to the LLM reader, in prompt order
+reader_assay	spatial		assays shown to the LLM reader, in prompt order
+reader_assay	targeted_capture		assays shown to the LLM reader, in prompt order
+reader_assay	rip_clip		assays shown to the LLM reader, in prompt order
+reader_assay	metagenomics		assays shown to the LLM reader, in prompt order
+reader_assay	pool_seq		assays shown to the LLM reader, in prompt order
+reader_assay	bsa_seq		assays shown to the LLM reader, in prompt order
+reader_assay	trap_seq		assays shown to the LLM reader, in prompt order
+reader_assay	wgs		assays shown to the LLM reader, in prompt order
+reader_organism	Sorghum bicolor		organisms shown to the LLM reader, in prompt order
+reader_organism	Zea mays		organisms shown to the LLM reader, in prompt order
+reader_organism	Arabidopsis thaliana		organisms shown to the LLM reader, in prompt order
+reader_organism	Oryza sativa		organisms shown to the LLM reader, in prompt order
+reader_organism	Triticum aestivum		organisms shown to the LLM reader, in prompt order
+reader_organism	Hordeum vulgare		organisms shown to the LLM reader, in prompt order
+reader_organism	Glycine max		organisms shown to the LLM reader, in prompt order
+reader_organism	Solanum lycopersicum		organisms shown to the LLM reader, in prompt order
+reader_organism	Solanum tuberosum		organisms shown to the LLM reader, in prompt order
+reader_organism	Gossypium hirsutum		organisms shown to the LLM reader, in prompt order
+reader_organism	Medicago truncatula		organisms shown to the LLM reader, in prompt order
+reader_organism	Brachypodium distachyon		organisms shown to the LLM reader, in prompt order
+reader_organism	Setaria viridis		organisms shown to the LLM reader, in prompt order
+reader_organism	Nicotiana benthamiana		organisms shown to the LLM reader, in prompt order
+reader_organism	Physcomitrium patens		organisms shown to the LLM reader, in prompt order
+reader_organism	Vitis vinifera		organisms shown to the LLM reader, in prompt order
+reader_organism	Populus trichocarpa		organisms shown to the LLM reader, in prompt order
+reader_organism	Eucalyptus grandis		organisms shown to the LLM reader, in prompt order
+reader_organism	Pinus taeda		organisms shown to the LLM reader, in prompt order
+reader_organism	Malus domestica		organisms shown to the LLM reader, in prompt order
+reader_organism	Citrus sinensis		organisms shown to the LLM reader, in prompt order
+reader_organism	Chlamydomonas reinhardtii		organisms shown to the LLM reader, in prompt order
+reader_organism	Brassica napus		organisms shown to the LLM reader, in prompt order
+reader_organism	Pennisetum glaucum		organisms shown to the LLM reader, in prompt order
+reader_organism	Homo sapiens		organisms shown to the LLM reader, in prompt order
+reader_organism	Mus musculus		organisms shown to the LLM reader, in prompt order
+reader_organism	Rattus norvegicus		organisms shown to the LLM reader, in prompt order
+reader_organism	Danio rerio		organisms shown to the LLM reader, in prompt order
+reader_organism	Drosophila melanogaster		organisms shown to the LLM reader, in prompt order
+reader_organism	Caenorhabditis elegans		organisms shown to the LLM reader, in prompt order
+reader_organism	Xenopus laevis		organisms shown to the LLM reader, in prompt order
+reader_organism	Gallus gallus		organisms shown to the LLM reader, in prompt order
+reader_organism	Sus scrofa		organisms shown to the LLM reader, in prompt order
+reader_organism	Bos taurus		organisms shown to the LLM reader, in prompt order
+reader_organism	Macaca mulatta		organisms shown to the LLM reader, in prompt order
+reader_organism	Saccharomyces cerevisiae		organisms shown to the LLM reader, in prompt order
+count_noun	check	checks?	noun after a number that counts check entries
+count_noun	check	check varieties	noun after a number that counts check entries
+count_noun	check	commercial checks	noun after a number that counts check entries
+count_noun	water	irrigation levels?	noun after a number that counts this factor's levels
+count_noun	water	water levels?	noun after a number that counts this factor's levels
+count_noun	water	water regimes?	noun after a number that counts this factor's levels
+count_noun	water	watering levels?	noun after a number that counts this factor's levels
+count_noun	water	water treatments?	noun after a number that counts this factor's levels
+count_noun	nitrogen	nitrogen levels?	noun after a number that counts this factor's levels
+count_noun	nitrogen	n levels?	noun after a number that counts this factor's levels
+count_noun	nutrient	nutrient solutions?	noun after a number that counts this factor's levels
+count_noun	nutrient	nutrient treatments?	noun after a number that counts this factor's levels
+count_noun	diet	yeast concentrations?	noun after a number that counts this factor's levels
+count_noun	diet	diets?	noun after a number that counts this factor's levels
+count_noun	dose	groups?	noun after a number that counts this factor's levels
+count_noun	treatment	treatment groups?	noun after a number that counts this factor's levels
+count_noun	per_cage	per cage	animals per cage
+count_noun	per_pen	per pen	animals per pen
+assay_advice_family	metabolomics	metabolomics_lipidomics	assay -> system whose advice it brings (not used to set the system)
+assay_advice_family	lipidomics	metabolomics_lipidomics	assay -> system whose advice it brings (not used to set the system)
+generic_assay	medip	methylation	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	scatac_seq	single_cell	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	scatac_seq	atac_seq	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	long_read_rna	rnaseq	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	trap_seq	rnaseq	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	nascent_rna	rnaseq	a specific assay stands in for this generic label (not both unless both are said)
+generic_assay	m6a_seq	rnaseq	a specific assay stands in for this generic label (not both unless both are said)
+system_organism_group	mouse	animal	organism group a system implies (trait suggestions)
+system_organism_group	drosophila	animal	organism group a system implies (trait suggestions)
+system_organism_group	cell_culture	animal	organism group a system implies (trait suggestions)
+system_organism_group	field	plant	organism group a system implies (trait suggestions)
+system_organism_group	greenhouse	plant	organism group a system implies (trait suggestions)
+system_organism_group	growth_chamber	plant	organism group a system implies (trait suggestions)
+system_organism_group	breeding_genetics	plant	organism group a system implies (trait suggestions)
+system_organism_group	multi_environment	plant	organism group a system implies (trait suggestions)
+taxon_group	plant	plant	evidence-table taxon group -> trait group (anything else: animal)
+taxon_group	tree	plant	evidence-table taxon group -> trait group (anything else: animal)
+taxon_group	alga	plant	evidence-table taxon group -> trait group (anything else: animal)
+taxon_group	fungus	other	evidence-table taxon group -> trait group (anything else: animal)
+organ_also	rosette	leaf	traits of these organs also apply
+organ_also	rosette	whole plant	traits of these organs also apply
+organ_also	seedling	leaf	traits of these organs also apply
+organ_also	seedling	whole plant	traits of these organs also apply
+schema2_assay	amplicon		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	bsa_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	degradome		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	gbs		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	hic		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	long_read_rna		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	m6a_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	medip		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	metagenomics		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	mnase_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	nascent_rna		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	pool_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	rip_clip		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	scatac_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	spatial		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	targeted_capture		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	trap_seq		assays added to the label schema in version 2 (filled into older labels when stated)
+schema2_assay	wgs		assays added to the label schema in version 2 (filled into older labels when stated)
+factor_rename	phenotype	phenotype_group	factor names renamed in label schema 2
+factor_rename	strain	genotype	factor names renamed in label schema 2

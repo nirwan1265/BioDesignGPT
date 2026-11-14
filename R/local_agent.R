@@ -72,7 +72,7 @@ extract_spec_local <- function(question) {
   if (length(intersect(study, .sf_systems_where(keeps_type_over_setting = TRUE)))) set("system", study[1]) else
     if (length(study) && length(site)) set("system", site[1]) else   # "RILs in an RCBD in the field": a field trial
     if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
-    if (length(sys)) set("system", sys[1]) else if (.sf_has(text, "vehicle|strains?|\\bmales?\\b|\\bfemales?\\b")) set("system", "mouse")
+    if (length(sys)) set("system", sys[1]) else if (.sf_has(text, .sf_cue("animal_study_fallback"))) set("system", "mouse")
   org <- names(.sf_rules("organism"))[vapply(.sf_rules("organism"), function(p) .sf_has(text, p), logical(1))]
   if (length(org)) set("organism", org[1])
 
@@ -90,143 +90,141 @@ extract_spec_local <- function(question) {
     if (!is.null(applied_to)) f$applied_to <- applied_to
     factors[[length(factors) + 1]] <<- f
   }
-  n_geno <- .sf_count_before(text, .sf_rules("genotype_noun"))
+  n_geno <- .sf_count_before(text, .sf_list("genotype_noun"))
   if (!is.na(n_geno)) add_factor("genotype", n_geno)
-  n_chk <- .sf_count_before(text, c("checks?", "check varieties", "commercial checks"))
+  n_chk <- .sf_count_before(text, .sf_group("count_noun", "check"))
   if (!is.na(n_chk)) add_factor("check", n_chk)
-  whole_plot_water <- .sf_has(text, "linear-move|pivot|can't randomi|cannot randomi|drip|laterals?|sprinkler line|whole plots?")
-  if (.sf_has(text, "irrigation|drought|water(?:ed|ing)? (?:levels?|regimes?|treatments?)|well-watered|water-stressed|water stress")) {
-    n <- .sf_count_before(text, c("irrigation levels?", "water levels?", "water regimes?", "watering levels?", "water treatments?"))
-    if (is.na(n) && .sf_has(text, "vs\\.? |versus|drought plots|control and drought|well-watered")) n <- 2
-    line_src <- .sf_has(text, "sprinkler line|line-source|line source")
+  whole_plot_water <- .sf_has(text, .sf_cue("whole_plot_irrigation"))
+  if (.sf_has(text, .sf_cue("water_factor"))) {
+    n <- .sf_count_before(text, .sf_group("count_noun", "water"))
+    if (is.na(n) && .sf_has(text, .sf_cue("water_two_levels"))) n <- 2
+    line_src <- .sf_has(text, .sf_cue("line_source"))
     add_factor("water", n, if (line_src) "distance_from_line" else if (whole_plot_water && spec$system %in% "field") "main_plot")
   }
-  if (.sf_has(text, "nitrogen")) add_factor("nitrogen", .sf_count_before(text, c("nitrogen levels?", "n levels?")) %|na|% 2)
-  if (.sf_has(text, "\\d+ ?c (?:vs|versus)|temperature|heat stress")) add_factor("temperature", 2, if (.sf_has(text, "chamber")) "chamber")
-  if (.sf_has(text, "co2")) add_factor("co2", 2, if (.sf_has(text, "chamber")) "chamber")
-  if (.sf_has(text, "nutrient solutions?|nutrient treatments?")) {
-    add_factor("nutrient", .sf_count_before(text, c("nutrient solutions?", "nutrient treatments?")))
+  if (.sf_has(text, .sf_cue("nitrogen_factor"))) add_factor("nitrogen", .sf_count_before(text, .sf_group("count_noun", "nitrogen")) %|na|% 2)
+  if (.sf_has(text, .sf_cue("temperature_factor"))) add_factor("temperature", 2, if (.sf_has(text, .sf_cue("chamber_word"))) "chamber")
+  if (.sf_has(text, .sf_cue("co2_factor"))) add_factor("co2", 2, if (.sf_has(text, .sf_cue("chamber_word"))) "chamber")
+  if (.sf_has(text, .sf_cue("nutrient_factor"))) {
+    add_factor("nutrient", .sf_count_before(text, .sf_group("count_noun", "nutrient")))
   }
-  if (.sf_has(text, "antibiotic")) add_factor("antibiotic", 2, if (.sf_has(text, "drinking water|diet")) "cage")
-  if (.sf_has(text, "high-fat|low-fat|maternal .*diet|diet")) {
-    n <- .sf_count_before(text, c("yeast concentrations?", "diets?"))
-    add_factor("diet", n %|na|% 2, if (.sf_has(text, "pregnan|maternal|dams")) "dam" else if (isTRUE(spec$system %in% "drosophila")) "vial")
+  if (.sf_has(text, .sf_cue("antibiotic_factor"))) add_factor("antibiotic", 2, if (.sf_has(text, .sf_cue("given_in_water_or_diet"))) "cage")
+  if (.sf_has(text, .sf_cue("diet_factor"))) {
+    n <- .sf_count_before(text, .sf_group("count_noun", "diet"))
+    add_factor("diet", n %|na|% 2, if (.sf_has(text, .sf_cue("maternal"))) "dam" else if (isTRUE(spec$system %in% "drosophila")) "vial")
   }
-  if (.sf_has(text, "\\bdoses?\\b")) add_factor("dose", .sf_count_before(text, c("groups?")) %|na|% NA)
-  if (.sf_has(text, "male and female|both sexes|males? .* females?")) add_factor("sex", 2)
-  if (.sf_has(text, "injur(?:ed|y) (?:and|vs\\.?|versus) (?:un-?injured|sham)|injured and uninjured")) add_factor("injury", 2)
-  n_trt_groups <- .sf_count_before(text, c("treatment groups?"))
+  if (.sf_has(text, .sf_cue("dose_factor"))) add_factor("dose", .sf_count_before(text, .sf_group("count_noun", "dose")) %|na|% NA)
+  if (.sf_has(text, .sf_cue("sex_factor"))) add_factor("sex", 2)
+  if (.sf_has(text, .sf_cue("injury_factor"))) add_factor("injury", 2)
+  n_trt_groups <- .sf_count_before(text, .sf_group("count_noun", "treatment"))
   if (!is.na(n_trt_groups)) {
     add_factor("treatment", n_trt_groups)
-  } else if (.sf_has(text, "\\bdrug\\b|compound|treatment (?:vs|versus|with a) control|vs\\.? vehicle|versus vehicle|vs\\.? saline|versus saline")) {
+  } else if (.sf_has(text, .sf_cue("treatment_vs_control"))) {
     if (!any(vapply(factors, `[[`, "", "name") %in% c("dose", "antibiotic", "injury"))) {
-      add_factor("treatment", 2, if (.sf_has(text, "dosed individually|individually dosed|injection|gavage")) "mouse")
+      add_factor("treatment", 2, if (.sf_has(text, .sf_cue("dosed_per_animal"))) "mouse")
     }
   }
   # genotype contrasts stated without a count
   if (!any(vapply(factors, `[[`, "", "name") == "genotype")) {
-    m <- regmatches(text, regexpr(paste0(.sf_num_re, "\\s+(?:mutants?|lines|genotypes)\\s+(?:vs\\.?|versus|and)\\s+(?:a|the|one)\\s+(?:control|wild[- ]type)"), text, perl = TRUE))
+    m <- regmatches(text, regexpr(.sf_cue("n_genotypes_vs_control"), text, perl = TRUE))
     if (length(m)) {
       add_factor("genotype", .sf_num(regmatches(m, regexpr(.sf_num_re, m, perl = TRUE))) + 1)
-    } else if (.sf_has(text, "knockout|mutant (?:line )?(?:lives|vs|versus|and)|than canton|than wild|(?:compare|vs\\.?|versus) (?:to )?wild[- ]type|overexpress")) {
+    } else if (.sf_has(text, .sf_cue("genotype_vs_wildtype"))) {
       add_factor("genotype", 2)
     }
   }
   if (length(factors)) set("factors", factors)
 
   # replication and environments
-  reps_nouns <- c("reps?", "replicates?", "replications?", "blocks", "dams per", if (.sf_has(text, "greenhouse")) "benches")
+  reps_nouns <- c(.sf_list("reps_noun"), if (.sf_has(text, .sf_cue("greenhouse_word"))) .sf_list("reps_noun_greenhouse"))
   set("design.reps", .sf_count_before(text, reps_nouns))
-  tc <- regmatches(text, regexpr(paste0(.sf_num_re, "\\s+treated and\\s+", .sf_num_re, "\\s+control"), text, perl = TRUE))
+  tc <- regmatches(text, regexpr(.sf_cue("n_treated_and_n_control"), text, perl = TRUE))
   if (length(tc)) set("design.reps", .sf_num(regmatches(tc, regexpr(.sf_num_re, tc, perl = TRUE))))
-  set("design.locations", .sf_count_before(text, c("locations?", "sites?", "environments?")))
-  set("design.seasons", .sf_count_before(text, c("seasons?", "years?")))
-  if (.sf_has(text, "this season|one season|single season")) set("design.seasons", 1)
-  if (.sf_has(text, "one plot each|one plot per|no replication|unreplicated|can't replicate|cannot replicate")) set("design.reps", 1)
+  set("design.locations", .sf_count_before(text, .sf_list("location_noun")))
+  set("design.seasons", .sf_count_before(text, .sf_list("season_noun")))
+  if (.sf_has(text, .sf_cue("one_season"))) set("design.seasons", 1)
+  if (.sf_has(text, .sf_cue("unreplicated"))) set("design.reps", 1)
 
   # units: "<n> <meas> per <exp>"; take the first match that names real units
-  per_re <- paste0(.sf_num_re, "\\s+(?:tagged |bagged |spaced )?([a-z]+)\\s+(?:per|each|in each|from each)\\s+(?:of\\s+(?:the\\s+)?(?:\\d+\\s+)?)?(?:replicate\\s+)?([a-z]+)")
+  per_re <- .sf_cue("n_units_per_unit")
   pers <- regmatches(text, gregexpr(per_re, text, perl = TRUE))[[1]]
   for (per in pers) {
     parts <- regmatches(per, regexec(per_re, per, perl = TRUE))[[1]]
     meas <- sub("(?<!s)s$", "", sub("ies$", "y", sub("aves$", "af", parts[3])), perl = TRUE)   # flies -> fly
-    meas <- c(panicle = "plant", pup = "pup", cell = "cell", leaf = "leaf", plant = "plant", mouse = "mouse",
-              mice = "mouse", well = "well", neuron = "cell", fly = "fly")[meas] %|na|% meas
+    meas <- .sf_map("measured_unit_word")[meas] %|na|% meas
     exp <- sub("s$", "", parts[4])
     n_sub <- .sf_num(parts[2])
     # "N units per <treatment group>" ("6 pigs per diet", "15 vials per diet", "four trees per treatment")
     # states the replication, not subsampling: a factor word or group word after "per"
     al <- .sf_alias_table()
-    group_word <- exp %in% c("group", "condition", "treatment", "genotype", "line", "entry", "cultivar", "variety") ||
+    group_word <- exp %in% .sf_list("group_word") ||
       exp %in% tolower(al$alias[al$category == "factor"])
     if (group_word && !identical(n_sub, 1) && is.null(spec$design$reps) && !meas %in% c("sample", "replicate")) {
       set("design.reps", n_sub)
       next
     }
     if (group_word) next   # a treatment group is never the experimental unit
-    if (exp %in% c("combination", "batch", "day", "week", "run", "group", "condition", "treatment", "time",
-                   "site", "year", "season", "location", "genotype", "line", "entry")) next
-    if (meas %in% c("female", "male", "parent", "injection", "egg", "replicate", "sample") || meas == exp) next
+    if (exp %in% .sf_list("not_experimental_unit")) next
+    if (meas %in% .sf_list("not_measurement_unit") || meas == exp) next
     if (identical(n_sub, 1)) next   # "one plant per pot" just defines the pot
     if (!is.null(spec$measurement_unit)) next   # units already read; keep looking only for "N units per group"
     set("measurement_unit", unname(meas))
     set("subsamples_per_unit", n_sub)
     set("experimental_unit", exp)
   }
-  if (.sf_has(text, "one plant per pot")) set("experimental_unit", "pot")
-  if (.sf_has(text, "per cage|mice per cage|housed \\d+ per cage")) {
-    if (.sf_has(text, "drinking water|in the diet|chow")) {
+  if (.sf_has(text, .sf_cue("one_plant_per_pot"))) set("experimental_unit", "pot")
+  if (.sf_has(text, .sf_cue("housed_per_cage"))) {
+    if (.sf_has(text, .sf_cue("given_to_whole_cage"))) {
       set("experimental_unit", "cage"); set("measurement_unit", "mouse")
-      set("subsamples_per_unit", .sf_count_before(text, c("per cage"), prefix = "(?:housed )?"))
+      set("subsamples_per_unit", .sf_count_before(text, .sf_group("count_noun", "per_cage"), prefix = "(?:housed )?"))
     }
   }
-  cells <- regmatches(text, regexpr(paste0(.sf_num_re, "\\s+(?:neurons|cells)\\s+(?:from|per|each|of)\\s+(?:one\\s+)?(?:[a-z-]+\\s+)?(?:mouse|animal|donor|sample)|(?:about |~)?", .sf_num_re, "\\s+cells each"), text, perl = TRUE))
+  cells <- regmatches(text, regexpr(.sf_cue("n_cells_per_animal"), text, perl = TRUE))
   if (length(cells)) {
     set("measurement_unit", "cell")
-    set("experimental_unit", if (.sf_has(text, "donor")) "donor" else "mouse")
+    set("experimental_unit", if (.sf_has(text, .sf_cue("donor_word"))) "donor" else "mouse")
     set("subsamples_per_unit", .sf_num(regmatches(cells, regexpr(.sf_num_re, cells, perl = TRUE))))
-    if (.sf_has(text, "from one ")) set("design.reps", 1)
-    r <- regmatches(text, regexpr(paste0("(?:from )?", .sf_num_re, "\\s+[a-z-]+\\s+and\\s+\\d+\\s+[a-z-]+\\s+mice"), text, perl = TRUE))
+    if (.sf_has(text, .sf_cue("from_one"))) set("design.reps", 1)
+    r <- regmatches(text, regexpr(.sf_cue("n_and_n_mice"), text, perl = TRUE))
     if (length(r)) set("design.reps", .sf_num(regmatches(r, regexpr(.sf_num_re, r, perl = TRUE))))
   }
-  if (.sf_has(text, "dosed individually|individually dosed|each mouse dosed")) {
+  if (.sf_has(text, .sf_cue("dosed_individually"))) {
     set("experimental_unit", "mouse"); set("measurement_unit", "mouse")
-    if (.sf_has(text, "within cages")) set("blocking_factors", "cage")
+    if (.sf_has(text, .sf_cue("within_cages"))) set("blocking_factors", "cage")
   }
-  if (.sf_has(text, "given to pregnant|pregnant dams|maternal treatment") &&
+  if (.sf_has(text, .sf_cue("maternal_treatment")) &&
       !any(vapply(factors, `[[`, "", "name") %in% c("diet", "treatment"))) {
     factors[[length(factors) + 1]] <- list(name = "treatment", n_levels = 2, applied_to = "dam")
     spec$factors <- factors
   }
-  if (.sf_has(text, "pregnan|maternal|dams")) {
+  if (.sf_has(text, .sf_cue("maternal"))) {
     set("experimental_unit", "litter")
-    if (.sf_has(text, "pups?")) set("measurement_unit", "pup")
+    if (.sf_has(text, .sf_cue("pup_word"))) set("measurement_unit", "pup")
   }
-  if (.sf_has(text, "one (?:set|chamber) (?:to|per) each|chambers?, one|one chamber per|identical chambers")) set("experimental_unit", "chamber")
+  if (.sf_has(text, .sf_cue("one_chamber_per_treatment"))) set("experimental_unit", "chamber")
   # animals sharing a pen or fish sharing a tank share the treatment when it is given in feed, water or the tank itself
-  if (is.null(spec$experimental_unit) && .sf_has(text, "\\bpens?\\b") && .sf_has(text, "diet|feed|drinking water|supplement|challenge")) {
+  if (is.null(spec$experimental_unit) && .sf_has(text, .sf_cue("pen_word")) && .sf_has(text, .sf_cue("pen_level_treatment"))) {
     set("experimental_unit", "pen"); set("measurement_unit", "animal")
-    n_pen <- .sf_count_before(text, c("per pen"), prefix = "(?:of )?")
-    pens_of <- regmatches(text, regexpr(paste0("pens? of ", .sf_num_re), text, perl = TRUE))
+    n_pen <- .sf_count_before(text, .sf_group("count_noun", "per_pen"), prefix = "(?:of )?")
+    pens_of <- regmatches(text, regexpr(.sf_cue("pens_of_n"), text, perl = TRUE))
     if (is.na(n_pen) && length(pens_of)) n_pen <- .sf_num(sub("^pens? of ", "", pens_of))
     if (!is.na(n_pen) && n_pen > 1) set("subsamples_per_unit", n_pen)
   }
-  if (is.null(spec$experimental_unit) && .sf_has(text, "\\btanks?\\b|\\baquari") && .sf_has(text, "fish|larvae|zebrafish|tadpoles|xenopus")) {
+  if (is.null(spec$experimental_unit) && .sf_has(text, .sf_cue("tank_word")) && .sf_has(text, .sf_cue("aquatic_animal"))) {
     set("experimental_unit", "tank"); set("measurement_unit", "fish")
   }
   if (is.null(spec$experimental_unit)) {
-    if (identical(spec$system, "field")) set("experimental_unit", if (.sf_has(text, "single-plant|spaced plants")) "plant" else "plot")
-    if (identical(spec$system, "greenhouse") && .sf_has(text, "\\bpots?\\b|carts?|imaging platform")) set("experimental_unit", "pot")
-    if (identical(spec$system, "growth_chamber") && .sf_has(text, "\\bpots\\b")) set("experimental_unit", "pot")
-    if (spec$system %in% c("growth_chamber", "greenhouse") && .sf_has(text, "-cell trays?|cell trays?|\\btrays?\\b")) set("experimental_unit", "cell")
-    if (identical(spec$system, "drosophila") && .sf_has(text, "lifespan|diet|yeast|wing")) {
+    if (identical(spec$system, "field")) set("experimental_unit", if (.sf_has(text, .sf_cue("single_plant_plots"))) "plant" else "plot")
+    if (identical(spec$system, "greenhouse") && .sf_has(text, .sf_cue("greenhouse_pot_unit"))) set("experimental_unit", "pot")
+    if (identical(spec$system, "growth_chamber") && .sf_has(text, .sf_cue("pots_word"))) set("experimental_unit", "pot")
+    if (spec$system %in% c("growth_chamber", "greenhouse") && .sf_has(text, .sf_cue("cell_tray"))) set("experimental_unit", "cell")
+    if (identical(spec$system, "drosophila") && .sf_has(text, .sf_cue("fly_vial_study"))) {
       set("experimental_unit", "vial"); set("measurement_unit", "fly")
     }
   }
-  if (.sf_has(text, "\\bbench(?:es)?\\b")) set("blocking_factors", "bench")
-  if (.sf_has(text, "shelves")) set("blocking_factors", "shelf")
-  if (.sf_has(text, "technicians?|experimenters?")) set("blocking_factors", "experimenter")
-  if (.sf_has(text, "\\bbatch(?:es)?\\b")) set("blocking_factors", if (.sf_has(text, "librar")) "library_batch" else "injection_batch")
+  if (.sf_has(text, .sf_cue("bench_word"))) set("blocking_factors", "bench")
+  if (.sf_has(text, .sf_cue("shelf_word"))) set("blocking_factors", "shelf")
+  if (.sf_has(text, .sf_cue("experimenter_word"))) set("blocking_factors", "experimenter")
+  if (.sf_has(text, .sf_cue("batch_word"))) set("blocking_factors", if (.sf_has(text, .sf_cue("library_word"))) "library_batch" else "injection_batch")
   if (identical(spec$system, "drosophila") && is.null(spec$organism)) set("organism", "Drosophila melanogaster")
 
   # round 3: populations, assays, extra organisms, environments (alias table, longest match first)
@@ -235,9 +233,9 @@ extract_spec_local <- function(question) {
   orgs <- find_all("organism")
   if (length(orgs) > 1 && identical(spec$system, "functional_validation")) set("organisms", orgs)
   if (length(orgs) && identical(spec$system, "functional_validation")) set("organism", orgs[1])
-  if (sys_now %in% c("multi_omics", "ribo_seq", "atac_seq", "functional_validation", "bulk_rnaseq", "breeding_genetics")) {
+  if (sys_now %in% .sf_systems_where(lists_assays = TRUE)) {
     as <- find_all("assay")
-    as <- setdiff(as, if (!sys_now %in% c("multi_omics", "functional_validation", "ribo_seq", "atac_seq")) c("rnaseq", "gwas"))
+    as <- setdiff(as, if (!sys_now %in% .sf_systems_where(rnaseq_gwas_are_assays = TRUE)) .sf_list("context_assay"))
     if (length(as)) set("assays", as)
   }
   if (identical(spec$system, "breeding_genetics")) {
@@ -247,27 +245,27 @@ extract_spec_local <- function(question) {
       if (mt[1] %in% c("ril", "nam", "dh")) set("population.type", mt[1])
       if (mt[1] %in% c("ril", "dh", "biparental")) set("population.parents", 2)
     }
-    g <- regmatches(text, regexpr(paste0("(?:for|after)\\s+", .sf_num_re, "\\s+generations"), text, perl = TRUE))
+    g <- regmatches(text, regexpr(.sf_cue("n_generations"), text, perl = TRUE))
     if (length(g)) set("population.generations", .sf_num(regmatches(g, regexpr(.sf_num_re, g, perl = TRUE))))
-    fg <- regmatches(text, regexpr("(?:to|until|the|at|in) (?:the )?f(\\d+)\\b", text, perl = TRUE))
+    fg <- regmatches(text, regexpr(.sf_cue("filial_generation"), text, perl = TRUE))
     if (length(fg)) set("population.filial_generation", as.numeric(sub(".*f", "", fg)))
-    mf <- regmatches(text, regexec(paste0(.sf_num_re, "\\s+males and\\s+", .sf_num_re, "\\s+females"), text, perl = TRUE))[[1]]
+    mf <- regmatches(text, regexec(.sf_cue("n_males_and_n_females"), text, perl = TRUE))[[1]]
     if (length(mf)) set("population.parents", .sf_num(mf[2]) + .sf_num(mf[3]))
-    fo <- regmatches(text, regexec(paste0(.sf_num_re, "\\s+founders"), text, perl = TRUE))[[1]]
+    fo <- regmatches(text, regexec(.sf_cue("n_founders"), text, perl = TRUE))[[1]]
     if (length(fo)) set("population.parents", .sf_num(fo[2]) + 1)
-    am <- regmatches(text, regexec(paste0("among\\s+", .sf_num_re, "\\s+"), text, perl = TRUE))[[1]]
+    am <- regmatches(text, regexec(.sf_cue("among_n"), text, perl = TRUE))[[1]]
     if (length(am)) set("population.parents", .sf_num(am[2]))
-    if (.sf_has(text, "gca|sca|combining ability|heterosis")) {
+    if (.sf_has(text, .sf_cue("combining_ability"))) {
       set("primary_outcome.name", "gca_sca"); set("primary_outcome.type", "continuous")
     }
   }
-  if (identical(spec$system, "multi_environment") && .sf_has(text, "greenhouse|growth chamber|glasshouse|controlled environment") && .sf_has(text, "field")) {
+  if (identical(spec$system, "multi_environment") && .sf_has(text, .sf_cue("controlled_environment")) && .sf_has(text, .sf_cue("field_word"))) {
     set("environments", c("greenhouse", "field"))
   }
-  if (.sf_has(text, .sf_rules("system")$ribo_seq) && .sf_has(text, "translation(?:al)? efficiency")) {   # the assay, whatever the setting
+  if (.sf_has(text, .sf_rules("system")$ribo_seq) && .sf_has(text, .sf_cue("translation_efficiency"))) {   # the assay, whatever the setting
     set("primary_outcome.name", "translation_efficiency"); set("primary_outcome.type", "continuous")
   }
-  if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, "yield stability")) {
+  if (sys_now %in% c("multi_environment") && is.null(spec$primary_outcome) && .sf_has(text, .sf_cue("yield_stability"))) {
     set("primary_outcome.name", "grain_yield"); set("primary_outcome.type", "continuous")
   }
 
@@ -281,8 +279,8 @@ extract_spec_local <- function(question) {
 # The system plus the families of the stated assays: the setting decides the layout, and each assay brings its own
 # designs, hazards and questions (a greenhouse ATAC-seq study gets greenhouse and ATAC advice).
 .sf_system_set <- function(spec) {
-  fam <- unname(.SF_SYSTEM_BY_ASSAY[unlist(spec$assays)])
-  if (any(unlist(spec$assays) %in% c("metabolomics", "lipidomics"))) fam <- c(fam, "metabolomics_lipidomics")
+  fam <- unname(.sf_map("system_by_assay")[unlist(spec$assays)])
+  fam <- c(fam, unname(.sf_map("assay_advice_family")[unlist(spec$assays)]))
   s <- unique(c(spec$system, fam[!is.na(fam)]))
   s[nzchar(s)]
 }
@@ -314,19 +312,19 @@ extract_spec_local <- function(question) {
   if (sys == "field") {
     q <- tolower(spec$question %||% "")
     if (any(applied %in% "distance_from_line")) cand <- c(cand, "line_source")
-    if (any(applied %in% "main_plot") || .sf_has(q, "tall .*short|short .*tall|mix of tall")) cand <- c(cand, "split")
-    if (.sf_has(q, "early-generation|\\d\\.\\d plots? per")) cand <- c(cand, "prep", "augmented")
+    if (any(applied %in% "main_plot") || .sf_has(q, .sf_cue("mixed_height"))) cand <- c(cand, "split")
+    if (.sf_has(q, .sf_cue("early_generation_trial"))) cand <- c(cand, "prep", "augmented")
     if (!is.na(reps) && reps == 1) cand <- c(cand, if (n_geno >= 500) "diagonal_checks", "augmented", "prep")
     if (n_geno > 25 && (is.na(reps) || reps > 1)) cand <- c(cand, "alpha", "row_column")
     if (n_geno > 0 && n_geno <= 25) cand <- c(cand, "rcbd")
     cand <- c(cand, "spatial_analysis")
   } else if (sys == "greenhouse") {
     q <- tolower(spec$question %||% "")
-    cand <- c(cand, if (length(f) > 1) "factorial", if (.sf_has(q, "every day|daily|over time|track growth|time course")) "repeated_measures",
-              if (length(f) > 1 && .sf_has(q, "bench")) "split", if (n_geno > 20) "alpha", "rcbd", "row_column")
+    cand <- c(cand, if (length(f) > 1) "factorial", if (.sf_has(q, .sf_cue("repeated_over_time_plants"))) "repeated_measures",
+              if (length(f) > 1 && .sf_has(q, .sf_cue("bench_mention"))) "split", if (n_geno > 20) "alpha", "rcbd", "row_column")
   } else if (sys == "growth_chamber") {
     if (any(applied %in% "chamber") || identical(spec$experimental_unit, "chamber")) cand <- c(cand, "chamber_runs")
-    if (.sf_has(tolower(spec$question %||% ""), "tray")) cand <- c(cand, "augmented_tray", "prep")
+    if (.sf_has(tolower(spec$question %||% ""), .sf_cue("tray_mention"))) cand <- c(cand, "augmented_tray", "prep")
     cand <- c(cand, "rcbd")
   } else if (sys == "mouse") {
     cand <- c(cand, if (length(f) > 1) "factorial", "rcbd", "crd")
@@ -334,10 +332,10 @@ extract_spec_local <- function(question) {
     mt <- spec$population$mating %||% ""
     q <- tolower(spec$question %||% "")
     cand <- c(cand, if (mt == "diallel") "diallel", if (mt == "nc_design") "nc_design",
-              if (mt %in% c("nam", "ril", "dh", "biparental", "selfing", "sib_mating", "backcross") || .sf_has(q, "qtl|mapping|inbred")) "mapping_population",
+              if (mt %in% c("nam", "ril", "dh", "biparental", "selfing", "sib_mating", "backcross") || .sf_has(q, .sf_cue("mapping_intent"))) "mapping_population",
               if (!is.null(spec$design$locations)) "met_fa", "alpha")
   } else if (sys == "multi_environment") {
-    cand <- c(cand, if (length(spec$environments) > 1 || .sf_has(tolower(spec$question %||% ""), "greenhouse|chamber")) "gh_field_validation", "met_fa", "alpha", "spatial_analysis")
+    cand <- c(cand, if (length(spec$environments) > 1 || .sf_has(tolower(spec$question %||% ""), .sf_cue("controlled_setting_mention"))) "gh_field_validation", "met_fa", "alpha", "spatial_analysis")
   } else if (sys == "multi_omics") {
     cand <- c(cand, "gwas_eqtl", if ("atac_seq" %in% spec$assays) "atac_replicated", if ("ribo_seq" %in% spec$assays) "riboseq_rnaseq", "alpha")
   } else if (sys == "ribo_seq") {
@@ -348,9 +346,9 @@ extract_spec_local <- function(question) {
     cand <- c(cand, "cross_species_validation", "rcbd")
   } else if (sys == "livestock") {
     q <- tolower(spec$question %||% "")
-    cand <- c(cand, if (length(f) > 1) "factorial", if (.sf_has(q, "weekly|over time|days? \\d+ and|repeated")) "repeated_measures", "rcbd", "crd")
+    cand <- c(cand, if (length(f) > 1) "factorial", if (.sf_has(q, .sf_cue("repeated_over_time_animals"))) "repeated_measures", "rcbd", "crd")
   } else if (sys == "drosophila") {
-    cand <- c(cand, if (identical(spec$primary_outcome$name, "lifespan") || .sf_has(tolower(spec$question %||% ""), "lifespan|diet|yeast")) "vial_lifespan", "rcbd")
+    cand <- c(cand, if (identical(spec$primary_outcome$name, "lifespan") || .sf_has(tolower(spec$question %||% ""), .sf_cue("vial_lifespan_study"))) "vial_lifespan", "rcbd")
   } else {
     cand <- c(cand, "rcbd", "crd")
   }
@@ -462,7 +460,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
     traits = tryCatch({
       omics <- length(spec$assays) || isTRUE(spec$system %in% .sf_systems_where(sequencing = TRUE))
-      if (grepl(.SF_ASKS_TRAITS, tolower(question), perl = TRUE) || (is.null(spec$primary_outcome$name) && !omics && !identical(spec$goal, "analysis")))
+      if (grepl(.sf_cue("asks_traits"), tolower(question), perl = TRUE) || (is.null(spec$primary_outcome$name) && !omics && !identical(spec$goal, "analysis")))
         suggest_traits(spec$tissue, .sf_stresses(spec, question), spec$organism, n = 6)
     }, error = function(e) NULL),
     disclaimer = if (identical(system, "mouse")) "Planning recommendation only; final designs need statistician, veterinarian and IACUC review."

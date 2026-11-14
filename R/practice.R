@@ -19,16 +19,7 @@
 }
 
 # spec system / assay canonical terms -> evidence technique labels
-.SF_TECH_BY_SYSTEM <- c(bulk_rnaseq = "Bulk RNA-seq", single_cell = "scRNA/snRNA-seq", ribo_seq = "Ribo-seq",
-                        atac_seq = "ATAC-seq")
-.SF_TECH_BY_ASSAY <- c(rnaseq = "Bulk RNA-seq", small_rnaseq = "small RNA-seq", single_cell = "scRNA/snRNA-seq",
-                       ribo_seq = "Ribo-seq", atac_seq = "ATAC-seq", chip_seq = "ChIP-seq",
-                       methylation = "Bisulfite / methylome", scatac_seq = "scATAC-seq", amplicon = "Amplicon",
-                       m6a_seq = "m6A / MeRIP-seq", long_read_rna = "Long-read RNA (Iso-Seq/ONT)", gbs = "GBS / RAD-seq",
-                       degradome = "Degradome / PARE", hic = "3D genome (Hi-C/HiChIP)", medip = "Methylation (enrichment)",
-                       mnase_seq = "MNase-seq", nascent_rna = "Nascent RNA (GRO/PRO/NET)", spatial = "Spatial transcriptomics",
-                       targeted_capture = "Targeted capture", rip_clip = "RIP / CLIP-seq", trap_seq = "TRAP-seq",
-                       wgs = "WGS / resequencing")
+
 
 .sf_norm_tissue <- function(x) {
   t <- tolower(trimws(x))
@@ -45,7 +36,7 @@
   if (length(hit)) return(hit[1])
   canon <- studyforge_alias(technique, "assay")
   if (is.na(canon)) canon <- technique
-  t <- unname(c(.SF_TECH_BY_ASSAY, .SF_TECH_BY_SYSTEM)[canon])
+  t <- unname(c(.sf_map("tech_by_assay"), .sf_map("tech_by_system"))[canon])
   if (length(t) && !is.na(t)) return(t)
   hit <- techs[grepl(tolower(technique), tolower(techs), fixed = TRUE)]
   if (length(hit)) hit[1] else NULL
@@ -164,7 +155,7 @@ print.studyforge_practice <- function(x, ...) {
 # For a StudySpec: the technique comes from the assays first, then the system.
 .sf_practice_for_spec <- function(spec, question = NULL) {
   if (is.null(spec$organism)) return(NULL)
-  techs <- c(unname(.SF_TECH_BY_ASSAY[unlist(spec$assays)]), unname(.SF_TECH_BY_SYSTEM[spec$system %||% ""]))
+  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[spec$system %||% ""]))
   techs <- unique(techs[!is.na(techs)])
   for (t in techs) {
     tis <- spec$tissue %||% tryCatch(.sf_tissue_in_question(question, spec$organism, t), error = function(e) NULL)
