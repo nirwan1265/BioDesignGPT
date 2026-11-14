@@ -21,7 +21,7 @@ dict(paper="paper_4761", style="question", prompt="RNA-seq of brain regions from
      spec=dict(system="livestock", organism="Sus scrofa", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3), dict(name="time")]),
      ask=["design.reps"], note="TBI model"),
 dict(paper="paper_4762", skip="method"),
-dict(paper="paper_4763", style="question", prompt="small RNA-seq of hearts from 6-month-old Tibetan and Yorkshire pigs raised at high altitude, 8 per breed pooled into 2 libraries per breed. Is that enough?",
+dict(paper="paper_4763", style="question", prompt="small RNA-seq of hearts from 6-month-old Tibetan and Yorkshire pigs raised at high altitude, 8 per breed pooled into 2 libraries of four pigs per breed. Is that enough?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=2), subsamples_per_unit=4),
      ask=[P], note="pooled libraries"),
 dict(paper="paper_4764", style="detailed", prompt="RNA-seq of harvested berries of grape varieties Fraoula and Victoria immersed in Aspergillus carbonarius spores vs mock, sampled at three times, 3 biological replicates.",
