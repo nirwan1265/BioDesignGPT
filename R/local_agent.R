@@ -338,6 +338,21 @@ extract_spec_local <- function(question) {
   s[nzchar(s)]
 }
 
+# Replication floor: a stated n below 3 per condition is flagged. Not when the candidates are designs built
+# for unreplicated entries (augmented, p-rep, diagonal checks), which estimate error from replicated checks.
+.sf_replication_check <- function(spec, candidates = character()) {
+  reps <- suppressWarnings(as.numeric(spec$design$reps %||% NA))
+  if (length(reps) != 1 || is.na(reps) || reps >= 3) return(NULL)
+  if (any(candidates %in% c("augmented", "prep", "diagonal_checks", "augmented_tray"))) return(NULL)
+  why <- if (reps < 2) {
+    "With one per condition there is no within-group variance, so no test or interval is possible."
+  } else {
+    "With two per condition the variance rests on 1 degree of freedom per group, so tests have little power and one outlier decides the result."
+  }
+  paste0(reps, " replicate", if (reps != 1) "s", " per condition is below the usual floor of 3 biological replicates. ", why,
+         " Use at least 3, and set the final number by power; published studies often use more.")
+}
+
 # Choose candidate designs with simple, transparent rules
 .sf_candidates <- function(spec) {
   sys <- spec$system %||% ""
@@ -492,6 +507,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   ans <- structure(list(
     question = question, provider = provider, engine = engine, fixes = fix, spec = spec, validation = v, audit = audit,
     candidates = candidates, designs = designs, hazards = hazards, reader_questions = reader_questions,
+    replication = .sf_replication_check(spec, candidates),
     questions = utils::head(questions, 3), all_questions = questions,
     notes = utils::head(notes, 3), recipe = .sf_recipe(spec, candidates),
     practice = tryCatch(.sf_practice_for_spec(spec, question), error = function(e) NULL),
@@ -560,6 +576,7 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
     cat0("\nUnit audit: risk ", toupper(x$audit$pseudoreplication_risk))
     cat0("  ", x$audit$resolution)
   }
+  if (!is.null(x$replication)) cat0("\nReplication: ", x$replication)
   if (length(x$validation$missing)) cat0("\nStill needed: ", paste(x$validation$missing, collapse = ", "))
   if (length(x$questions)) {
     cat0("\nQuestions that change the design:")

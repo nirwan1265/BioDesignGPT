@@ -14,8 +14,10 @@ This adds peft/accelerate to the env and downloads the 32B model (~65 GB) into t
     sbatch llm/finetune.slurm          # 32B on one RTX 6000 Pro (96 GB); resubmits itself until done (max 6 rounds of 2 h)
 
 Steps (each leaves a file, so a resubmitted job skips what is done):
-1. `make_sft.py prompts`: ~4,000 labelled prompts. All 755 paraphrases, synthetic study types balanced by
-   type x organism, and prompts built from real studies. Test prompts and the held-out species are excluded.
+1. `make_sft.py prompts`: ~5,300 labelled prompts. All 760 paper questions (hand-labelled training pool) and
+   755 paraphrases, synthetic study types balanced by type x organism, and prompts built from real studies.
+   Test prompts (including paper-question dev/test) and the held-out species are excluded. Every gold spec is
+   put on one system convention (stated setting = system, assay in assays; `training/setting.py`).
 2. The base model reads them (self-distillation for the fields we have no labels for: method, tissue,
    levels, outcome text, questions).
 3. `make_sft.py build`: targets = our labels + the distilled fields. Experimental unit only when the unit word

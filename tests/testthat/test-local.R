@@ -22,6 +22,15 @@ test_that("undecided counts are left empty", {
   expect_null(s$design$reps)
 })
 
+test_that("fewer than 3 replicates is flagged, except in designs for unreplicated entries", {
+  s <- list(system = "greenhouse", design = list(reps = 2))
+  expect_match(.sf_replication_check(s), "below the usual floor of 3")
+  expect_match(.sf_replication_check(list(design = list(reps = 1))), "no within-group variance")
+  expect_null(.sf_replication_check(list(design = list(reps = 3))))
+  expect_null(.sf_replication_check(list(design = list())))
+  expect_null(.sf_replication_check(list(design = list(reps = 1)), c("augmented", "prep")))
+})
+
 test_that("studyforge_ask returns a complete offline answer", {
   a <- studyforge_ask("Antibiotics vs control in the drinking water, 10 mice per group housed 5 per cage.")
   expect_s3_class(a, "studyforge_answer")

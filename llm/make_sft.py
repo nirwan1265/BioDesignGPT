@@ -5,8 +5,11 @@
      train.jsonl                        synthetic, ~60 study types (training/generate.py)
      grounded_train.jsonl               prompts built from real ENA/BioSample studies (training/grounded.py)
      training/data/para.jsonl           LLM paraphrases (the most natural wording we have)
+     paper_questions/splits/train.jsonl questions written from real papers (hand-labelled training pool; all used)
    (found in $SFT_DATA or training/data). Excluded: every prompt in a test/dev set, and the held-out species (setaria, poplar, zebrafish, xenopus), so
-   grounded_eval stays a test of unseen organisms.
+   grounded_eval stays a test of unseen organisms. Paper-question dev/test/test_heldout prompts are excluded too.
+   Every gold spec follows one system convention (training/setting.py): the stated setting (greenhouse, mice,
+   flies, cell lines ...) is the system and the assay goes in assays, so older generated labels are converted.
 
 2. build: the training targets. Our labels cover organism, system, assays, factors, counts, units, outcome,
    population. They don't cover method, tissue, levels, outcome text or the questions to ask. For those the
@@ -23,10 +26,17 @@ import argparse, collections, json, os, random, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import reader  # noqa: E402
+sys.path.insert(0, os.path.join(HERE, "..", "training"))
+import setting  # noqa: E402
 
 DATA = os.path.join(HERE, "..", "training", "data")
 EVAL_FILES = ["fresh_test.jsonl", "fresh_test_v2.jsonl", "fresh_test_v3.jsonl", "fresh_test_v4.jsonl", "grounded_eval.jsonl",
               "user_prompts_dev.jsonl", os.path.join("..", "..", "inst", "examples", "study_examples.jsonl")]
+PQ = os.path.join(HERE, "..", "training", "paper_questions", "splits")
+PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl"]
+# assay implied by an old assay-family system, kept when the system becomes the stated setting
+SYSTEM_ASSAY = {"bulk_rnaseq": "rnaseq", "single_cell": "single_cell", "atac_seq": "atac_seq", "ribo_seq": "ribo_seq",
+                "metabolomics_lipidomics": "metabolomics"}
 HOLDOUT_ORGS = {"Setaria viridis", "Populus trichocarpa", "Danio rerio", "Xenopus laevis"}
 SYN = {"accession": "genotype", "line": "genotype", "hybrid": "genotype", "variety": "genotype", "cultivar": "genotype",
        "family": "genotype", "entry": "genotype", "mutant": "genotype", "strain": "genotype", "inbred": "genotype",
@@ -58,7 +68,30 @@ def eval_prompts():
         p = os.path.join(DATA, name)
         if os.path.exists(p):
             seen |= {norm(json.loads(l)["prompt"]) for l in open(p, encoding="utf-8") if l.strip()}
+    for name in PQ_EVAL:
+        p = os.path.join(PQ, name)
+        if os.path.exists(p):
+            seen |= {norm(json.loads(l)["prompt"]) for l in open(p, encoding="utf-8") if l.strip()}
     return seen
+
+
+def paper_questions():
+    """The hand-labelled paper-question training pool, in the same row shape as the generated files."""
+    p = os.path.join(PQ, "train.jsonl")
+    if not os.path.exists(p):
+        return []
+    rows = [json.loads(l) for l in open(p, encoding="utf-8") if l.strip()]
+    return [{"text": r["prompt"], "spec": r["expected_spec"], "family": f"paper:{r.get('technique')}"}
+            for r in rows if not r.get("held_out_species")]
+
+
+def convention(spec, text):
+    """Gold spec under the current system convention (setting.apply), keeping the assay the old system implied."""
+    spec = json.loads(json.dumps(spec))
+    old = spec.get("system")
+    if setting.apply(spec, text) and old in SYSTEM_ASSAY and not spec.get("assays"):
+        spec["assays"] = [SYSTEM_ASSAY[old]]
+    return spec
 
 
 def norm(t):
@@ -74,11 +107,12 @@ def sample_prompts(n, seed):
     rnd = random.Random(seed)
     banned = eval_prompts()
     # paraphrases first: they are also inside train_r5, and they are the most natural wording we have
-    pools = {"paraphrase": load("para.jsonl"),
+    pools = {"paper": paper_questions(),
+             "paraphrase": load("para.jsonl"),
              "synthetic": [r for r in load("train.jsonl") if not str(r.get("family", "")).startswith("grounded")],
              "grounded": load("grounded_train.jsonl")}
     # shares of the sample: paraphrases all (most natural), then synthetic study types, then real-study prompts
-    want = {"paraphrase": None, "synthetic": int(n * 0.55), "grounded": int(n * 0.30)}
+    want = {"paper": None, "paraphrase": None, "synthetic": int(n * 0.55), "grounded": int(n * 0.30)}
     out, used = [], set()
     for src, rows in pools.items():
         rows = [r for r in rows if norm(r["text"]) not in banned and not held_out(r["spec"])]
@@ -99,7 +133,7 @@ def sample_prompts(n, seed):
             if t in used:
                 continue
             used.add(t)
-            out.append({"id": f"sft_{len(out):05d}", "prompt": " ".join(r["text"].split()), "gold": r["spec"],
+            out.append({"id": f"sft_{len(out):05d}", "prompt": " ".join(r["text"].split()), "gold": convention(r["spec"], r["text"]),
                         "family": r.get("family"), "source": src})
     rnd.shuffle(out)
     return out
