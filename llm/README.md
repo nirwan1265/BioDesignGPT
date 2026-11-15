@@ -90,6 +90,12 @@ is in the merge and the targets, not the amount of data:
 - experimental unit: base 21/24, v2 and v3 17/24. The training targets carry the unit only when the unit
   word is in the prompt, so fine-tuning teaches the reader to leave it out.
 
+**Merge fixes (tuned on dev only, v2 reader).** Merged recall on dev went from 86.6 to 87.4. Invented values
+went from 8 to 1, and rules alone from 4 to 1. Factor name + levels merged went from 73.1 to 76.2 (reader
+alone 76.8). Replicates merged: 94.8. The other sets are unchanged or better: study_examples 94.9,
+fresh v1 96.0, v2 98.3, v3 93.4, v4 97.5, held-out species 99.1, all with 0 invented. The test splits were not
+re-scored.
+
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
 

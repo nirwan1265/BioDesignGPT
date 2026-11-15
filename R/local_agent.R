@@ -36,13 +36,21 @@
   # up to two modifier words between the number and the noun, but never another
   # counted noun or a preposition ("three sites this season" is not 3 seasons)
   stop <- "(?!(?:sites?|locations?|reps?|replicates?|plots?|per|at|in|on|for|this|each|from|and|with|of|blocks?|trays?|cages?|vials?|pots?|benches)\\b)"
-  re <- paste0(prefix, .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b")
+  re <- paste0(prefix, .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
+               .sf_cue("count_within_rep"), ")")
   m <- regmatches(text, regexpr(re, text, perl = TRUE))
   if (!length(m) || grepl("\\bor\\b", m)) return(NA_real_)  # "two or three reps" is undecided
   .sf_num(regmatches(m, regexpr(.sf_num_re, m, perl = TRUE)))
 }
 
 .sf_has <- function(text, pattern) grepl(pattern, text, perl = TRUE)
+# the question sentences of a prompt (those ending in "?") match a cue
+.sf_asks <- function(question, cue) {
+  qs <- regmatches(tolower(question), gregexpr("[^.?!]*\\?", tolower(question), perl = TRUE))[[1]]
+  length(qs) > 0 && any(grepl(.sf_cue(cue), qs, perl = TRUE))
+}
+# the prompt leaves the replicate count open: the user asks for it, or the groups differ in size
+.sf_reps_open <- function(question) .sf_asks(question, "asks_reps") || .sf_has(tolower(question), .sf_cue("unequal_groups"))
 
 # Pattern tables (organism, system, setting, outcome, genotype nouns) live in inst/agent/rules.tsv and what each
 # system is (setting / assay family / study type) in inst/registry/experimental_systems.json: see .sf_rules().
@@ -163,7 +171,8 @@ extract_spec_local <- function(question) {
     al <- .sf_alias_table()
     group_word <- exp %in% .sf_list("group_word") ||
       exp %in% tolower(al$alias[al$category == "factor"])
-    if (group_word && !identical(n_sub, 1) && is.null(spec$design$reps) && !meas %in% c("sample", "replicate")) {
+    pooled <- .sf_has(text, gsub("{G}", .sf_re_escape(exp), .sf_cue("pooled_per_group"), fixed = TRUE))
+    if (group_word && !pooled && !identical(n_sub, 1) && is.null(spec$design$reps) && !meas %in% c("sample", "replicate")) {
       set("design.reps", n_sub)
       next
     }
@@ -278,6 +287,7 @@ extract_spec_local <- function(question) {
   }
 
   spec <- .sf_general_layer(spec, text)
+  if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec$question <- question
   spec
 }

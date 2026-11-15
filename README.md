@@ -259,20 +259,34 @@ filled in anyway.
 
 | set | rules alone | reader alone | rules + reader |
 |---|---|---|---|
-| paper questions, dev (328) | 64.7% | 86.0% (5 invented) | **86.6%** (8 invented) |
-| paper questions, **test** (764, scored once) | 64.0% (18 invented) | 85.8% (13 invented) | **85.7%** (24 invented) |
-| paper questions, **held-out species test** (87, scored once) | 65.0% (5 invented) | 89.1% (3 invented) | **89.4%** (5 invented) |
-| study examples, dev (59) | 92.7% | 85.8% | 94.6% |
+| paper questions, dev (328), merge of 2026-11-14 | 64.7% (4 invented) | 86.0% (5 invented) | 86.6% (8 invented) |
+| paper questions, dev (328), **current merge** | 64.7% (1 invented) | 86.0% (5 invented) | **87.4%** (1 invented) |
+| paper questions, **test** (764, scored once, merge of 2026-11-14) | 64.0% (18 invented) | 85.8% (13 invented) | **85.7%** (24 invented) |
+| paper questions, **held-out species test** (87, scored once, merge of 2026-11-14) | 65.0% (5 invented) | 89.1% (3 invented) | **89.4%** (5 invented) |
+| study examples, dev (59) | 92.7% | 85.8% | 94.9% |
 | fresh v4, clean test (21) | 86.6% | 93.3% | **97.5%** |
 | real studies of held-out species (300) | 98.2% | 98.1% | **99.1%** |
 
-Reader = Qwen2.5-32B + v2 adapter. The rules alone invent a must-ask value in 4 of the 328 dev questions. The two
-paper-question test sets were scored once, after the reader was fixed on dev (2026-11-14). Test recall holds at
-the dev level (85.7% vs 86.6%), and held-out species (zebrafish, Xenopus, Setaria, poplar) do no worse.
+Reader = Qwen2.5-32B + v2 adapter. The two paper-question test sets were scored once, after the reader was fixed
+on dev (2026-11-14). Test recall held at the dev level (85.7% vs 86.6%), and held-out species (zebrafish,
+Xenopus, Setaria, poplar) did no worse. Those test numbers stay the official record. They are not re-scored for
+the merge fixes below, which were tuned on dev only.
 
-Two weak spots show on dev and test alike; fixes will be tuned on dev only:
-- Merging loses factor levels the reader had right (test 76.0% alone vs 72.4% merged).
-- Most invented values in the merged output come from the rules (test: rules 18, reader alone 13, merged 24).
+Two weak spots showed on dev and test alike. Both are now fixed on dev:
+- **Merging lost factor levels the reader had right.** Lost factor keys went from 23 to 8, and name + levels
+  merged went from 73.1% to 76.2% (reader alone 76.8%). A reader level count is now kept when the prompt lists
+  that many items, or when its levels are named in the text. A rule count is dropped when the reader leaves the
+  count open and the number isn't written on its own ("Mo17" doesn't state 17 genotypes).
+- **The rules invented must-ask values.** Merged inventions on dev went from 8 to 1. The replicate count is left
+  open when:
+  - the question asks for it ("how many piglets per group", "should I have replicated");
+  - the groups differ in size ("3 plants each, plus a single control");
+  - the number is a total with a breakdown ("8 pigs (4 male, 4 female)");
+  - it counts something inside each replicate ("32 incomplete blocks per replication");
+  - the units are pooled per group.
+
+  The one left is an engine judgment (maternal treatment -> litter as the unit). The cues are in
+  `inst/agent/rules.tsv`.
 
 Per-set details and the base-model comparison are in [`llm/README.md`](llm/README.md).
 

@@ -98,13 +98,17 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   other_count <- function(v) {
     w <- paste(c(as.character(v), names(.sf_number_words)[.sf_number_words == v]), collapse = "|")
     nouns <- paste(c(.sf_list("level_noun"), .sf_list("genotype_noun_general"), .sf_list("location_noun"), .sf_list("season_noun"),
-                     "generations?", "weeks?", "days?", "hours?", "h", "months?", "regions?", "farms?", "populations?",
-                     "parents?", "founders?"), collapse = "|")
+                     .sf_list("not_rep_noun")), collapse = "|")
     all_m <- gregexpr(paste0("(?<![\\d.])\\b(?:", w, ")\\b(?![\\d.])"), text, perl = TRUE)[[1]]
     other <- gregexpr(paste0("(?<![\\d.])\\b(?:", w, ")\\s+(?:(?!(?:per|in|each|for|of|a|an|the)\\b)[a-z-]+\\s+)?(?:", nouns, ")\\b"), text, perl = TRUE)[[1]]
     all_m[1] > 0 && other[1] > 0 && length(other) >= length(all_m)
   }
-  rep_said <- function(v) stated(v) && !rep_range(v) && !other_count(v) &&
+  # a total split into groups ("8 pigs (4 male, 4 female)") is not the replicates per group
+  breakdown <- function(v) {
+    w <- paste(c(as.character(v), names(.sf_number_words)[.sf_number_words == v]), collapse = "|")
+    grepl(paste0("(?<![\\d.])\\b(?:", w, ")", .sf_cue("count_breakdown")), tolower(question), perl = TRUE)
+  }
+  rep_said <- function(v) stated(v) && !rep_range(v) && !other_count(v) && !breakdown(v) && !.sf_reps_open(question) &&
     (v != 1 || grepl(.sf_cue("one_replicate_stated"), text, perl = TRUE))
   unit_counted <- function(u) {
     w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
@@ -152,7 +156,18 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     lv <- tolower(unlist(f$levels))
     length(lv) >= 2 && mean(vapply(lv, function(l) agrepl(l, text, max.distance = 0.2, fixed = TRUE), logical(1))) > 0.5
   }
-  count_ok <- function(f) !is.null(f$n_levels) && (stated(f$n_levels) || (mostly_named(f) && length(unlist(f$levels)) == f$n_levels))
+  # the reader words a level its own way ("TEV-only control" for "a TEV-only control"): a level is in the text
+  # when its content words are; and a count is stated when a clause enumerates exactly that many items
+  enum_n <- .sf_enum_lengths(tolower(question))
+  nums_alone <- as.numeric(regmatches(text, gregexpr("(?<![\\w.])\\d+(?![\\w.])", text, perl = TRUE))[[1]])
+  stated_alone <- function(v) v %in% nums_alone ||
+    any(vapply(names(.sf_number_words)[.sf_number_words == v], function(w) grepl(paste0("\\b", w, "\\b"), text, perl = TRUE), logical(1)))
+  # "two parents and 146 lines" states 148 genotypes: a count may be the sum of two numbers written in the text
+  nums_all <- c(nums_alone, unname(.sf_number_words[vapply(names(.sf_number_words), function(w) grepl(paste0("\\b", w, "\\b"), text, perl = TRUE), logical(1))]))
+  sum_said <- function(v) length(nums_all) > 1 && any(outer(nums_all, nums_all, "+")[upper.tri(diag(length(nums_all)))] == v)
+  count_ok <- function(f) !is.null(f$n_levels) &&
+    (stated(f$n_levels) || f$n_levels %in% enum_n || sum_said(f$n_levels) ||
+       ((mostly_named(f) || .sf_levels_in_text(f$levels, text)) && length(unlist(f$levels)) == f$n_levels))
   # a factor is stated when it is named (directly or by an alias: "RILs" for genotype, "at 2 h" for time),
   # counted, or its levels are
   canon_said <- unique(c(vapply(.sf_find_all(text, "factor"), canon, ""),
@@ -171,13 +186,43 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     g <- list(name = f$name)
     if (!is.na(i)) { g <- rf[[i]]; used[i] <- TRUE }
     if (count_ok(f)) g$n_levels <- f$n_levels
-    if (named(f)) g$levels <- f$levels
+    # the reader names the factor but leaves its count open: a rule count stands only if the number is written on
+    # its own ("Mo17" or "rhp1" do not state 17 or 1 genotypes)
+    else if (is.null(f$n_levels) && !is.null(g$n_levels) && !stated_alone(g$n_levels)) g$n_levels <- NULL
+    if (named(f) || .sf_levels_in_text(f$levels, text)) g$levels <- f$levels
     if (is.null(g$applied_to) && !is.null(f$applied_to)) g$applied_to <- f$applied_to
     fx[[length(fx) + 1]] <- g
   }
   for (i in which(!used)) if (!rkey[i] %in% vapply(fx, function(g) canon(g$name), "")) fx[[length(fx) + 1]] <- rf[[i]]
   out$factors <- if (length(fx)) fx
   out
+}
+
+# Lengths of the enumerations in a text: per clause, the items between list separators ("A, B or C" = 3,
+# "X vs Y" = 2), plus every list of numbers ("at 3, 6, 18 and 72 h" = 4). Separators and clause breaks are cues
+# in rules.tsv.
+.sf_enum_lengths <- function(text) {
+  nums <- regmatches(text, gregexpr(.sf_cue("number_list"), text, perl = TRUE))[[1]]
+  n_num <- vapply(nums, function(s) length(regmatches(s, gregexpr("\\d+(?:\\.\\d+)?", s, perl = TRUE))[[1]]), 1L)
+  clauses <- strsplit(text, .sf_cue("clause_break"), perl = TRUE)[[1]]
+  n_cl <- vapply(clauses, function(cl) {
+    items <- trimws(strsplit(cl, .sf_cue("list_separator"), perl = TRUE)[[1]])
+    sum(nzchar(items))
+  }, 1L)
+  unique(c(n_num, n_cl[n_cl >= 2]))
+}
+
+# Every level is in the text when at least two thirds of its content words are (stopwords in rules.tsv;
+# a trailing plural s is ignored).
+.sf_levels_in_text <- function(levels, text) {
+  lv <- tolower(unlist(levels))
+  if (length(lv) < 2) return(FALSE)
+  words <- unique(sub("(?<![su])s$", "", strsplit(text, "[^a-z0-9]+", perl = TRUE)[[1]], perl = TRUE))
+  stop <- .sf_list("level_stopword")
+  all(vapply(lv, function(l) {
+    w <- setdiff(sub("(?<![su])s$", "", strsplit(l, "[^a-z0-9]+", perl = TRUE)[[1]], perl = TRUE), c(stop, ""))
+    length(w) > 0 && mean(w %in% words) >= 2 / 3
+  }, logical(1)))
 }
 
 .sf_alias_cache <- new.env()

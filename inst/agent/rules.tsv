@@ -4029,3 +4029,43 @@ unit_question	litter	value	Was the treatment given to the mothers (then the litt
 unit_question	cage	value	Was the treatment given to each animal (the animal is the unit, the cage a block) or to the whole cage, e.g. in food or water (the cage is the unit)?	asked when animals share housing but the text does not say how the treatment was given	rules
 unit_question	pen	value	Was the treatment given in the pen's feed or water (the pen is the unit) or to each animal (the animal is the unit, the pen a block)?	asked when animals share housing but the text does not say how the treatment was given	rules
 unit_question	tank	value	Was the treatment applied to the tank (water, diet, conditions: the tank is the unit) or to each fish (the fish is the unit, the tank a block)?	asked when animals share housing but the text does not say how the treatment was given	rules
+cue	list_separator	regex	\s*,\s*(?:and|or|vs\.?|versus)?\s*|\s+(?:and|or|vs\.?|versus|plus)\s+	separates the items of an enumeration ("A, B or C", "A vs B"); a reader's level count is stated when a clause lists exactly that many items	rules
+cue	clause_break	regex	[;:()\[\]]|(?<!\d)\.(?!\d)|,\s*then\b|,?\s+(?:then|while|whereas)\s+	ends a clause, so items of different enumerations are not counted together	rules
+cue	number_list	regex	(?<![\d.])\d+(?:\.\d+)?(?:\s*(?:,\s*(?:and|or)?|and|or)\s*\d+(?:\.\d+)?)+(?![\d.])	an enumeration of numbers ("3, 6, 18 and 72 h", "120, 150 or 170 days"); its length states a level count. Ranges ("10 to 20") are not lists	rules
+level_stopword		value	the	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	a	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	an	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	of	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	with	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	to	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	in	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	at	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	for	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	on	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	by	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	from	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	group	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	groups	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	level	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	levels	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	and	ignored when checking that a reader's level name is in the question	rules
+level_stopword		value	or	ignored when checking that a reader's level name is in the question	rules
+genotype_noun	genotype	word	inbreds	noun that names the set of genotypes ("several related maize inbreds")	rules
+genotype_noun	genotype	word	association panel	noun that names the set of genotypes ("several related maize inbreds")	rules
+genotype_noun	genotype	word	diversity panel	noun that names the set of genotypes ("several related maize inbreds")	rules
+cue	count_within_rep	regex	\s+(?:per|in each|within each|within a)\s+(?:replicat\w*|reps?|complete blocks?)\b	follows a counted noun that is counted inside each replicate ("32 incomplete blocks per replication"), so the number is not the replication	rules
+cue	pooled_per_group	regex	\b(?:pooled|bulked|combined)\s+(?:per|for each|from each|within each|by)\s+{G}s?\b	"N units per <group>" is not replication when those units are pooled per that group ({G} = the group word: "10 seedlings pooled per genotype")	rules
+not_rep_noun		regex	generations?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	weeks?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	days?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	hours?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	h	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	months?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	regions?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	farms?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	populations?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	parents?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+not_rep_noun		regex	founders?	a number followed by this noun counts something other than replicates ("two sites", "3 weeks")	rules
+cue	asks_reps	regex	\b(?:how many (?:(?:biological |technical )?(?:replicates?|reps|replications)|[a-z-]+(?: [a-z-]+)? (?:per|in each|for each) (?:group|treatment|condition|genotype|line|diet|arm|time ?point|cross|strain))|do i need (?:more )?(?:replicates|replication|to replicate)|should i (?:have )?replicat\w*)	a question sentence that asks for the replicate count: the count is the user's open question, so no number in the prompt fills it	rules
+cue	unequal_groups	regex	\beach\b\)?\s*,?\s*(?:plus|and|with)\s+(?:a single|one|only one|just one)\b	"(3 plants each), plus a single control plant": the groups differ in size, so there is no one replicate count	rules
+cue	count_breakdown	regex	\s+(?:[a-z-]+\s+){0,3}\(\s*\d+\s+[a-z-]+\s*(?:,|;|/|\band\b)\s*\d+	follows a number that is a total split into groups ("8 pigs (4 male, 4 female)"): the total is not the replicates per group	rules
