@@ -14,7 +14,7 @@ dict(paper="paper_2356", style="detailed", prompt="small RNA-seq of leaves and r
      spec=dict(system="growth_chamber", organism="Glycine max", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2), dict(name="tissue", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x2x3"),
 dict(paper="paper_2357", skip="viral evolution"),
-dict(paper="paper_2358", skip="single-cell gonad atlas"),
+{'paper': 'paper_2358', 'style': 'question', 'prompt': 'RNA-seq of C. elegans gonads cut into sequential segments along the distal-proximal axis, one segment per library. How many gonads?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['rnaseq'], 'factors': [{'name': 'position'}]}, 'ask': ['design.reps'], 'note': 'round 1: segments within gonad'},
 dict(paper="paper_2359", skip="cross-species comparison"),
 dict(paper="paper_2360", skip="differentiation time course"),
 dict(paper="paper_2361", skip="developmental survey"),

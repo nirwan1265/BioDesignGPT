@@ -6,7 +6,7 @@ dict(paper="paper_1175", style="detailed", prompt="Status epilepticus in immatur
 dict(paper="paper_1176", style="question", prompt="How many replicates for Hi-C and RNA-seq of 9-day-old Arabidopsis pickle mutant vs wild-type seedlings grown in continuous white light?",
      spec=dict(organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2)]),
      ask=["design.reps"], gaps=["assay:hic"], note="2 genotypes"),
-dict(paper="paper_1177", skip="small RNA atlas"),
+{'paper': 'paper_1177', 'style': 'terse', 'prompt': 'small RNA atlas of potato cultivars Desiree and Eva: flower, leaf, root and tuber, 3 biological replicates each.', 'spec': {'organism': 'Solanum tuberosum', 'assays': ['small_rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 4}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 2 x 4 x 3'},
 dict(paper="paper_1178", skip="miRNA expression atlas"),
 dict(paper="paper_1179", skip="risk locus functional dissection"),
 dict(paper="paper_1180", style="terse", prompt="RNA-seq of log-phase Chlamydomonas treated 1 h with the NO donor SNAP, the scavenger cPTIO, both, or neither, 3 biological replicates.",

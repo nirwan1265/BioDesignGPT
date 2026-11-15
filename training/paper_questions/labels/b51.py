@@ -19,7 +19,7 @@ dict(paper="paper_1258", style="detailed", prompt="Wheat Cadenza TILLING lines w
      ask=[P], note="homoeolog dosage series"),
 dict(paper="paper_1259", skip="descriptive repertoire profiling"),
 dict(paper="paper_1260", skip="cultivar resequencing"),
-dict(paper="paper_1261", skip="tissue promoter atlas"),
+{'paper': 'paper_1261', 'style': 'question', 'prompt': 'Transcription start site mapping and RNA-seq in 31 tissues from Hereford cattle slaughtered at one abattoir. Should I block on animal?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 31}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: tissues within animal'},
 dict(paper="paper_1262", style="question", prompt="For Hi-C and ATAC-seq of primary cortical neurons from Satb2 conditional knockout vs control pups, silenced with NBQX vs then activated, how many independent cultures per condition?",
      spec=dict(system="cell_culture", organism="Mus musculus", assays=["atac_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2)]),
      ask=["design.reps"], gaps=["assay:hic", "blocking:culture_batch"], note="2x2"),

@@ -11,7 +11,7 @@ dict(paper="paper_4530", style="detailed", prompt="Whole-blood RNA-seq of 3 male
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="sex", n_levels=2), dict(name="time")], design=dict(reps=3)),
      ask=[P], note="dense longitudinal"),
 dict(paper="paper_4531", skip="lymphoma clonality"),
-dict(paper="paper_4532", skip="body atlas"),
+{'paper': 'paper_4532', 'style': 'detailed', 'prompt': 'small RNA-seq body atlas of 5 male and 5 female Sprague-Dawley rats, about 20 organs per rat.', 'spec': {'system': 'mouse', 'organism': 'Rattus norvegicus', 'assays': ['small_rnaseq'], 'factors': [{'name': 'tissue'}, {'name': 'sex', 'n_levels': 2}], 'design': {'reps': 5}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: organs within rat'},
 dict(paper="paper_4533", skip="mutagenesis"),
 dict(paper="paper_4534", skip="pioneer factors"),
 dict(paper="paper_4535", skip="sarcoma mechanism"),

@@ -27,7 +27,7 @@ dict(paper="paper_1057", style="terse", prompt="Iso-Seq of chicken prehierarchic
 dict(paper="paper_1058", style="detailed", prompt="Old female rhesus macaques: ovary intact (4), ovariectomised + placebo capsule (8), ovariectomised + estradiol capsule (6); RNA-seq and WGBS of prefrontal and occipital cortex. Are those group sizes enough?",
      spec=dict(organism="Macaca mulatta", assays=["rnaseq", "methylation"], factors=[dict(name="treatment", n_levels=3), dict(name="tissue", n_levels=2)]),
      ask=[P], note="unequal n 4/8/6, 2 regions per animal"),
-dict(paper="paper_1059", skip="descriptive cell atlas"),
+{'paper': 'paper_1059', 'style': 'question', 'prompt': 'scRNA-seq of dendritic and monocytic cells sorted from mesenteric lymph nodes of three slaughtered cows. Are three cows enough?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['single_cell'], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 3 donors'},
 dict(paper="paper_1060", skip="structure probing method"),
 dict(paper="paper_1061", skip="RNA-binding biochemistry"),
 dict(paper="paper_1062", style="question", prompt="For root hair phenotyping of barley rhp1 mutants and their parent cultivars in aeroponics for 7 days, I planned four biological replicates of six plants per genotype. Is that enough to detect shorter root hairs?",

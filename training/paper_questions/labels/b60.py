@@ -48,7 +48,7 @@ dict(paper="paper_1495", style="detailed", prompt="Three young and two aged rhes
      spec=dict(organism="Macaca mulatta", assays=["single_cell"], factors=[dict(name="age", n_levels=2), dict(name="time", n_levels=10)]),
      ask=[P], gaps=["repeated_measures", "assay:amplicon_16s"], note="3 v 2 animals, longitudinal"),
 dict(paper="paper_1496", skip="species comparison challenge"),
-dict(paper="paper_1497", skip="single-cell multiome atlas"),
+{'paper': 'paper_1497', 'style': 'terse', 'prompt': 'Single-cell multiome of hooked potato stolons from Atlantic plants grown from tissue culture in a growth chamber, two biological replicates.', 'spec': {'system': 'growth_chamber', 'organism': 'Solanum tuberosum', 'assays': ['single_cell', 'scatac_seq'], 'design': {'reps': 2}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: one tissue atlas'},
 dict(paper="paper_1498", style="terse", prompt="Nucleosome/histone ChIP-seq of 6-day-old Arabidopsis Col-0 vs fgt1 seedlings, primed with heat stress vs untreated, all genotypes per treatment on one plate, 3 biological replicates.",
      spec=dict(organism="Arabidopsis thaliana", assays=["chip_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),

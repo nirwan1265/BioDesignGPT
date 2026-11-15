@@ -44,5 +44,5 @@ dict(paper="paper_2720", style="question", prompt="ATAC-seq of livers from SHR/I
 dict(paper="paper_2721", skip="single-cell method"),
 dict(paper="paper_2722", skip="transgenerational"),
 dict(paper="paper_2723", skip="mechanism"),
-dict(paper="paper_2724", skip="embryo atlas"),
+{'paper': 'paper_2724', 'style': 'question', 'prompt': 'scRNA-seq of chick hypothalamic tissue at six stages from HH6 to HH20/21, tissue pooled from several embryos per stage. How many pools per stage?', 'spec': {'organism': 'Gallus gallus', 'assays': ['single_cell'], 'factors': [{'name': 'stage', 'n_levels': 6}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled embryos'},
 ]

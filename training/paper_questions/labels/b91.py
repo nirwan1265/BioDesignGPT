@@ -43,7 +43,7 @@ dict(paper="paper_2268", style="question", prompt="RNA-seq of proximal colon fro
      ask=["design.reps"], note="2x2 colonisation"),
 dict(paper="paper_2269", skip="cultivar species unclear"),
 dict(paper="paper_2270", skip="strain engineering"),
-dict(paper="paper_2271", skip="gametophyte atlas"),
+{'paper': 'paper_2271', 'style': 'question', 'prompt': 'RNA-seq of maize B73 mature pollen, embryo sacs and seedlings from greenhouse- and field-grown plants, to find gametophyte transcripts. Can I combine samples from the two growing sites?', 'spec': {'organism': 'Zea mays', 'assays': ['rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 3}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: site confounded with tissue'},
 dict(paper="paper_2272", skip="gene function"),
 dict(paper="paper_2273", style="question", prompt="Jejunal small RNA-seq of piglets from 4 litters, 3 per litter randomly assigned to weaning vs continued suckling, 3 per group sequenced. Is the litter a block?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),

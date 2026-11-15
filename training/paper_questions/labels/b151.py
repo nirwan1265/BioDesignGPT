@@ -4,7 +4,7 @@ dict(paper="paper_3750", style="question", prompt="Archaeal 16S of rumen fluid i
      spec=dict(organism="Bos taurus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),
      ask=["experimental_unit"], note="in vitro fermenters"),
 dict(paper="paper_3751", skip="mitochondrial mutant"),
-dict(paper="paper_3752", skip="chrono atlas"),
+{'paper': 'paper_3752', 'style': 'question', 'prompt': 'scRNA-seq of mouse colon during regeneration, sampled every 6 h across the day in Per2-luciferase mice. How many mice per time point?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['single_cell'], 'factors': [{'name': 'time'}]}, 'ask': ['design.reps'], 'note': 'round 1: daily rhythm'},
 dict(paper="paper_3753", skip="exoribonuclease mechanism"),
 dict(paper="paper_3754", skip="imprinting mechanism"),
 dict(paper="paper_3755", style="question", prompt="RNA-seq of tissues from ART-treated SIV-infected rhesus macaques given anti-IFN-alpha antibody vs control, sampled over time. How many macaques per arm?",

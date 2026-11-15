@@ -22,7 +22,7 @@ dict(paper="paper_2810", style="question", prompt="Twelve Holstein calves in ind
 dict(paper="paper_2811", style="question", prompt="scRNA-seq of airway submucosal glands from cystic fibrosis vs wild-type pigs. How many pigs per genotype?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="genotype", n_levels=2)]),
      ask=["design.reps"], note="CF vs WT"),
-dict(paper="paper_2812", skip="germline atlas"),
+{'paper': 'paper_2812', 'style': 'question', 'prompt': 'scRNA-seq of Arabidopsis ovule primordia, each sample dissected from 60 floral buds at stages 9-10 of a KNU-Venus marker line. How many samples?', 'spec': {'organism': 'Arabidopsis thaliana', 'assays': ['single_cell'], 'subsamples_per_unit': 60}, 'ask': ['design.reps'], 'note': 'round 1: pooled buds'},
 dict(paper="paper_2813", skip="epigenome editing"),
 dict(paper="paper_2814", skip="microbiome time-restricted feeding"),
 dict(paper="paper_2815", style="terse", prompt="RNA-seq of petioles from wounded vs unwounded Arabidopsis under high vs low R:FR light in a culture chamber, 3 biological replicates.",

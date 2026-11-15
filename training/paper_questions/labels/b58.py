@@ -15,7 +15,7 @@ dict(paper="paper_1430", style="terse", prompt="Leaf RNA-seq of Micro-Tom tomato
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="temperature", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
 dict(paper="paper_1431", skip="Dicer mutation mechanism"),
-dict(paper="paper_1432", skip="developmental chromatin atlas"),
+{'paper': 'paper_1432', 'style': 'question', 'prompt': 'ATAC-seq and RNA-seq of C. elegans across the larval stages and ageing adults in a sterile glp-1 background, worms grown in liquid culture. How many replicate cultures per stage?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['atac_seq', 'rnaseq'], 'factors': [{'name': 'stage'}]}, 'ask': ['design.reps'], 'note': 'round 1: development + ageing'},
 dict(paper="paper_1433", skip="feather development atlas"),
 dict(paper="paper_1434", style="detailed", prompt="Drought GWAS in a maize inbred panel under well-watered and drought-stressed conditions at 5 locations in northern China, split-block design with 2 replications, two-row 5 m plots, grain yield and drought coefficient.",
      spec=dict(system="field", organism="Zea mays", assays=["gwas"], factors=[dict(name="genotype"), dict(name="water", n_levels=2)], design=dict(reps=2, locations=5), experimental_unit="plot", primary_outcome=dict(name="grain_yield")),

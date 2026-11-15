@@ -37,7 +37,7 @@ dict(paper="paper_3121", style="detailed", prompt="Leaf RNA-seq of Medicago trun
      spec=dict(system="growth_chamber", organism="Medicago truncatula", assays=["rnaseq"], factors=[dict(name="photoperiod", n_levels=2), dict(name="time")], design=dict(reps=3)),
      ask=[P], note="photoperiod x time"),
 dict(paper="paper_3122", skip="in vitro reconstitution"),
-dict(paper="paper_3123", skip="embryo atlas"),
+{'paper': 'paper_3123', 'style': 'question', 'prompt': 'scRNA-seq of bovine conceptuses on several peri-implantation days plus cotyledon and intercotyledonary placenta. How many embryos per day?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['single_cell'], 'factors': [{'name': 'stage'}]}, 'ask': ['design.reps'], 'note': 'round 1: embryo series'},
 dict(paper="paper_3124", style="question", prompt="small RNA-seq of Chlamydomonas cultures resuspended in TAP vs nitrogen-free TAP. How many replicate cultures?",
      spec=dict(system="cell_culture", organism="Chlamydomonas reinhardtii", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)]),
      ask=["design.reps"], note="N deprivation"),

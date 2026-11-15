@@ -28,7 +28,7 @@ dict(paper="paper_5190", style="detailed", prompt="Stem RNA-seq at flowering of 
      ask=[P], note="2x2x2x3"),
 dict(paper="paper_5191", skip="variant discovery"),
 dict(paper="paper_5192", skip="reference transcriptome"),
-dict(paper="paper_5193", skip="sleep atlas"),
+{'paper': 'paper_5193', 'style': 'question', 'prompt': 'scRNA-seq of Drosophila brains from sleep-deprived vs rested males at two times of day, flies monitored singly. How many brains per condition?', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['single_cell'], 'factors': [{'name': 'treatment', 'n_levels': 2}, {'name': 'time', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: 2 x 2'},
 dict(paper="paper_5194", style="detailed", prompt="Leaf RNA-seq of greenhouse soybean resistant Kefeng 1 and susceptible Nannong 1138-2 at the three-leaf stage, inoculated with soybean mosaic virus vs mock, sampled at four times, 3 biological replicates.",
      spec=dict(system="greenhouse", organism="Glycine max", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2), dict(name="time", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="2x2x4x3"),

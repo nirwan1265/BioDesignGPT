@@ -18,7 +18,7 @@ dict(paper="paper_2607", style="detailed", prompt="Leaf RNA-seq of potted Cabern
      ask=[P], note="2x2 RCBD x time"),
 dict(paper="paper_2608", skip="cell line mechanism"),
 {'paper': 'paper_2609', 'style': 'casual', 'prompt': 'mapping a short internode soybean mutant, F2:3 families from rin1 x Heihe43, 20 seeds of each F2 plant sown as one row in the field. how many families do i need?', 'spec': {'system': 'field', 'organism': 'Glycine max', 'assays': ['qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: F2:3 families'},
-dict(paper="paper_2610", skip="developmental survey"),
+{'paper': 'paper_2610', 'style': 'question', 'prompt': 'ATAC-seq and RNA-seq of fetal pig muscle at three gestational stages, fetuses collected from 13 Large White x Landrace gilts. Is the gilt or the fetus my unit?', 'spec': {'system': 'livestock', 'organism': 'Sus scrofa', 'assays': ['atac_seq', 'rnaseq'], 'factors': [{'name': 'stage', 'n_levels': 3}]}, 'ask': ['experimental_unit'], 'note': 'round 1: fetuses within gilt'},
 dict(paper="paper_2611", skip="meta-analysis"),
 dict(paper="paper_2612", skip="pituitary atlas"),
 dict(paper="paper_2613", skip="in vitro MDSC survey"),

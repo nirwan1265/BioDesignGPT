@@ -9,7 +9,7 @@ dict(paper="paper_3426", style="terse", prompt="small RNA-seq of leaves of resis
 dict(paper="paper_3427", style="detailed", prompt="small RNA-seq and RNA-seq of leaves and roots of hydroponic Moneymaker tomato in a growth chamber with vs without sulfate, 3 biological replicates each pooling 5 plants.",
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["small_rnaseq", "rnaseq"], factors=[dict(name="nutrient", n_levels=2), dict(name="tissue", n_levels=2)], design=dict(reps=3), subsamples_per_unit=5),
      ask=[P], note="sulfate deficiency"),
-dict(paper="paper_3428", skip="atlas"),
+{'paper': 'paper_3428', 'style': 'question', 'prompt': 'scRNA-seq atlas of thymus, spleen, lymph nodes and bone marrow from 4-week-old Yorkshire piglets in a BSL-2 facility. How many piglets?', 'spec': {'system': 'livestock', 'organism': 'Sus scrofa', 'assays': ['single_cell'], 'factors': [{'name': 'tissue', 'n_levels': 4}]}, 'ask': ['design.reps'], 'note': 'round 1: organs within piglet'},
 dict(paper="paper_3429", skip="centromere mechanism"),
 dict(paper="paper_3430", skip="gene function"),
 dict(paper="paper_3431", skip="chromatin mechanism"),

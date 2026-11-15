@@ -26,7 +26,7 @@ dict(paper="paper_0958", style="terse", prompt="Small RNA-seq of potato Kufri Jy
 dict(paper="paper_0959", style="terse", prompt="6mA IP-seq of C. elegans N2 vs metl-9 knockout, L4 worms fed OP50 or Pseudomonas PA14 for 2 h, 2 biological replicates.",
      spec=dict(organism="Caenorhabditis elegans", factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=2)),
      ask=[P], gaps=["assay:6ma_ip"], note="2 x 2 x 2"),
-dict(paper="paper_0960", skip="pooled tissue PARE atlas"),
+{'paper': 'paper_0960', 'style': 'question', 'prompt': 'PARE and small RNA-seq of Brachypodium Bd21 shoots, leaves, roots, panicles and stems from a growth chamber, tissue pooled from many plants per library. How many libraries per tissue?', 'spec': {'system': 'growth_chamber', 'organism': 'Brachypodium distachyon', 'assays': ['degradome', 'small_rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 5}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled tissue atlas'},
 dict(paper="paper_0961", style="detailed", prompt="Pakistani wheat germplasm: 51 genotypes each sown in 1 m2 blocks of 25 plants, in triplicate randomized blocks, agronomic traits scored per block, GBS genotyping. Is this enough for association mapping?",
      spec=dict(system="field", organism="Triticum aestivum", assays=["gwas"], factors=[dict(name="genotype", n_levels=51)], design=dict(reps=3), subsamples_per_unit=25),
      ask=[P], gaps=["assay:gbs_genotyping"], note="51 x 3 x 25"),

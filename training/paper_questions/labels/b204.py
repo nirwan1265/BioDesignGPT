@@ -32,7 +32,7 @@ dict(paper="paper_5094", style="question", prompt="Liver RNA-seq of juvenile Jap
      ask=["experimental_unit"], note="maternal diet"),
 dict(paper="paper_5095", skip="insulator binding"),
 dict(paper="paper_5096", skip="lineage methylome"),
-dict(paper="paper_5097", skip="placenta atlas"),
+{'paper': 'paper_5097', 'style': 'question', 'prompt': 'scRNA-seq of Sprague-Dawley rat placentas at embryonic days 12.5 and 15.5, several placentas from each pregnant dam. Is the placenta or the dam my unit?', 'spec': {'system': 'mouse', 'organism': 'Rattus norvegicus', 'assays': ['single_cell'], 'factors': [{'name': 'stage', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: placentas within dam'},
 dict(paper="paper_5098", style="question", prompt="Faecal 16S of male Sprague Dawley rats with induced type 2 diabetes given Parabacteroides distasonis, indoleacrylic acid or vehicle, plus healthy controls. How many rats per group?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=4)]),
      ask=["design.reps"], note="T2D model"),

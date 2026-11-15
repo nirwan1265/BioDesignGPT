@@ -11,7 +11,7 @@ dict(paper="paper_1330", style="terse", prompt="Heart H3K4me3 ChIP-seq of SHR.BN
      spec=dict(organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
 {'paper': 'paper_1331', 'style': 'detailed', 'prompt': 'Randomized double-blind trial in healthy women, probiotic vs placebo, faecal shotgun metagenomics and anxiety scores, 50 participants allocated 1:1.', 'spec': {'organism': 'Homo sapiens', 'assays': ['metagenomics'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 2-arm RCT'},
-dict(paper="paper_1332", skip="cell atlas"),
+{'paper': 'paper_1332', 'style': 'question', 'prompt': 'Single-cell atlas of pig cerebellum, heart, liver, kidney, spleen and other organs, with liver sampled from five lobes of one animal. Are the lobes replicates?', 'spec': {'system': 'livestock', 'organism': 'Sus scrofa', 'assays': ['single_cell'], 'factors': [{'name': 'tissue'}]}, 'ask': ['experimental_unit'], 'note': 'round 1: lobes within animal'},
 dict(paper="paper_1333", skip="ribosome protein mechanism"),
 dict(paper="paper_1334", style="detailed", prompt="Root small RNA-seq of Al-tolerant Tibetan wild barley XZ29 and cultivated Golden Promise, hydroponic seedlings in 1 mM CaCl2 at pH 4.5 with 0 or 5 uM Al, 2 biological replicates.",
      spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2)], design=dict(reps=2)),

@@ -19,7 +19,7 @@ dict(paper="paper_2681", style="terse", prompt="Root RNA-seq of maize seedlings 
 dict(paper="paper_2683", style="terse", prompt="Root RNA-seq of wheat seedlings on half-strength MS in a growth chamber: take-all fungus, Bacillus velezensis, both, or neither, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="4 x 3"),
-dict(paper="paper_2684", skip="primate neuron atlas"),
+{'paper': 'paper_2684', 'style': 'question', 'prompt': 'snRNA-seq of muscarinic receptor neurons in lateral prefrontal and anterior cingulate cortex of adult rhesus monkeys of both sexes, brains from ageing studies. How many monkeys per region?', 'spec': {'organism': 'Macaca mulatta', 'assays': ['single_cell'], 'factors': [{'name': 'tissue', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: regions within animal'},
 dict(paper="paper_2685", skip="CRISPRa screen"),
 dict(paper="paper_2686", skip="cell line mechanism"),
 dict(paper="paper_2687", skip="ChIP method"),

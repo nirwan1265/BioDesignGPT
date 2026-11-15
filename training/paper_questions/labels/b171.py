@@ -15,7 +15,7 @@ dict(paper="paper_4256", style="detailed", prompt="Flesh RNA-seq of Orin and Shi
      ask=[P], note="2x2x3x3"),
 dict(paper="paper_4257", skip="tumour enhancers"),
 dict(paper="paper_4258", skip="sperm mutations"),
-dict(paper="paper_4259", skip="aging atlas"),
+{'paper': 'paper_4259', 'style': 'question', 'prompt': 'Single-nucleus multiome of substantia nigra from young, middle-aged and old C57BL/6J mice, each sample pooling brains of several mice. How many pooled samples per age?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['single_cell', 'scatac_seq'], 'factors': [{'name': 'age', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled brains'},
 dict(paper="paper_4260", skip="cell lines"),
 dict(paper="paper_4261", skip="yeast population"),
 dict(paper="paper_4262", style="question", prompt="RNA-seq of amygdala and frontal cortex from male Sprague-Dawley rats given methylone or saline during fear extinction training. How many rats per group?",
