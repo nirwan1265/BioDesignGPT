@@ -17,8 +17,10 @@
    so fine-tuning teaches our schema without unlearning what the base model already reads well.
    Design judgments are kept out of the targets: experimental_unit only when the unit word is in the prompt.
    A missing unit label is not a null: most paper and real-study prompts were never labelled for the unit. There
-   the target takes the base model's unit if that word is in the prompt; it stays null only when the label says
-   the unit must be asked (must_ask) or nothing stated names one.
+   the target takes the base model's unit only when the prompt counts it as the replicate (cue unit_counted in
+   rules.tsv: "3 pots per treatment", "4 replicate cages", "one plant per pot"). A unit the prompt only mentions
+   is often what the question asks about ("are wells replicates?"), so v4, which took any mentioned unit, learned
+   to fill it in.
 
     python llm/make_sft.py prompts --out WORK [--n 4500]
     python llm/reader.py --model ... --examples WORK/prompts.jsonl --out WORK --raw     # distil (GPU)
@@ -48,6 +50,17 @@ def unit_stated(unit, text):
     """The unit word (or any alias of that unit in inst/agent/rules.tsv) is in the prompt."""
     words = set(rules.aliases("unit").get(unit, [])) | {unit.replace("_", " ")}
     return any(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?:e?s)?(?![a-z0-9])", text) for w in words)
+
+
+def _cue(name):
+    return next(r["pattern"] for r in rules.of("cue", "regex") if r["term"] == name)
+
+
+def unit_counted(unit, text):
+    """The prompt counts the unit as the replicate (cue unit_counted in rules.tsv, the same test merge_specs applies)."""
+    w = re.escape(re.sub(r"(?<![su])s$", "", unit.replace("_", " ").lower()))
+    pat = _cue("unit_counted").replace("{U}", w).replace("{N}", _cue("count_word"))
+    return re.search(pat, text.lower().replace(",", "")) is not None
 
 
 # generated training files (git-ignored) are looked for in SFT_DATA first (the slurm job regenerates them
@@ -156,9 +169,9 @@ def unit_target(gold, distilled, must_ask, text):
     du = distilled.get("experimental_unit")
     if isinstance(du, str) and du.strip():
         du = du.strip().lower().replace(" ", "_")
-        if unit_stated(du, text):
-            return du, "distilled"
-    return None, "none stated"
+        if unit_counted(du, text):
+            return du, "distilled"   # only a unit the prompt counts as the replicate ("3 pots per treatment")
+    return None, "not counted"
 
 
 def target(prompt, gold, distilled, must_ask=None, stats=None):

@@ -110,13 +110,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   }
   rep_said <- function(v) stated(v) && !rep_range(v) && !other_count(v) && !breakdown(v) && !.sf_reps_open(question) &&
     (v != 1 || grepl(.sf_cue("one_replicate_stated"), text, perl = TRUE))
-  unit_counted <- function(u) {
-    w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
-    n <- paste0("(?:\\d+|", paste(names(.sf_number_words), collapse = "|"), ")")
-    grepl(paste0("\\b", n, " (?:replicate |independent |separate |\\w+ ){0,2}", w, "(?:e?s)? (?:per|for each|in each|each)\\b|",
-                 "\\b", w, "(?:e?s)? of ", n, "\\b|\\b(?:one|1|a single|each) \\w+ (?:per|in its own|in their own) ", w, "\\b|",
-                 "\\b", n, " replicate ", w), text, perl = TRUE)
-  }
+  unit_counted <- function(u) .sf_unit_counted(u, text)
   out <- rule
   if (!is.null(model$system) && (is.null(rule$system) || tier(model$system) > tier(rule$system))) out$system <- model$system
   ma <- unlist(model$assays)
@@ -225,6 +219,12 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   }, logical(1)))
 }
 
+# the prompt counts the unit as the replicate (cue unit_counted in rules.tsv; llm/make_sft.py reads the same row)
+.sf_unit_counted <- function(u, text) {
+  w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
+  re <- gsub("{N}", .sf_cue("count_word"), gsub("{U}", w, .sf_cue("unit_counted"), fixed = TRUE), fixed = TRUE)
+  grepl(re, text, perl = TRUE)
+}
 .sf_alias_cache <- new.env()
 .sf_alias_table <- function() {
   if (is.null(.sf_alias_cache$t)) {
