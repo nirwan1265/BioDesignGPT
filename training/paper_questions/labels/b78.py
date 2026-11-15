@@ -12,7 +12,7 @@ dict(paper="paper_1929", style="detailed", prompt="RNA-seq and 16S of midgut and
 dict(paper="paper_1930", style="question", prompt="RRBS of testis from boars with low, medium and high boar taint, 3 pigs per group. Enough?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["methylation"], factors=[dict(name="phenotype_group", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
-dict(paper="paper_1931", skip="population resequencing"),
+{'paper': 'paper_1931', 'style': 'detailed', 'prompt': 'Comb morphology selection scan: resequencing of 228 chickens from nine Chinese indigenous breeds and one North American breed, 17 to 30 birds per breed.', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 10}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: unequal breed samples'},
 dict(paper="paper_1932", style="terse", prompt="Seed RNA-seq at R5 of two CRISPR knockout lines of a seed-weight gene vs wild type from a field trial, 3 biological replicates.",
      spec=dict(system="field", organism="Glycine max", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),

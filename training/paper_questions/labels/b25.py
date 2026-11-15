@@ -28,7 +28,7 @@ dict(paper="paper_0610", style="detailed", prompt="Eucalyptus grandis water defi
      spec=dict(system="growth_chamber", organism="Eucalyptus grandis", assays=["rnaseq"], factors=[dict(name="water", n_levels=2)], design=dict(reps=12), subsamples_per_unit=3),
      ask=[P], gaps=["blocking:run", "design:latin_square"], note="2 x 12 x 3 runs, pooled 3"),
 dict(paper="paper_0611", skip="SIV-infected macaque immunology, tissue atlas"),
-dict(paper="paper_0612", skip="population genomics"),
+{'paper': 'paper_0612', 'style': 'question', 'prompt': 'Population genomics of rhesus macaques from eight US primate research colonies plus three wild-caught Chinese animals by whole-genome sequencing. Should colony be a factor?', 'spec': {'organism': 'Macaca mulatta', 'assays': ['wgs'], 'factors': [{'name': 'location', 'n_levels': 8}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: colonies'},
 dict(paper="paper_0613", skip="yeast lifespan genetics"),
 dict(paper="paper_0614", style="casual", prompt="kc167 fly cells treated with aclarubicin vs dmso for 30 min, pol II cut&tag. 2 reps fine?",
      spec=dict(system="cell_culture", organism="Drosophila melanogaster", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=2)),

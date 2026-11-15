@@ -15,7 +15,7 @@ dict(paper="paper_2680", style="terse", prompt="Root RNA-seq of waterlogging-tol
 dict(paper="paper_2681", style="terse", prompt="Root RNA-seq of maize seedlings in a growth chamber: uninoculated, a biocontrol bacterium, Fusarium verticillioides, or both, 2 replicates.",
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=4)], design=dict(reps=2)),
      ask=[P], note="4 x 2"),
-dict(paper="paper_2682", skip="multi-parent population"),
+{'paper': 'paper_2682', 'style': 'question', 'prompt': 'Hundred-grain weight QTL in a maize multi-parent population from Ye107 crossed with three inbreds, 486 lines resequenced. How many field replicates per line?', 'spec': {'organism': 'Zea mays', 'assays': ['qtl_mapping', 'wgs'], 'factors': [{'name': 'genotype', 'n_levels': 486}]}, 'ask': ['design.reps'], 'note': 'round 1: multi-parent population'},
 dict(paper="paper_2683", style="terse", prompt="Root RNA-seq of wheat seedlings on half-strength MS in a growth chamber: take-all fungus, Bacillus velezensis, both, or neither, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="4 x 3"),

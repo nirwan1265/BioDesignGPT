@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_3100", skip="replication mechanism"),
 dict(paper="paper_3101", skip="embryo chromatin"),
 dict(paper="paper_3102", skip="T cell repertoire"),
-dict(paper="paper_3103", skip="strain resequencing"),
+{'paper': 'paper_3103', 'style': 'question', 'prompt': 'Selective sweeps among laboratory rat strains from whole-genome sequencing of 25 inbred strains, one animal each. Is one animal per inbred strain enough?', 'spec': {'system': 'mouse', 'organism': 'Rattus norvegicus', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 25}]}, 'ask': ['design.reps'], 'note': 'round 1: inbred strains'},
 {'paper': 'paper_3104', 'style': 'terse', 'prompt': 'Plasma small RNA-seq of polytrauma patients with high vs low troponin T, 5 per group, then qPCR in 19 more.', 'spec': {'organism': 'Homo sapiens', 'assays': ['small_rnaseq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}], 'design': {'reps': 5}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 5 v 5 discovery'},
 dict(paper="paper_3105", style="question", prompt="small RNA-seq of ileum, ileal lymph node and liver from dry cows diagnosed with Johne's disease vs test-negative herdmates. How many cows per group?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="tissue", n_levels=3)]),

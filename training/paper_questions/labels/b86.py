@@ -48,7 +48,7 @@ dict(paper="paper_2145", style="question", prompt="Faecal microbiome of co-house
 dict(paper="paper_2146", style="terse", prompt="RNA-seq of yeast heat-shocked at 42 C with normal vs blocked intracellular acidification, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Saccharomyces cerevisiae", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
-dict(paper="paper_2147", skip="population common garden"),
+{'paper': 'paper_2147', 'style': 'question', 'prompt': 'Short stamen loss along an elevation gradient: 112 Arabidopsis genotypes from 16 populations in Northeast Spain (5-9 per population) grown in a growth chamber, with resequencing of a subset. How many plants per genotype?', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['wgs'], 'factors': [{'name': 'population', 'n_levels': 16}]}, 'ask': ['design.reps'], 'note': 'round 1: common garden'},
 dict(paper="paper_2148", style="detailed", prompt="3' Tag-seq of heads and guts from VAPP58S ALS-model vs control flies at several ages, with or without neuronal Fos knockdown, 4 biological replicates.",
      spec=dict(system="drosophila", organism="Drosophila melanogaster", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="age"), dict(name="tissue", n_levels=2)], design=dict(reps=4)),
      ask=[P], note="genotype x age x tissue"),

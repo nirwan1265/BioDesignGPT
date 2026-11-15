@@ -1,7 +1,7 @@
 P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_3400", skip="repair mechanism"),
-dict(paper="paper_3401", skip="population resequencing"),
+{'paper': 'paper_3401', 'style': 'question', 'prompt': 'Whole-genome sequencing of weedy rice collected from fields in one Arkansas county with different herbicide histories, one seed per field plant. How many plants per field?', 'spec': {'system': 'field', 'organism': 'Oryza sativa', 'assays': ['wgs']}, 'ask': ['design.reps'], 'note': 'round 1: field sampling'},
 dict(paper="paper_3402", style="detailed", prompt="RNA-seq of Micro-Tom tomato ovaries at anthesis and fruits 4 days after pollination or IAA treatment in a culture chamber, 3 biological replicates each pooling about 50 ovaries.",
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3), subsamples_per_unit=50),
      ask=[P], note="pooled ovaries"),

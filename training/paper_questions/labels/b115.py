@@ -25,7 +25,7 @@ dict(paper="paper_2861", style="question", prompt="Bacterial wilt resistance of 
 dict(paper="paper_2862", style="detailed", prompt="RNA-seq of rice egg cells and zygotes from Kitaake, IR50 and their reciprocal crosses, 25 cells pooled per replicate, 3 biological replicates.",
      spec=dict(organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=4), dict(name="cell_type", n_levels=2)], design=dict(reps=3), subsamples_per_unit=25),
      ask=[P], note="pooled cells"),
-dict(paper="paper_2863", skip="population genomics"),
+{'paper': 'paper_2863', 'style': 'detailed', 'prompt': 'Selection scan in Gansu native cattle: resequencing of Yangba and Anxi cattle (20 each) plus 19 Zaosheng cattle and public genomes of other breeds.', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 3}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: three local breeds'},
 dict(paper="paper_2864", skip="meta-analysis"),
 dict(paper="paper_2865", skip="mechanism"),
 dict(paper="paper_2866", style="question", prompt="Boars fed a basal diet vs one with alginate oligosaccharides, 10 per group; faecal microbiome profiling. Is 10 enough?",

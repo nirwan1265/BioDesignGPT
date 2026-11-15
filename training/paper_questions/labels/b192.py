@@ -38,7 +38,7 @@ dict(paper="paper_4795", style="detailed", prompt="Fibre small RNA-seq of Ligon-
      spec=dict(system="field", organism="Gossypium hirsutum", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=3), dict(name="time")], design=dict(reps=3), subsamples_per_unit=15),
      ask=[P], note="bolls pooled"),
 dict(paper="paper_4796", skip="fungal gene"),
-dict(paper="paper_4797", skip="artificial selection"),
+{'paper': 'paper_4797', 'style': 'question', 'prompt': 'Artificial selection for shoot branching in Arabidopsis under high vs low nitrate, starting from 400 MAGIC lines, selected and control populations resequenced after several generations. How many replicate selection lines per nitrate level?', 'spec': {'organism': 'Arabidopsis thaliana', 'assays': ['wgs'], 'factors': [{'name': 'nitrogen', 'n_levels': 2}, {'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: selection lines'},
 dict(paper="paper_4798", skip="TAD deletion"),
 dict(paper="paper_4799", skip="lncRNA function"),
 ]

@@ -42,7 +42,7 @@ dict(paper="paper_3270", style="question", prompt="scRNA-seq of brain myeloid ce
      spec=dict(organism="Macaca mulatta", assays=["single_cell"], factors=[dict(name="infection", n_levels=2)]),
      ask=["design.reps"], note="infection vs control"),
 dict(paper="paper_3271", skip="haplotype mining"),
-dict(paper="paper_3272", skip="mutation accumulation"),
+{'paper': 'paper_3272', 'style': 'question', 'prompt': 'Transgenerational genome stability of Arabidopsis wild type vs uvr2 photolyase mutants in sun simulators under natural-like UV-B vs a UV-B-filtered control, lines propagated by single-seed descent and resequenced. How many lines per genotype and condition?', 'spec': {'organism': 'Arabidopsis thaliana', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: MA under UV'},
 dict(paper="paper_3273", skip="tumour driver"),
 dict(paper="paper_3274", style="question", prompt="RNA-seq of BALB/c bone marrow-derived macrophages exposed to alphavirus replicon vectors vs mock. How many independent cultures?",
      spec=dict(system="cell_culture", organism="Mus musculus", assays=["rnaseq"], factors=[dict(name="treatment")]),

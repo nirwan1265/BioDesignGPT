@@ -42,7 +42,7 @@ dict(paper="paper_1519", style="terse", prompt="RNA-seq and ATAC-seq of 3-week-o
      ask=[P], note="2x2x3"),
 dict(paper="paper_1520", skip="unclear array design"),
 dict(paper="paper_1521", skip="multi-species field comparison"),
-dict(paper="paper_1522", skip="diversity resequencing"),
+{'paper': 'paper_1522', 'style': 'question', 'prompt': "Promoter and 5'UTR resequencing of 96 wheat genotypes spanning ancestral, historic and modern varieties. Is one plant per genotype enough?", 'spec': {'organism': 'Triticum aestivum', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 96}]}, 'ask': ['design.reps'], 'note': 'round 1: diversity panel'},
 dict(paper="paper_1523", style="detailed", prompt="210 one-day-old male Luhua broilers randomised to a basal diet or the basal diet + vitamin D3, 7 replicate cages of 15 birds per diet; caecal 16S at the end.",
      spec=dict(organism="Gallus gallus", factors=[dict(name="diet", n_levels=2)], design=dict(reps=7), subsamples_per_unit=15),
      ask=[P], gaps=["unit:cage", "setting:livestock", "assay:amplicon_16s"], note="2 x 7 cages x 15"),

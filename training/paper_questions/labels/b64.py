@@ -35,7 +35,7 @@ dict(paper="paper_1590", style="terse", prompt="Heart DNA methylation profiling 
 dict(paper="paper_1591", style="detailed", prompt="30 adult male zebrafish split into control and chronically stressed groups (15 each, 21 days), then crossed with control females; small RNA-seq of 7 dpf progeny in pools of 50 larvae, 4 pools per group. Are the pools or the fathers the replicates?",
      spec=dict(organism="Danio rerio", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=4), subsamples_per_unit=50),
      ask=["experimental_unit"], gaps=["blocking:clutch"], note="held-out species; sire is unit"),
-dict(paper="paper_1592", skip="breed selection scan"),
+{'paper': 'paper_1592', 'style': 'question', 'prompt': 'Genetic structure and selected regions among Landrace (28), Erhualian (26) and Meishan (27) pigs by reduced-representation sequencing. Are 26-28 pigs per breed enough?', 'spec': {'system': 'livestock', 'organism': 'Sus scrofa', 'assays': ['gbs'], 'factors': [{'name': 'genotype', 'n_levels': 3}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: breed comparison'},
 dict(paper="paper_1593", skip="greenhouse virome survey"),
 dict(paper="paper_1594", skip="imprinting family sequencing"),
 dict(paper="paper_1595", style="terse", prompt="3' Tag-seq of hypocotyls and roots of 6-day-old Arabidopsis wild type vs hy5 seedlings kept at 22 C or moved to 28 C for 4 h, 3 biological replicates.",

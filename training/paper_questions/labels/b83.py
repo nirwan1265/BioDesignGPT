@@ -31,7 +31,7 @@ dict(paper="paper_2063", style="question", prompt="small RNA-seq of roots and sh
      spec=dict(system="greenhouse", organism="Glycine max", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2), dict(name="tissue", n_levels=2)]),
      ask=["design.reps"], note="2x2x2"),
 dict(paper="paper_2064", skip="base editor method"),
-dict(paper="paper_2065", skip="population genomics"),
+{'paper': 'paper_2065', 'style': 'question', 'prompt': 'Ancestry of White Plymouth Rock chickens from SNP genotypes of two body-weight selection lines (29 and 30 birds) and eight donor breeds (4-21 birds each). Can I estimate ancestry from breeds as small as 4 birds?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus'}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: small donor samples'},
 dict(paper="paper_2066", skip="neuron atlas"),
 dict(paper="paper_2067", style="terse", prompt="RNA-seq of four C. elegans strains (wild type and three RNA silencing mutants), 3 biological replicates.",
      spec=dict(organism="Caenorhabditis elegans", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=4)], design=dict(reps=3)),

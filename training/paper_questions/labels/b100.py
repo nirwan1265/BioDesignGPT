@@ -4,7 +4,7 @@ dict(paper="paper_2475", style="terse", prompt="RNA-seq of Thompson Seedless gra
      spec=dict(system="cell_culture", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="2x4x3"),
 dict(paper="paper_2476", skip="thymus mechanism"),
-dict(paper="paper_2477", skip="population genomics"),
+{'paper': 'paper_2477', 'style': 'question', 'prompt': 'Barley domestication haplotypes: whole-genome sequencing of 285 wild barley accessions plus landraces and cultivars. How many accessions per group?', 'spec': {'organism': 'Hordeum vulgare', 'assays': ['wgs'], 'factors': [{'name': 'population', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: wild vs domesticated'},
 dict(paper="paper_2478", style="terse", prompt="RNA-seq of ovaries from newly hatched Guangxi Ma chicks given estrogen, an estrogen synthesis inhibitor, or no drug, 3 per group.",
      spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),

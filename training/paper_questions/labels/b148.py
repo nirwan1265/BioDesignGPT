@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_3675", style="question", prompt="Faecal 16S of obese Zucker rats given carbohydrate-free peach juice, plum juice or a placebo drink, plus lean Zucker controls. How many rats per group?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=4)]),
      ask=["design.reps"], note="juice intervention"),
-dict(paper="paper_3676", skip="experimental evolution"),
+{'paper': 'paper_3676', 'style': 'question', 'prompt': 'Selection for multicellularity in Chlamydomonas: 10 strains each split into two flasks, one with rotifer predators and one control, followed over many generations with RNA-seq. Is the strain or the flask my replicate?', 'spec': {'system': 'cell_culture', 'organism': 'Chlamydomonas reinhardtii', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: strain split across treatments'},
 dict(paper="paper_3677", skip="decay mechanism"),
 dict(paper="paper_3678", skip="BSA mapping"),
 dict(paper="paper_3679", skip="paramutation"),

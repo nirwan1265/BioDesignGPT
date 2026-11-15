@@ -19,7 +19,7 @@ dict(paper="paper_2282", style="terse", prompt="CUT&Tag of Caco-2 cells treated 
      spec=dict(system="cell_culture", organism="Homo sapiens", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="4 x 3"),
 dict(paper="paper_2283", skip="replication origin mechanism"),
-dict(paper="paper_2284", skip="panel resequencing"),
+{'paper': 'paper_2284', 'style': 'question', 'prompt': 'Whole-genome resequencing of the 400-accession Sorghum Association Panel, three to five seedlings per accession grown in one greenhouse pot and pooled for DNA. Pool seedlings or sequence one plant?', 'spec': {'system': 'greenhouse', 'organism': 'Sorghum bicolor', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 400}]}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: pooled seedlings'},
 dict(paper="paper_2285", skip="reanalysis of public data"),
 dict(paper="paper_2286", style="detailed", prompt="scRNA-seq with antigen receptor profiling of lung leucocytes from pigs of two genotypes infected once or twice with influenza, 3 randomly selected pigs per group.",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=3)),

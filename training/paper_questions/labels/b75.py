@@ -28,7 +28,7 @@ dict(paper="paper_1858", style="terse", prompt="ChIP-seq in parental vs carbopla
      spec=dict(system="cell_culture", organism="Homo sapiens", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=2)),
      ask=[P], note="2 x 2"),
 dict(paper="paper_1859", skip="genome editing method"),
-dict(paper="paper_1860", skip="population exome capture"),
+{'paper': 'paper_1860', 'style': 'question', 'prompt': 'Exome capture of 397 barley accessions (172 cultivars, 171 landraces, 22 wild relatives and others) to map copy-number variants. Is one plant per accession enough?', 'spec': {'organism': 'Hordeum vulgare', 'assays': ['targeted_capture'], 'factors': [{'name': 'genotype', 'n_levels': 397}]}, 'ask': ['design.reps'], 'note': 'round 1: diversity panel'},
 dict(paper="paper_1861", style="question", prompt="Mammary biopsy 3' Tag-seq from lactating cows before and after a dexamethasone injection vs saline controls. How many cows?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="before/after x treatment"),

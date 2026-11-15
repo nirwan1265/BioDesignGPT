@@ -10,7 +10,7 @@ dict(paper="paper_3529", style="question", prompt="Plasma small RNA-seq of lacta
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="temperature", n_levels=2), dict(name="pregnancy", n_levels=2)]),
      ask=[P], note="repeated on cows"),
 dict(paper="paper_3530", skip="virome mining"),
-dict(paper="paper_3531", skip="mutation accumulation"),
+{'paper': 'paper_3531', 'style': 'question', 'prompt': 'Mutation accumulation in ten diploid yeast hybrids propagated by single-colony bottlenecks on YPD, hydroxyurea or rapamycin, end-point genomes sequenced. How many lines per strain and condition?', 'spec': {'organism': 'Saccharomyces cerevisiae', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 10}, {'name': 'treatment', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: MA lines'},
 dict(paper="paper_3532", style="question", prompt="Liver RNA-seq of male and female Wistar-Kyoto rats exposed by inhalation to filtered air or acrolein. How many rats per sex and exposure?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="sex", n_levels=2), dict(name="treatment", n_levels=2)]),
      ask=["design.reps"], note="sex x exposure"),

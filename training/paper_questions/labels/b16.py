@@ -55,7 +55,7 @@ dict(paper="paper_0394", style="detailed", prompt="MNase-seq of zebrafish embryo
 dict(paper="paper_0395", style="casual", prompt="5 day old maize seedlings from a chilling tolerant and a chilling sensitive inbred, 24h at 10/8C vs control in a growth chamber, small rna seq. how many reps",
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="temperature", n_levels=2)]),
      ask=["design.reps"], note="2 inbreds x chill/control"),
-dict(paper="paper_0396", skip="germplasm population genomics"),
+{'paper': 'paper_0396', 'style': 'question', 'prompt': 'Genotyping-by-sequencing of 1,949 apple accessions from one germplasm repository to compare modern cultivars with Malus sieversii and other wild species. Is one tree per accession enough?', 'spec': {'organism': 'Malus domestica', 'assays': ['gbs'], 'factors': [{'name': 'genotype', 'n_levels': 1949}]}, 'ask': ['design.reps'], 'note': 'round 1: germplasm survey'},
 dict(paper="paper_0397", skip="introgression history of a resistance locus"),
 dict(paper="paper_0398", style="detailed", prompt="Xenopus laevis animal caps: embryos injected at the 2-cell stage to induce neural crest, neural plate or left as ectoderm, about 80 caps per sample cultured to stage 15, small RNA-seq with 3 biological replicates.",
      spec=dict(organism="Xenopus laevis", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3), subsamples_per_unit=80),

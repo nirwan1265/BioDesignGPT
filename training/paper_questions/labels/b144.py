@@ -48,7 +48,7 @@ dict(paper="paper_3594", style="question", prompt="Root RNA-seq of potted Desire
      ask=["design.reps"], note="2x2"),
 dict(paper="paper_3595", skip="catalogue"),
 dict(paper="paper_3596", skip="replication mechanism"),
-dict(paper="paper_3597", skip="experimental evolution"),
+{'paper': 'paper_3597', 'style': 'detailed', 'prompt': 'Inversion frequency changes in Drosophila experimental evolution: three replicate populations per thermal regime (hot 18-28 C vs cold 10-20 C), pool-seq over generations.', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['pool_seq'], 'factors': [{'name': 'temperature', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 3 populations per regime'},
 dict(paper="paper_3598", skip="germ cell mechanism"),
 dict(paper="paper_3599", skip="patient tumours"),
 ]

@@ -44,5 +44,5 @@ dict(paper="paper_5297", style="detailed", prompt="Seedling RNA-seq of cold-tole
 dict(paper="paper_5298", style="detailed", prompt="Leaf and stem RNA-seq of 3-week-old hydroponic sweet sorghum Lvjure in a growth chamber under osmotic stress treatments vs control for 48 h, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Sorghum bicolor", assays=["rnaseq"], factors=[dict(name="treatment"), dict(name="tissue", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="osmotic stress"),
-dict(paper="paper_5299", skip="selection scan"),
+{'paper': 'paper_5299', 'style': 'terse', 'prompt': 'Selection signatures in Altay white-headed cattle: resequencing 20 animals plus public genomes of other Chinese and European breeds.', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs'], 'factors': [{'name': 'genotype'}], 'design': {'reps': 20}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: one breed vs public'},
 ]

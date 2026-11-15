@@ -52,7 +52,7 @@ dict(paper="paper_1919", style="terse", prompt="MeRIP-seq of young vs H2O2-induc
      ask=[P], note="2 x 3"),
 dict(paper="paper_1920", skip="gene amplification genetics"),
 dict(paper="paper_1921", skip="design not described"),
-dict(paper="paper_1922", skip="population resequencing"),
+{'paper': 'paper_1922', 'style': 'question', 'prompt': 'Resequencing of 314 wild and cultivated potato accessions to trace a self-compatibility MITE, plus self-pollination tests of diploid clones in a glasshouse. How many flowers per clone should I self?', 'spec': {'system': 'greenhouse', 'organism': 'Solanum tuberosum', 'assays': ['wgs'], 'factors': [{'name': 'genotype', 'n_levels': 314}]}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: flowers within clone'},
 dict(paper="paper_1923", style="terse", prompt="Bulk RNA-seq and scRNA-seq of the leaf developmental zone from Brachypodium Bd21-3 plants in a growth chamber, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Brachypodium distachyon", assays=["rnaseq", "single_cell"], design=dict(reps=3)),
      ask=[P], note="descriptive atlas"),

@@ -4,7 +4,7 @@ dict(paper="paper_3825", style="question", prompt="scRNA-seq of bronchoalveolar 
      spec=dict(organism="Macaca mulatta", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),
      ask=["design.reps"], note="BCG routes"),
 dict(paper="paper_3826", skip="meta-analysis"),
-dict(paper="paper_3827", skip="adaptation genomics"),
+{'paper': 'paper_3827', 'style': 'question', 'prompt': 'Drought adaptation in Cape Verde Arabidopsis: 152 Santo Antao lines and 24 Moroccan lines grown in a growth chamber under short days, with existing genome sequences. How many plants per line?', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['gwas'], 'factors': [{'name': 'population', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: island vs mainland lines'},
 dict(paper="paper_3828", skip="metastasis mechanism"),
 dict(paper="paper_3829", skip="macrophage mechanism"),
 dict(paper="paper_3830", skip="human hematopoiesis"),

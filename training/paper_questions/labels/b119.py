@@ -13,7 +13,7 @@ dict(paper="paper_2954", style="terse", prompt="RNA-seq of Nipped-B mutant vs is
      ask=[P], note="2 x 3"),
 dict(paper="paper_2955", skip="neuron differentiation mechanism"),
 dict(paper="paper_2956", skip="neural stem cell mechanism"),
-dict(paper="paper_2957", skip="landrace resequencing"),
+{'paper': 'paper_2957', 'style': 'question', 'prompt': 'Resequencing of 616 Vietnamese native rice accessions for diversity and GWAS, leaves from 35-40 seedlings per landrace pooled for DNA. Pool seedlings or sequence one plant?', 'spec': {'organism': 'Oryza sativa', 'assays': ['wgs', 'gwas'], 'factors': [{'name': 'genotype', 'n_levels': 616}]}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: pooled seedlings'},
 dict(paper="paper_2958", skip="aging screen"),
 dict(paper="paper_2959", skip="macrophage mechanism"),
 dict(paper="paper_2960", skip="base editor method"),

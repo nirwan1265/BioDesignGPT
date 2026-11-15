@@ -27,7 +27,7 @@ dict(paper="paper_4413", style="question", prompt="Root metatranscriptomics of f
 dict(paper="paper_4414", style="detailed", prompt="Leaf RNA-seq of seedlings of two citrus rootstock genotypes in growth chambers under every combination of heat, high light and drought (8 treatments), 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Citrus sinensis", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=8)], design=dict(reps=3)),
      ask=[P], note="2x8x3"),
-dict(paper="paper_4415", skip="adaptation scan"),
+{'paper': 'paper_4415', 'style': 'question', 'prompt': 'Adaptation scan in endangered Chinese native cattle from extreme environments, resequencing ear samples of two breeds plus public genomes. How many animals per breed?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs'], 'factors': [{'name': 'genotype'}]}, 'ask': ['design.reps'], 'note': 'round 1: breed sampling'},
 dict(paper="paper_4416", style="detailed", prompt="Root RNA-seq of four barley varieties in a growth room, waterlogged vs control, 4 biological replicates each pooling 3 plants.",
      spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=4), dict(name="water", n_levels=2)], design=dict(reps=4), subsamples_per_unit=3),
      ask=[P], note="4x2x4"),

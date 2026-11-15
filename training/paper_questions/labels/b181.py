@@ -20,7 +20,7 @@ dict(paper="paper_4505", style="terse", prompt="Tuber RNA-seq of potato grown in
      ask=[P], note="2 x 3"),
 dict(paper="paper_4506", skip="gene therapy"),
 dict(paper="paper_4507", skip="ligase mechanism"),
-dict(paper="paper_4508", skip="experimental evolution"),
+{'paper': 'paper_4508', 'style': 'question', 'prompt': 'Haplotypes of individual flies from a Drosophila experimental evolution study: 29 flies each from the base population and an evolved replicate, plus pool-seq of the replicates. Are 29 flies per population enough?', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['wgs', 'pool_seq'], 'factors': [{'name': 'time', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: base vs evolved'},
 dict(paper="paper_4509", skip="unclear assay"),
 dict(paper="paper_4510", skip="longevity mechanism"),
 dict(paper="paper_4511", skip="fibroblast secretome"),

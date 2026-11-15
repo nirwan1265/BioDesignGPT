@@ -9,7 +9,7 @@ dict(paper="paper_1126", style="detailed", prompt="Barley Scarlett in aerated hy
 dict(paper="paper_1127", style="terse", prompt="H3K9me3 CUT&Tag of primary mouse sympathetic neurons latently infected with HSV-1, IFN-alpha pre-treated vs untreated, 2 biological replicates.",
      spec=dict(system="cell_culture", organism="Mus musculus", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=2)),
      ask=[P], gaps=["synonym:CUT&Tag->chip_seq"], note="2 x 2"),
-dict(paper="paper_1128", skip="population genetics of wild isolates"),
+{'paper': 'paper_1128', 'style': 'question', 'prompt': 'Recombination rate variation from whole-genome sequences of 19 natural Chlamydomonas reinhardtii strains from one region of Quebec (9 MT+ and 10 MT-). Is 19 strains enough?', 'spec': {'organism': 'Chlamydomonas reinhardtii', 'assays': ['wgs']}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: wild isolates'},
 dict(paper="paper_1129", style="terse", prompt="ATAC-seq of sorted cranial neural crest from zebrafish foxc1a; foxc1b double mutants vs sibling controls at 36, 48 and 72 hpf, 2 biological replicates.",
      spec=dict(organism="Danio rerio", assays=["atac_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="time", n_levels=3)], design=dict(reps=2)),
      ask=[P], note="held-out species"),

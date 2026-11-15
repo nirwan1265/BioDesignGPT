@@ -37,7 +37,7 @@ dict(paper="paper_3342", style="question", prompt="Hindgut RNA-seq of embryos fr
 dict(paper="paper_3343", style="question", prompt="WGBS and RNA-seq of placentas of the heaviest vs lightest fetuses from third-parity Duroc sows, 2 per group. Is the sow my unit?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["methylation", "rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=2)),
      ask=["experimental_unit"], note="fetuses within sow"),
-dict(paper="paper_3344", skip="experimental evolution"),
+{'paper': 'paper_3344', 'style': 'question', 'prompt': 'Experimental evolution of C. elegans populations with two different recombination backgrounds in a new environment, pooled genome sequencing every few generations. How many replicate populations per background?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['pool_seq'], 'factors': [{'name': 'genotype', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: replicate populations'},
 dict(paper="paper_3345", skip="chondrocyte mechanism"),
 dict(paper="paper_3346", skip="tumour evolution"),
 dict(paper="paper_3347", style="question", prompt="WGBS of placenta and offspring hippocampus from Sprague-Dawley dams given chronic unpredictable mild stress vs no stress during pregnancy, 3 per group. Is the dam my unit?",
