@@ -81,6 +81,15 @@ keep-the-adapter rule (fresh v1/v2/v4 equal or better, 0 invented). v2 is weaker
 The v1 numbers below were scored before the one-system label convention, so they don't compare directly with
 this table.
 
+**v3 (not adopted).** Same recipe on 5,951 examples (the 1,619-question paper pool), val loss 0.045. On dev it
+is within noise of v2: merged 86.3 vs 86.6 (v3 - v2 = -0.3, 95% CI -1.0 to +0.4), alone 86.6 vs 86.0 (+0.6,
+-0.3 to +1.6), 5 / 8 invented like v2. The merged columns on the other sets equal v2's to the decimal (94.6,
+96.0, 98.3, 93.4, 97.5, 99.1). The extra paper questions did not move the reader, so v2 stays. What remains
+is in the merge and the targets, not the amount of data:
+- factor levels: reader alone 78.0 but merged 72.4 (v3 on dev). The merge drops levels the reader had right.
+- experimental unit: base 21/24, v2 and v3 17/24. The training targets carry the unit only when the unit
+  word is in the prompt, so fine-tuning teaches the reader to leave it out.
+
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
 
