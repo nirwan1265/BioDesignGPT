@@ -102,6 +102,34 @@ alone 76.8). Replicates merged: 94.8. The other sets are unchanged or better: st
 fresh v1 96.0, v2 98.3, v3 93.4, v4 97.5, held-out species 99.1, all with 0 invented. The test splits were not
 re-scored.
 
+**v4 (not adopted).** Same recipe on 5,951 examples, with the new unit targets (an unlabelled unit takes the
+base model's unit when that word is in the prompt), val loss 0.047. Results on dev, current merge:
+
+| | v2 | v4 |
+|---|---|---|
+| merged | 87.5 | 87.5 (v4 - v2 = +0.0, 95% CI -0.7 to +0.7) |
+| alone | 86.0 | 87.0 (+1.0, CI +0.0 to +2.0) |
+| experimental unit, merged | 18/24 | 21/24 |
+| invented, alone | 5 (all replicate counts) | 9 (3 replicate counts, 6 units) |
+| invented, merged | 1 | 2 |
+
+The other sets are equal or slightly lower (fresh v1 95.2 vs 96.0, held-out species 99.0 vs 99.1). The unit
+targets overshoot. A unit the prompt only mentions ("wells", "cage") is often the very thing the question
+asks about, so v4 learned to fill it in. Next time, a distilled unit should be kept only when the prompt
+counts it as the replicate ("3 pots per treatment"), which is the same test the merge applies.
+
+**New-kinds test** (`training/paper_questions/newkinds/`: 100 questions from study kinds never trained on;
+scored, never tuned on):
+
+| | rules | base | v2 | v4 |
+|---|---|---|---|---|
+| alone | 64.7 | 82.7 (13 inv) | **84.8** (2 inv) | 83.4 (6 inv) |
+| merged | | 83.2 (7 inv) | **84.1** (6 inv) | 82.2 (7 inv) |
+
+The fine-tuned reader carries over to unseen kinds (v2 beats base and invents far less), but the new kinds are
+harder than dev (v2 merged 84.1 vs 87.5). The weakest kinds are human cohorts (61) and mapping (78). That is
+the case for labelling training questions of these kinds; the test set measures whether it helps.
+
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
 
