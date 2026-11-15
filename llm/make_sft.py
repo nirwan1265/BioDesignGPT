@@ -37,7 +37,7 @@ DATA = os.path.join(HERE, "..", "training", "data")
 EVAL_FILES = ["fresh_test.jsonl", "fresh_test_v2.jsonl", "fresh_test_v3.jsonl", "fresh_test_v4.jsonl", "grounded_eval.jsonl",
               "user_prompts_dev.jsonl", os.path.join("..", "..", "inst", "examples", "study_examples.jsonl")]
 PQ = os.path.join(HERE, "..", "training", "paper_questions", "splits")
-PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl"]
+PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl", "test_newkinds.jsonl"]
 # vocabulary and system kinds come from the rule files (training/rules.py), never from lists in this script
 SYSTEM_ASSAY = {i: sy["assay"] for i, sy in rules.systems().items() if sy.get("kind") == "assay"}   # old system -> its assay
 HOLDOUT_ORGS = set(rules.mapping("held_out_species").values())

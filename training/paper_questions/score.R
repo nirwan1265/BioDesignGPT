@@ -2,6 +2,7 @@
 #   Rscript training/paper_questions/score.R                          rules on dev
 #   Rscript training/paper_questions/score.R dev llm/preds            + reader alone and rules + reader (preds_llm_dev.json)
 #   Rscript training/paper_questions/score.R test_heldout llm/preds   held-out species (score test sets only at the end)
+#   Rscript training/paper_questions/score.R test_newkinds llm/preds  study kinds never trained on (newkinds/), by kind
 # Run from the repo root. Gold specs hold only what each question states, so recall is the main number;
 # "invented" counts questions where the extractor filled a field the question leaves open (must_ask).
 args <- commandArgs(trailingOnly = TRUE)
@@ -26,7 +27,7 @@ score <- function(extractor) {
     fn_exp <- sub(":.*", "", f_exp)
     fn_got <- sub(":.*", "", f_got)
     inv <- vapply(unlist(e$must_ask), function(p) !is.null(spec_get(spec, p)) && is.null(spec$assumptions[[p]]), logical(1))
-    data.frame(id = e$id, species = e$species, style = e$style,
+    data.frame(id = e$id, species = e$species, style = e$style, kind = e$kind %||% NA_character_,
                field = c(names(flat), rep("factors (name+levels)", length(f_exp)), rep("factors (name)", length(fn_exp))),
                hit = c(hit, f_exp %in% f_got, fn_exp %in% fn_got),
                invented = any(inv), stringsAsFactors = FALSE)
@@ -42,7 +43,9 @@ summarise <- function(d, tag) {
   inv <- tapply(d$invented, d$id, any)
   list(by = by, overall = round(100 * mean(d$hit[!grepl("^factors \\(name\\)", d$field)]), 1),
        invented = sum(inv), n = length(inv),
-       by_style = round(100 * tapply(d$hit, d$style, mean), 1))
+       by_style = round(100 * tapply(d$hit, d$style, mean), 1),
+       by_kind = if (all(is.na(d$kind))) NULL else round(100 * tapply(d$hit, d$kind, mean), 1),
+       inv_kind = if (all(is.na(d$kind))) NULL else tapply(tapply(d$invented, d$id, any), tapply(d$kind, d$id, `[`, 1), sum))
 }
 
 res <- list(rules = summarise(score(extract_spec_local), "rules"))
@@ -61,3 +64,7 @@ cat("\n")
 for (k in names(res)) cat(sprintf("%-22s overall field recall %5.1f%%   invented a must-ask value in %d / %d questions\n",
                                   k, res[[k]]$overall, res[[k]]$invented, res[[k]]$n))
 cat("\nrecall by question style:\n"); print(do.call(rbind, lapply(res, `[[`, "by_style")))
+if (!is.null(res[[1]]$by_kind)) {
+  cat("\nrecall by study kind:\n"); print(do.call(rbind, lapply(res, `[[`, "by_kind")))
+  cat("\ninvented by study kind:\n"); print(do.call(rbind, lapply(res, `[[`, "inv_kind")))
+}

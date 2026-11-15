@@ -15,41 +15,61 @@ TOP = {"system", "organism", "organisms", "experimental_unit", "measurement_unit
 WORD = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
         "eleven": 11, "twelve": 12, "a dozen": 12, "dozen": 12, "a pair": 2, "pair": 2, "both": 2, "single": 1,
         "duplicates?": 2, "triplicates?": 3, "quadruplicates?": 4}
-errs, n, skips = [], 0, 0
-seen = set()
-stats = collections.Counter()
-for f in sorted(glob.glob(os.path.join(HERE, "batches", "batch_*.jsonl"))):
-    for i, l in enumerate(open(f, encoding="utf-8")):
-        r = json.loads(l)
-        where = f"{os.path.basename(f)}:{i + 1} {r.get('paper')}"
-        if r.get("paper") in seen: errs.append(f"{where}: duplicate paper")
-        seen.add(r.get("paper"))
-        if r.get("skip"):
-            skips += 1; continue
-        n += 1
-        e, p = r["expected_spec"], r["prompt"]
-        stats["style:" + str(r.get("style"))] += 1
-        for k in e:
-            if k not in TOP: errs.append(f"{where}: unknown field {k}")
-        if e.get("system") and e["system"] not in SYSTEMS: errs.append(f"{where}: system {e['system']}")
-        for a in e.get("assays", []):
-            if a not in ASSAYS: errs.append(f"{where}: assay {a}")
-        po = (e.get("primary_outcome") or {}).get("name")
-        if po and po not in OUTCOMES: errs.append(f"{where}: outcome {po}")
-        nums = set(re.findall(r"\d[\d,]*", p.lower()))
-        nums = {x.replace(",", "") for x in nums} | {str(v) for w, v in WORD.items() if re.search(r"\b" + w + r"\b", p.lower())}
-        for fct in e.get("factors", []):
-            if fct["name"] not in FACTORS: stats["factor:" + fct["name"]] += 1
-        for path in ("design.reps", "design.locations", "design.seasons", "subsamples_per_unit"):
-            v = e
-            for k in path.split("."): v = (v or {}).get(k) if isinstance(v, dict) else None
-            if v is not None and str(v) not in nums:
-                errs.append(f"{where}: {path}={v} not stated as a number in the prompt")
-        for m in r.get("must_ask", []):
-            v = e
-            for k in m.split("."): v = (v or {}).get(k) if isinstance(v, dict) else None
-            if v is not None: errs.append(f"{where}: must_ask {m} is also in expected_spec")
-print(f"{n} questions, {skips} skipped papers; styles { {k[6:]: v for k, v in stats.items() if k.startswith("style:")} }")
-other = {k: v for k, v in stats.items() if k.startswith("factor:")}
-if other: print("factor names outside the core list:", other)
-print("\n".join(errs) if errs else "no schema errors")
+
+
+def check(r, where, errs, stats):
+    """Schema checks for one labelled question (also used by newkinds/build.py)."""
+    e, p = r["expected_spec"], r["prompt"]
+    stats["style:" + str(r.get("style"))] += 1
+    for k in e:
+        if k not in TOP: errs.append(f"{where}: unknown field {k}")
+    if e.get("system") and e["system"] not in SYSTEMS: errs.append(f"{where}: system {e['system']}")
+    for a in e.get("assays", []):
+        if a not in ASSAYS: errs.append(f"{where}: assay {a}")
+    po = (e.get("primary_outcome") or {}).get("name")
+    if po and po not in OUTCOMES: errs.append(f"{where}: outcome {po}")
+    nums = set(re.findall(r"\d[\d,]*", p.lower()))
+    nums = {x.replace(",", "") for x in nums} | {str(v) for w, v in WORD.items() if re.search(r"\b" + w + r"\b", p.lower())}
+    for fct in e.get("factors", []):
+        if fct["name"] not in FACTORS: stats["factor:" + fct["name"]] += 1
+    for path in ("design.reps", "design.locations", "design.seasons", "subsamples_per_unit"):
+        v = e
+        for k in path.split("."): v = (v or {}).get(k) if isinstance(v, dict) else None
+        if v is not None and str(v) not in nums:
+            errs.append(f"{where}: {path}={v} not stated as a number in the prompt")
+    for m in r.get("must_ask", []):
+        v = e
+        for k in m.split("."): v = (v or {}).get(k) if isinstance(v, dict) else None
+        if v is not None: errs.append(f"{where}: must_ask {m} is also in expected_spec")
+
+
+def main():
+    errs, n, skips = [], 0, 0
+    seen, labelled = set(), set()
+    stats = collections.Counter()
+    for f in sorted(glob.glob(os.path.join(HERE, "batches", "batch_*.jsonl"))):
+        for i, l in enumerate(open(f, encoding="utf-8")):
+            r = json.loads(l)
+            where = f"{os.path.basename(f)}:{i + 1} {r.get('paper')}"
+            if r.get("paper") in seen: errs.append(f"{where}: duplicate paper")
+            seen.add(r.get("paper"))
+            if r.get("skip"):
+                skips += 1; continue
+            n += 1
+            labelled.add(r.get("paper"))
+            check(r, where, errs, stats)
+    # the new-kinds test papers (newkinds/selected.json) must never be labelled for training
+    sel = os.path.join(HERE, "newkinds", "selected.json")
+    if os.path.exists(sel):
+        reserved = {c["paper"] for c in json.load(open(sel))["papers"]}
+        for pp in sorted(reserved & labelled):
+            errs.append(f"{pp}: reserved for the new-kinds test set but labelled in batches/")
+    print(f"{n} questions, {skips} skipped papers; styles { {k[6:]: v for k, v in stats.items() if k.startswith("style:")} }")
+    other = {k: v for k, v in stats.items() if k.startswith("factor:")}
+    if other: print("factor names outside the core list:", other)
+    print("\n".join(errs) if errs else "no schema errors")
+    return 1 if errs else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

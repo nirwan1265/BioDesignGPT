@@ -1,0 +1,48 @@
+{
+ "n": 100,
+ "kinds": {
+  "mapping": 20,
+  "atlas": 15,
+  "population": 15,
+  "human_cohort": 15,
+  "cell_lines": 15,
+  "mutant_lines": 20
+ },
+ "sha256": "a1ad5cb52831fdd77fa394f6a9e561861c17dff1a443673b21918116c55aa80f",
+ "members_sha256": "c9e3234c6545b272acb4c7bb9b9573f8ef0510b01451b95806dddb5f88396cff",
+ "species": {
+  "human": 9,
+  "rat": 7,
+  "cattle": 7,
+  "chicken": 7,
+  "mouse": 7,
+  "arabidopsis": 6,
+  "pig": 6,
+  "wheat": 5,
+  "soybean": 5,
+  "rice": 5,
+  "fly": 5,
+  "maize": 4,
+  "potato": 3,
+  "grape": 3,
+  "worm": 3,
+  "nbenthamiana": 2,
+  "medicago": 2,
+  "macaque": 2,
+  "apple": 2,
+  "tomato": 2,
+  "yeast": 2,
+  "cotton": 2,
+  "chlamydomonas": 1,
+  "brachypodium": 1,
+  "sorghum": 1,
+  "barley": 1
+ },
+ "styles": {
+  "question": 61,
+  "detailed": 25,
+  "terse": 11,
+  "casual": 2,
+  "typo": 1
+ }
+}

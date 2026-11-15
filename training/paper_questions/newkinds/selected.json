@@ -1,0 +1,1337 @@
+{
+ "seed": 2026,
+ "papers": [
+  {
+   "paper": "paper_2107",
+   "kind": "mapping",
+   "rank": 0,
+   "quota": 20,
+   "species": "grape",
+   "technique": "Amplicon",
+   "skip": "long-term vineyard QTL"
+  },
+  {
+   "paper": "paper_5408",
+   "kind": "mapping",
+   "rank": 1,
+   "quota": 20,
+   "species": "arabidopsis",
+   "technique": "WGS / resequencing",
+   "skip": "mapping"
+  },
+  {
+   "paper": "paper_2533",
+   "kind": "mapping",
+   "rank": 2,
+   "quota": 20,
+   "species": "pig",
+   "technique": "WGS / resequencing",
+   "skip": "QTL population"
+  },
+  {
+   "paper": "paper_0541",
+   "kind": "mapping",
+   "rank": 3,
+   "quota": 20,
+   "species": "cotton",
+   "technique": "WGA",
+   "skip": "GWAS on resequenced accessions; phenotyping not described"
+  },
+  {
+   "paper": "paper_2776",
+   "kind": "mapping",
+   "rank": 4,
+   "quota": 20,
+   "species": "yeast",
+   "technique": "MNase-seq",
+   "skip": "origin mapping"
+  },
+  {
+   "paper": "paper_5189",
+   "kind": "mapping",
+   "rank": 5,
+   "quota": 20,
+   "species": "rice",
+   "technique": "Bulk RNA-seq",
+   "skip": "GWAS"
+  },
+  {
+   "paper": "paper_3907",
+   "kind": "mapping",
+   "rank": 6,
+   "quota": 20,
+   "species": "soybean",
+   "technique": "WGS / resequencing",
+   "skip": "BSA mapping"
+  },
+  {
+   "paper": "paper_1335",
+   "kind": "mapping",
+   "rank": 7,
+   "quota": 20,
+   "species": "rat",
+   "technique": "WGS / resequencing",
+   "skip": "congenic QTL dissection"
+  },
+  {
+   "paper": "paper_3116",
+   "kind": "mapping",
+   "rank": 8,
+   "quota": 20,
+   "species": "chicken",
+   "technique": "WGS / resequencing",
+   "skip": "pigmentation mapping"
+  },
+  {
+   "paper": "paper_2767",
+   "kind": "mapping",
+   "rank": 9,
+   "quota": 20,
+   "species": "human",
+   "technique": "OTHER",
+   "skip": "fragile site mapping"
+  },
+  {
+   "paper": "paper_5246",
+   "kind": "mapping",
+   "rank": 10,
+   "quota": 20,
+   "species": "cattle",
+   "technique": "WGS / resequencing",
+   "skip": "GWAS"
+  },
+  {
+   "paper": "paper_1494",
+   "kind": "mapping",
+   "rank": 11,
+   "quota": 20,
+   "species": "wheat",
+   "technique": "Targeted capture",
+   "skip": "resistance gene mapping"
+  },
+  {
+   "paper": "paper_0561",
+   "kind": "mapping",
+   "rank": 12,
+   "quota": 20,
+   "species": "medicago",
+   "technique": "WGS / resequencing",
+   "skip": "mutant mapping by bulk resequencing (duplicate pattern)"
+  },
+  {
+   "paper": "paper_0387",
+   "kind": "mapping",
+   "rank": 13,
+   "quota": 20,
+   "species": "potato",
+   "technique": "Amplicon",
+   "skip": "self-compatibility mapping with pooled style collections; weak design"
+  },
+  {
+   "paper": "paper_3911",
+   "kind": "mapping",
+   "rank": 14,
+   "quota": 20,
+   "species": "mouse",
+   "technique": "ChIP-seq",
+   "skip": "topoisomerase mapping"
+  },
+  {
+   "paper": "paper_5373",
+   "kind": "mapping",
+   "rank": 15,
+   "quota": 20,
+   "species": "fly",
+   "technique": "WGS / resequencing",
+   "skip": "GWAS"
+  },
+  {
+   "paper": "paper_2740",
+   "kind": "mapping",
+   "rank": 16,
+   "quota": 20,
+   "species": "tomato",
+   "technique": "WGS / resequencing",
+   "skip": "mutant mapping"
+  },
+  {
+   "paper": "paper_5370",
+   "kind": "mapping",
+   "rank": 17,
+   "quota": 20,
+   "species": "maize",
+   "technique": "Bulk RNA-seq",
+   "skip": "eQTL"
+  },
+  {
+   "paper": "paper_3716",
+   "kind": "mapping",
+   "rank": 18,
+   "quota": 20,
+   "species": "worm",
+   "technique": "WGS / resequencing",
+   "skip": "diapause mapping"
+  },
+  {
+   "paper": "paper_0397",
+   "kind": "mapping",
+   "rank": 19,
+   "quota": 20,
+   "species": "grape",
+   "technique": "WGS / resequencing",
+   "skip": "introgression history of a resistance locus"
+  },
+  {
+   "paper": "paper_4142",
+   "kind": "mapping",
+   "rank": 20,
+   "quota": 20,
+   "species": "arabidopsis",
+   "technique": "WGS / resequencing",
+   "skip": "MAGIC mapping"
+  },
+  {
+   "paper": "paper_1727",
+   "kind": "mapping",
+   "rank": 21,
+   "quota": 20,
+   "species": "pig",
+   "technique": "OTHER",
+   "skip": "multi-population GWAS"
+  },
+  {
+   "paper": "paper_2762",
+   "kind": "mapping",
+   "rank": 22,
+   "quota": 20,
+   "species": "cotton",
+   "technique": "Bulk RNA-seq",
+   "skip": "gene family GWAS"
+  },
+  {
+   "paper": "paper_3589",
+   "kind": "mapping",
+   "rank": 23,
+   "quota": 20,
+   "species": "yeast",
+   "technique": "Ribo-seq",
+   "skip": "damage mapping"
+  },
+  {
+   "paper": "paper_3496",
+   "kind": "mapping",
+   "rank": 24,
+   "quota": 20,
+   "species": "rice",
+   "technique": "WGS / resequencing",
+   "skip": "pooled mapping"
+  },
+  {
+   "paper": "paper_5547",
+   "kind": "mapping",
+   "rank": 25,
+   "quota": 20,
+   "species": "soybean",
+   "technique": "Bulk RNA-seq",
+   "skip": "GWAS"
+  },
+  {
+   "paper": "paper_0783",
+   "kind": "mapping",
+   "rank": 26,
+   "quota": 20,
+   "species": "rat",
+   "technique": "WGS / resequencing",
+   "skip": "QTL crosses with WGS of founders"
+  },
+  {
+   "paper": "paper_3279",
+   "kind": "mapping",
+   "rank": 27,
+   "quota": 20,
+   "species": "chicken",
+   "technique": "WGS / resequencing",
+   "skip": "pooled phenotype mapping"
+  },
+  {
+   "paper": "paper_4207",
+   "kind": "mapping",
+   "rank": 28,
+   "quota": 20,
+   "species": "cattle",
+   "technique": "WGS / resequencing",
+   "skip": "miRNA GWAS"
+  },
+  {
+   "paper": "paper_0735",
+   "kind": "mapping",
+   "rank": 29,
+   "quota": 20,
+   "species": "wheat",
+   "technique": "WGS / resequencing",
+   "skip": "introgression line characterisation"
+  },
+  {
+   "paper": "paper_3751",
+   "kind": "mutant_lines",
+   "rank": 0,
+   "quota": 20,
+   "species": "fly",
+   "technique": "OTHER",
+   "skip": "mitochondrial mutant"
+  },
+  {
+   "paper": "paper_1685",
+   "kind": "mutant_lines",
+   "rank": 1,
+   "quota": 20,
+   "species": "potato",
+   "technique": "WGS / resequencing",
+   "skip": "crossover mutant genotyping"
+  },
+  {
+   "paper": "paper_4847",
+   "kind": "mutant_lines",
+   "rank": 2,
+   "quota": 20,
+   "species": "medicago",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant nodulation"
+  },
+  {
+   "paper": "paper_4533",
+   "kind": "mutant_lines",
+   "rank": 3,
+   "quota": 20,
+   "species": "worm",
+   "technique": "WGS / resequencing",
+   "skip": "mutagenesis"
+  },
+  {
+   "paper": "paper_5262",
+   "kind": "mutant_lines",
+   "rank": 4,
+   "quota": 20,
+   "species": "rat",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "knockout"
+  },
+  {
+   "paper": "paper_5140",
+   "kind": "mutant_lines",
+   "rank": 5,
+   "quota": 20,
+   "species": "cotton",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant"
+  },
+  {
+   "paper": "paper_5484",
+   "kind": "mutant_lines",
+   "rank": 6,
+   "quota": 20,
+   "species": "apple",
+   "technique": "Bulk RNA-seq",
+   "skip": "transgenic calli"
+  },
+  {
+   "paper": "paper_4999",
+   "kind": "mutant_lines",
+   "rank": 7,
+   "quota": 20,
+   "species": "grape",
+   "technique": "Bulk RNA-seq",
+   "skip": "transgenic"
+  },
+  {
+   "paper": "paper_4850",
+   "kind": "mutant_lines",
+   "rank": 8,
+   "quota": 20,
+   "species": "sorghum",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant"
+  },
+  {
+   "paper": "paper_5352",
+   "kind": "mutant_lines",
+   "rank": 9,
+   "quota": 20,
+   "species": "barley",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant"
+  },
+  {
+   "paper": "paper_5680",
+   "kind": "mutant_lines",
+   "rank": 10,
+   "quota": 20,
+   "species": "rice",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant"
+  },
+  {
+   "paper": "paper_3842",
+   "kind": "mutant_lines",
+   "rank": 11,
+   "quota": 20,
+   "species": "nbenthamiana",
+   "technique": "Bulk RNA-seq",
+   "skip": "overexpression line"
+  },
+  {
+   "paper": "paper_5639",
+   "kind": "mutant_lines",
+   "rank": 12,
+   "quota": 20,
+   "species": "soybean",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutants"
+  },
+  {
+   "paper": "paper_5478",
+   "kind": "mutant_lines",
+   "rank": 13,
+   "quota": 20,
+   "species": "human",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant model"
+  },
+  {
+   "paper": "paper_3626",
+   "kind": "mutant_lines",
+   "rank": 14,
+   "quota": 20,
+   "species": "chicken",
+   "technique": "Bulk RNA-seq",
+   "skip": "TF mutants"
+  },
+  {
+   "paper": "paper_1435",
+   "kind": "mutant_lines",
+   "rank": 15,
+   "quota": 20,
+   "species": "macaque",
+   "technique": "ATAC-seq",
+   "skip": "transgenic macaque generation"
+  },
+  {
+   "paper": "paper_5384",
+   "kind": "mutant_lines",
+   "rank": 16,
+   "quota": 20,
+   "species": "tomato",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant"
+  },
+  {
+   "paper": "paper_5641",
+   "kind": "mutant_lines",
+   "rank": 17,
+   "quota": 20,
+   "species": "wheat",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant alleles"
+  },
+  {
+   "paper": "paper_4812",
+   "kind": "mutant_lines",
+   "rank": 18,
+   "quota": 20,
+   "species": "maize",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant stress"
+  },
+  {
+   "paper": "paper_5398",
+   "kind": "mutant_lines",
+   "rank": 19,
+   "quota": 20,
+   "species": "arabidopsis",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutants"
+  },
+  {
+   "paper": "paper_5124",
+   "kind": "mutant_lines",
+   "rank": 20,
+   "quota": 20,
+   "species": "yeast",
+   "technique": "WGS / resequencing",
+   "skip": "yeast mutants"
+  },
+  {
+   "paper": "paper_0840",
+   "kind": "mutant_lines",
+   "rank": 21,
+   "quota": 20,
+   "species": "chlamydomonas",
+   "technique": "WGS / resequencing",
+   "skip": "mutant genome resequencing"
+  },
+  {
+   "paper": "paper_5522",
+   "kind": "mutant_lines",
+   "rank": 22,
+   "quota": 20,
+   "species": "mouse",
+   "technique": "Bisulfite / methylome",
+   "skip": "transgenic model"
+  },
+  {
+   "paper": "paper_4909",
+   "kind": "mutant_lines",
+   "rank": 23,
+   "quota": 20,
+   "species": "cattle",
+   "technique": "WGS / resequencing",
+   "skip": "knockout embryos"
+  },
+  {
+   "paper": "paper_4178",
+   "kind": "mutant_lines",
+   "rank": 24,
+   "quota": 20,
+   "species": "fly",
+   "technique": "ChIP-seq",
+   "skip": "Polycomb mutants"
+  },
+  {
+   "paper": "paper_5212",
+   "kind": "mutant_lines",
+   "rank": 25,
+   "quota": 20,
+   "species": "potato",
+   "technique": "Bulk RNA-seq",
+   "skip": "transgenic"
+  },
+  {
+   "paper": "paper_4469",
+   "kind": "mutant_lines",
+   "rank": 26,
+   "quota": 20,
+   "species": "worm",
+   "technique": "WGS / resequencing",
+   "skip": "mutagenesis"
+  },
+  {
+   "paper": "paper_1166",
+   "kind": "mutant_lines",
+   "rank": 27,
+   "quota": 20,
+   "species": "rat",
+   "technique": "ATAC-seq",
+   "skip": "knockout resource generation"
+  },
+  {
+   "paper": "paper_5684",
+   "kind": "mutant_lines",
+   "rank": 28,
+   "quota": 20,
+   "species": "cotton",
+   "technique": "Bulk RNA-seq",
+   "skip": "mutant line"
+  },
+  {
+   "paper": "paper_4711",
+   "kind": "mutant_lines",
+   "rank": 29,
+   "quota": 20,
+   "species": "apple",
+   "technique": "Bulk RNA-seq",
+   "skip": "transgenic"
+  },
+  {
+   "paper": "paper_3856",
+   "kind": "population",
+   "rank": 0,
+   "quota": 15,
+   "species": "fly",
+   "technique": "WGS / resequencing",
+   "skip": "experimental evolution"
+  },
+  {
+   "paper": "paper_0786",
+   "kind": "population",
+   "rank": 1,
+   "quota": 15,
+   "species": "apple",
+   "technique": "OTHER",
+   "skip": "two-cultivar resequencing"
+  },
+  {
+   "paper": "paper_0972",
+   "kind": "population",
+   "rank": 2,
+   "quota": 15,
+   "species": "cotton",
+   "technique": "WGS / resequencing",
+   "skip": "NIL resequencing"
+  },
+  {
+   "paper": "paper_1368",
+   "kind": "population",
+   "rank": 3,
+   "quota": 15,
+   "species": "chlamydomonas",
+   "technique": "WGS / resequencing",
+   "skip": "mutation accumulation lines"
+  },
+  {
+   "paper": "paper_5210",
+   "kind": "population",
+   "rank": 4,
+   "quota": 15,
+   "species": "rice",
+   "technique": "WGS / resequencing",
+   "skip": "population genomics"
+  },
+  {
+   "paper": "paper_0085",
+   "kind": "population",
+   "rank": 5,
+   "quota": 15,
+   "species": "sorghum",
+   "technique": "WGA",
+   "skip": "data portal compiling public resequencing; no design"
+  },
+  {
+   "paper": "paper_4261",
+   "kind": "population",
+   "rank": 6,
+   "quota": 15,
+   "species": "yeast",
+   "technique": "WGS / resequencing",
+   "skip": "yeast population"
+  },
+  {
+   "paper": "paper_0718",
+   "kind": "population",
+   "rank": 7,
+   "quota": 15,
+   "species": "wheat",
+   "technique": "WGA",
+   "skip": "population genomics"
+  },
+  {
+   "paper": "paper_1823",
+   "kind": "population",
+   "rank": 8,
+   "quota": 15,
+   "species": "rat",
+   "technique": "OTHER",
+   "skip": "population demography"
+  },
+  {
+   "paper": "paper_4618",
+   "kind": "population",
+   "rank": 9,
+   "quota": 15,
+   "species": "chicken",
+   "technique": "WGS / resequencing",
+   "skip": "selection scan"
+  },
+  {
+   "paper": "paper_1422",
+   "kind": "population",
+   "rank": 10,
+   "quota": 15,
+   "species": "barley",
+   "technique": "WGS / resequencing",
+   "skip": "mutant population development"
+  },
+  {
+   "paper": "paper_2742",
+   "kind": "population",
+   "rank": 11,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "WGS / resequencing",
+   "skip": "population genomics"
+  },
+  {
+   "paper": "paper_3886",
+   "kind": "population",
+   "rank": 12,
+   "quota": 15,
+   "species": "worm",
+   "technique": "WGS / resequencing",
+   "skip": "mutation accumulation"
+  },
+  {
+   "paper": "paper_1517",
+   "kind": "population",
+   "rank": 13,
+   "quota": 15,
+   "species": "soybean",
+   "technique": "WGS / resequencing",
+   "skip": "population selection scan"
+  },
+  {
+   "paper": "paper_1427",
+   "kind": "population",
+   "rank": 14,
+   "quota": 15,
+   "species": "pig",
+   "technique": "WGS / resequencing",
+   "skip": "population SNP catalogue"
+  },
+  {
+   "paper": "paper_5086",
+   "kind": "population",
+   "rank": 15,
+   "quota": 15,
+   "species": "arabidopsis",
+   "technique": "WGS / resequencing",
+   "skip": "population genomics"
+  },
+  {
+   "paper": "paper_2024",
+   "kind": "population",
+   "rank": 16,
+   "quota": 15,
+   "species": "maize",
+   "technique": "Bisulfite / methylome",
+   "skip": "population methylome"
+  },
+  {
+   "paper": "paper_0158",
+   "kind": "population",
+   "rank": 17,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "Exome",
+   "skip": "colony population-structure survey; no experimental design"
+  },
+  {
+   "paper": "paper_1720",
+   "kind": "population",
+   "rank": 18,
+   "quota": 15,
+   "species": "tomato",
+   "technique": "WGS / resequencing",
+   "skip": "reanalysis of public resequencing"
+  },
+  {
+   "paper": "paper_2405",
+   "kind": "population",
+   "rank": 19,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "?",
+   "skip": "mutation selection"
+  },
+  {
+   "paper": "paper_1260",
+   "kind": "population",
+   "rank": 20,
+   "quota": 15,
+   "species": "potato",
+   "technique": "WGS / resequencing",
+   "skip": "cultivar resequencing"
+  },
+  {
+   "paper": "paper_2087",
+   "kind": "population",
+   "rank": 21,
+   "quota": 15,
+   "species": "fly",
+   "technique": "Amplicon",
+   "skip": "simulation and selection"
+  },
+  {
+   "paper": "paper_3762",
+   "kind": "human_cohort",
+   "rank": 0,
+   "quota": 15,
+   "species": "rat",
+   "technique": "Amplicon",
+   "skip": "patient cohort"
+  },
+  {
+   "paper": "paper_1395",
+   "kind": "human_cohort",
+   "rank": 1,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "WGS / resequencing",
+   "skip": "retrospective cohort"
+  },
+  {
+   "paper": "paper_4375",
+   "kind": "human_cohort",
+   "rank": 2,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "small RNA-seq",
+   "skip": "patient and mouse EVs"
+  },
+  {
+   "paper": "paper_3328",
+   "kind": "human_cohort",
+   "rank": 3,
+   "quota": 15,
+   "species": "pig",
+   "technique": "Amplicon",
+   "skip": "human trial"
+  },
+  {
+   "paper": "paper_4964",
+   "kind": "human_cohort",
+   "rank": 4,
+   "quota": 15,
+   "species": "human",
+   "technique": "small RNA-seq",
+   "skip": "human cohort"
+  },
+  {
+   "paper": "paper_0760",
+   "kind": "human_cohort",
+   "rank": 5,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "OTHER",
+   "skip": "same cohort as paper_0358"
+  },
+  {
+   "paper": "paper_1342",
+   "kind": "human_cohort",
+   "rank": 6,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "Bisulfite / methylome",
+   "skip": "retrospective culled-cow cohort"
+  },
+  {
+   "paper": "paper_3939",
+   "kind": "human_cohort",
+   "rank": 7,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "?",
+   "skip": "patient cohort"
+  },
+  {
+   "paper": "paper_3833",
+   "kind": "human_cohort",
+   "rank": 8,
+   "quota": 15,
+   "species": "human",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "patient cohort"
+  },
+  {
+   "paper": "paper_2727",
+   "kind": "human_cohort",
+   "rank": 9,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "Amplicon",
+   "skip": "observational cohort"
+  },
+  {
+   "paper": "paper_4076",
+   "kind": "human_cohort",
+   "rank": 10,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "Amplicon",
+   "skip": "observational cohort"
+  },
+  {
+   "paper": "paper_4102",
+   "kind": "human_cohort",
+   "rank": 11,
+   "quota": 15,
+   "species": "human",
+   "technique": "Bulk RNA-seq",
+   "skip": "patient blasts"
+  },
+  {
+   "paper": "paper_1001",
+   "kind": "human_cohort",
+   "rank": 12,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "Spatial transcriptomics",
+   "skip": "mixed-age macaque cohort, multiple sub-studies"
+  },
+  {
+   "paper": "paper_0635",
+   "kind": "human_cohort",
+   "rank": 13,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "Exome",
+   "skip": "tumour exome cohort"
+  },
+  {
+   "paper": "paper_3547",
+   "kind": "human_cohort",
+   "rank": 14,
+   "quota": 15,
+   "species": "human",
+   "technique": "small RNA-seq",
+   "skip": "patient cohort"
+  },
+  {
+   "paper": "paper_0280",
+   "kind": "human_cohort",
+   "rank": 15,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "Amplicon",
+   "skip": "SHIV infection cohort, antibody lineage tracing; no design to plan"
+  },
+  {
+   "paper": "paper_3471",
+   "kind": "human_cohort",
+   "rank": 16,
+   "quota": 15,
+   "species": "human",
+   "technique": "ATAC-seq",
+   "skip": "patient xenografts"
+  },
+  {
+   "paper": "paper_3312",
+   "kind": "human_cohort",
+   "rank": 17,
+   "quota": 15,
+   "species": "human",
+   "technique": "Bisulfite / methylome",
+   "skip": "patient cell lines"
+  },
+  {
+   "paper": "paper_4665",
+   "kind": "human_cohort",
+   "rank": 18,
+   "quota": 15,
+   "species": "human",
+   "technique": "small RNA-seq",
+   "skip": "patient tissue"
+  },
+  {
+   "paper": "paper_4575",
+   "kind": "human_cohort",
+   "rank": 19,
+   "quota": 15,
+   "species": "human",
+   "technique": "OTHER",
+   "skip": "human cohort"
+  },
+  {
+   "paper": "paper_4848",
+   "kind": "human_cohort",
+   "rank": 20,
+   "quota": 15,
+   "species": "human",
+   "technique": "small RNA-seq",
+   "skip": "human cohort"
+  },
+  {
+   "paper": "paper_3599",
+   "kind": "human_cohort",
+   "rank": 21,
+   "quota": 15,
+   "species": "human",
+   "technique": "Bisulfite / methylome",
+   "skip": "patient tumours"
+  },
+  {
+   "paper": "paper_0467",
+   "kind": "atlas",
+   "rank": 0,
+   "quota": 15,
+   "species": "nbenthamiana",
+   "technique": "Degradome / PARE",
+   "skip": "descriptive miRNA atlas across tissues"
+  },
+  {
+   "paper": "paper_2013",
+   "kind": "atlas",
+   "rank": 1,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "ATAC-seq",
+   "skip": "multi-species tissue atlas"
+  },
+  {
+   "paper": "paper_1170",
+   "kind": "atlas",
+   "rank": 2,
+   "quota": 15,
+   "species": "arabidopsis",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "descriptive single-nucleus atlas"
+  },
+  {
+   "paper": "paper_1433",
+   "kind": "atlas",
+   "rank": 3,
+   "quota": 15,
+   "species": "chicken",
+   "technique": "ATAC-seq",
+   "skip": "feather development atlas"
+  },
+  {
+   "paper": "paper_4612",
+   "kind": "atlas",
+   "rank": 4,
+   "quota": 15,
+   "species": "wheat",
+   "technique": "Bulk RNA-seq",
+   "skip": "tissue atlas"
+  },
+  {
+   "paper": "paper_0919",
+   "kind": "atlas",
+   "rank": 5,
+   "quota": 15,
+   "species": "maize",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "descriptive meristem single-cell atlas"
+  },
+  {
+   "paper": "paper_1578",
+   "kind": "atlas",
+   "rank": 6,
+   "quota": 15,
+   "species": "rat",
+   "technique": "scATAC-seq",
+   "skip": "brain region chromatin atlas"
+  },
+  {
+   "paper": "paper_3045",
+   "kind": "atlas",
+   "rank": 7,
+   "quota": 15,
+   "species": "pig",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "duplicate infection atlas"
+  },
+  {
+   "paper": "paper_5502",
+   "kind": "atlas",
+   "rank": 8,
+   "quota": 15,
+   "species": "cotton",
+   "technique": "Bulk RNA-seq",
+   "skip": "developmental series"
+  },
+  {
+   "paper": "paper_2741",
+   "kind": "atlas",
+   "rank": 9,
+   "quota": 15,
+   "species": "rice",
+   "technique": "Bisulfite / methylome",
+   "skip": "gametogenesis atlas"
+  },
+  {
+   "paper": "paper_3009",
+   "kind": "atlas",
+   "rank": 10,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "Spatial transcriptomics",
+   "skip": "ovary spatial atlas"
+  },
+  {
+   "paper": "paper_4148",
+   "kind": "atlas",
+   "rank": 11,
+   "quota": 15,
+   "species": "human",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "leukemia atlas"
+  },
+  {
+   "paper": "paper_5027",
+   "kind": "atlas",
+   "rank": 12,
+   "quota": 15,
+   "species": "soybean",
+   "technique": "Bulk RNA-seq",
+   "skip": "developmental series"
+  },
+  {
+   "paper": "paper_2442",
+   "kind": "atlas",
+   "rank": 13,
+   "quota": 15,
+   "species": "potato",
+   "technique": "3D genome (Hi-C/HiChIP)",
+   "skip": "gene atlas"
+  },
+  {
+   "paper": "paper_1178",
+   "kind": "atlas",
+   "rank": 14,
+   "quota": 15,
+   "species": "grape",
+   "technique": "small RNA-seq",
+   "skip": "miRNA expression atlas"
+  },
+  {
+   "paper": "paper_2625",
+   "kind": "atlas",
+   "rank": 15,
+   "quota": 15,
+   "species": "worm",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "neuron atlas"
+  },
+  {
+   "paper": "paper_4009",
+   "kind": "atlas",
+   "rank": 16,
+   "quota": 15,
+   "species": "brachypodium",
+   "technique": "Bulk RNA-seq",
+   "skip": "embryo atlas"
+  },
+  {
+   "paper": "paper_1774",
+   "kind": "atlas",
+   "rank": 17,
+   "quota": 15,
+   "species": "physcomitrium",
+   "technique": "Bulk RNA-seq",
+   "skip": "expression atlas from public data"
+  },
+  {
+   "paper": "paper_5247",
+   "kind": "atlas",
+   "rank": 18,
+   "quota": 15,
+   "species": "barley",
+   "technique": "Bulk RNA-seq",
+   "skip": "meristem atlas"
+  },
+  {
+   "paper": "paper_1349",
+   "kind": "atlas",
+   "rank": 19,
+   "quota": 15,
+   "species": "sorghum",
+   "technique": "Bulk RNA-seq",
+   "skip": "organ x stage expression atlas"
+  },
+  {
+   "paper": "paper_2322",
+   "kind": "atlas",
+   "rank": 20,
+   "quota": 15,
+   "species": "fly",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "nervous system atlas"
+  },
+  {
+   "paper": "paper_3040",
+   "kind": "atlas",
+   "rank": 21,
+   "quota": 15,
+   "species": "macaque",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "cross-species atlas"
+  },
+  {
+   "paper": "paper_3184",
+   "kind": "cell_lines",
+   "rank": 0,
+   "quota": 15,
+   "species": "chicken",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "germ cell culture"
+  },
+  {
+   "paper": "paper_5220",
+   "kind": "cell_lines",
+   "rank": 1,
+   "quota": 15,
+   "species": "pig",
+   "technique": "small RNA-seq",
+   "skip": "cell culture"
+  },
+  {
+   "paper": "paper_0267",
+   "kind": "cell_lines",
+   "rank": 2,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "RIP / CLIP-seq",
+   "skip": "virus evolution in cell culture; no comparison design"
+  },
+  {
+   "paper": "paper_5697",
+   "kind": "cell_lines",
+   "rank": 3,
+   "quota": 15,
+   "species": "potato",
+   "technique": "Bulk RNA-seq",
+   "skip": "in vitro culture"
+  },
+  {
+   "paper": "paper_5618",
+   "kind": "cell_lines",
+   "rank": 4,
+   "quota": 15,
+   "species": "fly",
+   "technique": "ChIP-seq",
+   "skip": "cell line"
+  },
+  {
+   "paper": "paper_0608",
+   "kind": "cell_lines",
+   "rank": 5,
+   "quota": 15,
+   "species": "arabidopsis",
+   "technique": "Amplicon",
+   "skip": "CRISPR screening proxies"
+  },
+  {
+   "paper": "paper_1189",
+   "kind": "cell_lines",
+   "rank": 6,
+   "quota": 15,
+   "species": "worm",
+   "technique": "Amplicon",
+   "skip": "in vitro bacterial growth"
+  },
+  {
+   "paper": "paper_5446",
+   "kind": "cell_lines",
+   "rank": 7,
+   "quota": 15,
+   "species": "human",
+   "technique": "ChIP-seq",
+   "skip": "cell line"
+  },
+  {
+   "paper": "paper_4307",
+   "kind": "cell_lines",
+   "rank": 8,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "small RNA-seq",
+   "skip": "cell line infection"
+  },
+  {
+   "paper": "paper_5672",
+   "kind": "cell_lines",
+   "rank": 9,
+   "quota": 15,
+   "species": "rat",
+   "technique": "Bulk RNA-seq",
+   "skip": "stem cells"
+  },
+  {
+   "paper": "paper_3122",
+   "kind": "cell_lines",
+   "rank": 10,
+   "quota": 15,
+   "species": "yeast",
+   "technique": "MNase-seq",
+   "skip": "in vitro reconstitution"
+  },
+  {
+   "paper": "paper_4029",
+   "kind": "cell_lines",
+   "rank": 11,
+   "quota": 15,
+   "species": "chicken",
+   "technique": "Amplicon",
+   "skip": "knockout cell line"
+  },
+  {
+   "paper": "paper_2689",
+   "kind": "cell_lines",
+   "rank": 12,
+   "quota": 15,
+   "species": "pig",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "reprogramming"
+  },
+  {
+   "paper": "paper_5670",
+   "kind": "cell_lines",
+   "rank": 13,
+   "quota": 15,
+   "species": "cattle",
+   "technique": "small RNA-seq",
+   "skip": "cell culture"
+  },
+  {
+   "paper": "paper_5170",
+   "kind": "cell_lines",
+   "rank": 14,
+   "quota": 15,
+   "species": "fly",
+   "technique": "ChIP-seq",
+   "skip": "cell line"
+  },
+  {
+   "paper": "paper_4285",
+   "kind": "cell_lines",
+   "rank": 15,
+   "quota": 15,
+   "species": "arabidopsis",
+   "technique": "WGS / resequencing",
+   "skip": "cell culture mutagenesis"
+  },
+  {
+   "paper": "paper_3052",
+   "kind": "cell_lines",
+   "rank": 16,
+   "quota": 15,
+   "species": "worm",
+   "technique": "small RNA-seq",
+   "skip": "RNAi screen"
+  },
+  {
+   "paper": "paper_4274",
+   "kind": "cell_lines",
+   "rank": 17,
+   "quota": 15,
+   "species": "human",
+   "technique": "small RNA-seq",
+   "skip": "cell line"
+  },
+  {
+   "paper": "paper_5258",
+   "kind": "cell_lines",
+   "rank": 18,
+   "quota": 15,
+   "species": "mouse",
+   "technique": "scRNA/snRNA-seq",
+   "skip": "stem cell culture"
+  },
+  {
+   "paper": "paper_4719",
+   "kind": "cell_lines",
+   "rank": 19,
+   "quota": 15,
+   "species": "rat",
+   "technique": "small RNA-seq",
+   "skip": "cell line"
+  },
+  {
+   "paper": "paper_1155",
+   "kind": "cell_lines",
+   "rank": 20,
+   "quota": 15,
+   "species": "yeast",
+   "technique": "MNase-seq",
+   "skip": "in vitro reconstitution"
+  },
+  {
+   "paper": "paper_5490",
+   "kind": "cell_lines",
+   "rank": 21,
+   "quota": 15,
+   "species": "chicken",
+   "technique": "Bulk RNA-seq",
+   "skip": "cell culture"
+  }
+ ]
+}

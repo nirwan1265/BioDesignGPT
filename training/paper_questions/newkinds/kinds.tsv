@@ -1,0 +1,7 @@
+kind	quota	include	exclude
+mapping	20	gwas|qtl|mapping|bsa|segregant|association|introgression|linkage	mechanism|method
+mutant_lines	20	knockout|mutant|transgenic|edited lines|mutagenesis|overexpress|knockdown	mechanism|method|mapping|screen|histone
+population	15	population|experimental evolution|mutation accumulation|selection|adaptation|resequencing	mechanism|method|mapping|qtl|gwas
+human_cohort	15	patient|human cohort|cohort|human trial|clinical	mechanism|method
+atlas	15	atlas|developmental|time course|time-course	mechanism|method
+cell_lines	15	cell lines?$|cell culture|stem cells$|human cells|organoid|in vitro|reprogramming|crispr screen|rnai screen|cell line infection	mechanism|method
