@@ -3335,7 +3335,7 @@ check	check	word	reference genotypes		curated terminology
 check	check	word	local checks		curated terminology
 cue	n_genotypes_vs_control	regex	{N}\s+(?:mutants?|lines|genotypes)\s+(?:vs\.?|versus|and)\s+(?:a|the|one)\s+(?:control|wild[- ]type)	"two mutants vs the wild type" ({N} = a number)	rules
 cue	n_treated_and_n_control	regex	{N}\s+treated and\s+{N}\s+control	"5 treated and 5 control"	rules
-cue	n_units_per_unit	regex	{N}\s+(?:tagged |bagged |spaced )?([a-z]+)\s+(?:per|each|in each|from each)\s+(?:of\s+(?:the\s+)?(?:\d+\s+)?)?(?:replicate\s+)?([a-z]+)	"<N> <measured unit> per <experimental unit>" ("5 plants per plot")	rules
+cue	n_units_per_unit	regex	{N}\s+(?:tagged |bagged |spaced )?([a-z]+)\s+(?:per|each|in each|from each)\s+(?:of\s+(?:the\s+)?(?:\d+\s+)?)?(?:replicate\s+)?(?:[a-z0-9]+-[a-z0-9]+\s+)?([a-z]+)(?![a-z-])	"<N> <measured unit> per <experimental unit>" ("5 plants per plot")	rules
 cue	n_cells_per_animal	regex	{N}\s+(?:neurons|cells)\s+(?:from|per|each|of)\s+(?:one\s+)?(?:[a-z-]+\s+)?(?:mouse|animal|donor|sample)|(?:about |~)?{N}\s+cells each	cells sampled per animal or donor (single cell)	rules
 cue	n_and_n_mice	regex	(?:from )?{N}\s+[a-z-]+\s+and\s+\d+\s+[a-z-]+\s+mice	"4 treated and 4 control mice"	rules
 cue	pens_of_n	regex	pens? of {N}	"pens of 10" (animals per pen)	rules

@@ -16,6 +16,9 @@
    target takes the base model's own answer (self-distillation from `reader.py --examples prompts.jsonl --raw`),
    so fine-tuning teaches our schema without unlearning what the base model already reads well.
    Design judgments are kept out of the targets: experimental_unit only when the unit word is in the prompt.
+   A missing unit label is not a null: most paper and real-study prompts were never labelled for the unit. There
+   the target takes the base model's unit if that word is in the prompt; it stays null only when the label says
+   the unit must be asked (must_ask) or nothing stated names one.
 
     python llm/make_sft.py prompts --out WORK [--n 4500]
     python llm/reader.py --model ... --examples WORK/prompts.jsonl --out WORK --raw     # distil (GPU)
@@ -80,7 +83,7 @@ def paper_questions():
     if not os.path.exists(p):
         return []
     rows = [json.loads(l) for l in open(p, encoding="utf-8") if l.strip()]
-    return [{"text": r["prompt"], "spec": r["expected_spec"], "family": f"paper:{r.get('technique')}"}
+    return [{"text": r["prompt"], "spec": r["expected_spec"], "family": f"paper:{r.get('technique')}", "must_ask": r.get("must_ask") or []}
             for r in rows if not r.get("held_out_species")]
 
 
@@ -133,7 +136,7 @@ def sample_prompts(n, seed):
                 continue
             used.add(t)
             out.append({"id": f"sft_{len(out):05d}", "prompt": " ".join(r["text"].split()), "gold": convention(r["spec"], r["text"]),
-                        "family": r.get("family"), "source": src})
+                        "family": r.get("family"), "source": src, "must_ask": r.get("must_ask") or []})
     rnd.shuffle(out)
     return out
 
@@ -143,7 +146,22 @@ def canon(name):
     return SYN.get(n, n)
 
 
-def target(prompt, gold, distilled):
+def unit_target(gold, distilled, must_ask, text):
+    """(unit, where it came from) for the target: a stated label, else the base model's stated unit, else null."""
+    unit = gold.get("experimental_unit")
+    if unit:
+        return (unit, "label") if unit_stated(unit, text) else (None, "label not stated")
+    if "experimental_unit" in (must_ask or []):
+        return None, "must ask"
+    du = distilled.get("experimental_unit")
+    if isinstance(du, str) and du.strip():
+        du = du.strip().lower().replace(" ", "_")
+        if unit_stated(du, text):
+            return du, "distilled"
+    return None, "none stated"
+
+
+def target(prompt, gold, distilled, must_ask=None, stats=None):
     """Reader JSON: our labels where we have them, the base model's reading elsewhere."""
     d = distilled if isinstance(distilled, dict) else {}
     text = prompt.lower()
@@ -155,9 +173,9 @@ def target(prompt, gold, distilled):
         if isinstance(lv, list) and f.get("n_levels") and len(lv) == f["n_levels"]:
             g["levels"] = [str(x) for x in lv]
         factors.append(g)
-    unit = gold.get("experimental_unit")
-    if unit and not unit_stated(unit, text):
-        unit = None   # inferred, not stated: a design judgment the reader must leave to the engine
+    unit, why = unit_target(gold, d, must_ask, text)   # an inferred unit is a design judgment left to the engine
+    if stats is not None:
+        stats[why] += 1
     des = gold.get("design") or {}
     pop = gold.get("population") or {}
     po = gold.get("primary_outcome")
@@ -187,9 +205,9 @@ def build(work, val_frac, seed):
     raw = json.load(open(raw_path, encoding="utf-8")) if os.path.exists(raw_path) else {}
     if not raw:
         print(f"warning: no distilled answers at {raw_path}; method/tissue/levels/questions will be empty", file=sys.stderr)
-    rows = []
+    rows, unit_src = [], collections.Counter()
     for p in prompts:
-        t = target(p["prompt"], p["gold"], reader.parse_json(raw.get(p["prompt"], "")) or {})
+        t = target(p["prompt"], p["gold"], reader.parse_json(raw.get(p["prompt"], "")) or {}, p.get("must_ask"), unit_src)
         msgs = reader.messages(p["prompt"], shots=False) + [{"role": "assistant", "content": json.dumps(t)}]
         rows.append({"id": p["id"], "source": p["source"], "messages": msgs})
     random.Random(seed).shuffle(rows)
@@ -200,6 +218,7 @@ def build(work, val_frac, seed):
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print(f"wrote {len(rows) - nv} train / {nv} val examples to {work}; distilled answers for "
           f"{sum(1 for p in prompts if p['prompt'] in raw)}/{len(prompts)} prompts")
+    print("experimental_unit in the targets: " + ", ".join(f"{k} {v}" for k, v in unit_src.most_common()))
 
 
 def main():

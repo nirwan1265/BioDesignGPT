@@ -21,7 +21,10 @@ Steps (each leaves a file, so a resubmitted job skips what is done):
 2. The base model reads them (self-distillation for the fields we have no labels for: method, tissue,
    levels, outcome text, questions).
 3. `make_sft.py build`: targets = our labels + the distilled fields. Experimental unit only when the unit word
-   is in the prompt; environments only when settings are compared.
+   is in the prompt. A missing unit label is not a null, because most paper and real-study prompts were never
+   labelled for the unit. There the target takes the base model's unit if that word is in the prompt, and stays
+   null only when the unit is must-ask or no stated word names one. The build log prints the unit sources.
+   Environments only when settings are compared.
 4. `train_lora.py`: LoRA r=16 on all projection layers, answer tokens only, 1 epoch, checkpoints every 40
    steps, stops before the 2-hour limit and resumes.
 5. Base and fine-tuned readers on every test set: `WORK/eval_base`, `WORK/eval_ft`.
@@ -87,8 +90,11 @@ is within noise of v2: merged 86.3 vs 86.6 (v3 - v2 = -0.3, 95% CI -1.0 to +0.4)
 96.0, 98.3, 93.4, 97.5, 99.1). The extra paper questions did not move the reader, so v2 stays. What remains
 is in the merge and the targets, not the amount of data:
 - factor levels: reader alone 78.0 but merged 72.4 (v3 on dev). The merge drops levels the reader had right.
-- experimental unit: base 21/24, v2 and v3 17/24. The training targets carry the unit only when the unit
-  word is in the prompt, so fine-tuning teaches the reader to leave it out.
+- experimental unit: base 21/24, v2 and v3 17/24. All 24 dev gold units are written in the prompt, so the
+  cause was not the "stated only" rule. Of the 1,619 paper questions, 927 mention a unit word but carry no unit
+  label, and so do all grounded prompts. Each of those became a null unit target, which taught the reader to
+  leave stated units out. This is fixed in `make_sft.py` for v4 (step 3 above). The rules' "per two-row plot"
+  read "two" as the unit; that is fixed too (dev unit, merged: 70.8 -> 75.0).
 
 **Merge fixes (tuned on dev only, v2 reader).** Merged recall on dev went from 86.6 to 87.4. Invented values
 went from 8 to 1, and rules alone from 4 to 1. Factor name + levels merged went from 73.1 to 76.2 (reader
