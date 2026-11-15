@@ -26,7 +26,7 @@ dict(paper="paper_3287", style="detailed", prompt="Field trial of 66 maize F1 hy
      spec=dict(system="field", organism="Zea mays", factors=[dict(name="genotype", n_levels=80)], design=dict(reps=3, seasons=3), experimental_unit="plot"),
      ask=[P], note="alpha x 3 years"),
 dict(paper="paper_3288", skip="transgenerational mechanism"),
-dict(paper="paper_3289", skip="patient cohort"),
+{'paper': 'paper_3289', 'style': 'question', 'prompt': 'scRNA-seq and scATAC-seq of skin biopsies from early, untreated systemic sclerosis patients vs healthy controls. How many per group?', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell', 'scatac_seq'], 'factors': [{'name': 'disease', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: case vs control'},
 dict(paper="paper_3290", style="terse", prompt="WGBS and RNA-seq of leaves of Nipponbare rice infected with rice black-streaked dwarf virus vs virus-free in a glasshouse, 3 biological replicates.",
      spec=dict(system="greenhouse", organism="Oryza sativa", assays=["methylation", "rnaseq"], factors=[dict(name="infection", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),

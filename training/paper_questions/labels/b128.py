@@ -17,7 +17,7 @@ dict(paper="paper_3185", style="terse", prompt="Shoot-tip RNA-seq of potted dwar
      ask=[P], note="2 x 3"),
 dict(paper="paper_3186", skip="NK cell mechanism"),
 dict(paper="paper_3187", skip="methylation mechanism"),
-dict(paper="paper_3188", skip="patient cohort"),
+{'paper': 'paper_3188', 'style': 'question', 'prompt': 'scRNA-seq of adenoids from children with mild (under half the nasopharynx, 4 children) vs severe adenoid hypertrophy (7 children). Can I compare 4 vs 7?', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 4 vs 7'},
 dict(paper="paper_3189", style="detailed", prompt="RNA-seq of Gamay Teinturier grapevine callus in a growth chamber, pre-treated with ethanol or not and then heat-stressed or kept at control temperature, 4 biological replicates.",
      spec=dict(system="growth_chamber", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="temperature", n_levels=2)], design=dict(reps=4)),
      ask=[P], note="2x2x4"),

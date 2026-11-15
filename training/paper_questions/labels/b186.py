@@ -27,7 +27,7 @@ dict(paper="paper_4640", style="question", prompt="small RNA-seq of umbilical co
 dict(paper="paper_4641", style="detailed", prompt="Berry RNA-seq of two grapevine cultivars at three ripening stages, three randomized field plots of seven vines per cultivar, 200 berries per replicate.",
      spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="stage", n_levels=3)], design=dict(reps=3), experimental_unit="plot"),
      ask=[P], note="plots x 3"),
-dict(paper="paper_4642", skip="patient cohort"),
+{'paper': 'paper_4642', 'style': 'question', 'prompt': 'Whole-blood RNA-seq of 128 hospitalized COVID-19 patients sampled up to five times during their stay, compared by severity. Does the unequal number of samples per patient matter?', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'disease'}, {'name': 'time'}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: longitudinal, unequal visits'},
 dict(paper="paper_4643", style="question", prompt="Pre-infection caecal 16S of chicks raised in isolators and later classed as Salmonella super-shedders vs low-shedders. Is the isolator or the chick my unit?",
      spec=dict(system="livestock", organism="Gallus gallus", assays=["amplicon"], factors=[dict(name="phenotype_group", n_levels=2)]),
      ask=["experimental_unit"], note="isolators"),

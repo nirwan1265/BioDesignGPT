@@ -36,5 +36,5 @@ dict(paper="paper_5445", skip="stem cell 3D genome"),
 dict(paper="paper_5446", skip="cell line"),
 dict(paper="paper_5447", skip="cell line"),
 dict(paper="paper_5448", skip="mutant"),
-dict(paper="paper_5449", skip="human cohort"),
+{'paper': 'paper_5449', 'style': 'question', 'prompt': 'Blood small RNA-seq of 3 active tuberculosis patients vs 3 healthy people from routine check-ups. Is 3 vs 3 enough?', 'spec': {'organism': 'Homo sapiens', 'assays': ['small_rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 3 v 3'},
 ]

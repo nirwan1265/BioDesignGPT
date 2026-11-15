@@ -34,7 +34,7 @@ dict(paper="paper_2968", style="terse", prompt="ChIP-seq of nucleus accumbens fr
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),
 dict(paper="paper_2969", skip="lineage tracing"),
-dict(paper="paper_2970", skip="patient cohort"),
+{'paper': 'paper_2970', 'style': 'question', 'prompt': 'PBMC immune profiling at cancer diagnosis: glioblastoma (11), colorectal (20), hepatocellular (16) and head and neck cancer (19) patients vs 11 healthy volunteers, scRNA-seq on a subset. Are 11 controls enough?', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell'], 'factors': [{'name': 'disease', 'n_levels': 5}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 4 cancers vs controls'},
 dict(paper="paper_2971", style="question", prompt="Cabernet Sauvignon berry RNA-seq at three ripening stages from vineyard inter-rows under black mulch vs tillage, each treatment applied to 30-vine experimental units replicated three times. Is that enough?",
      spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="stage", n_levels=3)], design=dict(reps=3), experimental_unit="plot"),
      ask=[P], note="3 plots per treatment"),

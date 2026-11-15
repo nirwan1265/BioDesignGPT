@@ -27,7 +27,7 @@ dict(paper="paper_4763", style="question", prompt="small RNA-seq of hearts from 
 dict(paper="paper_4764", style="detailed", prompt="RNA-seq of harvested berries of grape varieties Fraoula and Victoria immersed in Aspergillus carbonarius spores vs mock, sampled at three times, 3 biological replicates.",
      spec=dict(organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2), dict(name="time", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="2x2x3x3"),
-dict(paper="paper_4765", skip="human cohort"),
+{'paper': 'paper_4765', 'style': 'question', 'prompt': 'RNA-seq and small RNA-seq of archived first-trimester chorionic villus samples from women who later developed preterm preeclampsia, term preeclampsia or stayed normotensive. How many per outcome group?', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq', 'small_rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: retrospective outcome groups'},
 dict(paper="paper_4766", style="question", prompt="Caecal and ileal 16S of 7-day-old broilers given in ovo cathelicidin-2 vs saline, chicks housed in pens by treatment after hatch. Is the pen or the chick my unit?",
      spec=dict(system="livestock", organism="Gallus gallus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=2)]),
      ask=["experimental_unit"], note="pens by treatment"),

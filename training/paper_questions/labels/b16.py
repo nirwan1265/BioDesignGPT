@@ -22,7 +22,7 @@ dict(paper="paper_0381", style="detailed", prompt="Salt tolerance time course in
 dict(paper="paper_0382", style="detailed", prompt="Baseline liver epigenomes in outbred rats: Sprague-Dawley and Wistar, males and females, 6 animals per strain x sex, MeDIP and hMeDIP-seq plus H3K27ac / H3K4me1 ChIP-seq.",
      spec=dict(organism="Rattus norvegicus", assays=["methylation", "chip_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="sex", n_levels=2)], design=dict(reps=6)),
      ask=[P], gaps=["assay:medip"], note="2 strains x 2 sexes x 6"),
-dict(paper="paper_0383", skip="observational human matched cohort"),
+{'paper': 'paper_0383', 'style': 'question', 'prompt': 'Faecal metagenomics in early pregnancy: obese women individually matched to lean controls on parity, gestational week and age. Should I analyse it as matched pairs?', 'spec': {'organism': 'Homo sapiens', 'assays': ['metagenomics'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: matched cohort'},
 dict(paper="paper_0384", style="question", prompt="How many piglets per group for single-cell RNA-seq of heart border zone after myocardial infarction vs sham surgery at postnatal day 1 or day 8, collected 1 or 3 days after surgery?",
      spec=dict(system="single_cell", organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="injury", n_levels=2), dict(name="age", n_levels=2), dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="MI/sham x P1/P8 x D1/D3"),

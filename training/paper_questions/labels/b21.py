@@ -21,7 +21,7 @@ dict(paper="paper_0507", style="terse", prompt="MeRIP-seq of human trophoblast s
 dict(paper="paper_0508", style="typo", prompt="small rna seq of 3 week arabidopsis, rice1 rice2 double mutant vs col, 3 reps each. need more?",
      spec=dict(organism="Arabidopsis thaliana", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
-dict(paper="paper_0509", skip="tumour sample cohort"),
+{'paper': 'paper_0509', 'style': 'question', 'prompt': 'Methylation profiling of FFPE lymphoma biopsies, extranodal NK/T-cell lymphoma (43) and nodal T/NK-cell lymphoma (12) vs reactive tonsil, lymph node and nasal mucosa controls. Can I find prognostic subgroups within 43 cases?', 'spec': {'organism': 'Homo sapiens', 'assays': ['methylation'], 'factors': [{'name': 'disease'}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: cases vs tissue controls'},
 dict(paper="paper_0510", style="question", prompt="For mapping EMS-induced maize kernel mutants by bulked sequencing, how many mutant (non-germinating) and wild-type kernels should go into each pool from a segregating ear?",
      spec=dict(organism="Zea mays", factors=[dict(name="genotype", n_levels=2)]),
      ask=["subsamples_per_unit"], gaps=["assay:bsa_seq"], note="mutant vs WT pools"),

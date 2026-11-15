@@ -36,7 +36,7 @@ dict(paper="paper_4316", style="detailed", prompt="small RNA-seq of liver, jejun
 dict(paper="paper_4317", style="question", prompt="Berry RNA-seq of Zinfandel vines with grapevine red blotch virus vs healthy in two vineyards (3 infected and 6 healthy vines in one, 6 and 3 in the other), sampled at several ripening stages. Is that balanced enough?",
      spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="location", n_levels=2), dict(name="stage")]),
      ask=[P], note="unbalanced vineyards"),
-dict(paper="paper_4318", skip="patient metastases"),
+{'paper': 'paper_4318', 'style': 'question', 'prompt': 'RNA-seq of primary tumours, normal tissue and 1-7 metastases per patient from 20 bladder cancer autopsies. Can metastases from the same patient be treated as independent?', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 3}]}, 'ask': ['experimental_unit'], 'note': 'round 1: metastases within patient'},
 dict(paper="paper_4319", skip="method"),
 dict(paper="paper_4320", skip="growth indices"),
 dict(paper="paper_4321", skip="HSF binding"),

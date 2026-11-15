@@ -1,11 +1,11 @@
 P = "power.minimum_detectable_difference"
 L = [
-dict(paper="paper_3375", skip="patient pilot"),
+{'paper': 'paper_3375', 'style': 'question', 'prompt': 'PBMC ATAC-seq and RNA-seq pilot in suspected coronary artery disease: patients stratified by CT angiography into no plaque, non-obstructive and obstructive plaque. How many per group for a pilot?', 'spec': {'organism': 'Homo sapiens', 'assays': ['atac_seq', 'rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: pilot, 3 strata'},
 dict(paper="paper_3376", skip="silencing mechanism"),
 dict(paper="paper_3377", style="question", prompt="Caecal metagenomics of laying hens fed a basal diet, a probiotic, or mushroom stipe waste, 36 hens per diet housed 4 per cage in 9 cages. Is the cage or the hen my unit?",
      spec=dict(system="livestock", organism="Gallus gallus", assays=["metagenomics"], factors=[dict(name="diet", n_levels=3)]),
      ask=["experimental_unit"], note="diet per cage"),
-dict(paper="paper_3378", skip="patient cohort"),
+{'paper': 'paper_3378', 'style': 'terse', 'prompt': 'snRNA-seq of left ventricular apex from 6 heart-failure patients, sampled at LVAD implantation and again at explant.', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell'], 'factors': [{'name': 'time', 'n_levels': 2}], 'design': {'reps': 6}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: paired pre/post'},
 dict(paper="paper_3379", skip="muscle mechanism"),
 dict(paper="paper_3380", skip="meta-analysis"),
 dict(paper="paper_3381", skip="cohesin mechanism"),

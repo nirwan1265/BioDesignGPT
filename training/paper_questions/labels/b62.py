@@ -55,7 +55,7 @@ dict(paper="paper_1546", style="terse", prompt="RNA-seq of human foreskin fibrob
 dict(paper="paper_1547", style="question", prompt="Rat pups mixed among litters on P1 and 10 assigned per dam, then handled 15 min daily (augmented maternal care) or left undisturbed; NRSF ChIP-seq of hypothalamus pooled from 10 pups. How many dams per condition?",
      spec=dict(organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2)], subsamples_per_unit=10),
      ask=["design.reps", "experimental_unit"], gaps=["blocking:litter"], note="dam is the unit"),
-dict(paper="paper_1548", skip="patient cohort"),
+{'paper': 'paper_1548', 'style': 'detailed', 'prompt': 'RNA-seq and DNA sequencing of colorectal tumours and matched normal tissue from 20 White and 20 African American patients.', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'population', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 2}], 'design': {'reps': 20}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: ancestry x tissue, paired'},
 dict(paper="paper_1549", style="detailed", prompt="5-week-old male Tibetan pigs and Bama pigs, 3 of each breed held at 4 C and 3 at 25 C for 3 days; adipose snRNA-seq.",
      spec=dict(organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="genotype", n_levels=2), dict(name="temperature", n_levels=2)], design=dict(reps=3)),
      ask=[P], gaps=["synonym:breed->genotype"], note="2x2x3"),

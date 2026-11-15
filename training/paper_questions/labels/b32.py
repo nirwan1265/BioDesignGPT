@@ -5,7 +5,7 @@ dict(paper="paper_0776", style="detailed", prompt="Mechanical loading of human c
      spec=dict(system="cell_culture", organism="Homo sapiens", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="cell_type", n_levels=3)], design=dict(reps=6)),
      ask=["experimental_unit"], gaps=["factor:cell_type", "blocking:run"], note="stretch vs static x 3 cell types, 6 chambers"),
 dict(paper="paper_0777", skip="recombination genetics across strains"),
-dict(paper="paper_0778", skip="observational human cohort"),
+{'paper': 'paper_0778', 'style': 'question', 'prompt': 'Vaginal and faecal shotgun metagenomics from a pregnancy cohort: women who later miscarried vs matched controls who carried to term, self-sampled at gestational weeks 10-20. How many controls per case?', 'spec': {'organism': 'Homo sapiens', 'assays': ['metagenomics'], 'factors': [{'name': 'disease', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: nested case-control'},
 dict(paper="paper_0779", style="detailed", prompt="Pigs infected intranasally with pH1N1 influenza, immunised with Ad-HA/NP, or Ad-HA/NP + Ad-IL-1β (5 pigs each), plus 3 PBS controls; bronchoalveolar lavage scRNA-seq three weeks later. Are 3 controls enough?",
      spec=dict(system="single_cell", organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="treatment", n_levels=4)]),
      ask=[P], note="3 x 5 + 3 controls"),

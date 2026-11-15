@@ -12,7 +12,7 @@ dict(paper="paper_1079", style="detailed", prompt="Differentiated human nasal an
 dict(paper="paper_1080", style="detailed", prompt="Neonatal rat hypoxic-ischemic brain injury at P7-P10: sham, HIBD, HIBD + sodium butyrate gavage for 2 weeks, or HIBD + saline; histone crotonylation ChIP-seq of brain. How many pups per group for the ChIP, and should litters be split across groups?",
      spec=dict(organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=4)]),
      ask=["design.reps"], gaps=["blocking:litter"], note="4 groups"),
-dict(paper="paper_1081", skip="observational cohort microbiome"),
+{'paper': 'paper_1081', 'style': 'question', 'prompt': 'Faecal shotgun metagenomics in early pregnancy, nested in a cohort: women with severe nausea and vomiting vs matched women with none. How many cases do I need?', 'spec': {'organism': 'Homo sapiens', 'assays': ['metagenomics'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: nested case-control'},
 dict(paper="paper_1082", style="casual", prompt="weaning study in piglets: 3 litters, within each litter half weaned at day 21 into the nursery and half left with the sow, then ileum scRNA-seq. how many piglets per group do I sequence?",
      spec=dict(organism="Sus scrofa", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2)]),
      ask=["design.reps"], gaps=["blocking:litter", "setting:livestock"], note="split-litter, 3 litters"),

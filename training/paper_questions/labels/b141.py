@@ -27,7 +27,7 @@ dict(paper="paper_3513", style="detailed", prompt="RNA-seq of potted Pinot Noir 
      spec=dict(system="greenhouse", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),
 dict(paper="paper_3514", skip="translation mechanism"),
-dict(paper="paper_3515", skip="patient cohort"),
+{'paper': 'paper_3515', 'style': 'detailed', 'prompt': "Blood RNA-seq of 30 Sjogren's disease patients vs 20 age- and sex-matched healthy controls, with 7 patients sampled again one month after starting treatment.", 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 30 vs 20, follow-up subset'},
 dict(paper="paper_3516", skip="mutation discovery"),
 dict(paper="paper_3517", skip="yeast hybrids"),
 dict(paper="paper_3518", skip="cistrome"),

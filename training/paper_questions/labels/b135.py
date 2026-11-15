@@ -27,7 +27,7 @@ dict(paper="paper_3363", style="question", prompt="snRNA-seq of brains from axen
      spec=dict(system="drosophila", organism="Drosophila melanogaster", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2), dict(name="age", n_levels=2)], design=dict(reps=1)),
      ask=[P], note="unreplicated"),
 dict(paper="paper_3364", skip="transcription factor mechanism"),
-dict(paper="paper_3365", skip="patient iPSC"),
+{'paper': 'paper_3365', 'style': 'question', 'prompt': 'Hi-C and RNA-seq of iPSC-derived cortical neural cells from Smith-Magenis syndrome patient lines vs 4 healthy control lines, at stem cell and neural stages. Are separate differentiations of one line replicates?', 'spec': {'system': 'cell_culture', 'organism': 'Homo sapiens', 'assays': ['hic', 'rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}, {'name': 'stage', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: lines vs differentiations'},
 dict(paper="paper_3366", skip="gene function"),
 dict(paper="paper_3367", style="question", prompt="small RNA-seq of shoots and roots of salt-tolerant Doc Phung and salt-sensitive IR28 rice seedlings on MS medium with vs without NaCl, one pooled sample each. Is that enough?",
      spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="salt", n_levels=2), dict(name="tissue", n_levels=2)], design=dict(reps=1)),

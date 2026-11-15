@@ -52,5 +52,5 @@ dict(paper="paper_1197", skip="observational fruit microbiome"),
 dict(paper="paper_1198", style="detailed", prompt="WGBS and small RNA-seq of stage 9 anthers, stage 12 ovules and flower buds from Arabidopsis transcription-factor mutants vs Col-0 grown in the greenhouse, 2 biological replicates.",
      spec=dict(system="greenhouse", organism="Arabidopsis thaliana", assays=["methylation", "small_rnaseq"], factors=[dict(name="genotype"), dict(name="tissue", n_levels=3)], design=dict(reps=2)),
      ask=[P], note="mutants x 3 tissues x 2"),
-dict(paper="paper_1199", skip="observational patient cohort"),
+{'paper': 'paper_1199', 'style': 'detailed', 'prompt': 'Whole-blood methylation and RNA-seq of 46 hospitalized COVID-19 patients at admission and 2-3 weeks later, vs healthy controls from a national genome project.', 'spec': {'organism': 'Homo sapiens', 'assays': ['methylation', 'rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}, {'name': 'time', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: acute vs recovery, external controls'},
 ]

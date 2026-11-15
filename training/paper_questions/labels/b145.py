@@ -5,7 +5,7 @@ dict(paper="paper_3600", style="terse", prompt="RNA-seq of N2 C. elegans on cont
      ask=[P], note="2 x 3"),
 dict(paper="paper_3601", skip="targeted methylation"),
 dict(paper="paper_3602", skip="method"),
-dict(paper="paper_3603", skip="patient tumours"),
+{'paper': 'paper_3603', 'style': 'casual', 'prompt': 'rna-seq of hepatoblastoma tumours vs the adjacent non-tumour liver from the same children. how many patients would i need?', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: paired tumour/normal'},
 dict(paper="paper_3604", skip="stem cell differentiation"),
 dict(paper="paper_3605", skip="T cell mechanism"),
 dict(paper="paper_3606", style="question", prompt="small RNA-seq of PBMCs from five-week-old piglets stimulated with poly I:C vs medium, cells from 2 pigs. Is that enough?",

@@ -1,7 +1,7 @@
 P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_3725", skip="nodule mechanism"),
-dict(paper="paper_3726", skip="human trial"),
+{'paper': 'paper_3726', 'style': 'question', 'prompt': 'Plasma small RNA-seq before and after onion extract vs placebo tablets in a randomized trial of 20 healthy adults, one dropout. How many per arm do I need?', 'spec': {'organism': 'Homo sapiens', 'assays': ['small_rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}, {'name': 'time', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: small RCT, pre/post'},
 dict(paper="paper_3727", style="question", prompt="Root RNA-seq of hydroponic Nipponbare rice in a growth chamber inoculated with one of two Burkholderia strains or mock, sampled at an early and a late time. How many replicate pools?",
      spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3), dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="beneficial bacteria"),

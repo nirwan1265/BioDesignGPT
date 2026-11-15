@@ -36,7 +36,7 @@ dict(paper="paper_0587", style="casual", prompt="IPEC-J2 pig intestinal cells in
 dict(paper="paper_0588", style="detailed", prompt="Tomato Heinz 1706 flower buds (4 mm) at the 2-3 inflorescence stage: control (0 h) and after 0.5, 1, 3 and 5 h at 37 C, three biological replicates, MeRIP-seq and lncRNA-seq.",
      spec=dict(organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="time", n_levels=5)], design=dict(reps=3)),
      ask=[P], gaps=["assay:m6a_merip", "assay:lncrna_seq"], note="5 times x 3"),
-dict(paper="paper_0589", skip="patient skin biopsies"),
+{'paper': 'paper_0589', 'style': 'question', 'prompt': 'scRNA-seq of skin from atopic dermatitis patients (lesional and non-lesional biopsies from the same person) and healthy donors. How many people per group, and do the two biopsies count separately?', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell'], 'factors': [{'name': 'disease', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 2}]}, 'ask': ['design.reps', 'experimental_unit'], 'note': 'round 1: biopsies within person'},
 dict(paper="paper_0590", skip="case description of affected litters"),
 dict(paper="paper_0591", skip="single-microspore sequencing for recombination; no design"),
 dict(paper="paper_0592", style="detailed", prompt="Wound healing in Xenopus tailbud embryos: uninjured, injured, and injured with an MMP inhibitor, embryos fixed 1 and 3 h after injury, 20 embryos per sample, RNA-seq from 2 independent experiments.",

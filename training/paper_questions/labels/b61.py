@@ -36,7 +36,7 @@ dict(paper="paper_1515", style="detailed", prompt="Barley hsfa2 and hsfa3 mutant
      ask=[P], note="3 x 3 x 3 pools of 10"),
 dict(paper="paper_1516", skip="non-macaque primate"),
 dict(paper="paper_1517", skip="population selection scan"),
-dict(paper="paper_1518", skip="patient cohort single-cell"),
+{'paper': 'paper_1518', 'style': 'question', 'prompt': 'scRNA-seq and scATAC-seq of peripheral blood B cells from people with monoclonal B cell lymphocytosis, early CLL and progressive CLL. How many patients per stage?', 'spec': {'organism': 'Homo sapiens', 'assays': ['single_cell', 'scatac_seq'], 'factors': [{'name': 'stage', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: disease continuum'},
 dict(paper="paper_1519", style="terse", prompt="RNA-seq and ATAC-seq of 3-week-old Arabidopsis H3.3 K4 mutant vs wild-type seedlings at 22 C or shifted to 28 C for 4 h, 3 biological replicates.",
      spec=dict(organism="Arabidopsis thaliana", assays=["rnaseq", "atac_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="temperature", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),

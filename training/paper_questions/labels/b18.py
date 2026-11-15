@@ -40,7 +40,7 @@ dict(paper="paper_0441", style="casual", prompt="n benthamiana leaves co-infiltr
 dict(paper="paper_0442", style="terse", prompt="Ribo-seq and RNA-seq of rice MH63, ZS97 and their hybrid SY63 in root, young leaf and panicle, 2 biological replicates.",
      spec=dict(system="ribo_seq", organism="Oryza sativa", assays=["ribo_seq", "rnaseq"], factors=[dict(name="genotype", n_levels=3), dict(name="tissue", n_levels=3)], design=dict(reps=2), primary_outcome=dict(name="translation_efficiency")),
      ask=[P], note="3 genotypes x 3 tissues x 2"),
-dict(paper="paper_0443", skip="patient vs healthy cohort"),
+{'paper': 'paper_0443', 'style': 'detailed', 'prompt': "lncRNA and mRNA sequencing of CD4+ T cells from 12 relapsed Graves' disease patients vs 8 age- and sex-matched healthy controls, with validation in the rest of the cohort.", 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 12 vs 8'},
 dict(paper="paper_0444", style="detailed", prompt="RNA-seq of 20 rice inbred lines (indica and japonica) grown in hydroponics, 15-day seedlings; the middle five plants of each row pooled per biological replicate, 3 replicates per line.",
      spec=dict(system="bulk_rnaseq", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=20)], design=dict(reps=3), subsamples_per_unit=5),
      ask=[P], note="20 lines x 3 reps x 5 pooled"),
