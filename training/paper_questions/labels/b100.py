@@ -9,7 +9,7 @@ dict(paper="paper_2478", style="terse", prompt="RNA-seq of ovaries from newly ha
      spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
 {'paper': 'paper_2479', 'style': 'question', 'prompt': 'GWAS of Sclerotinia stem rot resistance in mostly Brazilian soybean genotypes, V2 plants in cups in a greenhouse inoculated with a local isolate. How many plants per genotype?', 'spec': {'system': 'greenhouse', 'organism': 'Glycine max', 'assays': ['gwas']}, 'ask': ['design.reps'], 'note': 'round 1: GWAS panel'},
-dict(paper="paper_2480", skip="iPSC reprogramming"),
+{'paper': 'paper_2480', 'style': 'question', 'prompt': 'ATAC-seq and RNA-seq of porcine embryonic fibroblasts, dox-dependent porcine iPSCs and mouse ES cells as a reference. How many independent iPSC lines?', 'spec': {'system': 'cell_culture', 'organism': 'Sus scrofa', 'assays': ['atac_seq', 'rnaseq'], 'factors': [{'name': 'cell_type', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: iPSC lines'},
 dict(paper="paper_2481", skip="DNA repair assay"),
 dict(paper="paper_2482", style="question", prompt="scRNA-seq of spinal cord from female rats after spinal cord injury vs sham. How many rats per group?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2)]),

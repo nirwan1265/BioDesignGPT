@@ -35,7 +35,7 @@ dict(paper="paper_4717", style="detailed", prompt="Heart RNA-seq of male Wistar 
 dict(paper="paper_4718", skip="meta-analysis"),
 dict(paper="paper_4719", skip="cell line"),
 dict(paper="paper_4720", skip="mutational signatures"),
-dict(paper="paper_4721", skip="reprogramming enhancers"),
+{'paper': 'paper_4721', 'style': 'question', 'prompt': 'ATAC-seq of reprogramming mouse embryonic fibroblasts carrying dox-inducible OSKM at several days after induction, with ES cells as the endpoint. How many replicate inductions per day?', 'spec': {'system': 'cell_culture', 'organism': 'Mus musculus', 'assays': ['atac_seq'], 'factors': [{'name': 'time'}]}, 'ask': ['design.reps'], 'note': 'round 1: reprogramming time course'},
 dict(paper="paper_4722", skip="germline 3D genome"),
 dict(paper="paper_4723", skip="cell line infection"),
 dict(paper="paper_4724", skip="germ cell mechanism"),

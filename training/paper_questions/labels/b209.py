@@ -1,6 +1,6 @@
 P = "power.minimum_detectable_difference"
 L = [
-dict(paper="paper_5200", skip="human cells"),
+{'paper': 'paper_5200', 'style': 'question', 'prompt': "ATAC-seq and RNA-seq of NK cells from healthy donors' PBMCs treated with 100 nM dexamethasone vs vehicle for 16 h. Is the donor my replicate?", 'spec': {'system': 'cell_culture', 'organism': 'Homo sapiens', 'assays': ['atac_seq', 'rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: paired within donor'},
 dict(paper="paper_5201", style="detailed", prompt="small RNA-seq of rosettes of 4-week-old hydroponic Arabidopsis in a growth chamber under light stress treatments vs control, 3 replicates each pooling 6 plants.",
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["small_rnaseq"], factors=[dict(name="treatment")], design=dict(reps=3), subsamples_per_unit=6),
      ask=[P], note="pooled plants"),

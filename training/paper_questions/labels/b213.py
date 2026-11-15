@@ -38,5 +38,5 @@ dict(paper="paper_5320", skip="reanalysis"),
 dict(paper="paper_5321", skip="crossover mapping"),
 dict(paper="paper_5322", skip="neural tube"),
 dict(paper="paper_5323", skip="worm mechanism"),
-dict(paper="paper_5324", skip="in vitro infection"),
+{'paper': 'paper_5324', 'style': 'detailed', 'prompt': 'RNA-seq of PBMCs from cattle and goats (6 animals each) infected in vitro with peste des petits ruminants virus vs mock.', 'spec': {'system': 'cell_culture', 'organisms': ['Bos taurus', 'Capra hircus'], 'assays': ['rnaseq'], 'factors': [{'name': 'species', 'n_levels': 2}, {'name': 'infection', 'n_levels': 2}], 'design': {'reps': 6}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: donor cells, two species'},
 ]

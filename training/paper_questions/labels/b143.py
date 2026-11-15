@@ -25,7 +25,7 @@ dict(paper="paper_3562", style="question", prompt="Leaf RNA-seq of two thermotol
      ask=["design.reps"], note="cultivars x heat"),
 dict(paper="paper_3563", skip="genotyping tool"),
 dict(paper="paper_3564", skip="stem cell mechanism"),
-dict(paper="paper_3565", skip="reprogramming"),
+{'paper': 'paper_3565', 'style': 'question', 'prompt': 'RNA-seq of mouse embryonic fibroblasts transduced with four transcription factors to make alveolar epithelial-like cells vs mock-transduced fibroblasts and primary AT2 cells. How many independent inductions?', 'spec': {'system': 'cell_culture', 'organism': 'Mus musculus', 'assays': ['rnaseq', 'overexpression'], 'factors': [{'name': 'cell_type', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: direct reprogramming'},
 dict(paper="paper_3566", skip="patient genetics"),
 dict(paper="paper_3567", skip="method"),
 dict(paper="paper_3568", skip="selection scan"),

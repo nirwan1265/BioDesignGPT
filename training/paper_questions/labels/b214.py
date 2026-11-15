@@ -31,7 +31,7 @@ dict(paper="paper_5340", style="question", prompt="Kidney RNA-seq of PKD/Mhm (Cy
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)]),
      ask=["design.reps"], note="cell therapy"),
 dict(paper="paper_5341", skip="allele-specific expression"),
-dict(paper="paper_5342", skip="cell line"),
+{'paper': 'paper_5342', 'style': 'detailed', 'prompt': 'small RNA-seq of rat H9c2 cardiomyocytes under anoxia-reoxygenation pretreated with astaxanthin, Trolox or vehicle, plus normoxic controls, 3 replicates.', 'spec': {'system': 'cell_culture', 'organism': 'Rattus norvegicus', 'assays': ['small_rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 4}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 4 groups x 3'},
 dict(paper="paper_5343", skip="tumour niche"),
 dict(paper="paper_5344", skip="CTCF mechanism"),
 dict(paper="paper_5345", skip="cell line"),

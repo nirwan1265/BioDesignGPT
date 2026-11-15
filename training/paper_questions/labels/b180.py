@@ -21,7 +21,7 @@ dict(paper="paper_4486", style="detailed", prompt="Leaf RNA-seq of Jing411 wheat
      spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="treatment")], design=dict(reps=3), subsamples_per_unit=6),
      ask=[P], note="pooled"),
 dict(paper="paper_4487", skip="dormancy genetics"),
-dict(paper="paper_4488", skip="cell line"),
+{'paper': 'paper_4488', 'style': 'question', 'prompt': 'ChIP-seq and RNA-seq of mouse erythroleukaemia cells with FOG-1 knockdown vs control, induced to differentiate with 2% DMSO for 4 days. Are separate inductions of one clone biological replicates?', 'spec': {'system': 'cell_culture', 'organism': 'Mus musculus', 'assays': ['chip_seq', 'rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: clone inductions'},
 dict(paper="paper_4489", skip="microglia mechanism"),
 dict(paper="paper_4490", skip="cell line"),
 dict(paper="paper_4491", skip="silencing mechanism"),

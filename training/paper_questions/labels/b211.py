@@ -32,7 +32,7 @@ dict(paper="paper_5270", skip="miRNA decay"),
 dict(paper="paper_5271", style="detailed", prompt="RNA-seq of longissimus dorsi, psoas major and semimembranosus from Hanwoo bulls with high vs low daily weight gain, 7 per group.",
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2), dict(name="tissue", n_levels=3)], design=dict(reps=7)),
      ask=[P], note="7 v 7, 3 muscles"),
-dict(paper="paper_5272", skip="cell line"),
+{'paper': 'paper_5272', 'style': 'terse', 'prompt': 'RNA-seq of porcine IPEC-J2 intestinal cells at three growth phases after seeding, 3 replicates, passages 1-5 after thawing.', 'spec': {'system': 'cell_culture', 'organism': 'Sus scrofa', 'assays': ['rnaseq'], 'factors': [{'name': 'time', 'n_levels': 3}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: growth phases'},
 dict(paper="paper_5273", skip="oocyte states"),
 dict(paper="paper_5274", skip="cell culture"),
 ]

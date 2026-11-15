@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_3775", skip="TE regulation mutants"),
 dict(paper="paper_3776", skip="lncRNA function"),
 dict(paper="paper_3777", skip="CRISPR screen"),
-dict(paper="paper_3778", skip="cell line infection"),
+{'paper': 'paper_3778', 'style': 'question', 'prompt': 'Dual RNA-seq of porcine IPEC-J2 epithelial cells exposed to Ascaris suum third-stage larvae vs unexposed cells, plus larvae alone. How many wells per group?', 'spec': {'system': 'cell_culture', 'organism': 'Sus scrofa', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: co-culture'},
 dict(paper="paper_3779", skip="cancer model"),
 dict(paper="paper_3780", style="question", prompt="small RNA-seq of mesenteric lymph nodes from piglets before vs 2 days after oral Salmonella Typhimurium challenge, one library per time pooling 4 piglets. Is that enough?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=2)], design=dict(reps=1), subsamples_per_unit=4),

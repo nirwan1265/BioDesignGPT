@@ -15,7 +15,7 @@ dict(paper="paper_4032", style="question", prompt="Faecal 16S of sows of differe
 dict(paper="paper_4033", style="question", prompt="Leaf RNA-seq of hydroponic Moneymaker tomato inoculated with Salmonella enterica, sampled at 0, 2, 24 and 48 h, each sample pooling several plants. How many replicates?",
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="time", n_levels=4)]),
      ask=["design.reps"], note="time course"),
-dict(paper="paper_4034", skip="stem cells"),
+{'paper': 'paper_4034', 'style': 'question', 'prompt': 'scRNA-seq of pig extraembryonic endoderm cell lines derived from several embryos, compared with the embryo explants they came from. Is each derived line a replicate?', 'spec': {'system': 'cell_culture', 'organism': 'Sus scrofa', 'assays': ['single_cell']}, 'ask': ['experimental_unit'], 'note': 'round 1: lines from embryos'},
 dict(paper="paper_4035", skip="Pol II mechanism"),
 dict(paper="paper_4036", style="detailed", prompt="Fruit RNA-seq of orchard Golden Delicious apples bagged vs left exposed, sampled at 30, 60 and 150 days after flowering, 3 biological replicates.",
      spec=dict(system="field", organism="Malus domestica", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=3)], design=dict(reps=3)),

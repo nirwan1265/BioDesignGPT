@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_5675", style="terse", prompt="ATAC-seq of cauda sperm from male C57BL/6J mice randomized at four weeks to a high-fat vs control diet, 5 per group.",
      spec=dict(system="mouse", organism="Mus musculus", assays=["atac_seq"], factors=[dict(name="diet", n_levels=2)], design=dict(reps=5)),
      ask=[P], note="5 v 5"),
-dict(paper="paper_5676", skip="cell line"),
+{'paper': 'paper_5676', 'style': 'question', 'prompt': 'ChIP-seq of pre-replication complex proteins in HCT116 cells and stable clones, with or without replication stress. How many biological replicates?', 'spec': {'system': 'cell_culture', 'organism': 'Homo sapiens', 'assays': ['chip_seq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: stress vs not'},
 dict(paper="paper_5677", skip="knockout"),
 dict(paper="paper_5678", skip="mutants"),
 dict(paper="paper_5679", skip="cell line"),

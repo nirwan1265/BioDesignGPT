@@ -39,7 +39,7 @@ dict(paper="paper_1138", style="question", prompt="Is 2 SIV-infected rhesus maca
      spec=dict(organism="Macaca mulatta", assays=["single_cell", "atac_seq"], factors=[dict(name="infection", n_levels=2)], design=dict(reps=2)),
      ask=[P], gaps=["assay:scatac_seq"], note="2 v 2 animals"),
 dict(paper="paper_1139", skip="assembly technical evaluation"),
-dict(paper="paper_1140", skip="CRISPR screen in cell line"),
+{'paper': 'paper_1140', 'style': 'question', 'prompt': 'CRISPR knockout screen in KSHV-transformed rat mesenchymal stem cells vs untransformed parental cells, guides counted at several passages. How many replicate infections?', 'spec': {'system': 'cell_culture', 'organism': 'Rattus norvegicus', 'assays': ['crispr'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'time'}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled screen'},
 dict(paper="paper_1141", style="detailed", prompt="Zebrafish AB larvae, two 2.8 L tanks per temperature, held at 28 C or 34 C from 18 to 32 dpf, then grown to 90 dpf and gonads sequenced (miRNA-seq) separately for testes and ovaries. Are the fish or the 2 tanks the replicates?",
      spec=dict(organism="Danio rerio", assays=["small_rnaseq"], factors=[dict(name="temperature", n_levels=2), dict(name="sex", n_levels=2)], design=dict(reps=2)),
      ask=["experimental_unit"], gaps=["unit:tank"], note="2 tanks per temperature; held-out species"),

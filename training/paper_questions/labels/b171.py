@@ -16,7 +16,7 @@ dict(paper="paper_4256", style="detailed", prompt="Flesh RNA-seq of Orin and Shi
 dict(paper="paper_4257", skip="tumour enhancers"),
 dict(paper="paper_4258", skip="sperm mutations"),
 {'paper': 'paper_4259', 'style': 'question', 'prompt': 'Single-nucleus multiome of substantia nigra from young, middle-aged and old C57BL/6J mice, each sample pooling brains of several mice. How many pooled samples per age?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['single_cell', 'scatac_seq'], 'factors': [{'name': 'age', 'n_levels': 3}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled brains'},
-dict(paper="paper_4260", skip="cell lines"),
+{'paper': 'paper_4260', 'style': 'detailed', 'prompt': 'small RNA-seq of bovine B lymphoblastoid lines BL3 and BL20 vs their Theileria annulata-infected derivatives, 3 replicates each.', 'spec': {'system': 'cell_culture', 'organism': 'Bos taurus', 'assays': ['small_rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'infection', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: line x infection'},
 dict(paper="paper_4261", skip="yeast population"),
 dict(paper="paper_4262", style="question", prompt="RNA-seq of amygdala and frontal cortex from male Sprague-Dawley rats given methylone or saline during fear extinction training. How many rats per group?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="tissue", n_levels=2)]),

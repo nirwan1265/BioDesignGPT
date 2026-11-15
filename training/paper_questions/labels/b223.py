@@ -38,7 +38,7 @@ dict(paper="paper_5569", style="detailed", prompt="Berry RNA-seq of Ruidu Hongyu
      ask=[P], note="5x3x3"),
 {'paper': 'paper_5570', 'style': 'question', 'prompt': 'RNA-seq of DCIS biopsies before and after neoadjuvant palbociclib vs untreated surgery controls in a small trial. How many women per group?', 'spec': {'organism': 'Homo sapiens', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}, {'name': 'time', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: pre/post window trial'},
 dict(paper="paper_5571", skip="yeast fermentation"),
-dict(paper="paper_5572", skip="cell line"),
+{'paper': 'paper_5572', 'style': 'question', 'prompt': 'ChIP-seq and MNase-seq of FLAG-H2Av in stable Drosophila S2 lines, induced vs uninduced metallothionein promoter. How many biological replicates?', 'spec': {'system': 'cell_culture', 'organism': 'Drosophila melanogaster', 'assays': ['chip_seq', 'mnase_seq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: induction'},
 dict(paper="paper_5573", style="question", prompt="Ileal and colonic digesta 16S of finishing pigs fed normal or protein-restricted diets, pigs allocated in randomized blocks. How many pigs per diet?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet"), dict(name="tissue", n_levels=2)]),
      ask=["design.reps"], note="protein restriction"),

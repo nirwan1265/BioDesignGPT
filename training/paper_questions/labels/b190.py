@@ -39,7 +39,7 @@ dict(paper="paper_4744", style="question", prompt="RNA-seq of blood and tissues 
      spec=dict(organism="Macaca mulatta", assays=["rnaseq"], factors=[dict(name="time")], design=dict(reps=3)),
      ask=[P], note="natural history"),
 dict(paper="paper_4745", skip="transgenic lines"),
-dict(paper="paper_4746", skip="cell line"),
+{'paper': 'paper_4746', 'style': 'question', 'prompt': 'RNA-seq of Drosophila DL1 cells after RNAi depletion of Pumilio, CCR4-NOT subunits or a control dsRNA. How many replicate knockdowns per target?', 'spec': {'system': 'cell_culture', 'organism': 'Drosophila melanogaster', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment'}]}, 'ask': ['design.reps'], 'note': 'round 1: RNAi panel'},
 dict(paper="paper_4747", skip="stem cell heat"),
 dict(paper="paper_4748", skip="circuit mechanism"),
 dict(paper="paper_4749", style="question", prompt="Gut 16S of Wistar rats under chronic unpredictable mild stress given porous-silicon catechin or vehicle, plus unstressed controls, six rats per cage. Is the cage or the rat my unit?",

@@ -11,7 +11,7 @@ dict(paper="paper_4753", style="detailed", prompt="RNA-seq of the basal axillary
 dict(paper="paper_4754", skip="RNAi mechanism"),
 dict(paper="paper_4755", skip="Okazaki processing"),
 dict(paper="paper_4756", skip="population genomics"),
-dict(paper="paper_4757", skip="CRISPR screen"),
+{'paper': 'paper_4757', 'style': 'question', 'prompt': 'In vivo CRISPR screen for sarcoma tumour suppressors: transduced cells transplanted into nude and C57BL/6 mice, guides counted in the tumours. Is each tumour or each mouse a replicate?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['crispr'], 'factors': [{'name': 'genotype', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: tumours within mouse'},
 dict(paper="paper_4758", skip="RNA processing"),
 dict(paper="paper_4759", style="question", prompt="RNA-seq of single in vivo-produced blastocysts sired by Norwegian Red bulls with high vs low non-return rate. Is the bull, the recipient cow, or the embryo my unit?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)]),

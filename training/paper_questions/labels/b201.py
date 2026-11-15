@@ -19,7 +19,7 @@ dict(paper="paper_5011", style="question", prompt="small RNA-seq of cultured bov
      spec=dict(system="cell_culture", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="fraction", n_levels=2)], design=dict(reps=3)),
      ask=["experimental_unit"], note="primary culture"),
 dict(paper="paper_5012", skip="experimental evolution"),
-dict(paper="paper_5013", skip="cell line"),
+{'paper': 'paper_5013', 'style': 'question', 'prompt': 'RNA-seq of a rat lung fibroblast reporter cell line treated with TGF-beta1, IL-13, TNF-alpha or IL-33 vs untreated. How many wells per treatment?', 'spec': {'system': 'cell_culture', 'organism': 'Rattus norvegicus', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 5}]}, 'ask': ['design.reps'], 'note': 'round 1: cytokine panel'},
 dict(paper="paper_5014", style="terse", prompt="Breast muscle RNA-seq of meat-type chickens with fast vs slow growth, 8 per group.",
      spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=8)),
      ask=[P], note="8 v 8"),
