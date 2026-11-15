@@ -39,7 +39,7 @@ dict(paper="paper_4869", style="question", prompt="snRNA-seq of kidney from 12 m
 dict(paper="paper_4870", style="question", prompt="Faecal 16S of Sprague Dawley pups born by cesarean section vs vaginal delivery, given probiotics or not and sensitised to a food allergen. Is the litter or the pup my unit?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="delivery", n_levels=2), dict(name="treatment", n_levels=2)]),
      ask=["experimental_unit"], note="litters"),
-dict(paper="paper_4871", skip="GWAS"),
+{'paper': 'paper_4871', 'style': 'detailed', 'prompt': 'GWAS of gibberellin sensitivity for panicle exsertion in 173 rice accessions, GA3-treated vs untreated, two replicates in a randomized block design.', 'spec': {'system': 'field', 'organism': 'Oryza sativa', 'assays': ['gwas'], 'factors': [{'name': 'genotype', 'n_levels': 173}, {'name': 'treatment', 'n_levels': 2}], 'design': {'reps': 2}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: panel x GA'},
 dict(paper="paper_4872", style="detailed", prompt="Root RNA-seq of hydroponic maize seedlings in a greenhouse under low vs normal nitrate, 3 biological replicates each pooling 6 seedlings.",
      spec=dict(system="greenhouse", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="nitrogen", n_levels=2)], design=dict(reps=3), subsamples_per_unit=6),
      ask=[P], note="pooled seedlings"),

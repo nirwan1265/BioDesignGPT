@@ -5,7 +5,7 @@ dict(paper="paper_3675", style="question", prompt="Faecal 16S of obese Zucker ra
      ask=["design.reps"], note="juice intervention"),
 {'paper': 'paper_3676', 'style': 'question', 'prompt': 'Selection for multicellularity in Chlamydomonas: 10 strains each split into two flasks, one with rotifer predators and one control, followed over many generations with RNA-seq. Is the strain or the flask my replicate?', 'spec': {'system': 'cell_culture', 'organism': 'Chlamydomonas reinhardtii', 'assays': ['rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: strain split across treatments'},
 dict(paper="paper_3677", skip="decay mechanism"),
-dict(paper="paper_3678", skip="BSA mapping"),
+{'paper': 'paper_3678', 'style': 'detailed', 'prompt': 'BSA-seq for plant height in a rice F2:3 population of 638 families from Dongfu 114 x Longyang 11, paddy field rows, 5 plants measured per family.', 'spec': {'system': 'field', 'organism': 'Oryza sativa', 'assays': ['bsa_seq', 'qtl_mapping'], 'design': {'subsamples_per_unit': 5}, 'population': {'mating': 'biparental'}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: families, 5 plants'},
 dict(paper="paper_3679", skip="paramutation"),
 dict(paper="paper_3680", skip="gene function"),
 dict(paper="paper_3681", style="question", prompt="WGBS of loin muscle from Brangus calves whose dams were fed different supplements during gestation. Is the dam or the calf my unit, and how many per diet?",
@@ -39,6 +39,6 @@ dict(paper="paper_3695", style="detailed", prompt="Leaf RNA-seq of in vitro Cabe
      ask=[P], note="3x3x3"),
 dict(paper="paper_3696", skip="cell line miRNA"),
 dict(paper="paper_3697", skip="cancer mechanism"),
-dict(paper="paper_3698", skip="microbiome GWAS"),
+{'paper': 'paper_3698', 'style': 'detailed', 'prompt': 'Host genetics of the chicken caecal microbiome: 600 broiler and Kadaknath birds from 60 farms, 16S amplicon sequencing and genotyping, 5 or 10 birds per farm.', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['gwas', 'amplicon'], 'factors': [{'name': 'breed', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: birds within farms'},
 dict(paper="paper_3699", skip="decay mechanism"),
 ]

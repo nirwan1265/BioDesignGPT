@@ -7,7 +7,7 @@ dict(paper="paper_4677", style="question", prompt="RNA-seq of fetal hearts from 
      ask=["experimental_unit"], note="maternal stress"),
 dict(paper="paper_4678", skip="human HSPC"),
 dict(paper="paper_4679", skip="RISC loading"),
-dict(paper="paper_4680", skip="F2 GWAS"),
+{'paper': 'paper_4680', 'style': 'question', 'prompt': 'GWAS of growth traits in a Gushi x Anka F2 chicken population, body weight recorded every two weeks to 12 weeks. Should I analyze each week separately or fit a growth curve?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['gwas'], 'population': {'mating': 'biparental'}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: repeated weights'},
 dict(paper="paper_4681", style="question", prompt="Rumen-wall metatranscriptomics of cannulated dairy cows sampled before and during a subacute ruminal acidosis challenge. How many cows do I need?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="paired challenge"),

@@ -38,7 +38,7 @@ dict(paper="paper_4770", style="terse", prompt="Leaf RNA-seq of four-week-old Ai
      spec=dict(system="greenhouse", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="water", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
 dict(paper="paper_4771", skip="GRF mechanism"),
-dict(paper="paper_4772", skip="transgenic"),
+{'paper': 'paper_4772', 'style': 'question', 'prompt': 'RNA-seq of leaves from MdDof54 RNAi apple plants and non-transgenic GL-3 plants, well watered vs long-term drought. How many plants per line and treatment?', 'spec': {'system': 'greenhouse', 'organism': 'Malus domestica', 'assays': ['rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: 2 x 2'},
 dict(paper="paper_4773", skip="embryo accessibility"),
 dict(paper="paper_4774", skip="method"),
 ]

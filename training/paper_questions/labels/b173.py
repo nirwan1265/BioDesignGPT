@@ -7,7 +7,7 @@ dict(paper="paper_4301", style="question", prompt="Faecal 16S and medial prefron
 dict(paper="paper_4302", style="detailed", prompt="RNA-seq of batch cultures of wild-type and icl Chlamydomonas on several acetate concentrations, sampled over time, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Chlamydomonas reinhardtii", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment"), dict(name="time")], design=dict(reps=3)),
      ask=[P], note="acetate series"),
-dict(paper="paper_4303", skip="heat GWAS"),
+{'paper': 'paper_4303', 'style': 'question', 'prompt': 'Heat tolerance at anthesis GWAS in 173 rice accessions with heat-tolerant and sensitive checks, field plots in a high-temperature season. How many replicate plots?', 'spec': {'system': 'field', 'organism': 'Oryza sativa', 'assays': ['gwas'], 'factors': [{'name': 'genotype', 'n_levels': 173}]}, 'ask': ['design.reps'], 'note': 'round 1: panel'},
 dict(paper="paper_4304", style="detailed", prompt="RNA-seq of leaves and roots of waxy maize inbreds D35 and N6110, which differ in twin-shoot phenotype, at the seedling stage in an incubator, 3 replicates.",
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="tissue", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),

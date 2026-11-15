@@ -42,5 +42,5 @@ dict(paper="paper_3971", style="terse", prompt="WGBS of knee joints from 7-week-
      ask=[P], note="6 v 6"),
 dict(paper="paper_3972", skip="cancer mechanism"),
 dict(paper="paper_3973", skip="method"),
-dict(paper="paper_3974", skip="mutant mapping"),
+{'paper': 'paper_3974', 'style': 'question', 'prompt': 'Mapping-by-sequencing of an EMS albino Arabidopsis mutant: RNA-seq of pooled albino F2 seedlings from a backcross to the parent. How many albino seedlings per pool?', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['bsa_seq', 'rnaseq'], 'population': {'mating': 'backcross'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: mutant pool'},
 ]

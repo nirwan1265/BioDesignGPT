@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_2075", style="question", prompt="small RNA-seq of follicular fluid extracellular vesicles from postpartum Holstein cows in metabolically divergent groups plus heifers. How many cows per group?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="phenotype_group", n_levels=3)]),
      ask=["design.reps"], note="observational groups"),
-dict(paper="paper_2076", skip="extreme QTL mapping"),
+{'paper': 'paper_2076', 'style': 'question', 'prompt': 'Extreme QTL mapping of zinc tolerance in Drosophila: a large DSPR-derived base population selected on zinc vs control food, then pooled sequencing. How many replicate selected populations?', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['pool_seq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: X-QTL replicates'},
 dict(paper="paper_2077", style="question", prompt="Methylome and RNA-seq of 150 Swedish Arabidopsis accessions grown in growth chambers at 10 C and 16 C, 3 plants pooled per accession. How many pools per accession?",
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["methylation", "rnaseq"], factors=[dict(name="genotype", n_levels=150), dict(name="temperature", n_levels=2)], subsamples_per_unit=3),
      ask=["design.reps"], note="accession panel"),

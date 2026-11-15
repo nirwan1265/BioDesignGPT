@@ -7,7 +7,7 @@ dict(paper="paper_2276", style="terse", prompt="Leaf RNA-seq of barley Bowman an
 dict(paper="paper_2277", style="question", prompt="Dual RNA-seq of field-grown B73 kernels inoculated with Aspergillus flavus vs mock and sampled from 0 to 72 h, repeated over two years. How many ears per time point?",
      spec=dict(system="field", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="time")]),
      ask=["design.reps"], note="time course x years"),
-dict(paper="paper_2278", skip="bulk segregant mapping"),
+{'paper': 'paper_2278', 'style': 'question', 'prompt': 'BSA-seq for Fusarium and Gibberella ear rot resistance in maize F2 populations, ears inoculated in the field, resistant and susceptible bulks. How many plants per bulk?', 'spec': {'system': 'field', 'organism': 'Zea mays', 'assays': ['bsa_seq'], 'population': {'mating': 'biparental'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: BSA bulks'},
 dict(paper="paper_2279", style="terse", prompt="Flag leaf RNA-seq of an older and a modern Canadian wheat variety under drought vs well-watered in the greenhouse, 3 biological replicates.",
      spec=dict(system="greenhouse", organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="water", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),

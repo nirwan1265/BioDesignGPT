@@ -50,5 +50,5 @@ dict(paper="paper_0770", style="detailed", prompt="Dietary muramidase in 900 Loh
 dict(paper="paper_0771", skip="sea urchin methylation (not the organism)"),
 dict(paper="paper_0772", skip="virus RNA biology in cell lines"),
 dict(paper="paper_0773", skip="natural population sampling"),
-dict(paper="paper_0774", skip="mutant functional study"),
+{'paper': 'paper_0774', 'style': 'question', 'prompt': 'ChIP-seq in maize anthers of a male-sterile mutant and its wild-type sibling to find transcription factor targets. Is a sibling a better control than B73?', 'spec': {'system': 'field', 'organism': 'Zea mays', 'assays': ['chip_seq'], 'factors': [{'name': 'genotype', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: sibling control'},
 ]

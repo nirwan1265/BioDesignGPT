@@ -34,5 +34,5 @@ dict(paper="paper_5496", skip="lncRNA function"),
 dict(paper="paper_5498", style="detailed", prompt="Leaf RNA-seq of 20-day-old greenhouse rice, susceptible Diantun 502 and resistant Diantun 506, sprayed with Magnaporthe oryzae conidia or water, 3 biological replicates.",
      spec=dict(system="greenhouse", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection")], design=dict(reps=3)),
      ask=[P], note="blast"),
-dict(paper="paper_5499", skip="mutant"),
+{'paper': 'paper_5499', 'style': 'question', 'prompt': 'RNA-seq of roots from 4-day-old sorghum seedlings of an EMS bri1 mutant vs BTx623, on half MS plates with or without 150 mM NaCl. How many plates per group?', 'spec': {'system': 'growth_chamber', 'organism': 'Sorghum bicolor', 'assays': ['rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: 2 x 2'},
 ]

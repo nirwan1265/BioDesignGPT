@@ -11,7 +11,7 @@ dict(paper="paper_0452", style="question", prompt="For sequential nutrient stres
      ask=[P], note="-Fe/-Pi sequence x timepoints, 4 single-plant reps"),
 dict(paper="paper_0453", skip="methods (6mA mapping)"),
 dict(paper="paper_0454", skip="mutagenesis population characterisation"),
-dict(paper="paper_0455", skip="mutant identification"),
+{'paper': 'paper_0455', 'style': 'question', 'prompt': 'Whole-genome sequencing of an EMS sorghum mutant with altered carbon isotope ratio and its BTx623 parent to find the causal mutation. Should I sequence a bulk of mutant-phenotype F2 plants instead?', 'spec': {'system': 'field', 'organism': 'Sorghum bicolor', 'assays': ['wgs']}, 'ask': ['population.size'], 'note': 'round 1: mutant mapping'},
 dict(paper="paper_0456", skip="breed SSR survey"),
 dict(paper="paper_0457", skip="transposon screen across strains"),
 dict(paper="paper_0458", style="detailed", prompt="Mouse primary hepatocytes transduced with Ad-shPer1 or Ad-GFP, then switched to complete or nutrient-restricted medium for 24 h; RNA-seq plus scATAC of livers from hepatocyte Per1 knockdown mice. How many hepatocyte isolations per condition?",

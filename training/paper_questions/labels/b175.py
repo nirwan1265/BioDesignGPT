@@ -44,5 +44,5 @@ dict(paper="paper_4372", style="detailed", prompt="GWAS of drought tolerance in 
 dict(paper="paper_4373", style="question", prompt="WGBS of blood from Nellore and Angus bullocks under heat stress, 25 per breed of which only some will be sequenced. How many per breed should I sequence?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="genotype", n_levels=2)]),
      ask=["design.reps"], note="breed contrast"),
-dict(paper="paper_4374", skip="knockout"),
+{'paper': 'paper_4374', 'style': 'detailed', 'prompt': 'RNA-seq of leaves from in vitro potato DM1 plantlets: pds CRISPR knockout lines vs wild type, 3 replicates.', 'spec': {'system': 'growth_chamber', 'organism': 'Solanum tuberosum', 'assays': ['rnaseq', 'crispr'], 'factors': [{'name': 'genotype', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: KO vs WT'},
 ]

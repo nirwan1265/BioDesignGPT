@@ -36,7 +36,7 @@ dict(paper="paper_5393", style="question", prompt="Urinary exosome small RNA-seq
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),
      ask=["design.reps"], note="AKI biomarkers"),
 dict(paper="paper_5394", skip="developmental series"),
-dict(paper="paper_5395", skip="knockout"),
+{'paper': 'paper_5395', 'style': 'question', 'prompt': 'ChIP-seq and HiChIP of juvenile mouse testes from Zbtb16 null mice vs wild type at postnatal day 6. Are testes from one pup one replicate?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['chip_seq', 'hic'], 'factors': [{'name': 'genotype', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: pooled testes'},
 dict(paper="paper_5396", skip="cell line"),
 dict(paper="paper_5397", skip="knockout"),
 dict(paper="paper_5398", skip="mutants"),

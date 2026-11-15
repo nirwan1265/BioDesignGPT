@@ -16,7 +16,7 @@ dict(paper="paper_5455", style="detailed", prompt="Leaf RNA-seq of greenhouse wh
      ask=[P], note="infection time course"),
 dict(paper="paper_5456", skip="method"),
 dict(paper="paper_5457", skip="knockout"),
-dict(paper="paper_5458", skip="knockout"),
+{'paper': 'paper_5458', 'style': 'question', 'prompt': 'Hippocampal RNA-seq of brain-specific aromatase knockout mice vs floxed littermates, males and females, young and middle-aged. How many mice per group?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'sex', 'n_levels': 2}, {'name': 'age', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: 2 x 2 x 2'},
 dict(paper="paper_5459", skip="cell model"),
 dict(paper="paper_5460", skip="mutant"),
 dict(paper="paper_5461", style="question", prompt="Faecal 16S of three-month-old calves fed a basal diet or diets supplemented with zinc amino acid complexes. How many calves per group?",

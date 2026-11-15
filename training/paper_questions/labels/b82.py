@@ -4,7 +4,7 @@ dict(paper="paper_2025", style="question", prompt="scATAC-seq of periaqueductal 
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["scatac_seq"], factors=[dict(name="treatment", n_levels=3)]),
      ask=["design.reps"], note="3 treatments"),
 dict(paper="paper_2026", skip="experimental evolution"),
-dict(paper="paper_2027", skip="bulk segregant mapping"),
+{'paper': 'paper_2027', 'style': 'question', 'prompt': 'QTL-seq and linkage mapping of seedling cold tolerance in a rice F2 from Dongnong 430 x Dongfu104, seedlings held at 9 C. How many plants per bulk?', 'spec': {'system': 'growth_chamber', 'organism': 'Oryza sativa', 'assays': ['bsa_seq', 'qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: bulks'},
 dict(paper="paper_2028", style="question", prompt="Single-embryo RNA-seq of Drosophila embryos at 0-1, 1-2 and 2-3 h after fertilization, collected from 4 egg-laying cages with samples balanced across processing batches. Is the cage or the embryo my replicate?",
      spec=dict(system="drosophila", organism="Drosophila melanogaster", assays=["rnaseq"], factors=[dict(name="time", n_levels=3)]),
      ask=["experimental_unit"], note="embryos within cages"),

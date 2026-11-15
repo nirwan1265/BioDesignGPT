@@ -36,7 +36,7 @@ dict(paper="paper_4495", skip="injury mechanism"),
 dict(paper="paper_4496", style="question", prompt="Placental RNA-seq from 10 rhesus macaque females given a daily THC edible vs placebo before and during pregnancy. Is 10 animals enough?",
      spec=dict(organism="Macaca mulatta", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)]),
      ask=[P], note="prenatal THC"),
-dict(paper="paper_4497", skip="overexpression"),
+{'paper': 'paper_4497', 'style': 'detailed', 'prompt': 'RNA-seq of Nicotiana benthamiana leaves agroinfiltrated with banana MaWRKY45 vs empty vector, 3 plants each.', 'spec': {'system': 'growth_chamber', 'organism': 'Nicotiana benthamiana', 'assays': ['rnaseq', 'overexpression'], 'factors': [{'name': 'genotype', 'n_levels': 2}], 'design': {'reps': 3}, 'experimental_unit': 'plant'}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: transient OE'},
 dict(paper="paper_4498", skip="neuron mechanism"),
 dict(paper="paper_4499", skip="silencing mechanism"),
 ]
