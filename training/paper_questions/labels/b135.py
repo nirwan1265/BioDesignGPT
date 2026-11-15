@@ -10,7 +10,7 @@ dict(paper="paper_3354", style="question", prompt="Root-hair RNA-seq of Medicago
      spec=dict(system="growth_chamber", organism="Medicago truncatula", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=1)),
      ask=[P], note="technical reps only"),
 dict(paper="paper_3355", skip="extracellular vesicles"),
-dict(paper="paper_3356", skip="QTL mapping"),
+{'paper': 'paper_3356', 'style': 'question', 'prompt': 'Submergence tolerance QTL in 132 backcross recombinant inbred lines from Dongxiang wild rice, 30 seeds per bottle submerged for 96 h. How many bottles per line?', 'spec': {'organism': 'Oryza sativa', 'assays': ['qtl_mapping'], 'factors': [{'name': 'genotype', 'n_levels': 132}], 'population': {'mating': 'backcross'}, 'subsamples_per_unit': 30}, 'ask': ['design.reps'], 'note': 'round 1: seeds within bottle'},
 dict(paper="paper_3357", style="detailed", prompt="Leaf RNA-seq of several sorghum accessions in an Arizona field under well-watered, pre-flowering and post-flowering drought, 3 biological replicates.",
      spec=dict(system="field", organism="Sorghum bicolor", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="water", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="genotype x drought"),

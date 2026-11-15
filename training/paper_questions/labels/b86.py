@@ -52,5 +52,5 @@ dict(paper="paper_2147", skip="population common garden"),
 dict(paper="paper_2148", style="detailed", prompt="3' Tag-seq of heads and guts from VAPP58S ALS-model vs control flies at several ages, with or without neuronal Fos knockdown, 4 biological replicates.",
      spec=dict(system="drosophila", organism="Drosophila melanogaster", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="age"), dict(name="tissue", n_levels=2)], design=dict(reps=4)),
      ask=[P], note="genotype x age x tissue"),
-dict(paper="paper_2149", skip="mutant mapping"),
+{'paper': 'paper_2149', 'style': 'question', 'prompt': 'Mapping EMS mutants of C. elegans resistant to DTT by whole-genome sequencing of backcrossed resistant progeny pools. How many resistant F2 animals per pool?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['bsa_seq'], 'population': {'mating': 'backcross'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: mutant pools'},
 ]

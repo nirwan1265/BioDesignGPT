@@ -34,7 +34,7 @@ dict(paper="paper_0912", style="detailed", prompt="Barley rhizosphere under elev
 dict(paper="paper_0913", style="casual", prompt="sorghum RTx430 in field plots, drought (no irrigation) vs drip irrigated control, roots at 8 weeks for 16S to see Streptomyces enrichment. how many plots per treatment?",
      spec=dict(system="field", organism="Sorghum bicolor", factors=[dict(name="water", n_levels=2)]),
      ask=["design.reps"], gaps=["assay:amplicon_16s"], note="drought vs control plots"),
-dict(paper="paper_0914", skip="F2 bulk mapping of resistance"),
+{'paper': 'paper_0914', 'style': 'question', 'prompt': 'Late blight resistance mapping in tomato: F2 from susceptible Castlerock x resistant Solanum habrochaites LA1777, seedlings inoculated in a greenhouse, resistant and susceptible bulks resequenced. How many F2 plants per bulk?', 'spec': {'system': 'greenhouse', 'organism': 'Solanum lycopersicum', 'assays': ['bsa_seq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}], 'population': {'mating': 'biparental'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: F2 bulks'},
 dict(paper="paper_0915", style="typo", prompt="thai rice KDML105 seedlings in hydroponics, 75 mM NaCl vs normal for 2 days, leaf rna-seq 3 reps. want a co-expression network, enough samples?",
      spec=dict(organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="salt", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="salt vs control x 3"),

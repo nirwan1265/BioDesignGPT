@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_5550", skip="knockout"),
 dict(paper="paper_5551", skip="chimera immunology"),
 dict(paper="paper_5552", skip="reprogramming"),
-dict(paper="paper_5553", skip="variant mapping"),
+{'paper': 'paper_5553', 'style': 'question', 'prompt': 'GWAS of white spotting in 1,126 whole-genome sequenced dairy cattle (Holstein-Friesian, Jersey and crossbreds), with amplicon checks of candidate variants. Should breed be a covariate?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['gwas', 'wgs']}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: multi-breed GWAS'},
 dict(paper="paper_5554", skip="immune mechanism"),
 dict(paper="paper_5555", style="question", prompt="RNA-seq of oropharyngeal mucosa from SIV-infected rhesus macaques given long-term THC vs vehicle, plus uninfected controls. How many macaques per group?",
      spec=dict(organism="Macaca mulatta", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)]),

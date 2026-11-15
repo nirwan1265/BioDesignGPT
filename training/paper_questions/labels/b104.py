@@ -32,7 +32,7 @@ dict(paper="paper_2588", style="question", prompt="Whole-body RNA-seq of adult m
      ask=["design.reps"], note="pools"),
 dict(paper="paper_2589", skip="cell line mechanism"),
 dict(paper="paper_2590", skip="eccDNA survey"),
-dict(paper="paper_2591", skip="extreme QTL mapping"),
+{'paper': 'paper_2591', 'style': 'question', 'prompt': 'Extreme-QTL mapping of malathion resistance in Drosophila: an outbred population from 663 DSPR RILs, flies exposed to malathion with survivors and unexposed controls pooled for sequencing. How many replicate selections?', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['qtl_mapping', 'pool_seq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: X-QTL selection replicates'},
 dict(paper="paper_2592", skip="GWAS of public data"),
 dict(paper="paper_2593", skip="neural stem cell mechanism"),
 dict(paper="paper_2594", skip="cancer mechanism"),

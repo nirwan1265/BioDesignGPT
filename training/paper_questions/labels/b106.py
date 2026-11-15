@@ -14,7 +14,7 @@ dict(paper="paper_2629", style="question", prompt="Embryo RNA-seq from four hens
 dict(paper="paper_2630", style="question", prompt="Colon biopsy RNA-seq from rhesus macaques before, during and after a broad-spectrum antibiotic course. How many animals do I need?",
      spec=dict(organism="Macaca mulatta", assays=["rnaseq"], factors=[dict(name="time", n_levels=3)]),
      ask=["design.reps"], note="repeated biopsies"),
-dict(paper="paper_2631", skip="population GWAS"),
+{'paper': 'paper_2631', 'style': 'question', 'prompt': 'Host-microbiome GWAS in outbred heterogeneous stock rats raised at three sites, faecal 16S plus low-coverage genome sequencing. Should site be a covariate?', 'spec': {'system': 'mouse', 'organism': 'Rattus norvegicus', 'assays': ['gwas', 'amplicon'], 'factors': [{'name': 'location', 'n_levels': 3}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: multi-site HS rats'},
 dict(paper="paper_2632", skip="patient exosome survey"),
 dict(paper="paper_2633", style="question", prompt="Liver small RNA-seq of Angus steers finished on grass vs grain, 3 per group, slaughtered at 21 and 14 months respectively. Is 3 enough, and is age confounded with diet?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="diet", n_levels=2)], design=dict(reps=3)),

@@ -10,7 +10,7 @@ dict(paper="paper_2228", style="question", prompt="MeRIP-seq of bone from ovarie
      ask=[P], note="4 v 4"),
 dict(paper="paper_2229", skip="damage mapping method"),
 dict(paper="paper_2230", skip="unclear groups"),
-dict(paper="paper_2231", skip="bulk segregant mapping"),
+{'paper': 'paper_2231', 'style': 'question', 'prompt': 'Bulked segregant mapping of tuber eye depth in a tetraploid potato F1 population from Jinshu 16, grown in the field over three seasons, deep- and shallow-eyed clones pooled. How many clones per bulk?', 'spec': {'system': 'field', 'organism': 'Solanum tuberosum', 'assays': ['bsa_seq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}], 'design': {'seasons': 3}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: F1 bulks'},
 dict(paper="paper_2232", skip="mechanism, mixed assays"),
 dict(paper="paper_2233", skip="mechanism, mixed assays"),
 dict(paper="paper_2234", skip="nucleosome method"),

@@ -9,7 +9,7 @@ dict(paper="paper_1377", style="detailed", prompt="Pregnant Sprague-Dawley rats 
      ask=["design.reps", "experimental_unit"], gaps=["blocking:litter", "assay:amplicon_16s", "repeated_measures"], note="dam is the unit for prenatal diet"),
 dict(paper="paper_1378", skip="lineage barcoding"),
 dict(paper="paper_1379", skip="breed SNP comparison"),
-dict(paper="paper_1380", skip="resistance gene mapping"),
+{'paper': 'paper_1380', 'style': 'question', 'prompt': 'Mapping the tomato leaf mould resistance gene Cf-16: parents, F1, F2 and BC1 from Ontario7816 x Moneymaker in a greenhouse, inoculated with Cladosporium fulvum at the 5-6 leaf stage. How many F2 plants?', 'spec': {'system': 'greenhouse', 'organism': 'Solanum lycopersicum', 'assays': ['qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: F2/BC1 segregation'},
 dict(paper="paper_1381", style="detailed", prompt="Nine crossbred gilts from two litters, blood taken 24 h before and 24 h after weaning; PBMC RNA-seq on all and RRBS on the high- and low-stress extremes chosen from lesion and cortisol scores. Enough pigs?",
      spec=dict(organism="Sus scrofa", assays=["rnaseq", "methylation"], factors=[dict(name="time", n_levels=2)], design=dict(reps=9)),
      ask=[P], gaps=["design:paired", "blocking:litter", "factor:extreme_phenotype_group"], note="before/after within pig"),

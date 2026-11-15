@@ -40,7 +40,7 @@ dict(paper="paper_4020", style="detailed", prompt="RNA-seq of wild-type and BMP-
      spec=dict(organism="Caenorhabditis elegans", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),
 dict(paper="paper_4021", skip="founder cells"),
-dict(paper="paper_4022", skip="fine mapping"),
+{'paper': 'paper_4022', 'style': 'question', 'prompt': 'Fine-mapping milk oligosaccharide QTL in Holstein-Friesian cows from one research herd, milk sampled in three batches of 40 cows a year, milk-cell and blood RNA-seq for eQTL. Should batch be in the model?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['eqtl', 'rnaseq']}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: sampling batches'},
 dict(paper="paper_4023", skip="patient metagenomics"),
 dict(paper="paper_4024", style="detailed", prompt="RNA-seq of backfat and muscle from 10-month-old Dingyuan pigs with high vs low backfat and high vs low intramuscular fat, 3 pigs per group.",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=4)], design=dict(reps=3)),

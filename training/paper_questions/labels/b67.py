@@ -11,7 +11,7 @@ dict(paper="paper_1655", style="terse", prompt="H3K4me3 ChIP-seq of C. elegans e
      spec=dict(organism="Caenorhabditis elegans", assays=["chip_seq"], factors=[dict(name="genotype", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
 dict(paper="paper_1656", skip="genotyping method"),
-dict(paper="paper_1657", skip="causal mutation mapping"),
+{'paper': 'paper_1657', 'style': 'question', 'prompt': 'MutMap of several EMS rice mutants in Huanghuazhan: each mutant backcrossed to wild type, segregation scored in 160 F2 plants, mutant-phenotype plants pooled in equal DNA amounts. How many plants per pool?', 'spec': {'organism': 'Oryza sativa', 'assays': ['bsa_seq'], 'population': {'mating': 'backcross'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: MutMap pools'},
 dict(paper="paper_1658", style="question", prompt="I did WGBS of Micro-Tom fruit at immature green, mature green, breaker and red ripe from control vs pCPA (auxin inhibitor)-treated plants, one library per stage and treatment. Do I need replicate libraries?",
      spec=dict(system="greenhouse", organism="Solanum lycopersicum", assays=["methylation"], factors=[dict(name="treatment", n_levels=2), dict(name="stage", n_levels=4)]),
      ask=["design.reps"], note="unreplicated 2 x 4"),

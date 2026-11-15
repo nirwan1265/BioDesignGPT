@@ -37,7 +37,7 @@ dict(paper="paper_0688", style="question", prompt="How many replicates for NRDE-
 dict(paper="paper_0689", style="detailed", prompt="Maize brassinosteroid-deficient brd1 mutant vs wild-type siblings grown side by side in the greenhouse, shoot meristem-enriched tissue for RNA-seq, three replicates each pooling 12 plants.",
      spec=dict(system="greenhouse", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3), subsamples_per_unit=12),
      ask=[P], note="2 x 3 x 12 pooled"),
-dict(paper="paper_0690", skip="natural variant mapping"),
+{'paper': 'paper_0690', 'style': 'question', 'prompt': 'Mapping ozone sensitivity in Col-0 x Cvi-0 Arabidopsis RILs in growth chambers, five plants per pot, three-week-old plants exposed to ozone. How many pots per RIL?', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['qtl_mapping'], 'population': {'mating': 'ril'}}, 'ask': ['design.reps'], 'note': 'round 1: RIL mapping'},
 dict(paper="paper_0691", style="detailed", prompt="Photoprotection QTL in maize: 320 RILs per year in an alpha-lattice with 2 replicates of 40 blocks (8 plots each), two years, chlorophyll fluorescence on 3 plants per plot.",
      spec=dict(system="field", organism="Zea mays", assays=["qtl_mapping"], factors=[dict(name="genotype", n_levels=320)], design=dict(reps=2, seasons=2), subsamples_per_unit=3, experimental_unit="plot", primary_outcome=dict(name="photosynthesis")),
      ask=[P], gaps=["assay:targeted_capture", "design:alpha_lattice"], note="320 RILs x 2 reps x 2 years x 3 plants"),

@@ -17,7 +17,7 @@ dict(paper="paper_2607", style="detailed", prompt="Leaf RNA-seq of potted Cabern
      spec=dict(system="greenhouse", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="water", n_levels=2), dict(name="temperature", n_levels=2), dict(name="time")], design=dict(reps=5)),
      ask=[P], note="2x2 RCBD x time"),
 dict(paper="paper_2608", skip="cell line mechanism"),
-dict(paper="paper_2609", skip="QTL population"),
+{'paper': 'paper_2609', 'style': 'casual', 'prompt': 'mapping a short internode soybean mutant, F2:3 families from rin1 x Heihe43, 20 seeds of each F2 plant sown as one row in the field. how many families do i need?', 'spec': {'system': 'field', 'organism': 'Glycine max', 'assays': ['qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: F2:3 families'},
 dict(paper="paper_2610", skip="developmental survey"),
 dict(paper="paper_2611", skip="meta-analysis"),
 dict(paper="paper_2612", skip="pituitary atlas"),

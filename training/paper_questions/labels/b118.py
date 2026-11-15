@@ -12,7 +12,7 @@ dict(paper="paper_2929", style="question", prompt="16S of rumen fluid and faeces
 dict(paper="paper_2930", skip="single-oocyte survey"),
 dict(paper="paper_2931", skip="proteome focus"),
 dict(paper="paper_2932", skip="CRISPR screen"),
-dict(paper="paper_2933", skip="natural variant mapping"),
+{'paper': 'paper_2933', 'style': 'detailed', 'prompt': 'Petal size GWAS in 272 Arabidopsis accessions in a growth chamber, 10 petals from the first open flowers of 3 biological replicates per accession.', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['gwas'], 'factors': [{'name': 'genotype', 'n_levels': 272}], 'design': {'reps': 3}, 'subsamples_per_unit': 10}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: petals within plant'},
 dict(paper="paper_2934", skip="mechanism, mixed genotypes"),
 dict(paper="paper_2935", skip="modifier screen"),
 dict(paper="paper_2936", style="detailed", prompt="RNA-seq and small RNA-seq of N. benthamiana leaves in growth chambers at the acute symptomatic stage and after recovery from tomato ringspot virus vs mock, 3 replicates of 3 pooled plants.",

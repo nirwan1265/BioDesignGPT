@@ -4,7 +4,7 @@ dict(paper="paper_3800", style="terse", prompt="small RNA-seq of central amygdal
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="3 v 3"),
 dict(paper="paper_3801", skip="cloning mechanism"),
-dict(paper="paper_3802", skip="RIL metabolite QTL"),
+{'paper': 'paper_3802', 'style': 'question', 'prompt': 'Metabolite QTL in 199 C. elegans RILs from N2 x CB4856, about 2000 synchronized eggs per strain seeded on plates and grown to young adults for profiling. How many replicate plates per RIL?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['qtl_mapping', 'metabolomics'], 'factors': [{'name': 'genotype', 'n_levels': 199}], 'population': {'mating': 'ril'}}, 'ask': ['design.reps'], 'note': 'round 1: pooled worms per plate'},
 dict(paper="paper_3803", skip="drug profiling"),
 dict(paper="paper_3804", skip="chromatin domains"),
 dict(paper="paper_3805", style="question", prompt="WGBS and RNA-seq of liver from male and female offspring of Sprague-Dawley dams fed an obesogenic vs control diet, at weaning and in adulthood. Is the dam my unit?",

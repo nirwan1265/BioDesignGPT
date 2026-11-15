@@ -22,7 +22,7 @@ dict(paper="paper_5685", style="detailed", prompt="Root RNA-seq of wheat seedlin
      spec=dict(organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=2), dict(name="phosphorus", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x2x3"),
 dict(paper="paper_5686", skip="knockout"),
-dict(paper="paper_5687", skip="genetic mapping"),
+{'paper': 'paper_5687', 'style': 'question', 'prompt': 'Bleomycin lung injury in Diversity Outbred mice and the 8 founder strains, lungs phenotyped and RNA-sequenced at 3 or 10 weeks after exposure for QTL and eQTL mapping. How many DO mice per time point?', 'spec': {'system': 'mouse', 'organism': 'Mus musculus', 'assays': ['qtl_mapping', 'eqtl', 'rnaseq'], 'factors': [{'name': 'time', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: DO mapping'},
 dict(paper="paper_5688", skip="cell lines"),
 dict(paper="paper_5689", skip="developmental atlas"),
 dict(paper="paper_5690", skip="vaccine B cells"),

@@ -31,7 +31,7 @@ dict(paper="paper_2215", style="question", prompt="35 female crossbred piglets g
      spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet", n_levels=2)]),
      ask=[P], note="power from behaviour"),
 dict(paper="paper_2216", skip="perturb-seq method"),
-dict(paper="paper_2217", skip="genetic mapping panel"),
+{'paper': 'paper_2217', 'style': 'question', 'prompt': 'Lifespan and mitochondrial stress QTL in C. elegans RILs from N2 x Hawaii, worms in a microfluidic device with or without 15 ug/mL doxycycline, RNA-seq of each RIL. How many worms per RIL and condition?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['qtl_mapping', 'rnaseq'], 'factors': [{'name': 'treatment', 'n_levels': 2}], 'population': {'mating': 'ril'}}, 'ask': ['design.reps'], 'note': 'round 1: RIL x drug'},
 dict(paper="paper_2218", style="terse", prompt="RNA-seq of A549 and BEAS-2B cells treated 72 h with an AP-1 inhibitor vs DMSO, 6 biological replicates.",
      spec=dict(system="cell_culture", organism="Homo sapiens", assays=["rnaseq"], factors=[dict(name="cell_line", n_levels=2), dict(name="treatment", n_levels=2)], design=dict(reps=6)),
      ask=[P], note="2x2x6"),

@@ -20,7 +20,7 @@ dict(paper="paper_2106", style="terse", prompt="WGBS and RNA-seq of leaves from 
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["methylation", "rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 3"),
 dict(paper="paper_2107", skip="long-term vineyard QTL"),
-dict(paper="paper_2108", skip="introgression genotyping"),
+{'paper': 'paper_2108', 'style': 'question', 'prompt': 'Fusarium head blight resistance of wheat lines carrying a Triticum timopheevii 3G segment vs Paragon, point-inoculated spikes in a glasshouse, plants in 1 L pots. How many plants per line?', 'spec': {'system': 'greenhouse', 'organism': 'Triticum aestivum', 'factors': [{'name': 'genotype'}]}, 'ask': ['design.reps'], 'note': 'round 1: introgression lines vs parent'},
 dict(paper="paper_2109", skip="sequencing method"),
 dict(paper="paper_2110", skip="viral gene function"),
 dict(paper="paper_2111", style="question", prompt="RNA-seq of four pork cuts sampled from the same 6 pigs. Is that enough to compare cuts?",

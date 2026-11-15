@@ -31,7 +31,7 @@ dict(paper="paper_3090", style="question", prompt="RNA-seq of brain regions, pit
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="sex", n_levels=2), dict(name="tissue")]),
      ask=["experimental_unit"], note="prenatal exposure"),
 dict(paper="paper_3091", skip="centromere mechanism"),
-dict(paper="paper_3092", skip="CNV association"),
+{'paper': 'paper_3092', 'style': 'detailed', 'prompt': 'A copy-number variant and mastitis resistance in Holstein-Friesian cattle: 266 resequenced bulls plus liver RNA-seq of 178 cows about 14 days after calving for eQTL.', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs', 'eqtl', 'rnaseq']}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: CNV association + eQTL'},
 dict(paper="paper_3093", style="question", prompt="Faecal 16S of male Wistar rats in individual cages randomly assigned to magnesium-deficient vs adequate diets. How many rats per diet?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet")]),
      ask=["design.reps"], note="individually caged"),

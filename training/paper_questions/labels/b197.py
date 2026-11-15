@@ -30,7 +30,7 @@ dict(paper="paper_4917", style="question", prompt="RNA-seq of remote and infarct
      ask=["design.reps"], note="CKD + MI"),
 dict(paper="paper_4918", skip="cell line"),
 dict(paper="paper_4919", skip="silencing mechanism"),
-dict(paper="paper_4920", skip="GWAS"),
+{'paper': 'paper_4920', 'style': 'detailed', 'prompt': 'Breast muscle fatty acid GWAS in a Gushi x Anka F2 chicken population, plus muscle RNA-seq at several ages with three birds per age.', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['gwas', 'rnaseq'], 'factors': [{'name': 'age'}], 'design': {'reps': 3}, 'population': {'mating': 'biparental'}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: F2 GWAS + expression series'},
 dict(paper="paper_4921", style="question", prompt="Rumen and faecal 16S of lactating Holstein cows ranked for high vs low nitrogen use efficiency. How many cows per group?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="phenotype_group", n_levels=2), dict(name="tissue", n_levels=2)]),
      ask=["design.reps"], note="extremes"),

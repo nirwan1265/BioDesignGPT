@@ -34,5 +34,5 @@ dict(paper="paper_5020", skip="transgenic"),
 dict(paper="paper_5021", skip="database"),
 dict(paper="paper_5022", skip="mutant"),
 dict(paper="paper_5023", skip="transgenic"),
-dict(paper="paper_5024", skip="trait mapping"),
+{'paper': 'paper_5024', 'style': 'question', 'prompt': 'Slick coat mapping in cattle: GWAS of slick vs non-slick tropical crossbred cattle, then resequencing of slick bulls. How many slick animals do I need?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['gwas', 'wgs'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: case-control GWAS'},
 ]

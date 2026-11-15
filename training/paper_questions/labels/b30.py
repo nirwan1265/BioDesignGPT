@@ -19,7 +19,7 @@ dict(paper="paper_0730", style="casual", prompt="medicago R108 4th trifoliate le
      spec=dict(organism="Medicago truncatula", assays=["rnaseq", "overexpression"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="LAP1 vs control constructs x 3"),
 dict(paper="paper_0731", skip="clock gene function; DAP-seq descriptive"),
-dict(paper="paper_0732", skip="yeast ethanol tolerance mapping by pooled selection"),
+{'paper': 'paper_0732', 'style': 'question', 'prompt': 'Ethanol tolerance mapping in an advanced intercross yeast population (S288c x a wild isolate), pools selected for survival in 15% ethanol or growth in 9.5% ethanol vs unselected, sequenced. How many replicate selections per trait?', 'spec': {'organism': 'Saccharomyces cerevisiae', 'assays': ['pool_seq', 'qtl_mapping'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: selection replicates'},
 dict(paper="paper_0733", style="detailed", prompt="MeDIP-seq of PBMCs from high- vs low-milk-yield Holstein cows, chosen as case-control pairs within each of 4 commercial farms, 3 pairs sequenced.",
      spec=dict(organism="Bos taurus", assays=["methylation"], factors=[dict(name="phenotype", n_levels=2)], design=dict(reps=3)),
      ask=[P], gaps=["assay:medip", "blocking:farm", "design:paired"], note="3 within-farm pairs"),

@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_2675", style="terse", prompt="Leaf RNA-seq of cold-tolerant B144 and cold-sensitive Q319 maize seedlings in a light incubator at three times after a shift to low temperature, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="time", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="2x3x3"),
-dict(paper="paper_2676", skip="QTL population"),
+{'paper': 'paper_2676', 'style': 'question', 'prompt': 'QTL for early maturity in 150 upland cotton RILs from SCRC21 x SCRC19 in a randomized complete block design in the field. How many blocks?', 'spec': {'system': 'field', 'organism': 'Gossypium hirsutum', 'assays': ['qtl_mapping'], 'factors': [{'name': 'genotype', 'n_levels': 150}], 'population': {'mating': 'ril'}}, 'ask': ['design.reps'], 'note': 'round 1: RIL RCBD'},
 dict(paper="paper_2677", style="terse", prompt="small RNA-seq of cultured porcine ovarian granulosa cells treated with two resveratrol doses or vehicle, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),

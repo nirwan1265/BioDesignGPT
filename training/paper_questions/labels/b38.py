@@ -25,7 +25,7 @@ dict(paper="paper_0932", style="terse", prompt="scRNA-seq of human trophoblast s
      spec=dict(system="cell_culture", organism="Homo sapiens", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=2)),
      ask=[P], note="KD vs scramble x 2"),
 dict(paper="paper_0933", skip="farm pedigree genetics of a syndrome"),
-dict(paper="paper_0934", skip="F2 resistance gene mapping"),
+{'paper': 'paper_0934', 'style': 'question', 'prompt': 'Fine mapping southern corn rust resistance in maize: backcross populations from resistant line 1484 into Jing2416, scored in the field in Hainan with a row of the susceptible parent every 20 rows. How many plants do I need to score?', 'spec': {'system': 'field', 'organism': 'Zea mays', 'assays': ['qtl_mapping'], 'population': {'mating': 'backcross'}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: BC fine mapping, checks'},
 dict(paper="paper_0935", skip="transposon evolution; descriptive expression"),
 dict(paper="paper_0936", skip="descriptive i-motif mapping"),
 dict(paper="paper_0937", style="question", prompt="How many littermate mice per genotype for WGBS of sorted vWF+ and vWF- long-term HSCs and megakaryocyte progenitors from Dnmt3a+/- vs wild-type mice?",

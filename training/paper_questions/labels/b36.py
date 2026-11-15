@@ -1,7 +1,7 @@
 P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_0875", skip="dosage compensation genetics; ChIP descriptive"),
-dict(paper="paper_0876", skip="linkage drag genotyping of a population"),
+{'paper': 'paper_0876', 'style': 'question', 'prompt': 'Amplicon genotyping of F2 tomato plants from Moneyberg x Moneymaker carrying CRISPR-induced breaks near tm-2, looking for recombinants that break linkage drag. How many F2 plants do I need?', 'spec': {'organism': 'Solanum lycopersicum', 'assays': ['amplicon', 'crispr'], 'population': {'mating': 'biparental'}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: recombinant screen'},
 dict(paper="paper_0877", style="terse", prompt="ATAC-seq and RNA-seq of pig IPEC-J2 cells after 4 h with nothing, Salmonella enterica, or Lactobacillus reuteri + Salmonella, 3 replicates per group.",
      spec=dict(system="cell_culture", organism="Sus scrofa", assays=["atac_seq", "rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),

@@ -13,7 +13,7 @@ dict(paper="paper_2528", style="question", prompt="150 layer hens randomly alloc
      spec=dict(system="livestock", organism="Gallus gallus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=3), dict(name="time")]),
      ask=["experimental_unit"], note="pens"),
 dict(paper="paper_2529", skip="cell line 3D genome"),
-dict(paper="paper_2530", skip="GWAS panel"),
+{'paper': 'paper_2530', 'style': 'detailed', 'prompt': 'Kernel colour GWAS in 2,448 maize inbred lines grown in the field as one replicate in two years, each block augmented with a B73 check plot.', 'spec': {'system': 'field', 'organism': 'Zea mays', 'assays': ['gwas'], 'factors': [{'name': 'genotype', 'n_levels': 2448}], 'design': {'reps': 1, 'seasons': 2}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: augmented design'},
 dict(paper="paper_2531", skip="domestication mechanism"),
 dict(paper="paper_2532", skip="editing method"),
 dict(paper="paper_2533", skip="QTL population"),

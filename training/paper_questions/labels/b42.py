@@ -29,7 +29,7 @@ dict(paper="paper_1036", style="question", prompt="How many embryo pools per gro
      spec=dict(organism="Danio rerio", assays=["rnaseq"], factors=[dict(name="infection", n_levels=3)], subsamples_per_unit=100),
      ask=["design.reps"], note="2 pathogens + control, pools of 100"),
 dict(paper="paper_1037", skip="resistance gene cloning"),
-dict(paper="paper_1038", skip="mutant mapping"),
+{'paper': 'paper_1038', 'style': 'question', 'prompt': 'Mapping a gamma-ray-induced semi-dwarf wheat mutant: an F2 from the mutant x a tall parent, plus yield components of mutant vs wild-type Jing411 from field plots in two years. How many F2 plants should I phenotype?', 'spec': {'system': 'field', 'organism': 'Triticum aestivum', 'assays': ['qtl_mapping'], 'population': {'mating': 'biparental'}, 'design': {'seasons': 2}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: mutant F2'},
 dict(paper="paper_1039", style="casual", prompt="6 barley varieties with good vs poor malting quality, sampled through malting (3 germination days, kilning, finished malt), rna-seq. how many reps per variety per stage?",
      spec=dict(organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=6), dict(name="stage", n_levels=5)]),
      ask=["design.reps"], note="6 varieties x 5 malting stages"),

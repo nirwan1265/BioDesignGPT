@@ -36,7 +36,7 @@ dict(paper="paper_2743", style="question", prompt="Offspring of rats given LPS v
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=2), dict(name="diet", n_levels=2)], design=dict(reps=8)),
      ask=["experimental_unit"], note="prenatal x postnatal"),
 dict(paper="paper_2744", skip="mechanism, mixed assays"),
-dict(paper="paper_2745", skip="haplotype association"),
+{'paper': 'paper_2745', 'style': 'question', 'prompt': 'mtDNA haplotype and ovarian reproductive traits in commercial gilts from two farms, ovaries collected at slaughter. How many gilts per haplotype?', 'spec': {'system': 'livestock', 'organism': 'Sus scrofa', 'factors': [{'name': 'genotype'}]}, 'ask': ['design.reps'], 'note': 'round 1: haplotype association'},
 dict(paper="paper_2746", style="question", prompt="small RNA-seq of roots of resistant Motelle and susceptible Moneymaker tomato 24 h after Fusarium oxysporum vs mock, one library each. Is that enough?",
      spec=dict(organism="Solanum lycopersicum", assays=["small_rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=1)),
      ask=[P], note="unreplicated"),

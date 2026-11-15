@@ -1,6 +1,6 @@
 P = "power.minimum_detectable_difference"
 L = [
-dict(paper="paper_1225", skip="unreduced pollen gene mapping"),
+{'paper': 'paper_1225', 'style': 'question', 'prompt': 'Mapping unreduced pollen in diploid potato: 124 seedlings of one population in 5 L pots in a greenhouse, extended the next year to 191 clones in single-row field plots. Should the clones be replicated?', 'spec': {'organism': 'Solanum tuberosum', 'assays': ['qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['design.reps'], 'note': 'round 1: unreplicated clones'},
 dict(paper="paper_1226", skip="mRNA quantification method"),
 dict(paper="paper_1227", skip="genotyping assay conversion"),
 dict(paper="paper_1228", style="terse", prompt="GWAS of low-temperature germination in 273 rice accessions: germination at 15 C scored daily, 3 replications of 30 seeds per accession.",

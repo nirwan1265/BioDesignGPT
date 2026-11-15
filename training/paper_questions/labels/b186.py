@@ -10,7 +10,7 @@ dict(paper="paper_4630", style="detailed", prompt="RNA-seq of leaves and roots o
      ask=[P], note="2x5x3"),
 dict(paper="paper_4631", skip="development series"),
 dict(paper="paper_4632", skip="checkpoint genetics"),
-dict(paper="paper_4633", skip="eQTL map"),
+{'paper': 'paper_4633', 'style': 'question', 'prompt': 'eQTL mapping in Drosophila: outbred populations founded from wild-derived F2s and kept recombining, heads and bodies RNA-sequenced from about 1,600 individual flies. Do I need biological replicates for eQTL?', 'spec': {'system': 'drosophila', 'organism': 'Drosophila melanogaster', 'assays': ['eqtl', 'rnaseq'], 'factors': [{'name': 'tissue', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: individuals as replicates'},
 dict(paper="paper_4634", skip="embryo method"),
 dict(paper="paper_4635", skip="longevity mechanism"),
 dict(paper="paper_4636", style="question", prompt="RNA-seq of GV and MII bovine oocytes collected from cows in the hot vs cool season. Is the cow, the collection day, or the oocyte pool my unit?",

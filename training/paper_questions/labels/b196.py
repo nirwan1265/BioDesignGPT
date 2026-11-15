@@ -32,5 +32,5 @@ dict(paper="paper_4896", style="question", prompt="small RNA-seq of longissimus 
      ask=["design.reps"], note="marbling"),
 dict(paper="paper_4897", skip="mutation accumulation"),
 dict(paper="paper_4898", skip="cell line"),
-dict(paper="paper_4899", skip="trait mapping"),
+{'paper': 'paper_4899', 'style': 'question', 'prompt': 'Mapping the rumpless trait in Piao chickens: a backcross population of 573 birds over six backcross generations to normal-tailed Xianju hens, genotyped by resequencing. Is 573 enough?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['qtl_mapping', 'wgs'], 'population': {'mating': 'backcross'}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: backcross mapping'},
 ]

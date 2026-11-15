@@ -15,7 +15,7 @@ dict(paper="paper_3930", style="question", prompt="Plaque, saliva and faecal 16S
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="infection", n_levels=4)]),
      ask=["experimental_unit"], note="litters"),
 dict(paper="paper_3931", skip="gene function"),
-dict(paper="paper_3932", skip="rice GWAS"),
+{'paper': 'paper_3932', 'style': 'detailed', 'prompt': 'Anaerobic germination mapping in rice: 168 RILs from weedy rice WR04-6 x Qishanzhan plus a GWAS panel of 190 accessions, coleoptile length measured in 3 replicates of 30 seeds.', 'spec': {'organism': 'Oryza sativa', 'assays': ['qtl_mapping', 'gwas'], 'population': {'mating': 'ril'}, 'design': {'reps': 3}, 'subsamples_per_unit': 30}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: RIL + GWAS'},
 dict(paper="paper_3933", style="question", prompt="Leaf RNA-seq of B73 maize in a greenhouse under several long-duration abiotic stresses vs control, one plant per pot in randomized blocks. How many plants per treatment?",
      spec=dict(system="greenhouse", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="treatment")]),
      ask=["design.reps"], note="multi-stress"),

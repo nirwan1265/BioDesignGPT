@@ -25,7 +25,7 @@ dict(paper="paper_2888", style="question", prompt="16S of whole adult flies afte
 dict(paper="paper_2889", style="question", prompt="WGBS of jejunum from one intrauterine-growth-restricted and one normal-birth-weight piglet from each of 4 litters. Is the litter my block?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["methylation"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=4)),
      ask=["experimental_unit"], note="littermate pairs"),
-dict(paper="paper_2890", skip="structural variant mapping"),
+{'paper': 'paper_2890', 'style': 'terse', 'prompt': 'Shank length in Yunlong short-leg chickens: resequencing 10 short-legged and 10 normal birds from a conservation farm, plus public genomes of other breeds.', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['wgs'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}], 'design': {'reps': 10}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 10 v 10'},
 dict(paper="paper_2891", style="terse", prompt="Leaf RNA-seq of E1-overexpressing vs DN50 wild-type soybean in a growth chamber, 2 replicates.",
      spec=dict(system="growth_chamber", organism="Glycine max", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=2)),
      ask=[P], note="2 x 2"),

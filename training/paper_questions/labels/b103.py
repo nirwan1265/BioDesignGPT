@@ -12,7 +12,7 @@ dict(paper="paper_2552", style="question", prompt="Leaf RNA-seq of 23 spring bar
 dict(paper="paper_2553", style="terse", prompt="Kernel RNA-seq of maize at 0, 6, 12, 24, 48 and 72 h after Aspergillus flavus inoculation, 4 biological replicates.",
      spec=dict(organism="Zea mays", assays=["rnaseq"], factors=[dict(name="time", n_levels=6)], design=dict(reps=4)),
      ask=[P], note="6 x 4"),
-dict(paper="paper_2554", skip="bulk segregant mapping"),
+{'paper': 'paper_2554', 'style': 'question', 'prompt': 'Bulked segregant mapping of spider mite resistance in maize: F2 from resistant inbred B96 x a susceptible line, plants infested with Tetranychus urticae, resistant and susceptible bulks resequenced. How many plants per bulk?', 'spec': {'organism': 'Zea mays', 'assays': ['bsa_seq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}], 'population': {'mating': 'biparental'}}, 'ask': ['subsamples_per_unit'], 'note': 'round 1: F2 bulks'},
 dict(paper="paper_2555", style="terse", prompt="Leaf RNA-seq of M1 seedlings of two wheat cultivars from seeds irradiated with a mixed particle field, 7Li-ion beams, or untreated, growth chamber, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="2x3x3"),

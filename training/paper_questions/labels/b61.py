@@ -16,7 +16,7 @@ dict(paper="paper_1504", style="detailed", prompt="Rat neuropathic pain: L5 spin
 dict(paper="paper_1505", style="terse", prompt="RNA-seq of fibres from cotton GhRabA4c overexpression, suppression and wild-type plants, 3 biological replicates.",
      spec=dict(organism="Gossypium hirsutum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
-dict(paper="paper_1506", skip="single-cell eQTL resource"),
+{'paper': 'paper_1506', 'style': 'question', 'prompt': 'Single-cell eQTL in yeast: 480 BY x RM segregants grown in 96-well plates and pooled at equal volume for scRNA-seq. Is one pooled culture enough?', 'spec': {'organism': 'Saccharomyces cerevisiae', 'assays': ['single_cell', 'eqtl'], 'factors': [{'name': 'genotype', 'n_levels': 480}]}, 'ask': ['design.reps'], 'note': 'round 1: pooled segregants'},
 dict(paper="paper_1507", skip="DNA repair mechanism"),
 dict(paper="paper_1508", style="detailed", prompt="Brachypodium grown at three atmospheric CO2 concentrations, one growth chamber per concentration, then inoculated with a fungal pathogen; leaf RNA-seq with 3 biological replicates of 4 pooled plants. Is that design sound?",
      spec=dict(system="growth_chamber", organism="Brachypodium distachyon", assays=["rnaseq"], factors=[dict(name="co2", n_levels=3)], design=dict(reps=3), subsamples_per_unit=4),

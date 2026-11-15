@@ -9,7 +9,7 @@ dict(paper="paper_5153", style="question", prompt="Retina scRNA-seq of Sprague D
 dict(paper="paper_5154", style="question", prompt="Faecal virome sequencing of male Sprague Dawley rats given intestinal injections of alpha-synuclein fibrils vs vehicle, sampled repeatedly over months. How many rats per group?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["metagenomics"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),
      ask=["design.reps"], note="longitudinal"),
-dict(paper="paper_5155", skip="GWAS"),
+{'paper': 'paper_5155', 'style': 'detailed', 'prompt': 'Germination-stage salinity GWAS in 201 rice accessions from the 3K panel, completely randomized with three replications per genotype under control vs 120 mM NaCl, 10 seeds per replication.', 'spec': {'organism': 'Oryza sativa', 'assays': ['gwas'], 'factors': [{'name': 'genotype', 'n_levels': 201}, {'name': 'salt', 'n_levels': 2}], 'design': {'reps': 3}, 'subsamples_per_unit': 10}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: CRD, 3 reps x 10 seeds'},
 dict(paper="paper_5156", skip="mutant"),
 dict(paper="paper_5157", style="detailed", prompt="Tuber RNA-seq of potted potato cultivars Bintje and Magnum Bonum grown under three cultivation conditions, 3 biological replicates.",
      spec=dict(organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=3)], design=dict(reps=3)),
