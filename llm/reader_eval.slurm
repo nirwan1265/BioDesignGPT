@@ -4,16 +4,17 @@
 #SBATCH --error=logs/llm-reader.%j.err
 #SBATCH --partition=gpu_partners
 #SBATCH --qos=short_gpu
-#SBATCH --gres=gpu:l40s:1
+#SBATCH --gres=gpu:rtx_6000_pro:1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --time=01:00:00
 # Run the LLM reader on every test set (offline; model downloaded by retrieval/setup_cluster.sh).
 # short_gpu QOS (<2 h) is shared by everyone; if the l40s are all taken, other cards work too:
-#   sbatch --gres=gpu:h200:1 llm/reader_eval.slurm         (141 GB; also fits READER=Qwen/Qwen2.5-32B-Instruct)
+#   sbatch --gres=gpu:h200:1 llm/reader_eval.slurm         (141 GB)
 #   sbatch --gres=gpu:h100:1 llm/reader_eval.slurm         (80 GB)
-# The 14B model needs ~30 GB, so not a10/a30 (24 GB) unless READER=Qwen/Qwen2.5-7B-Instruct.
+# The default reader is the 32B (~65 GB in bf16), so not l40s (48 GB) unless READER=Qwen/Qwen2.5-14B-Instruct.
+# An adapter must be used with the model it was trained on (v2, v3, v4: 32B).
 set -euo pipefail
 BASE=${BASE:-/gpfs_common/share01/maize/ntanduk}
 export HF_HOME=$BASE/hf HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 VLLM_NO_USAGE_STATS=1

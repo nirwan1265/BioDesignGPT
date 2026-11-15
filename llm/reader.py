@@ -374,7 +374,7 @@ def serve(backend, a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", default=os.environ.get("READER", "Qwen/Qwen2.5-14B-Instruct"))
+    ap.add_argument("--model", default=os.environ.get("READER", "Qwen/Qwen2.5-32B-Instruct"))
     ap.add_argument("--adapter", default=os.environ.get("READER_ADAPTER") or None, help="LoRA adapter folder (llm/train_lora.py)")
     ap.add_argument("--backend", default="vllm", help="vllm, or replay:<raw.json> for tests")
     ap.add_argument("--examples", nargs="*", default=[], help="jsonl files with a 'prompt' field")
