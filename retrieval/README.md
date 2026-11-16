@@ -25,7 +25,7 @@ sbatch retrieval/build_index.slurm
 SPECIES=sorghum sbatch retrieval/build_index.slurm      # one organism
 
 # 3. search (any node)
-/gpfs_common/share01/maize/ntanduk/envs/biodes-gpu/bin/python retrieval/search.py \
+/usr/local/usrapps/maize/ntanduk/biodes-gpu/bin/python retrieval/search.py \
   --index /gpfs_common/share01/maize/ntanduk/index --organism maize --technique ChIP-seq \
   --query "field-grown plants, crosslinking leaf tissue, input controls, replicates"
 ```

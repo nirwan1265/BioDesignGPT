@@ -25,4 +25,5 @@ if command -v nvcc >/dev/null; then export CUDA_HOME=$(dirname "$(dirname "$(com
 export VLLM_ATTENTION_BACKEND=${VLLM_ATTENTION_BACKEND:-FLASH_ATTN} VLLM_USE_FLASHINFER_SAMPLER=0
 cd "$SLURM_SUBMIT_DIR"; mkdir -p logs
 echo "== reader $READER ${ADARG:-(base model)} on $(hostname)"
-exec $BASE/envs/biodes-gpu/bin/python llm/reader.py --serve --model "$READER" $ADARG --port 8765 --conn-file "$HOME/.biodes/reader.json"
+BIODES_ENV=${BIODES_ENV:-/usr/local/usrapps/maize/ntanduk/biodes-gpu}
+exec $BIODES_ENV/bin/python llm/reader.py --serve --model "$READER" $ADARG --port 8765 --conn-file "$HOME/.biodes/reader.json"

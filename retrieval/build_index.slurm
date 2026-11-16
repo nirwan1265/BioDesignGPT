@@ -16,7 +16,8 @@ BASE=${BASE:-/gpfs_common/share01/maize/ntanduk}
 EVIDENCE=${EVIDENCE:-$BASE/design/evidence}
 INDEX=${INDEX:-$BASE/index}
 export HF_HOME=$BASE/hf HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
-PY=$BASE/envs/biodes-gpu/bin/python
+BIODES_ENV=${BIODES_ENV:-/usr/local/usrapps/maize/ntanduk/biodes-gpu}   # conda env on app storage (not the share: its file count is capped)
+PY=$BIODES_ENV/bin/python
 cd "$SLURM_SUBMIT_DIR"
 mkdir -p logs
 nvidia-smi --query-gpu=name,memory.total --format=csv
