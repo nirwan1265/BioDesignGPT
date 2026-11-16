@@ -130,6 +130,25 @@ The fine-tuned reader carries over to unseen kinds (v2 beats base and invents fa
 harder than dev (v2 merged 84.1 vs 87.5). The weakest kinds are human cohorts (61) and mapping (78). That is
 the case for labelling training questions of these kinds; the test set measures whether it helps.
 
+**v5 (not adopted).** v4's recipe with two changes: a distilled unit is kept only when `unit_counted` passes,
+and 289 round-1 training questions were added from the new kinds' study types (`training/paper_questions/rounds/`;
+the 100 test papers are excluded). Val loss 0.049.
+
+| | v2 | v5 |
+|---|---|---|
+| dev merged | 87.5 | 87.8 (v5 - v2 = +0.3, CI -0.5 to +1.0) |
+| dev alone | 86.0 | 87.2 (+1.2, CI +0.2 to +2.2) |
+| dev invented, alone / merged | 5 / 1 | 8 / 3 |
+| new kinds merged | 84.1 | 82.9 (-1.2, CI -2.8 to +0.2) |
+| new kinds, human cohorts merged | 61.0 | 55.8 |
+| new kinds, mapping merged | 77.8 | 72.7 |
+
+The other sets are equal or lower (fresh v2 97.5 vs 98.3). Round 1 did not help the kinds it targeted, so
+round 2 is not worth doing. Most of the change on new kinds is in factor names, not facts: v5 says
+`phenotype_group` where the label says `disease`, and the conventions allow either name. The misses in mapping
+are mostly the assay (`qtl_mapping` / `bsa_seq` vs `wgs`) and `population.mating`. Those are naming conventions
+the reader has to guess, and adding more papers does not teach them.
+
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
 

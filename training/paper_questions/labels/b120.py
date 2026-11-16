@@ -14,7 +14,7 @@ dict(paper="paper_2979", style="question", prompt="Tomato fruit weight GWAS acro
 dict(paper="paper_2980", style="question", prompt="WGBS of greenhouse rice plants regenerated after several transformation treatments vs untransformed regenerants and wild-type seedlings, 2 biological replicates. Is that enough?",
      spec=dict(system="greenhouse", organism="Oryza sativa", assays=["methylation"], factors=[dict(name="treatment")], design=dict(reps=2)),
      ask=[P], note="treatments x 2"),
-{'paper': 'paper_2981', 'style': 'question', 'prompt': 'Feed efficiency in Holstein cows: whole-genome sequencing of high vs low residual feed intake cows, then validation in bulls. How many cows per extreme group?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs', 'gwas'], 'factors': [{'name': 'phenotype', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: extremes'},
+{'paper': 'paper_2981', 'style': 'question', 'prompt': 'Feed efficiency in Holstein cows: whole-genome sequencing of high vs low residual feed intake cows, then validation in bulls. How many cows per extreme group?', 'spec': {'system': 'livestock', 'organism': 'Bos taurus', 'assays': ['wgs', 'gwas'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: extremes'},
 dict(paper="paper_2982", style="question", prompt="Faecal 16S over time in offspring of female rats fed a cafeteria diet vs chow before and during pregnancy and lactation. Is the dam my unit?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet", n_levels=2), dict(name="time")]),
      ask=["experimental_unit"], note="maternal diet"),
