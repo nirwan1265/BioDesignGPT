@@ -23,8 +23,7 @@ export HF_HOME=$BASE/hf HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 VLLM_NO_USAGE_ST
 module load cuda 2>/dev/null || true
 if command -v nvcc >/dev/null; then export CUDA_HOME=$(dirname "$(dirname "$(command -v nvcc)")"); fi
 export VLLM_ATTENTION_BACKEND=${VLLM_ATTENTION_BACKEND:-FLASH_ATTN} VLLM_USE_FLASHINFER_SAMPLER=0
-BIODES_ENV=${BIODES_ENV:-/usr/local/usrapps/maize/ntanduk/biodes-gpu}   # conda env on app storage (not the share: its file count is capped)
-PY=$BIODES_ENV/bin/python
+PY=${CONDA_PREFIX:?activate the biodes conda env before sbatch}/bin/python   # the env active at submit time
 cd "$SLURM_SUBMIT_DIR"; mkdir -p logs llm/preds
 nvidia-smi --query-gpu=name,memory.total --format=csv
 echo "nvcc: $(command -v nvcc || echo none)  attention: $VLLM_ATTENTION_BACKEND"
