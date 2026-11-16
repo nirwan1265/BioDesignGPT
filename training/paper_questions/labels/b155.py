@@ -28,7 +28,7 @@ dict(paper="paper_3864", style="question", prompt="small RNA-seq of oesophagus f
      spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="challenge", n_levels=2)]),
      ask=["design.reps"], note="blocked 2x2"),
 dict(paper="paper_3865", style="detailed", prompt="RNA-seq of rachis from berry-shrivel vs healthy Zweigelt clusters in a commercial vineyard at several dates in two seasons, 3 biological replicates.",
-     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2), dict(name="time")], design=dict(reps=3, seasons=2)),
+     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="disease", n_levels=2), dict(name="time")], design=dict(reps=3, seasons=2)),
      ask=[P], note="rachis"),
 dict(paper="paper_3866", skip="editing mechanism"),
 dict(paper="paper_3867", skip="xenograft drug"),

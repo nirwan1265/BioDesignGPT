@@ -2,7 +2,7 @@ P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_5125", skip="neurospheres"),
 dict(paper="paper_5126", style="terse", prompt="Spleen RNA-seq of 40-day-old commercial Hubbard broilers with valgus-varus deformity vs healthy flockmates, 3 per group.",
-     spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=3)),
+     spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="3 v 3"),
 dict(paper="paper_5127", style="terse", prompt="small RNA-seq of hypothalamic arcuate nucleus of Sprague Dawley rats in a neuropathic pain model vs sham, 3 per group.",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),
@@ -32,7 +32,7 @@ dict(paper="paper_5145", skip="reprogramming"),
 dict(paper="paper_5146", skip="kinase mutants"),
 {'paper': 'paper_5147', 'style': 'question', 'prompt': 'GWAS of avian leukosis virus status in 315 Wuhua yellow chickens sampled at 46 weeks. Is a case-control split better than using all birds?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['gwas', 'wgs']}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: case-control'},
 dict(paper="paper_5148", style="terse", prompt="16S of Holstein heifers with brisket disease vs healthy herdmates in the same barn, 5 per group.",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=5)),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=5)),
      ask=[P], note="5 v 5"),
 dict(paper="paper_5149", skip="atlas"),
 ]

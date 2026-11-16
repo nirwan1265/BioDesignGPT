@@ -161,6 +161,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   sum_said <- function(v) length(nums_all) > 1 && any(outer(nums_all, nums_all, "+")[upper.tri(diag(length(nums_all)))] == v)
   count_ok <- function(f) !is.null(f$n_levels) &&
     (stated(f$n_levels) || f$n_levels %in% enum_n || sum_said(f$n_levels) ||
+       (f$n_levels == 2 && tolower(f$name) %in% .sf_list("group_factor") && grepl(.sf_cue("two_group_contrast"), text, perl = TRUE)) ||
        ((mostly_named(f) || .sf_levels_in_text(f$levels, text)) && length(unlist(f$levels)) == f$n_levels))
   # a factor is stated when it is named (directly or by an alias: "RILs" for genotype, "at 2 h" for time),
   # counted, or its levels are
@@ -168,12 +169,16 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
                          if (length(.sf_find_all(text, "genotype_noun"))) "genotype",
                          if (grepl(.sf_cue("time_stated"),
                                    text, perl = TRUE)) "time"))
+  # a group factor is stated when the text says what formed the groups (the group_by_* cues)
+  grouped <- grepl(.sf_cue("group_by_trait"), text, perl = TRUE) || grepl(.sf_cue("group_by_health"), text, perl = TRUE)
   said <- function(f) word_in(f$name) || canon(f$name) %in% canon_said || named(f) || count_ok(f) ||
+    (grouped && tolower(f$name) %in% .sf_list("group_factor")) ||
     any(vapply(unlist(f$levels), function(l) agrepl(tolower(l), text, max.distance = 0.2, fixed = TRUE), logical(1)))
   rf <- rule$factors %||% list()
   rkey <- vapply(rf, function(f) canon(f$name), "")
   fx <- list(); used <- logical(length(rf))
   for (f in model$factors %||% list()) {
+    f$name <- .sf_group_factor(f$name, text)
     k <- canon(f$name)
     if (k %in% units || k %in% vapply(fx, function(g) canon(g$name), "") || !said(f)) next
     i <- match(k, rkey)
@@ -220,6 +225,17 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
 }
 
 # the prompt counts the unit as the replicate (cue unit_counted in rules.tsv; llm/make_sft.py reads the same row)
+# A factor of subject groups is named by what formed the groups (rules.tsv cues): a ranked or scored trait
+# ("high vs low backfat", "resistant vs susceptible") is phenotype_group; a health state ("patients vs healthy
+# controls") is disease. Other factor names pass through.
+.sf_group_factor <- function(name, text) {
+  nm <- tolower(name %||% "")
+  if (!nm %in% .sf_list("group_factor")) return(name)
+  if (grepl(.sf_cue("group_by_trait"), text, perl = TRUE)) return("phenotype_group")
+  if (grepl(.sf_cue("group_by_health"), text, perl = TRUE)) return("disease")
+  if (nm %in% c("disease", "phenotype_group")) name else "phenotype_group"
+}
+
 .sf_unit_counted <- function(u, text) {
   w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
   re <- gsub("{N}", .sf_cue("count_word"), gsub("{U}", w, .sf_cue("unit_counted"), fixed = TRUE), fixed = TRUE)

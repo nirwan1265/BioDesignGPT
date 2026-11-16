@@ -16,7 +16,7 @@ dict(paper="paper_3357", style="detailed", prompt="Leaf RNA-seq of several sorgh
      ask=[P], note="genotype x drought"),
 dict(paper="paper_3358", skip="pooled gut microbiome"),
 dict(paper="paper_3359", style="question", prompt="RNA-seq of leaves and fruit from HLB-symptomatic, asymptomatic and healthy sweet orange trees on a farm, each sample pooling 5-10 leaves or fruit from one of five trees. Is the tree my unit?",
-     spec=dict(system="field", organism="Citrus sinensis", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=3), dict(name="tissue", n_levels=2)], design=dict(reps=5)),
+     spec=dict(system="field", organism="Citrus sinensis", assays=["rnaseq"], factors=[dict(name="disease", n_levels=3), dict(name="tissue", n_levels=2)], design=dict(reps=5)),
      ask=["experimental_unit"], note="symptomatic and asymptomatic from the same trees"),
 dict(paper="paper_3360", skip="lignin mechanism"),
 dict(paper="paper_3361", skip="embryo genomics"),

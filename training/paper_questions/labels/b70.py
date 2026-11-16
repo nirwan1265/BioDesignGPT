@@ -56,7 +56,7 @@ dict(paper="paper_1744", style="terse", prompt="small RNA-seq of KYSE-410 esopha
      ask=[P], note="2 x 2"),
 dict(paper="paper_1745", skip="miRNA atlas of cell types"),
 dict(paper="paper_1746", style="question", prompt="Small RNA-seq of tail-vein blood from Holstein cows with normal placenta expulsion (n = 3) vs retained placenta (n = 3). Is that enough?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=3)),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="3 v 3 observational"),
 dict(paper="paper_1747", skip="experimental evolution resequencing"),
 dict(paper="paper_1748", style="detailed", prompt="Small RNA-seq of rosette leaves from many Arabidopsis accessions in growth chambers at 21 C, each accession grown and harvested several times in batches weeks apart. Should batch be a block?",

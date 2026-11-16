@@ -5,7 +5,7 @@ dict(paper="paper_5476", style="question", prompt="Methylation sequencing of olf
      spec=dict(system="mouse", organism="Mus musculus", assays=["methylation"], factors=[dict(name="maternal_diet", n_levels=3)]),
      ask=["experimental_unit"], note="maternal programming"),
 dict(paper="paper_5477", style="detailed", prompt="Spur RNA-seq of field grapevines with vs without trunk disease symptoms in cultivars Alicante Bouschet and Trincadeira, 3 biological replicates.",
-     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="phenotype_group", n_levels=2)], design=dict(reps=3)),
+     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="disease", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2x2x3"),
 dict(paper="paper_5478", skip="mutant model"),
 dict(paper="paper_5479", skip="yeast culture"),

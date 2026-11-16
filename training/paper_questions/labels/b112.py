@@ -42,7 +42,7 @@ dict(paper="paper_2793", style="terse", prompt="RNA-seq of IRF7 knockout vs wild
      spec=dict(system="cell_culture", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="time")], design=dict(reps=3)),
      ask=[P], note="2 x time x 3"),
 dict(paper="paper_2794", style="question", prompt="Liver small RNA-seq of laying hens with fatty liver syndrome vs healthy hens, 3 each. Is 3 enough?",
-     spec=dict(system="livestock", organism="Gallus gallus", assays=["small_rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=3)),
+     spec=dict(system="livestock", organism="Gallus gallus", assays=["small_rnaseq"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="3 v 3"),
 dict(paper="paper_2795", style="question", prompt="RNA-seq of HER2-driven mammary tumours and adjacent mammary tissue from 5 transgenic mice. Is 5 enough?",
      spec=dict(system="mouse", organism="Mus musculus", assays=["rnaseq"], factors=[dict(name="tissue", n_levels=2)], design=dict(reps=5)),

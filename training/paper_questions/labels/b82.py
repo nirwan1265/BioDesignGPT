@@ -33,7 +33,7 @@ dict(paper="paper_2038", style="question", prompt="scATAC-seq of kidney cortex f
      spec=dict(system="mouse", organism="Mus musculus", assays=["scatac_seq"], factors=[dict(name="genotype", n_levels=2)]),
      ask=["design.reps"], note="tg vs control"),
 dict(paper="paper_2039", style="question", prompt="Sperm histone ChIP-seq of F3-generation atrazine-lineage rats with vs without later testis or kidney disease. How many males per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="phenotype_group", n_levels=2)]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["chip_seq"], factors=[dict(name="disease", n_levels=2)]),
      ask=["design.reps"], note="disease vs not"),
 dict(paper="paper_2040", style="question", prompt="WGBS of kidneys from Idh1 R132H mutant vs wild-type mice, 3 each, taken from groups of 6. Is 3 enough?",
      spec=dict(system="mouse", organism="Mus musculus", assays=["methylation"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3)),

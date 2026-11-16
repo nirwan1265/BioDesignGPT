@@ -7,7 +7,7 @@ dict(paper="paper_2926", style="terse", prompt="ATAC-seq of colon cancer cells t
 dict(paper="paper_2927", skip="structural biology"),
 dict(paper="paper_2928", skip="cross-species regulator"),
 dict(paper="paper_2929", style="question", prompt="16S of rumen fluid and faeces from 8 Holstein cows with subclinical mastitis and 8 healthy herdmates on the same ration. Is 8 per group enough?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=8)),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=8)),
      ask=[P], note="8 v 8"),
 dict(paper="paper_2930", skip="single-oocyte survey"),
 dict(paper="paper_2931", skip="proteome focus"),

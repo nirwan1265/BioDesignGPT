@@ -20,7 +20,7 @@ dict(paper="paper_4010", style="terse", prompt="Faecal 16S of rats on normal cho
 dict(paper="paper_4011", style="terse", prompt="RNA-seq of CC-4533 Chlamydomonas under phosphate deficiency vs sufficiency, 2 biological replicates.",
      spec=dict(system="cell_culture", organism="Chlamydomonas reinhardtii", assays=["rnaseq"], factors=[dict(name="nutrient", n_levels=2)], design=dict(reps=2)),
      ask=[P], note="2 v 2"),
-{'paper': 'paper_4012', 'style': 'detailed', 'prompt': 'Cold tolerance at bud bursting in rice F2:3 families, one hundred seeds per family germinated and chilled, BSA-seq of tolerant and sensitive bulks.', 'spec': {'system': 'growth_chamber', 'organism': 'Oryza sativa', 'assays': ['bsa_seq', 'qtl_mapping'], 'population': {'mating': 'biparental'}}, 'ask': ['design.reps'], 'note': 'round 1: seeds per family'},
+{'paper': 'paper_4012', 'style': 'detailed', 'prompt': 'Cold tolerance at bud bursting in rice F2:3 families, one hundred seeds per family germinated and chilled, BSA-seq of tolerant and sensitive bulks.', 'spec': {'system': 'growth_chamber', 'organism': 'Oryza sativa', 'assays': ['bsa_seq'], 'population': {'mating': 'biparental'}}, 'ask': ['design.reps'], 'note': 'round 1: seeds per family'},
 dict(paper="paper_4013", style="detailed", prompt="RNA-seq of four primary-root zones of 5-day-old B73 maize seedlings in a growth chamber, mock vs 10 uM IAA, at two times, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="tissue", n_levels=4), dict(name="treatment", n_levels=2), dict(name="time", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="4x2x2x3"),

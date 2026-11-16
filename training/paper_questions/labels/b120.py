@@ -36,7 +36,7 @@ dict(paper="paper_2991", style="question", prompt="Lymph node RNA-seq of 8 young
      spec=dict(organism="Macaca mulatta", assays=["rnaseq"], factors=[dict(name="age", n_levels=2), dict(name="time")], design=dict(reps=8)),
      ask=[P], note="age x time"),
 dict(paper="paper_2992", skip="population genomics"),
-{'paper': 'paper_2993', 'style': 'question', 'prompt': 'small RNA-seq of bronchial brushings and biopsies from high-risk smokers in lung cancer screening, comparing progressive vs regressive premalignant lesions, with several biopsies per patient. Is the biopsy or the patient my unit?', 'spec': {'organism': 'Homo sapiens', 'assays': ['small_rnaseq'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: lesions within patient'},
+{'paper': 'paper_2993', 'style': 'question', 'prompt': 'small RNA-seq of bronchial brushings and biopsies from high-risk smokers in lung cancer screening, comparing progressive vs regressive premalignant lesions, with several biopsies per patient. Is the biopsy or the patient my unit?', 'spec': {'organism': 'Homo sapiens', 'assays': ['small_rnaseq'], 'factors': [{'name': 'disease', 'n_levels': 2}, {'name': 'tissue', 'n_levels': 2}]}, 'ask': ['experimental_unit'], 'note': 'round 1: lesions within patient'},
 dict(paper="paper_2994", style="question", prompt="Bronchial lymph node small RNA-seq of 12 BRSV-challenged and 6 mock-challenged Holstein-Friesian calves. Is the 12 vs 6 split OK?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=2)]),
      ask=[P], note="unbalanced"),

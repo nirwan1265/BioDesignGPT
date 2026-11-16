@@ -6,7 +6,7 @@ dict(paper="paper_5176", style="question", prompt="Intestinal 16S of C57BL/6J da
      ask=["design.reps"], note="PCB doses"),
 dict(paper="paper_5177", skip="aging atlas"),
 dict(paper="paper_5178", style="question", prompt="Whole blood small RNA-seq of feedlot cattle with different lameness phenotypes vs healthy pen-mates. How many animals per phenotype?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="phenotype_group")]),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="disease")]),
      ask=["design.reps"], note="case-control"),
 dict(paper="paper_5179", skip="yeast population"),
 dict(paper="paper_5180", skip="primary neurons"),

@@ -33,7 +33,7 @@ dict(paper="paper_2663", style="question", prompt="Adipose RNA-seq of 6 backcros
      spec=dict(system="livestock", organism="Sus scrofa", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="extremes 3 v 3"),
 dict(paper="paper_2664", style="question", prompt="RNA-seq of fruit, leaves and stems from one severely and one mildly virus-symptomatic tomato plant in the same field plot. Is that enough?",
-     spec=dict(system="field", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2), dict(name="tissue", n_levels=3)], design=dict(reps=1)),
+     spec=dict(system="field", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="disease", n_levels=2), dict(name="tissue", n_levels=3)], design=dict(reps=1)),
      ask=[P], note="one plant each"),
 dict(paper="paper_2665", style="terse", prompt="small RNA-seq of leaves of 3-week-old Col-0 in a growth room at several times after Phytophthora capsici vs mock inoculation, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="time")], design=dict(reps=3)),

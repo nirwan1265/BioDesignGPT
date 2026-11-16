@@ -149,6 +149,28 @@ round 2 is not worth doing. Most of the change on new kinds is in factor names, 
 are mostly the assay (`qtl_mapping` / `bsa_seq` vs `wgs`) and `population.mating`. Those are naming conventions
 the reader has to guess, and adding more papers does not teach them.
 
+**Naming conventions (rules, no retraining).** Three fixes, tuned on dev and train, then the new-kinds test
+scored once:
+- Subject groups: a factor of groups is `disease` when a health state formed them and `phenotype_group` when a
+  ranked trait did (`group_by_health` / `group_by_trait` cues). 33 training labels that broke this were
+  relabelled; dev and the test splits are unchanged.
+- Mapping assays: "mapping" in a segregating population is `qtl_mapping`; sequenced bulks or pools of progeny
+  are `bsa_seq`; these are listed in any setting, not only breeding studies.
+- Mating: the stated population (F2, backcross, RILs, DH ...) sets `population.mating` in any setting. The bare
+  word "self" was dropped (it matched self-administration, self-grafted).
+
+| | before | after |
+|---|---|---|
+| dev, v2 merged | 87.5 | 87.8 |
+| train, rules: population.mating | 20.0 | 95.0 |
+| new kinds, v2 merged | 84.1 | **86.2** |
+| new kinds, human cohorts (v2 merged) | 61.0 | 72.7 |
+| new kinds, mapping (v2 merged) | 77.8 | 82.8 |
+| new kinds, rules alone | 64.7 | 66.6 |
+
+One check set dropped: fresh v3, v2 merged 93.4 to 91.8. A question about "self-pollinated" F2 plants no longer
+gets `selfing` once the bare word "self" is gone, and its "ready for mapping?" now gets `qtl_mapping`.
+
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
 

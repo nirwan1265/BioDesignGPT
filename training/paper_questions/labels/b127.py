@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_3150", skip="cancer mechanism"),
 dict(paper="paper_3151", skip="DNA repair mechanism"),
 dict(paper="paper_3152", style="question", prompt="16S of rectal samples from normal vs diarrheic Hanwoo calves, 53 each, sampled once on farms. Is that enough?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="phenotype_group", n_levels=2)], design=dict(reps=53)),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["amplicon"], factors=[dict(name="disease", n_levels=2)], design=dict(reps=53)),
      ask=[P], note="observational"),
 dict(paper="paper_3153", skip="cross-species skin"),
 dict(paper="paper_3154", skip="cell-specific profiling method"),

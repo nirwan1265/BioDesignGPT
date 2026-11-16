@@ -46,7 +46,7 @@ dict(paper="paper_3745", skip="chromatin mechanism"),
 dict(paper="paper_3746", style="detailed", prompt="small RNA-seq of wild-type Arabidopsis seedlings on MS plates under a dozen abiotic stresses (salt, metals, nutrient deficiencies, heat and others) vs control, 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=13)], design=dict(reps=3)),
      ask=[P], note="13 x 3"),
-{'paper': 'paper_3747', 'style': 'question', 'prompt': 'Resequencing of Xin Pudong chickens positive vs negative for pullorum disease, with gut microbiome sampling. How many birds per group?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['wgs', 'amplicon'], 'factors': [{'name': 'phenotype_group', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: case-control'},
+{'paper': 'paper_3747', 'style': 'question', 'prompt': 'Resequencing of Xin Pudong chickens positive vs negative for pullorum disease, with gut microbiome sampling. How many birds per group?', 'spec': {'system': 'livestock', 'organism': 'Gallus gallus', 'assays': ['wgs', 'amplicon'], 'factors': [{'name': 'disease', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: case-control'},
 dict(paper="paper_3748", skip="neuronal model"),
 dict(paper="paper_3749", skip="embryo mechanism"),
 ]

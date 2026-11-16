@@ -15,7 +15,7 @@ dict(paper="paper_4332", style="terse", prompt="RNA-seq of primary Sprague-Dawle
      spec=dict(system="cell_culture", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="3 v 3"),
 dict(paper="paper_4333", style="question", prompt="Pectoralis RNA-seq of Ross 708 broilers sampled at several ages and later scored as wooden-breast affected vs unaffected. How many birds per age?",
-     spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="time"), dict(name="phenotype_group", n_levels=2)]),
+     spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="time"), dict(name="disease", n_levels=2)]),
      ask=["design.reps"], note="myopathy development"),
 dict(paper="paper_4334", style="terse", prompt="Plasma exosome small RNA-seq of male Sprague-Dawley rats given remote ischaemic preconditioning vs sham, 3 per group.",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),

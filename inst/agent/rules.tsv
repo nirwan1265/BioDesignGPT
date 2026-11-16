@@ -3179,7 +3179,6 @@ design	repeated_measures	word	repeated measures design		deepseek
 mating	selfing	word	selfing		curated terminology (round 3)
 mating	selfing	word	self-pollination		curated terminology (round 3)
 mating	selfing	word	selfed		curated terminology (round 3)
-mating	selfing	word	self		curated terminology (round 3)
 mating	selfing	word	single seed descent		curated terminology (round 3)
 mating	selfing	word	ssd		curated terminology (round 3)
 mating	sib_mating	word	sib mating		curated terminology (round 3)
@@ -3192,7 +3191,6 @@ mating	backcross	word	backcross		curated terminology (round 3)
 mating	backcross	word	backcrossing		curated terminology (round 3)
 mating	backcross	word	backcrossed		curated terminology (round 3)
 mating	backcross	word	bc1		curated terminology (round 3)
-mating	backcross	word	introgression		curated terminology (round 3)
 mating	diallel	word	diallel		curated terminology (round 3)
 mating	diallel	word	half diallel		curated terminology (round 3)
 mating	diallel	word	full diallel		curated terminology (round 3)
@@ -4071,3 +4069,37 @@ cue	unequal_groups	regex	\beach\b\)?\s*,?\s*(?:plus|and|with)\s+(?:a single|one|
 cue	count_breakdown	regex	\s+(?:[a-z-]+\s+){0,3}\(\s*\d+\s+[a-z-]+\s*(?:,|;|/|\band\b)\s*\d+	follows a number that is a total split into groups ("8 pigs (4 male, 4 female)"): the total is not the replicates per group	rules
 cue	count_word	regex	(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|hundred)	a count written as digits or a word; {N} in other cues	rules
 cue	unit_counted	regex	\b{N} (?:replicate |independent |separate |\w+ ){0,2}{U}(?:e?s)? (?:per|for each|in each|each)\b|\b{U}(?:e?s)? of {N}\b|\b(?:one|1|a single|each) \w+ (?:per|in its own|in their own) {U}\b|\b{N} replicate {U}	the prompt counts {U} as the replicate ("3 pots per treatment", "4 replicate cages", "one plant per pot"): only then is {U} the stated experimental unit. Read by merge_specs (R) and llm/make_sft.py (Python), so the reader is trained and merged on the same test	rules
+group_factor		word	disease	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	phenotype_group	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	phenotype	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	phenotypic_group	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	health_status	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	disease_status	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	status	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	condition	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	case_control	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	group	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	outcome_group	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	response	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+group_factor		word	response_group	factor name the reader may use for groups of subjects; renamed to disease or phenotype_group by the group_by_* cues	rules
+cue	group_by_trait	regex	(?i)\b(?:high(?:est)?\s+(?:vs\.?|versus|and|or)\s+low(?:est)?|low\s+(?:vs\.?|versus|and)\s+high|heaviest|lightest|extremes?|resistant|susceptible|tolerant|sensitive|super-?shedders?|low-?shedders?|ranked|efficiency|slick|respon(?:se|ders?|ded|d))\b	groups formed by ranking or scoring a trait (high vs low, resistant vs susceptible, responders) are factor phenotype_group; checked before group_by_health	curated terminology (paper questions)
+cue	group_by_health	regex	(?i)\b(?:patients?|healthy|diseased?|syndrome|disorder|cancers?|tumou?rs?|infected|diarrh\w*|mastitis|lesions?|\w+itis|\w+osis|affected|unaffected|diagnos\w*|subclinical|clinical|sick|epileptic|preeclampsia|miscarr\w*|COVID-19|endometriosis|shrivel|retained placenta|diabet\w*|hypertrophy|symptomatic|infarction|neuropathy|\w+omas?|dysplasia)\b	groups formed by a health or disease state (patients vs healthy controls, affected vs unaffected) are factor disease	curated terminology (paper questions)
+cue	two_group_contrast	regex	(?i)\b(?:vs\.?|versus|or not|did or did not|with and without|with or without)\b	a two-way contrast of subject groups ("affected vs healthy", "who did or did not develop"): a group factor of 2 levels is stated	rules
+mating	backcross	word	introgression line	a single introgression line (backcross-derived)	curated terminology (paper questions)
+mating	backcross	regex	\bbc\d+f\d	BC1F3-style generation codes	curated terminology (paper questions)
+mating	biparental	regex	\bsegregants?\b	haploid segregants of a two-strain cross (yeast)	curated terminology (paper questions)
+mating	biparental	regex	\bf1 (?:population|progeny|seedlings|clones)\b	an F1 mapping population of two heterozygous (clonal) parents	curated terminology (paper questions)
+assay	bsa_seq	word	mapping-by-sequencing	mutant mapping from pooled mutant-phenotype progeny	curated terminology (paper questions)
+assay	bsa_seq	word	mapping by sequencing	mutant mapping from pooled mutant-phenotype progeny	curated terminology (paper questions)
+assay	bsa_seq	word	bulked resequencing	bulked segregant resequencing	curated terminology (paper questions)
+assay	bsa_seq	regex	^(?=.*\b(?:f2|bc\d|backcross\w*|segregants?|progeny|f1 population|mutants?|families)\b)(?=.*sequenc).*?\K\b(?:bulks?|bulked|pool(?:s|ed)?)\b(?=.*\b(?:f2|bc\d|backcross\w*|segregants?|progeny|mutants?|families|plants|seedlings|clones|birds|animals|resequenc\w*|sequenc\w*)\b|.*\bby\b)	pools or bulks of segregating progeny that are sequenced (bulk segregant mapping); populations pooled without a cross are pool_seq	curated terminology (paper questions)
+assay	qtl_mapping	word	qtls	plural of qtl	curated terminology (paper questions)
+assay	qtl_mapping	regex	^(?!.*\b(?:bulk\w*|pool(?:s|ed)?|qtl-seq|bsa-seq|mutmap|mapping[- ]by[- ]sequencing)\b)(?=.*\b(?:rils?|f2(?::3)?|f3|bc\d\w*|backcross\w*|dh|doubled haploids?|intercross|segregants?|families|full-sib family|progeny|f1 population|cross(?:es)?)\b).*?\K\b(?:fine[- ])?mapping\b	mapping a trait in a segregating population (RILs, F2, backcross ...) is QTL mapping	curated terminology (paper questions)
+assay	wgs	word	whole-genome sequenced	whole-genome sequenced individuals	curated terminology (paper questions)
+assay	wgs	word	whole genome sequenced	whole-genome sequenced individuals	curated terminology (paper questions)
+assay	wgs	word	genomes sequenced	genomes were sequenced	curated terminology (paper questions)
+mapping_assay		value	qtl_mapping	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
+mapping_assay		value	bsa_seq	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
+mapping_assay		value	gwas	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
+mapping_assay		value	eqtl	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
+mapping_assay		value	pool_seq	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)

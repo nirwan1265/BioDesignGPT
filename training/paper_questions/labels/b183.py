@@ -22,7 +22,7 @@ dict(paper="paper_4560", style="detailed", prompt="Leaf RNA-seq of Nicotiana ben
 dict(paper="paper_4561", skip="optogenetic model"),
 dict(paper="paper_4562", skip="R-loop mechanism"),
 dict(paper="paper_4563", style="question", prompt="snRNA-seq of dorsal root ganglia from streptozotocin-diabetic Sprague-Dawley rats with and without painful neuropathy, plus non-diabetic controls. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["single_cell"], factors=[dict(name="phenotype_group", n_levels=3)]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["single_cell"], factors=[dict(name="disease", n_levels=3)]),
      ask=["design.reps"], note="neuropathy"),
 dict(paper="paper_4564", style="detailed", prompt="Faecal 16S of male F344 rats fed a control diet, a haem-rich diet, or haem with mineral calcium or a calcium-rich dairy matrix, 12 rats per group.",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet", n_levels=4)], design=dict(reps=12)),

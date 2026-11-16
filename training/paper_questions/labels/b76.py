@@ -11,7 +11,7 @@ dict(paper="paper_1878", style="question", prompt="How many replicates for ChIP-
      spec=dict(system="cell_culture", organism="Mus musculus", assays=["chip_seq"], factors=[dict(name="genotype", n_levels=3)]),
      ask=["design.reps"], note="3 genotypes"),
 dict(paper="paper_1879", style="question", prompt="scRNA-seq of pancreatic lymph nodes from organ donors with type 1 diabetes, autoantibody-positive donors and donors without diabetes. How many donors per group?",
-     spec=dict(organism="Homo sapiens", assays=["single_cell"], factors=[dict(name="phenotype_group", n_levels=3)]),
+     spec=dict(organism="Homo sapiens", assays=["single_cell"], factors=[dict(name="disease", n_levels=3)]),
      ask=["design.reps"], note="observational donors"),
 dict(paper="paper_1880", style="detailed", prompt="Leaf RNA-seq of Summer Black grapevines in the field at 2, 5, 7 and 10 weeks after emergence, three replicates per stage from 5-6-year-old vines.",
      spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="stage", n_levels=4)], design=dict(reps=3)),

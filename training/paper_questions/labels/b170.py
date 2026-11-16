@@ -21,7 +21,7 @@ dict(paper="paper_4234", style="detailed", prompt="RNA-seq of 14-day-old seedlin
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3), dict(name="treatment", n_levels=3)], design=dict(reps=3), subsamples_per_unit=8),
      ask=[P], note="3x3x3"),
 dict(paper="paper_4235", style="question", prompt="RRBS of blood from dairy calves with vs without bovine respiratory disease, sampled at neonatal, pre-weaning and post-weaning ages. How many calves per group?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="phenotype_group", n_levels=2), dict(name="time", n_levels=3)]),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="disease", n_levels=2), dict(name="time", n_levels=3)]),
      ask=["design.reps"], note="pilot"),
 dict(paper="paper_4236", style="question", prompt="RNA-seq of Pirol potato with or without arbuscular mycorrhiza and with or without PVY infection, pots arranged in infected/uninfected pairs. Is the pot pair a block?",
      spec=dict(organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="infection", n_levels=2)]),

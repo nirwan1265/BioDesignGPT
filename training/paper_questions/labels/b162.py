@@ -35,7 +35,7 @@ dict(paper="paper_4044", style="question", prompt="Liver RNA-seq of 21-day-old b
      spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="diet")]),
      ask=["design.reps"], note="probiotic diet"),
 dict(paper="paper_4045", style="question", prompt="Plasma small RNA-seq at 2 and 9 days after lateral fluid-percussion brain injury in rats later classed as epileptic or not, plus sham-operated rats. How many rats per outcome group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="phenotype_group", n_levels=3), dict(name="time", n_levels=2)]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["small_rnaseq"], factors=[dict(name="disease", n_levels=3), dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="biomarker cohort"),
 dict(paper="paper_4046", skip="germline atlas"),
 dict(paper="paper_4047", skip="pharmacogenetics"),

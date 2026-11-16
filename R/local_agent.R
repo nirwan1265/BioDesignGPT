@@ -253,7 +253,17 @@ extract_spec_local <- function(question) {
   if (sys_now %in% .sf_systems_where(lists_assays = TRUE)) {
     as <- find_all("assay")
     as <- setdiff(as, if (!sys_now %in% .sf_systems_where(rnaseq_gwas_are_assays = TRUE)) .sf_list("context_assay"))
+    as <- setdiff(as, .sf_generic_of(as))
     if (length(as)) set("assays", as)
+  } else {
+    # a field, greenhouse or animal study that maps a trait lists its assays too (mapping_assay in rules.tsv)
+    as <- find_all("assay")
+    if (length(intersect(as, .sf_list("mapping_assay")))) set("assays", setdiff(as, .sf_generic_of(as)))
+  }
+  # the mating of a stated population (F2, backcross, RILs ...) whatever the setting
+  if (!identical(spec$system, "breeding_genetics")) {
+    mt <- find_all("mating")
+    if (length(mt)) set("population.mating", mt[1])
   }
   if (identical(spec$system, "breeding_genetics")) {
     mt <- find_all("mating")

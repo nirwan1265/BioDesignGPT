@@ -22,6 +22,8 @@ paper with no planned comparison.
 - System: `breeding_genetics`, unless a field, greenhouse or growth chamber is named. Then that setting is
   the system, and mapping goes in assays.
 - Assays: `gwas`, `qtl_mapping`, `bsa_seq`, `eqtl`, plus the genotyping assay if stated (`gbs`, `wgs`).
+  Bulk segregant studies (BSA-seq, QTL-seq, MutMap, pooled F2 bulks) are `bsa_seq`; add `qtl_mapping` only
+  when a linkage or QTL analysis is also stated.
 - Factor `genotype`: n_levels = the number of lines or accessions when stated. Bulks in BSA are not
   genotype levels.
 - `population.mating`: one of the schema values (`biparental`, `backcross`, `ril`, `dh`, `nam`, `selfing`,
@@ -53,6 +55,10 @@ paper with no planned comparison.
 ## human_cohort: patient cohorts, observational cohorts, trials
 - Organism `Homo sapiens`. No system (none fits). Don't force one.
 - Factor `disease` / `phenotype_group` / `treatment` (case vs control, arms), with n_levels as stated.
+  `disease` when a health state formed the groups (patients vs healthy controls, affected vs unaffected,
+  naturally infected vs healthy); `phenotype_group` when a ranked or scored trait did (high vs low,
+  resistant vs susceptible, responders vs non-responders). The rules apply the same test
+  (`group_by_trait`, then `group_by_health`, in `inst/agent/rules.tsv`).
   `time` for repeated visits.
 - design.reps = participants per group. The unit is `donor` only when written that way.
 - Ask: `design.reps` if not stated. Always ask `power.minimum_detectable_difference` unless an effect is given.

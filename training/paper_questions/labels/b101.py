@@ -5,7 +5,7 @@ dict(paper="paper_2500", style="question", prompt="Blood RNA-seq of 4 African gr
      ask=[P], note="species x time"),
 dict(paper="paper_2501", skip="tumour genome survey"),
 dict(paper="paper_2502", style="question", prompt="small RNA-seq of matched eutopic and ectopic endometrium from 4 endometriosis patients plus eutopic endometrium from 4 controls. Is 4 per group enough?",
-     spec=dict(organism="Homo sapiens", assays=["small_rnaseq"], factors=[dict(name="phenotype_group", n_levels=3)], design=dict(reps=4)),
+     spec=dict(organism="Homo sapiens", assays=["small_rnaseq"], factors=[dict(name="disease", n_levels=3)], design=dict(reps=4)),
      ask=[P], note="paired within patient"),
 dict(paper="paper_2503", style="question", prompt="small RNA-seq of milk extracellular vesicles from dairy cows given recombinant somatotropin vs untreated, sampled repeatedly across treatment cycles. How many cows per group?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["small_rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),

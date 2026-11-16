@@ -10,7 +10,7 @@ dict(paper="paper_1852", style="question", prompt="How many mice per group for l
      spec=dict(system="mouse", organism="Mus musculus", assays=["single_cell"], factors=[dict(name="genotype", n_levels=2)]),
      ask=["design.reps"], note="tg vs WT"),
 dict(paper="paper_1853", style="question", prompt="Blood methylation of 30 dairy cows later culled for infertility, mastitis, lameness or metabolic disease and 30 healthy herdmates from the same farm. Is 6 per disease group enough?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="phenotype_group", n_levels=5)]),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="disease", n_levels=5)]),
      ask=[P], note="retrospective case-control"),
 dict(paper="paper_1854", style="detailed", prompt="Rice tms5 panicles at about 1 cm: plants kept at high summer temperature vs moved to 22 C growth chambers; ATAC-seq and RNA-seq with 3 biological replicates.",
      spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["atac_seq", "rnaseq"], factors=[dict(name="temperature", n_levels=2)], design=dict(reps=3)),
