@@ -4103,3 +4103,4 @@ mapping_assay		value	bsa_seq	a mapping assay: listed in any system when the text
 mapping_assay		value	gwas	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
 mapping_assay		value	eqtl	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
 mapping_assay		value	pool_seq	a mapping assay: listed in any system when the text names it (field, greenhouse and animal studies map traits too)	curated terminology (paper questions)
+mating	selfing	regex	\bself\b(?!-(?:administ\w*|graft\w*|sampl\w*|report\w*|renew\w*|assembl\w*|organi[sz]\w*|compatib\w*|incompatib\w*))	self, self-pollinated, self-fertilised, self-crossed ...; not self-administration, self-grafted, self-sampled, self-renewal, self-compatibility (those are not a selfing population)	curated terminology (round 3)

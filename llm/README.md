@@ -156,8 +156,7 @@ scored once:
   relabelled; dev and the test splits are unchanged.
 - Mapping assays: "mapping" in a segregating population is `qtl_mapping`; sequenced bulks or pools of progeny
   are `bsa_seq`; these are listed in any setting, not only breeding studies.
-- Mating: the stated population (F2, backcross, RILs, DH ...) sets `population.mating` in any setting. The bare
-  word "self" was dropped (it matched self-administration, self-grafted).
+- Mating: the stated population (F2, backcross, RILs, DH ...) sets `population.mating` in any setting.
 
 | | before | after |
 |---|---|---|
@@ -168,8 +167,7 @@ scored once:
 | new kinds, mapping (v2 merged) | 77.8 | 82.8 |
 | new kinds, rules alone | 64.7 | 66.6 |
 
-One check set dropped: fresh v3, v2 merged 93.4 to 91.8. A question about "self-pollinated" F2 plants no longer
-gets `selfing` once the bare word "self" is gone, and its "ready for mapping?" now gets `qtl_mapping`.
+"self" is kept as a selfing cue, minus the forms that are not a selfing population (self-administration, self-grafted, self-sampled, self-renewal, self-compatibility); the exclusions are in the rule itself. Fresh v3 is back to 93.4.
 
     Rscript training/paper_questions/score.R dev llm/preds WORK/eval_base WORK/eval_ft   # dev, field by field
     Rscript llm/score.R WORK/eval_base WORK/eval_ft                                      # the other sets
