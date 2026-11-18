@@ -156,6 +156,14 @@ extract_spec_local <- function(question) {
   set("design.seasons", .sf_count_before(text, .sf_list("season_noun")))
   if (.sf_has(text, .sf_cue("one_season"))) set("design.seasons", 1)
   if (.sf_has(text, .sf_cue("unreplicated"))) set("design.reps", 1)
+  # other ways of stating the replicates per group (rules.tsv reps_pattern; {N} is the count_word cue)
+  if (is.null(spec$design$reps)) for (rp in .sf_rules_rows("reps_pattern")$pattern) {
+    g <- regmatches(text, regexec(gsub("{N}", .sf_cue("count_word"), rp, fixed = TRUE), text, perl = TRUE))[[1]]
+    if (!length(g)) next
+    v <- g[-1][nzchar(g[-1])][1]
+    n <- if (v %in% c("one", "a single")) 1 else .sf_num(v)
+    if (!is.na(n) && n >= 2 && n <= 500) { set("design.reps", n); break }   # one per group: left to the unreplicated cue
+  }
 
   # units: "<n> <meas> per <exp>"; take the first match that names real units
   per_re <- .sf_cue("n_units_per_unit")
