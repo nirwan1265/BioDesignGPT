@@ -55,11 +55,11 @@ test_that("bundled model runs when Python is available", {
 
 test_that("new topics: rules read populations, assays and organisms", {
   s <- extract_spec_local("I want a half diallel among 8 maize inbreds to estimate GCA and SCA at three locations.")
-  expect_equal(s$system, "breeding_genetics")
+  expect_equal(s$study_type, "breeding_genetics")
   expect_equal(s$population$mating, "diallel")
   expect_equal(s$population$parents, 8)
   v <- extract_spec_local("We want to validate 3 candidate genes in silico and in vivo with CRISPR in rice and heterologous expression in Arabidopsis.")
-  expect_equal(v$system, "functional_validation")
+  expect_equal(v$study_type, "functional_validation")
   expect_equal(unlist(v$organisms), c("Oryza sativa", "Arabidopsis thaliana"))
   expect_true(all(c("crispr", "heterologous", "in_silico") %in% unlist(v$assays)))
   a <- studyforge_ask("ATAC-seq of maize roots across 3 water treatments with 2 biological replicates")

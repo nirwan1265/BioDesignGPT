@@ -155,7 +155,7 @@ print.studyforge_practice <- function(x, ...) {
 # For a StudySpec: the technique comes from the assays first, then the system.
 .sf_practice_for_spec <- function(spec, question = NULL) {
   if (is.null(spec$organism)) return(NULL)
-  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[spec$system %||% ""]))
+  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[.sf_system_set(spec)]))
   techs <- unique(techs[!is.na(techs)])
   for (t in techs) {
     tis <- spec$tissue %||% tryCatch(.sf_tissue_in_question(question, spec$organism, t), error = function(e) NULL)

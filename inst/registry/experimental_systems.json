@@ -281,6 +281,24 @@
       "reporting_checklist": "ARRIVE 2.0; FASS Guide for the Care and Use of Agricultural Animals in Research and Teaching",
       "disclaimer": "Planning recommendation only; final designs require statistician, veterinarian and animal care committee review.",
       "guidance": "When diets or water treatments are given to pens, the pen is the experimental unit and n is the number of pens (Bello et al. 2016, J Dairy Sci 99:8871-8879, doi:10.3168/jds.2016-11516)."
+    },
+    {
+      "id": "cell_culture",
+      "kind": "setting",
+      "consequential_questions": [
+        "Primary cells or a cell line? If primary, how many donors or animals did the cells come from (the donor is usually the unit)?",
+        "Are replicates independent cultures (separate passages, thaws, isolations or days) or wells of one culture?",
+        "How is the treatment applied: per well, per plate or per flask, and are plates processed in batches?",
+        "Primary outcome and its expected SD; time points and harvest order?",
+        "Plate position and edge effects: are treatments randomized across plates and positions?"
+      ],
+      "default_blocking": [
+        "batch",
+        "donor",
+        "plate",
+        "passage"
+      ],
+      "guidance": "Wells or flasks from one culture are technical replicates; independent cultures (separate isolations, passages or days) or donors are the biological replicates (Lazic 2010, BMC Neurosci 11:5, doi:10.1186/1471-2202-11-5)."
     }
   ]
 }

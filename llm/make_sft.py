@@ -8,8 +8,9 @@
      paper_questions/splits/train.jsonl questions written from real papers (hand-labelled training pool; all used)
    (found in $SFT_DATA or training/data). Excluded: every prompt in a test/dev set, and the held-out species (rules.tsv held_out_species), so
    grounded_eval stays a test of unseen organisms. Paper-question dev/test/test_heldout prompts are excluded too.
-   Every gold spec follows one system convention (training/setting.py): the stated setting (greenhouse, mice,
-   flies, cell lines ...) is the system and the assay goes in assays, so older generated labels are converted.
+   Every gold spec follows one system convention (training/setting.py): system is the setting (greenhouse, mice,
+   flies, cell lines ...), study_type the kind of study (breeding, multi-environment, multi-omics, validation) and
+   the assays go in assays, so older generated labels are converted.
 
 2. build: the training targets. Our labels cover organism, system, assays, factors, counts, units, outcome,
    population. They don't cover method, tissue, levels, outcome text or the questions to ask. For those the
@@ -104,7 +105,7 @@ def convention(spec, text):
     """Gold spec under the current system convention (setting.apply), keeping the assay the old system implied."""
     spec = json.loads(json.dumps(spec))
     old = spec.get("system")
-    if setting.apply(spec, text) and old in SYSTEM_ASSAY and not spec.get("assays"):
+    if setting.apply(spec, text) is not None and old in SYSTEM_ASSAY and not spec.get("assays"):
         spec["assays"] = [SYSTEM_ASSAY[old]]
     return spec
 
@@ -194,7 +195,7 @@ def target(prompt, gold, distilled, must_ask=None, stats=None):
     po = gold.get("primary_outcome")
     goal = d.get("goal") if d.get("goal") in ("design", "analysis") else "design"
     return {
-        "goal": goal, "system": gold.get("system"), "organism": gold.get("organism"),
+        "goal": goal, "system": gold.get("system"), "study_type": gold.get("study_type"), "organism": gold.get("organism"),
         "organisms": gold.get("organisms"), "method": d.get("method") if isinstance(d.get("method"), str) else None,
         "assays": gold.get("assays") or [], "tissue": d.get("tissue") if isinstance(d.get("tissue"), str) else None,
         "factors": factors,

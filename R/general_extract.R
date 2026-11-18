@@ -135,14 +135,10 @@
   }
   if (is.null(spec$assays)) {
     a <- .sf_find_all(text, "assay")
-    if (!identical(spec$system, "functional_validation")) a <- setdiff(a, "heterologous")   # "benthamiana" is an organism
+    if (!identical(spec$study_type, "functional_validation")) a <- setdiff(a, "heterologous")   # "benthamiana" is an organism
     if (length(a)) set("assays", a)
   }
-  if (is.null(spec$system) && length(spec$assays)) {
-    s <- unname(.sf_map("system_by_assay")[unlist(spec$assays)])
-    s <- s[!is.na(s)]
-    if (length(s)) set("system", s[1])
-  }
+  # the assay family is not a setting: with no setting stated, system stays open and is asked
   # factors: fill counts the hand rules missed or defaulted, add factors they never saw
   gen <- .sf_generic_factors(text)
   if (length(gen)) {
@@ -262,7 +258,7 @@ studyforge_fix <- function(answer, ...) {
                                       if (!is.null(sq$depth_m)) paste0(sq$depth_m, " M reads")), collapse = ", ") else hint("sequencing")
   rows <- c(
     Goal = if (identical(s$goal, "analysis")) "analyse data already collected" else "design a new study",
-    Organism = q(s$organism), Setting = q(s$system), `Assay / data` = q(s$assays),
+    Organism = q(s$organism), Setting = q(s$system), `Study type` = q(s$study_type), `Assay / data` = q(s$assays),
     `Method / resource` = q(s$method), Tissue = tissue,
     `Factors (levels)` = fx, `Outcome / phenotype` = outcome, `Experimental unit` = q(s$experimental_unit),
     `Replicates` = q(s$design$reps), `Locations / seasons` = paste(q(s$design$locations), "/", q(s$design$seasons)))
@@ -271,14 +267,15 @@ studyforge_fix <- function(answer, ...) {
             ifelse(names(rows) %in% c("Organism", "Replicates", "Tissue") & names(rows) %in% names(fixes), "  (corrected)", "")))
 }
 
-# Factors whose levels are listed or counted in the text (rules.tsv category factor_levels; {N} is the count_word
-# cue). match says how to read a hit: list = one level per number in group 1 ("at 0, 6, 12 and 24 h"); count =
+# Factors whose levels are listed or counted in the text (rules.tsv category factor_levels, term "<factor>/<how>";
+# {N} is the count_word cue). how says how to read a hit: list = one level per number in group 1 ("at 0, 6, 12 and 24 h"); count =
 # group 1 is the number of levels ("at four times"); pair = two levels ("at baseline and 52 weeks"); wordlist = one
 # level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
 # factor is there, its levels unknown ("sampled over time").
 .sf_level_factors <- function(text) {
   r <- .sf_rules_rows("factor_levels")
   out <- list()
+  how <- sub("^[^/]*/", "", r$term); r$term <- sub("/.*$", "", r$term); r$match <- how
   for (i in seq_len(nrow(r))) {
     nm <- r$term[i]; if (nm %in% names(out) && !is.na(out[[nm]])) next
     re <- gsub("{N}", .sf_cue("count_word"), r$pattern[i], fixed = TRUE)

@@ -3,14 +3,14 @@
 import glob, json, os, re, sys, collections
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "llm"))
-from reader import SYSTEMS, ASSAYS  # noqa: E402
+from reader import SYSTEMS, STUDY_TYPES, ASSAYS  # noqa: E402
 FACTORS = {"age", "antibiotic", "co2", "diet", "disease", "genotype", "injury", "light", "nitrogen", "nutrient", "phosphorus",
            "salt", "sex", "stage", "temperature", "time", "tissue", "treatment", "water", "dose", "infection", "cell_type",
            "species", "generation", "soil", "phenotype_group"}
 OUTCOMES = {"behaviour", "biomass", "body_weight", "chromatin_accessibility", "disease_severity", "flowering_time",
             "forage_yield", "gca_sca", "gene_expression", "grain_yield", "leaf_growth", "lifespan", "lipid_content",
             "mechanical_threshold", "photosynthesis", "plant_height", "translation_efficiency", "wing_size"}
-TOP = {"system", "organism", "organisms", "experimental_unit", "measurement_unit", "subsamples_per_unit", "factors", "design",
+TOP = {"system", "study_type", "organism", "organisms", "experimental_unit", "measurement_unit", "subsamples_per_unit", "factors", "design",
        "assays", "primary_outcome", "population", "environments", "blocking_factors"}
 WORD = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
         "eleven": 11, "twelve": 12, "a dozen": 12, "dozen": 12, "a pair": 2, "pair": 2, "both": 2, "single": 1,
@@ -24,6 +24,7 @@ def check(r, where, errs, stats):
     for k in e:
         if k not in TOP: errs.append(f"{where}: unknown field {k}")
     if e.get("system") and e["system"] not in SYSTEMS: errs.append(f"{where}: system {e['system']}")
+    if e.get("study_type") and e["study_type"] not in STUDY_TYPES: errs.append(f"{where}: study_type {e['study_type']}")
     for a in e.get("assays", []):
         if a not in ASSAYS: errs.append(f"{where}: assay {a}")
     po = (e.get("primary_outcome") or {}).get("name")

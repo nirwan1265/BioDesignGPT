@@ -17,20 +17,26 @@ test_that("assays in a question map to evidence techniques", {
   expect_equal(unname(.sf_map("tech_by_assay")["m6a_seq"]), "m6A / MeRIP-seq")
 })
 
-test_that("single-cell ATAC is a single-cell study, not bulk ATAC; a named setting comes first", {
+test_that("single-cell ATAC is a single-cell assay, not bulk ATAC; system is only a named setting", {
   s <- extract_spec_local("scATAC-seq of retina, Oct4 overexpression vs control.")
-  expect_equal(s$system, "single_cell")
+  expect_null(s$system)                                # no setting named: system stays open and is asked
   expect_true("scatac_seq" %in% unlist(s$assays))
+  expect_true("single_cell" %in% .sf_system_set(s))   # single-cell advice still follows the assay
   s <- extract_spec_local("scATAC-seq of mouse retina, Oct4 overexpression vs control.")
   expect_equal(s$system, "mouse")                      # the setting is the system; the assay stays listed
   expect_true("scatac_seq" %in% unlist(s$assays))
 })
 
-test_that("system is the stated setting, else the assay family; assay advice follows the assay", {
+test_that("system is the stated setting, never the assay family; assay advice follows the assay", {
   s <- extract_spec_local("ATAC-seq of soybean trifoliate leaves from greenhouse plants, drought vs control, 3 reps.")
   expect_equal(s$system, "greenhouse")
   expect_true("atac_replicated" %in% .sf_candidates(s))
-  expect_equal(extract_spec_local("RNA-seq of 2 cultivars under heat vs control.")$system, "bulk_rnaseq")
+  s <- extract_spec_local("RNA-seq of 2 cultivars under heat vs control.")
+  expect_null(s$system)
+  expect_true("bulk_rnaseq" %in% .sf_system_set(s))
+  s <- extract_spec_local("300 RILs of maize to map flowering time in field plots at 2 locations.")
+  expect_equal(s$system, "field")                      # the setting ...
+  expect_equal(s$study_type, "breeding_genetics")      # ... and the kind of study, kept apart
   expect_equal(extract_spec_local("Drosophila S2 cells, ATAC-seq after induction.")$system, "cell_culture")
   expect_equal(extract_spec_local("Ribosome profiling of yeast under heat vs control to measure translation efficiency.")$primary_outcome$name,
                "translation_efficiency")

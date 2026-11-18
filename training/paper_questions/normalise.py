@@ -9,13 +9,15 @@ gold spec still contains only what the question states.
               system "livestock", factor names phenotype -> phenotype_group and strain -> genotype.
     schema 3: system is the stated setting (growth chamber, greenhouse, field, mice/rats, flies, farm animals,
               cell lines) rather than the assay family when the question names one (training/setting.py).
+    schema 4: system is only ever the setting; a study type moves to study_type and an assay family is dropped
+              (it is in assays), leaving system empty when no setting is stated (training/setting.py).
 """
 import csv, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, ".."))
 import setting  # noqa: E402
-SCHEMA = 3
+SCHEMA = 4
 import rules  # noqa: E402   inst/agent/rules.tsv
 NEW_ASSAYS = set(rules.keys("schema2_assay"))
 # a specific assay replaces the generic label used for it before, unless the generic one is also stated on its own

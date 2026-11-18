@@ -19,6 +19,13 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
       model$primary_outcome <- NULL
   }
   if (is.character(model$organism) && !grepl("^[A-Z][a-z]+ [a-z]+", model$organism)) model$organism <- NULL
+  # system is the setting only: a study type the reader gives as its system is the study_type, an assay family is
+  # already in assays (readers trained before this convention still answer that way)
+  if (is.character(model$system) && model$system %in% .sf_systems_where(kind = "study")) {
+    if (is.null(model$study_type)) model$study_type <- model$system
+    model$system <- NULL
+  }
+  if (is.character(model$system) && model$system %in% .sf_systems_where(kind = "assay")) model$system <- NULL
   # the reader's setting must fit the organism: plant settings (field, greenhouse, chamber) are not for animals,
   # the animal-facility setting ("mouse": cages, litters) is not for plants or people, vials are for flies
   org <- rule$organism %||% (if (is.character(model$organism)) model$organism)
@@ -113,6 +120,9 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   unit_counted <- function(u) .sf_unit_counted(u, text)
   out <- rule
   if (!is.null(model$system) && (is.null(rule$system) || tier(model$system) > tier(rule$system))) out$system <- model$system
+  # the study type only when the text says it (the rules' study cues)
+  if (is.null(out$study_type) && is.character(model$study_type) && .sf_rule_hit("system", model$study_type, text))
+    out$study_type <- model$study_type
   ma <- unlist(model$assays)
   if (length(ma) && (all(ma %in% assays_said) || is.null(rule$assays)))
     out$assays <- as.list(unique(c(ma, setdiff(unlist(rule$assays), c(ma, .sf_generic_of(ma), .sf_list("method_assay"))))))

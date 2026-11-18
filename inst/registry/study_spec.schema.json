@@ -1,6 +1,6 @@
 {
-  "version": "0.3.0",
-  "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final.",
+  "version": "0.4.0",
+  "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
     "goal",
@@ -13,6 +13,7 @@
     "power.residual_sd"
   ],
   "optional": [
+    "study_type",
     "organism",
     "measurement_unit",
     "subsamples_per_unit",
@@ -40,17 +41,9 @@
       "greenhouse",
       "growth_chamber",
       "mouse",
-      "bulk_rnaseq",
-      "metabolomics_lipidomics",
-      "single_cell",
-      "cell_culture",
+      "livestock",
       "drosophila",
-      "breeding_genetics",
-      "multi_environment",
-      "multi_omics",
-      "ribo_seq",
-      "atac_seq",
-      "functional_validation"
+      "cell_culture"
     ],
     "primary_outcome.type": [
       "continuous",
@@ -64,6 +57,12 @@
       "needs_clarification",
       "assumptions_flagged",
       "validated"
+    ],
+    "study_type": [
+      "breeding_genetics",
+      "multi_environment",
+      "multi_omics",
+      "functional_validation"
     ]
   }
 }

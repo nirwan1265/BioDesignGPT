@@ -19,7 +19,8 @@ import rules as _rules  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # the reader's vocabulary (systems, assays, organisms, in prompt order) lives in inst/agent/rules.tsv
-SYSTEMS = _rules.keys("reader_system")
+SYSTEMS = _rules.keys("reader_system")            # settings only: where the experimental units live
+STUDY_TYPES = _rules.keys("reader_study_type")
 ASSAYS = _rules.keys("reader_assay")
 ORGANISMS = _rules.keys("reader_organism")
 
@@ -29,19 +30,17 @@ Never invent numbers: every count must appear in the text (digits or words). Do 
 
 Fields:
 - goal: "design" (planning a new study) or "analysis" (data already collected; asks which test, how to analyse).
-- system: one of {SYSTEMS}. Decide in this order and stop at the first that applies:
-  1. study type: validating candidate genes (CRISPR, complementation, another organism) -> functional_validation;
-     GWAS together with expression/eQTL -> multi_omics; crosses, selfing, backcrossing, RILs, NAM, diallel, mutant
-     populations -> breeding_genetics; the same entries over several locations/years for GxE or stability, or a
-     greenhouse/chamber screen checked against the field -> multi_environment.
-  2. the setting, when the text names it: growth chamber/room/climate chamber -> growth_chamber; greenhouse/glasshouse/
-     net house -> greenhouse; field/paddy/orchard -> field; mice or rats -> mouse; flies/Drosophila -> drosophila;
-     cell lines, ES/iPS cells, organoids, yeast or algal cultures -> cell_culture; farm animals (pigs, cattle, chickens,
-     broilers, hens, sheep, goats) -> livestock. The assay still goes in assays: RNA-seq of leaves in a growth chamber
-     is system growth_chamber with assays ["rnaseq"].
-  3. only when no setting is named, the assay family: bulk/small/long-read RNA-seq -> bulk_rnaseq; scRNA/snRNA/scATAC
-     -> single_cell; ATAC-seq -> atac_seq; Ribo-seq -> ribo_seq; lipidomics/metabolomics -> metabolomics_lipidomics.
-  ChIP-seq, CUT&Tag and methylome have no system of their own: use the setting and list the assay.
+- system: the setting the experimental units live in, one of {SYSTEMS}, only when the text names it or the organisms
+  make it plain: growth chamber/room/climate chamber/incubator/plates -> growth_chamber; greenhouse/glasshouse/net house
+  -> greenhouse; field/paddy/orchard/vineyard/plots -> field; mice or rats -> mouse; flies/Drosophila -> drosophila;
+  cell lines, primary cells, organoids, yeast or algal cultures -> cell_culture; farm animals (pigs, cattle, chickens,
+  broilers, hens, sheep, goats) -> livestock. An assay is never a system: RNA-seq of leaves in a growth chamber is
+  system growth_chamber with assays ["rnaseq"]; RNA-seq of leaves with no setting named is system null.
+- study_type: one of {STUDY_TYPES}, else null: validating candidate genes (CRISPR, complementation, another organism)
+  -> functional_validation; GWAS together with expression/eQTL -> multi_omics; crosses, selfing, backcrossing, RILs,
+  NAM, diallel, mutant populations -> breeding_genetics; the same entries over several locations/years for GxE or
+  stability, or a greenhouse/chamber screen checked against the field -> multi_environment. A study type and a
+  setting go together: RILs in field plots are study_type breeding_genetics with system field.
 - organism: scientific name, one of {ORGANISMS} or another scientific name. organisms: list when more than one.
 - method: the genetic tool, resource or approach named, in a few words (e.g. "Cre-lox conditional knockout",
   "EMS mutagenesis", "DGRP reference panel", "CRISPR knockout", "RNAi"), else null.
@@ -78,14 +77,14 @@ Return one JSON object and nothing else."""
 # worked examples written for this prompt (not from any test set)
 SHOTS = [
     ("We'll grow 48 barley lines in the field at two sites with three blocks each and score heading date.",
-     {"goal": "design", "system": "field", "organism": "Hordeum vulgare", "organisms": None, "method": None, "assays": [],
+     {"goal": "design", "system": "field", "study_type": None, "organism": "Hordeum vulgare", "organisms": None, "method": None, "assays": [],
       "tissue": None, "factors": [{"name": "genotype", "n_levels": 48, "levels": None, "applied_to": None}],
       "design": {"reps": 3, "locations": 2, "seasons": None}, "experimental_unit": "plot", "measurement_unit": None,
       "subsamples_per_unit": None, "primary_outcome": {"name": "heading_date", "type": "continuous"},
       "outcome_text": "heading date", "population": None, "environments": None, "blocking_factors": None, "sequencing": None,
       "missing_questions": ["How many seasons?", "Plot size and seed per line?"]}),
     ("I already have liver RNA-seq from knockout and wild-type mice on two diets, 4 mice per group. Which model finds DE genes?",
-     {"goal": "analysis", "system": "mouse", "organism": "Mus musculus", "organisms": None, "method": "knockout",
+     {"goal": "analysis", "system": "mouse", "study_type": None, "organism": "Mus musculus", "organisms": None, "method": "knockout",
       "assays": ["rnaseq"], "tissue": "liver",
       "factors": [{"name": "genotype", "n_levels": 2, "levels": ["knockout", "wild-type"], "applied_to": None},
                   {"name": "diet", "n_levels": 2, "levels": None, "applied_to": None}],
@@ -94,7 +93,7 @@ SHOTS = [
       "outcome_text": "DE genes", "population": None, "environments": None, "blocking_factors": None, "sequencing": None,
       "missing_questions": ["Were sexes mixed?", "Were libraries prepared in batches?"]}),
     ("Tamoxifen-inducible floxed allele in rats; I want to knock out my gene in adults and look at behaviour.",
-     {"goal": "design", "system": "mouse", "organism": "Rattus norvegicus", "organisms": None,
+     {"goal": "design", "system": "mouse", "study_type": None, "organism": "Rattus norvegicus", "organisms": None,
       "method": "Cre-lox conditional knockout (tamoxifen-inducible CreERT2)", "assays": [], "tissue": None,
       "factors": [{"name": "genotype", "n_levels": None, "levels": None, "applied_to": None},
                   {"name": "treatment", "n_levels": None, "levels": ["tamoxifen", "vehicle"], "applied_to": None}],
@@ -104,7 +103,7 @@ SHOTS = [
       "missing_questions": ["Which behaviour test is the primary outcome?", "Which control genotypes (Cre-only, flox-only)?",
                             "Both sexes?"]}),
     ("Salt stress on 20 rice accessions in hydroponics in a growth chamber, control vs 100 mM NaCl, 6 plants per tray, 4 trays.",
-     {"goal": "design", "system": "growth_chamber", "organism": "Oryza sativa", "organisms": None, "method": None, "assays": [],
+     {"goal": "design", "system": "growth_chamber", "study_type": None, "organism": "Oryza sativa", "organisms": None, "method": None, "assays": [],
       "tissue": None, "factors": [{"name": "genotype", "n_levels": 20, "levels": None, "applied_to": None},
                                   {"name": "salt", "n_levels": 2, "levels": ["control", "100 mM NaCl"], "applied_to": None}],
       "design": {"reps": 4, "locations": None, "seasons": None}, "experimental_unit": "tray", "measurement_unit": "plant",
@@ -190,6 +189,10 @@ def to_spec(d):
         s["goal"] = d["goal"]
     if d.get("system") in SYSTEMS:
         s["system"] = d["system"]
+    elif d.get("system") in STUDY_TYPES and not d.get("study_type"):   # an older reader's study type given as system
+        s["study_type"] = d["system"]
+    if d.get("study_type") in STUDY_TYPES:
+        s["study_type"] = d["study_type"]
     org = d.get("organism")
     listed = org if isinstance(org, list) else []
     o = canon_organism(listed[0] if listed else org) if (listed or isinstance(org, str)) else None

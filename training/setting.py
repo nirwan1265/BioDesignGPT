@@ -1,9 +1,11 @@
-"""System convention for labels (rules from inst/agent/rules.tsv + the system registry): the setting, when the question states one; otherwise the assay family.
+"""System convention for labels (rules from inst/agent/rules.tsv + the system registry), schema 4.
 
-"RNA-seq of poplar leaves in the greenhouse" is a greenhouse study with an RNA-seq assay (system "greenhouse",
-assays ["rnaseq"]); "RNA-seq of poplar leaves" stays "bulk_rnaseq". Validation and multi-environment
-studies keep their type; breeding and multi-omics studies give way to a named field, greenhouse or growth chamber. R's
-rule extractor reads the same rule files, so labels and extractor follow one convention.
+system is the setting the experimental units live in (field, greenhouse, growth chamber, mouse facility, livestock,
+flies, cell culture); study_type is the kind of study (breeding, multi-environment, multi-omics, validation); the
+assays are in assays. "RNA-seq of poplar leaves in the greenhouse": system "greenhouse", assays ["rnaseq"].
+"RNA-seq of poplar leaves": no system (not stated, so it is asked). "RILs in field plots": study_type
+"breeding_genetics", system "field". Older labels that used a study type or an assay family as the system are
+converted here; a setting a person labelled is kept. R's rule extractor reads the same rule files.
 
     python3 training/setting.py FILE.jsonl ...     rewrite eval files in place (expected_spec.system), print changes
 """
@@ -31,17 +33,29 @@ def stated_setting(text):
 # keeps_type_over_setting false); validation and multi-environment studies span settings and keep their type
 
 
+STUDIES = rules.systems_where(kind="study")
+SYSTEM_ASSAY = {i: sy.get("assay") for i, sy in rules.systems().items() if sy.get("kind") == "assay"}
+
+
 def apply(spec, text):
-    """Return the setting that replaces the label's system, or None if the label stays."""
+    """Bring one gold spec to schema 4 in place. Returns the new system ("" when none) if it changed, else None."""
+    old = spec.get("system")
+    if old not in STUDIES and old not in ASSAY_SYSTEMS:
+        return None
+    if old in STUDIES and not spec.get("study_type"):
+        spec["study_type"] = old
+    if old in ASSAY_SYSTEMS and not spec.get("assays") and SYSTEM_ASSAY.get(old):
+        spec["assays"] = [SYSTEM_ASSAY[old]]   # the assay the old system stood for
     s = stated_setting(text)
-    if s and (spec.get("system") in ASSAY_SYSTEMS or (spec.get("system") in STUDY_BELOW_SITE and s in PLANT_SITES)):
+    if s:
         spec["system"] = s
-        return s
-    return None
+    else:
+        spec.pop("system", None)
+    return spec.get("system", "")
 
 
 if __name__ == "__main__":
-    # edit the one "system" value in place so each file keeps its own JSON formatting
+    # rewrite label files in place (expected_spec or spec), one JSON object per line
     for path in sys.argv[1:]:
         lines = open(path, encoding="utf-8", newline="").read().split("\n")
         n = 0
@@ -49,13 +63,13 @@ if __name__ == "__main__":
             if not line.strip():
                 continue
             r = json.loads(line)
-            old = r["expected_spec"].get("system")
-            new = apply(r["expected_spec"], r["prompt"])
-            if new:
-                lines[i] = re.sub(r'("system"\s*:\s*")' + re.escape(old) + '"', lambda m: m.group(1) + new + '"', line, count=1)
-                assert json.loads(lines[i])["expected_spec"]["system"] == new
+            key = "expected_spec" if isinstance(r.get("expected_spec"), dict) else "spec" if isinstance(r.get("spec"), dict) else None
+            if key is None:
+                continue
+            old = r[key].get("system")
+            if apply(r[key], r.get("prompt") or r.get("text") or "") is not None:
+                lines[i] = json.dumps(r, ensure_ascii=False)
                 n += 1
-                print(f"  {old} -> {new}: {r['prompt'][:100]}")
         with open(path, "w", encoding="utf-8", newline="") as f:
             f.write("\n".join(lines))
         print(f"{path}: {n} relabelled")

@@ -80,3 +80,13 @@ paper with no planned comparison.
   it the unit.
 - Ask: `experimental_unit` when the question asks whether wells or passages are replicates. `design.reps`
   if not stated.
+
+## System and study type (schema 4)
+
+- `system` is the setting the experimental units live in: field, greenhouse, growth_chamber, mouse (rodent
+  facility), livestock, drosophila, cell_culture. Label it when the question names the setting or the organisms make
+  it plain (pigs on a farm, flies in vials, cell lines). Otherwise leave it out: it is asked.
+- `study_type` is the kind of study: breeding_genetics, multi_environment, multi_omics, functional_validation.
+  It goes with a setting: RILs in field plots are study_type breeding_genetics, system field.
+- An assay family (RNA-seq, single-cell, ATAC, Ribo-seq, metabolomics) is never a system; it is in assays.
+

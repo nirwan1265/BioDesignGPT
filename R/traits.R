@@ -96,7 +96,7 @@ suggest_traits <- function(organ = NULL, stress = NULL, organism = NULL, n = 8) 
 .sf_practice_hint <- function(spec, what = c("tissue", "sequencing")) {
   what <- match.arg(what)
   if (is.null(spec$organism)) return(NULL)
-  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[spec$system %||% ""]))
+  techs <- c(unname(.sf_map("tech_by_assay")[unlist(spec$assays)]), unname(.sf_map("tech_by_system")[.sf_system_set(spec)]))
   techs <- unique(techs[!is.na(techs)])
   if (!length(techs)) return(NULL)
   p <- .sf_practice_tables()$practice

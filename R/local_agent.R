@@ -77,10 +77,20 @@ extract_spec_local <- function(question) {
   study <- intersect(sys, .sf_systems_where(kind = "study"))
   stated <- unique(names(.sf_rules("setting"))[vapply(.sf_rules("setting"), function(p) .sf_has(text, p), logical(1))])
   site <- intersect(stated, .sf_systems_where(plant_site = TRUE))
-  if (length(intersect(study, .sf_systems_where(keeps_type_over_setting = TRUE)))) set("system", study[1]) else
-    if (length(study) && length(site)) set("system", site[1]) else   # "RILs in an RCBD in the field": a field trial
-    if (length(study)) set("system", study[1]) else if (length(stated)) set("system", stated[1]) else
-    if (length(sys)) set("system", sys[1]) else if (.sf_has(text, .sf_cue("animal_study_fallback"))) set("system", "mouse")
+  # ctx: the registry entry that decides the rules below (study type, else the setting, else the assay family);
+  # the spec itself keeps them apart: system is only the setting, study_type the kind of study, the assays in assays
+  ctx <- if (length(intersect(study, .sf_systems_where(keeps_type_over_setting = TRUE)))) study[1] else
+    if (length(study) && length(site)) site[1] else   # "RILs in an RCBD in the field": a field trial
+    if (length(study)) study[1] else if (length(stated)) stated[1] else
+    if (length(sys)) sys[1] else if (.sf_has(text, .sf_cue("animal_study_fallback"))) "mouse" else NULL
+  if (length(study)) set("study_type", study[1])
+  # the setting: the context when that is a setting; else a stated setting, and under a study type also the weak
+  # setting cues ("plots" in a multi-site trial); under an assay alone the weak cues do not count ("RNA-seq of
+  # cultivars" is not a field study)
+  setting <- if (isTRUE(ctx %in% .sf_systems_where(kind = "setting"))) ctx else
+    c(stated, if (length(study)) intersect(sys, .sf_systems_where(kind = "setting")))   # under a study type the weak cues too
+  if (length(setting)) set("system", setting[1])
+  spec$system_context <- ctx   # dropped before the spec is returned
   org <- .sf_first_named(text, "organism")
   if (length(org)) set("organism", org)
 
@@ -112,7 +122,7 @@ extract_spec_local <- function(question) {
     n <- .sf_count_before(text, .sf_group("count_noun", "water"))
     if (is.na(n) && .sf_has(text, .sf_cue("water_two_levels"))) n <- 2
     line_src <- .sf_has(text, .sf_cue("line_source"))
-    add_factor("water", n, if (line_src) "distance_from_line" else if (whole_plot_water && spec$system %in% "field") "main_plot")
+    add_factor("water", n, if (line_src) "distance_from_line" else if (whole_plot_water && spec$system_context %in% "field") "main_plot")
   }
   if (.sf_has(text, .sf_cue("nitrogen_factor"))) add_factor("nitrogen", .sf_count_before(text, .sf_group("count_noun", "nitrogen")) %|na|% 2)
   if (.sf_has(text, .sf_cue("temperature_factor"))) add_factor("temperature", 2, if (.sf_has(text, .sf_cue("chamber_word"))) "chamber")
@@ -123,7 +133,7 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, .sf_cue("antibiotic_factor"))) add_factor("antibiotic", 2, if (.sf_has(text, .sf_cue("given_in_water_or_diet"))) "cage")
   if (.sf_has(text, .sf_cue("diet_factor"))) {
     n <- .sf_count_before(text, .sf_group("count_noun", "diet"))
-    add_factor("diet", n %|na|% 2, if (.sf_has(text, .sf_cue("maternal"))) "dam" else if (isTRUE(spec$system %in% "drosophila")) "vial")
+    add_factor("diet", n %|na|% 2, if (.sf_has(text, .sf_cue("maternal"))) "dam" else if (isTRUE(spec$system_context %in% "drosophila")) "vial")
   }
   if (.sf_has(text, .sf_cue("dose_factor"))) add_factor("dose", .sf_count_before(text, .sf_group("count_noun", "dose")) %|na|% NA)
   if (.sf_has(text, .sf_cue("sex_factor"))) add_factor("sex", 2)
@@ -238,11 +248,11 @@ extract_spec_local <- function(question) {
     set("experimental_unit", "tank"); set("measurement_unit", "fish")
   }
   if (is.null(spec$experimental_unit)) {
-    if (identical(spec$system, "field")) set("experimental_unit", if (.sf_has(text, .sf_cue("single_plant_plots"))) "plant" else "plot")
-    if (identical(spec$system, "greenhouse") && .sf_has(text, .sf_cue("greenhouse_pot_unit"))) set("experimental_unit", "pot")
-    if (identical(spec$system, "growth_chamber") && .sf_has(text, .sf_cue("pots_word"))) set("experimental_unit", "pot")
-    if (spec$system %in% c("growth_chamber", "greenhouse") && .sf_has(text, .sf_cue("cell_tray"))) set("experimental_unit", "cell")
-    if (identical(spec$system, "drosophila") && .sf_has(text, .sf_cue("fly_vial_study"))) {
+    if (identical(spec$system_context, "field")) set("experimental_unit", if (.sf_has(text, .sf_cue("single_plant_plots"))) "plant" else "plot")
+    if (identical(spec$system_context, "greenhouse") && .sf_has(text, .sf_cue("greenhouse_pot_unit"))) set("experimental_unit", "pot")
+    if (identical(spec$system_context, "growth_chamber") && .sf_has(text, .sf_cue("pots_word"))) set("experimental_unit", "pot")
+    if (spec$system_context %in% c("growth_chamber", "greenhouse") && .sf_has(text, .sf_cue("cell_tray"))) set("experimental_unit", "cell")
+    if (identical(spec$system_context, "drosophila") && .sf_has(text, .sf_cue("fly_vial_study"))) {
       set("experimental_unit", "vial"); set("measurement_unit", "fly")
     }
   }
@@ -250,14 +260,14 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, .sf_cue("shelf_word"))) set("blocking_factors", "shelf")
   if (.sf_has(text, .sf_cue("experimenter_word"))) set("blocking_factors", "experimenter")
   if (.sf_has(text, .sf_cue("batch_word"))) set("blocking_factors", if (.sf_has(text, .sf_cue("library_word"))) "library_batch" else "injection_batch")
-  if (identical(spec$system, "drosophila") && is.null(spec$organism)) set("organism", "Drosophila melanogaster")
+  if (identical(spec$system_context, "drosophila") && is.null(spec$organism)) set("organism", "Drosophila melanogaster")
 
   # round 3: populations, assays, extra organisms, environments (alias table, longest match first)
   find_all <- function(cat) .sf_find_all(text, cat)
-  sys_now <- spec$system %||% ""
+  sys_now <- spec$system_context %||% ""
   orgs <- find_all("organism")
-  if (length(orgs) > 1 && identical(spec$system, "functional_validation")) set("organisms", orgs)
-  if (length(orgs) && identical(spec$system, "functional_validation")) set("organism", orgs[1])
+  if (length(orgs) > 1 && identical(spec$study_type, "functional_validation")) set("organisms", orgs)
+  if (length(orgs) && identical(spec$study_type, "functional_validation")) set("organism", orgs[1])
   if (sys_now %in% .sf_systems_where(lists_assays = TRUE)) {
     as <- find_all("assay")
     as <- setdiff(as, if (!sys_now %in% .sf_systems_where(rnaseq_gwas_are_assays = TRUE)) .sf_list("context_assay"))
@@ -269,11 +279,11 @@ extract_spec_local <- function(question) {
     if (length(intersect(as, .sf_list("mapping_assay")))) set("assays", setdiff(as, .sf_generic_of(as)))
   }
   # the mating of a stated population (F2, backcross, RILs ...) whatever the setting
-  if (!identical(spec$system, "breeding_genetics")) {
+  if (!identical(sys_now, "breeding_genetics")) {
     mt <- find_all("mating")
     if (length(mt)) set("population.mating", mt[1])
   }
-  if (identical(spec$system, "breeding_genetics")) {
+  if (identical(sys_now, "breeding_genetics")) {
     mt <- find_all("mating")
     if (length(mt)) {
       set("population.mating", mt[1])
@@ -294,7 +304,7 @@ extract_spec_local <- function(question) {
       set("primary_outcome.name", "gca_sca"); set("primary_outcome.type", "continuous")
     }
   }
-  if (identical(spec$system, "multi_environment") && .sf_has(text, .sf_cue("controlled_environment")) && .sf_has(text, .sf_cue("field_word"))) {
+  if (identical(spec$study_type, "multi_environment") && .sf_has(text, .sf_cue("controlled_environment")) && .sf_has(text, .sf_cue("field_word"))) {
     set("environments", c("greenhouse", "field"))
   }
   if (.sf_rule_hit("system", "ribo_seq", text) && .sf_has(text, .sf_cue("translation_efficiency"))) {   # the assay, whatever the setting
@@ -305,6 +315,7 @@ extract_spec_local <- function(question) {
   }
 
   spec <- .sf_general_layer(spec, text)
+  spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
   spec$question <- question
@@ -313,12 +324,13 @@ extract_spec_local <- function(question) {
 
 `%|na|%` <- function(a, b) if (length(a) == 0 || is.na(a)) b else a
 
-# The system plus the families of the stated assays: the setting decides the layout, and each assay brings its own
-# designs, hazards and questions (a greenhouse ATAC-seq study gets greenhouse and ATAC advice).
+# The study type, the setting and the families of the stated assays: the setting decides the layout, and the study
+# type and each assay bring their own designs, hazards and questions (a greenhouse ATAC-seq study gets greenhouse
+# and ATAC advice; a RIL trial in the field gets breeding and field advice).
 .sf_system_set <- function(spec) {
   fam <- unname(.sf_map("system_by_assay")[unlist(spec$assays)])
   fam <- c(fam, unname(.sf_map("assay_advice_family")[unlist(spec$assays)]))
-  s <- unique(c(spec$system, fam[!is.na(fam)]))
+  s <- unique(c(spec$study_type, spec$system, fam[!is.na(fam)]))
   s[nzchar(s)]
 }
 
@@ -365,7 +377,14 @@ extract_spec_local <- function(question) {
 
 # Choose candidate designs with simple, transparent rules
 .sf_candidates <- function(spec) {
-  sys <- spec$system %||% ""
+  # the entry whose designs come first: a study type that keeps its type over the setting (validation,
+  # multi-environment), else the setting when it is a plant site, else the study type, else the setting, else the
+  # family of the first assay
+  st <- spec$study_type; se <- spec$system
+  fam1 <- setdiff(.sf_system_set(spec), c(st, se))[1]
+  sys <- if (!is.null(st) && (st %in% .sf_systems_where(keeps_type_over_setting = TRUE) || is.null(se) ||
+                              !se %in% .sf_systems_where(plant_site = TRUE))) st else se %||% fam1 %||% ""
+  if (is.na(sys)) sys <- ""
   f <- spec$factors %||% list()
   fname <- vapply(f, `[[`, "", "name")
   n_geno <- suppressWarnings(max(c(0, unlist(lapply(f, function(x) if (x$name == "genotype") x$n_levels)))))
@@ -574,7 +593,8 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
          " this data implies, which fixes the model it should be analysed with.")
   }
   cat0("")
-  cat0("System: ", s$system %||% "unknown", if (!is.null(s$organism)) paste0(" | Organism: ", s$organism))
+  cat0("System: ", s$system %||% "unknown", if (!is.null(s$study_type)) paste0(" | Study: ", s$study_type),
+       if (!is.null(s$organism)) paste0(" | Organism: ", s$organism))
   if (length(s$factors)) {
     fx <- vapply(s$factors, function(f) paste0(f$name, if (!is.null(f$n_levels)) paste0(" (", f$n_levels, ")"),
                                                if (!is.null(f$applied_to)) paste0(" on ", f$applied_to)), "")

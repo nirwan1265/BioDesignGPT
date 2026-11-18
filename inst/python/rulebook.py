@@ -8,6 +8,18 @@ Order within a category is priority.
 """
 import csv, functools, os, re
 
+try:   # PCRE features the R side uses (\K) need the regex module; without it \K is dropped (same hits, wider span)
+    import regex as _regex
+except ImportError:
+    _regex = None
+
+
+def compile_rule(pattern):
+    """compile a rules.tsv regex the way R's PCRE reads it"""
+    if _regex is not None:
+        return _regex.compile(pattern, flags=_regex.V0)
+    return re.compile(pattern.replace("\\K", ""))
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 CANDIDATES = [os.path.join(HERE, "..", "agent", "rules.tsv"),            # installed package, or inst/ in the repo
               os.path.join(HERE, "..", "inst", "agent", "rules.tsv")]    # repo root layouts
@@ -39,12 +51,12 @@ def alias_rows():
 @functools.lru_cache(None)
 def regex_rows(category):
     """((term, compiled regex), ...) of a category's regex rows (none is fine), for the alias lookups"""
-    return tuple((r["term"], re.compile(r["pattern"])) for r in rows() if r["category"] == category and r["match"] == "regex")
+    return tuple((r["term"], compile_rule(r["pattern"])) for r in rows() if r["category"] == category and r["match"] == "regex")
 
 
 def patterns(category):
     """[(term, compiled regex), ...] of a category's regex rows, in order"""
-    return [(r["term"], re.compile(r["pattern"])) for r in of(category, "regex")]
+    return [(r["term"], compile_rule(r["pattern"])) for r in of(category, "regex")]
 
 
 def keys(category):

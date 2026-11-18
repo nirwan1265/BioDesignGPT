@@ -234,3 +234,19 @@ against the rules; every gap became rows in `inst/agent/rules.tsv`, not code:
 Check sets equal or higher (fresh v2 rules 95.8 -> 97.5). Factor names found by the rules on train: time 1 -> 78%,
 tissue 5 -> 74%, treatment 26 -> 59%, genotype 42 -> 59%.
 
+**System is the setting (schema 4).** `system` now only says where the experimental units live (field, greenhouse,
+growth_chamber, mouse, livestock, drosophila, cell_culture); the kind of study is a separate field, `study_type`
+(breeding_genetics, multi_environment, multi_omics, functional_validation), and assays stay in `assays`. A question
+that names no setting has no system and it is asked. Every label set was converted by one script
+(`training/setting.py`, also applied by `write_batch.py` and `make_sft.py`): a study type moved to `study_type`, an
+assay family was dropped (its assay kept in `assays`), and a setting a person labelled was kept. The rules choose
+designs and questions from the study type, the setting and the assay families together (`.sf_system_set`), and the
+merge translates an older reader's study-type or assay-family `system`. The reader needs one retraining on the new
+labels (v6).
+
+| under schema 4 | rules | v2 merged |
+|---|---|---|
+| dev | 71.2 | 89.5 (invented 1 of 328) |
+| train (rules) | 75.1 | - |
+| new kinds | 72.9 | 88.6 |
+
