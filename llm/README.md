@@ -212,3 +212,25 @@ rules and by the merge, whoever filled it. A number the user states and asks abo
 training sets: on train the rules now invent a must-ask value in 15 of 1908 questions (was 82); dev and every check
 set are unchanged (dev v2 merged 87.8, invented 1 of 328).
 
+**Rules grown from the labelled papers.** The 1,908 hand-labelled training questions were read field by field
+against the rules; every gap became rows in `inst/agent/rules.tsv`, not code:
+- `factor_levels` rows: time points listed or counted ("at 0, 6, 12 and 24 h", "at four times", "over time"),
+  tissues listed ("shoots and roots", "jejunal, ileal and colonic"), treatment arms with a control ("A, B or
+  DMSO", "X vs untreated"), genotype counts and contrasts ("360 RILs", "resistant A and susceptible B", "X vs its
+  mutant"), patient/control and high/low groups, stages; with `tissue_word` (+136), `treatment_control`,
+  `stage_word` lists.
+- `setting` rows: growth cabinets, plates, in vitro plantlets, in-vitro cell work, vineyards, yield trials, farm
+  animals named as animals. An organism name alone is not a setting (that broke the grounded and synthetic sets).
+- `reps_pattern` rows: "3 per group", "(n = 10)", "3 vs 3", "groups of 15", "3 independent repeats", "3 each".
+
+| | before | after |
+|---|---|---|
+| train, rules | 64.3 | 74.9 |
+| dev, rules | 64.8 | 71.4 |
+| dev, v2 merged | 87.8 | 89.3 (invented 1 of 328, unchanged) |
+| new kinds, rules | 66.6 | 72.0 |
+| new kinds, v2 merged | 86.2 | 87.4 (invented 6 of 100; 4 in mapping) |
+
+Check sets equal or higher (fresh v2 rules 95.8 -> 97.5). Factor names found by the rules on train: time 1 -> 78%,
+tissue 5 -> 74%, treatment 26 -> 59%, genotype 42 -> 59%.
+
