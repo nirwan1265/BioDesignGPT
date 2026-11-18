@@ -161,6 +161,18 @@
     }
     spec$factors <- fx
   }
+  # factors whose levels are listed or counted ("at 0, 6 and 24 h", "at four times", "over time"): factor_levels rows
+  lv <- .sf_level_factors(text)
+  if (length(lv)) {
+    fx <- spec$factors %||% list()
+    have <- vapply(fx, function(f) f$name, "")
+    for (nm in names(lv)) {
+      i <- match(nm, have); n <- lv[[nm]]
+      if (is.na(i)) { fx[[length(fx) + 1]] <- if (is.na(n)) list(name = nm) else list(name = nm, n_levels = n); have <- c(have, nm) }
+      else if (is.null(fx[[i]]$n_levels) && !is.na(n)) fx[[i]]$n_levels <- n
+    }
+    spec$factors <- fx
+  }
   # specific factor words stated without a count ("cold", "drought", "placebo"): factor with unknown levels
   fx <- spec$factors %||% list()
   have <- vapply(fx, function(f) { c <- .sf_factor_name(f$name); if (is.na(c)) f$name else c }, "")
@@ -249,4 +261,44 @@ studyforge_fix <- function(answer, ...) {
   if (omics) rows <- append(rows, c(Sequencing = seqtxt), after = 6)
   c(sprintf("  %-20s %s%s", paste0(names(rows), ":"), rows,
             ifelse(names(rows) %in% c("Organism", "Replicates", "Tissue") & names(rows) %in% names(fixes), "  (corrected)", "")))
+}
+
+# Factors whose levels are listed or counted in the text (rules.tsv category factor_levels; {N} is the count_word
+# cue). match says how to read a hit: list = one level per number in group 1 ("at 0, 6, 12 and 24 h"); count =
+# group 1 is the number of levels ("at four times"); pair = two levels ("at baseline and 52 weeks"); wordlist = one
+# level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
+# factor is there, its levels unknown ("sampled over time").
+.sf_level_factors <- function(text) {
+  r <- .sf_rules_rows("factor_levels")
+  out <- list()
+  for (i in seq_len(nrow(r))) {
+    nm <- r$term[i]; if (nm %in% names(out) && !is.na(out[[nm]])) next
+    re <- gsub("{N}", .sf_cue("count_word"), r$pattern[i], fixed = TRUE)
+    if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
+      vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
+      bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
+      named <- function(x) {
+        if (any(vapply(bad, function(b) grepl(b, x, fixed = TRUE), logical(1)))) return(FALSE)
+        w <- strsplit(x, "\\s+")[[1]]; grams <- c(w, if (length(w) > 1) paste(utils::head(w, -1), utils::tail(w, -1)))
+        any(vapply(grams, .sf_norm_tissue, "") %in% vocab | grams %in% vocab)
+      }
+      runs <- regmatches(text, gregexpr(re, text, perl = TRUE))[[1]]
+      for (run in runs) {
+        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+and\\s+|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+|\\s*/\\s*", perl = TRUE)[[1]])
+        k <- sum(vapply(items, named, logical(1)))
+        if (k >= 2) { out[[nm]] <- k; break }
+      }
+      next
+    }
+    g <- regmatches(text, regexec(re, text, perl = TRUE))[[1]]
+    if (!length(g)) next
+    n <- switch(r$match[i],
+      list = length(regmatches(g[2], gregexpr("\\d+(?:\\.\\d+)?(?:-\\d+(?:\\.\\d+)?)?", g[2], perl = TRUE))[[1]]),
+      count = .sf_num(g[2]),
+      pair = 2,
+      NA)
+    if (!is.na(n) && n < 2) next
+    out[[nm]] <- n
+  }
+  out
 }
