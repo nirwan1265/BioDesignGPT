@@ -194,7 +194,7 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
   }
   for (i in which(!used)) if (!rkey[i] %in% vapply(fx, function(g) canon(g$name), "")) fx[[length(fx) + 1]] <- rf[[i]]
   out$factors <- if (length(fx)) fx
-  out
+  .sf_clear_asked(out, question)   # what the user asks about stays open, whoever filled it (questions.tsv)
 }
 
 # Lengths of the enumerations in a text: per clause, the items between list separators ("A, B or C" = 3,

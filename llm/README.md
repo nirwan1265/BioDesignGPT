@@ -202,3 +202,13 @@ merge, the rules had real bugs, fixed as general rules:
 
 Re-score: put `preds_llm_*.json` in `llm/preds/` and run `merge_specs()` over each set with
 `evaluate_extraction()`.
+
+**What the user asks (`inst/agent/questions.tsv`).** Each question sentence is cut at its question frames ("how
+many", "which", "is/are/should ...", "whether") into spans; the target named in a span says which field is asked
+("how many mice per diet" -> design.reps, "is the pen or the bird my unit" -> experimental_unit, "how many birds
+in each pool" -> subsamples_per_unit, "how many genes" -> not a design field). An asked field is left open by the
+rules and by the merge, whoever filled it. A number the user states and asks about ("3 per group, is that enough?",
+"using 3 replicates each?") stays in the spec, as the labels have it. Built on train and the synthetic and grounded
+training sets: on train the rules now invent a must-ask value in 15 of 1908 questions (was 82); dev and every check
+set are unchanged (dev v2 merged 87.8, invented 1 of 328).
+

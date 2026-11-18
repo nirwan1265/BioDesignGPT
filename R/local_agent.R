@@ -298,6 +298,7 @@ extract_spec_local <- function(question) {
 
   spec <- .sf_general_layer(spec, text)
   if (.sf_reps_open(question)) spec$design$reps <- NULL
+  spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
   spec$question <- question
   spec
 }
@@ -639,4 +640,64 @@ launch_studyforge <- function(...) {
   app_dir <- system.file("shiny", "studyforge", package = "studyforge")
   if (!nzchar(app_dir)) stop("App not found; reinstall studyforge.", call. = FALSE)
   shiny::runApp(app_dir, ...)
+}
+
+# What the user asks about (inst/agent/questions.tsv). Each question sentence (ending in "?") is cut at its question
+# frames ("how many", "which", "is/are/should ...") into spans ({N} in a pattern is the count_word cue of rules.tsv); the first target pattern that fits the span's frame
+# kind names the field being asked. A field the user asks about is left open (never filled), so it is asked back.
+.sf_questions <- local({
+  tbl <- NULL
+  function() {
+    if (is.null(tbl)) {
+      f <- system.file("agent", "questions.tsv", package = "studyforge")
+      if (!nzchar(f)) f <- file.path("inst", "agent", "questions.tsv")
+      tbl <<- utils::read.delim(f, quote = "", comment.char = "", colClasses = "character", na.strings = character())
+      tbl$pattern <<- gsub("{N}", .sf_cue("count_word"), tbl$pattern, fixed = TRUE)   # {N}: a number or number word
+    }
+    tbl
+  }
+})
+.sf_asked_fields <- function(question) {
+  q <- .sf_questions(); fr <- q[q$table == "frame", ]; tg <- q[q$table == "target", ]
+  t <- tolower(question)
+  sents <- regmatches(t, gregexpr("[^.?!]*\\?", t, perl = TRUE))[[1]]
+  out <- character()
+  for (s in trimws(sents)) {
+    starts <- integer(); kinds <- character()
+    for (i in seq_len(nrow(fr))) {
+      m <- gregexpr(fr$pattern[i], s, perl = TRUE)[[1]]
+      if (m[1] > 0) { starts <- c(starts, as.integer(m)); kinds <- c(kinds, rep(fr$kinds[i], length(m))) }
+    }
+    # a bare question with no frame is read only in the short "<what> per <group>?" form ("Rats per region?",
+    # "Birds per pool?"); other frameless sentences ending in "?" are statements
+    if (!length(starts)) {
+      if (!grepl("^\\s*(?:[a-z0-9:-]+\\s+){1,2}(?:per|in each|for each|each)\\b", s, perl = TRUE)) next
+      starts <- 1L; kinds <- "count,choice,yesno"
+    }
+    o <- order(starts); starts <- starts[o]; kinds <- kinds[o]
+    keep <- !duplicated(starts); starts <- starts[keep]; kinds <- kinds[keep]
+    ends <- c(starts[-1] - 1L, nchar(s))
+    for (j in seq_along(starts)) {
+      span <- substr(s, starts[j], ends[j]); k <- strsplit(kinds[j], ",")[[1]]
+      ok <- vapply(strsplit(tg$kinds, ","), function(x) any(k %in% x), logical(1))
+      pos <- vapply(tg$pattern, function(p) as.integer(regexpr(p, span, perl = TRUE)), integer(1), USE.NAMES = FALSE)
+      # pass 1 rows win in table order (which thing is the unit, what goes in a pool, "is N enough");
+      # otherwise the target named first in the span wins ("how many replicates of the mutants" asks replicates)
+      hit <- which(ok & pos > 0 & tg$pass == "1")[1]
+      if (is.na(hit)) { c2 <- which(ok & pos > 0); if (length(c2)) hit <- c2[which.min(pos[c2])] }
+      if (!is.na(hit) && nzchar(tg$field[hit])) out <- c(out, tg$field[hit])
+    }
+  }
+  unique(out)
+}
+# leave the asked fields open; factors.<name>.n_levels drops that factor's level count
+.sf_clear_asked <- function(spec, question) {
+  for (p in .sf_asked_fields(question)) {
+    k <- strsplit(p, ".", fixed = TRUE)[[1]]
+    if (k[1] == "factors" && length(k) == 3) {
+      for (i in seq_along(spec$factors)) if (identical(spec$factors[[i]]$name, k[2])) spec$factors[[i]][[k[3]]] <- NULL
+    } else if (length(k) == 1) spec[[k]] <- NULL
+    else if (length(k) == 2 && is.list(spec[[k[1]]])) spec[[k[1]]][[k[2]]] <- NULL
+  }
+  spec
 }
