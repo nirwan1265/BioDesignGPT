@@ -166,6 +166,14 @@
   if (length(lv)) {
     fx <- spec$factors %||% list()
     have <- vapply(fx, function(f) f$name, "")
+    # an arm list already read as another factor (infection vs mock, diet vs chow, dose vs vehicle) is not a treatment
+    owned <- c("infection", "diet", "dose", "antibiotic", "injury", "disease", "phenotype_group")
+    if ("treatment" %in% names(lv) && any(have %in% owned)) lv$treatment <- NULL
+    # disease and phenotype_group are one group factor: the group_by_* cues pick the name, as for the reader
+    for (g in intersect(names(lv), c("disease", "phenotype_group"))) {
+      nm2 <- .sf_group_factor(g, text); if (!identical(nm2, g)) { lv[[nm2]] <- lv[[g]]; lv[[g]] <- NULL }
+    }
+    if (all(c("disease", "phenotype_group") %in% names(lv))) lv$phenotype_group <- NULL
     for (nm in names(lv)) {
       i <- match(nm, have); n <- lv[[nm]]
       if (is.na(i)) { fx[[length(fx) + 1]] <- if (is.na(n)) list(name = nm) else list(name = nm, n_levels = n); have <- c(have, nm) }
@@ -274,6 +282,19 @@ studyforge_fix <- function(answer, ...) {
   for (i in seq_len(nrow(r))) {
     nm <- r$term[i]; if (nm %in% names(out) && !is.na(out[[nm]])) next
     re <- gsub("{N}", .sf_cue("count_word"), r$pattern[i], fixed = TRUE)
+    if (identical(r$match[i], "contrast")) {   # a vs/or run with a control arm: one level per arm
+      vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
+      ctrl <- function(x) { w <- strsplit(x, "\\s+")[[1]]; g <- c(w, if (length(w) > 1) paste(utils::head(w, -1), utils::tail(w, -1)))
+        any(g %in% vocab) || grepl("^(?:no|without)\\s", x, perl = TRUE) }
+      runs <- regmatches(text, gregexpr(re, text, perl = TRUE))[[1]]
+      for (run in runs) {
+        if (!grepl("\\bvs\\.?\\s|\\bversus\\s|\\sor\\s", run, perl = TRUE)) next   # an "and" list is not a contrast
+        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
+        items <- items[nzchar(items)]
+        if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) { out[[nm]] <- length(items); break }
+      }
+      next
+    }
     if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
