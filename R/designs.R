@@ -118,6 +118,11 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
 
   spec$design$randomization_seed <- attr(book, "seed")
   spec$design$chosen <- attr(book, "design")
+  # the analysis model that matches the chosen design (design_catalog.json), so Bioana and Simitall read it
+  # from the spec instead of looking it up; y is the primary outcome, terms are the layout's columns
+  cat_d <- Filter(function(d) identical(d$id, spec$design$chosen), load_registry("design_catalog")$designs)
+  if (length(cat_d)) spec$analysis$model <- cat_d[[1]]$model
+  spec$handoff_version <- load_registry("study_spec.schema")$version
   spath <- file.path(outdir, "study_spec.json")
   jsonlite::write_json(spec, spath, auto_unbox = TRUE, pretty = TRUE, null = "null")
   paths <- c(paths, spath)

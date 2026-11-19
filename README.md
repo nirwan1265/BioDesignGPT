@@ -22,6 +22,8 @@ One shared core, four heads. Each head reads the same StudySpec and cites the sa
 
 The flow follows a real project: **Biodes** hands a StudySpec and layout to **Simitall**, simulated data goes to **Bioana**, fitted results go to **Biopaint**, and what you learn feeds the next design.
 
+**How the heads connect:** see [`docs/SUITE_INTEGRATION.md`](docs/SUITE_INTEGRATION.md). Biodes writes `study_spec.json` (now with the matching `analysis.model` and `handoff_version`), `field_layout.csv` and `sample_metadata_template.tsv`; Simitall and Bioana read only those files.
+
 > The R package is still named `studyforge` (and its functions `studyforge_*`) while the rename to Biodes is in progress.
 
 ## Install

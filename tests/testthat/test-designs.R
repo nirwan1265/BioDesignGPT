@@ -59,3 +59,12 @@ test_that("write_design_package writes the expected files", {
   expect_equal(s$design$chosen, "rcbd")
   expect_equal(s$design$randomization_seed, 42)
 })
+
+test_that("the hand-off spec records the chosen design's analysis model and the schema version", {
+  b <- data.frame(plots = 101:104, block = rep(1:2, each = 2), treatment = rep(c("a", "b"), 2))
+  attr(b, "design") <- "rcbd"; attr(b, "seed") <- 1
+  p <- write_design_package(b, new_spec(), outdir = tempfile())
+  j <- jsonlite::fromJSON(p[basename(p) == "study_spec.json"])
+  expect_equal(j$analysis$model, "y ~ treatment + block")
+  expect_equal(j$handoff_version, load_registry("study_spec.schema")$version)
+})
