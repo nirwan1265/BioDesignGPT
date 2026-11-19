@@ -40,7 +40,9 @@ DATA = os.path.join(HERE, "..", "training", "data")
 EVAL_FILES = ["fresh_test.jsonl", "fresh_test_v2.jsonl", "fresh_test_v3.jsonl", "fresh_test_v4.jsonl", "grounded_eval.jsonl",
               "user_prompts_dev.jsonl", os.path.join("..", "..", "inst", "examples", "study_examples.jsonl")]
 PQ = os.path.join(HERE, "..", "training", "paper_questions", "splits")
-PQ_EVAL = ["dev.jsonl", "test.jsonl", "test_heldout.jsonl", "test_newkinds.jsonl"]
+# every frozen paper-question split (dev and all test_* files, e.g. test_draw4) is banned from training prompts
+PQ_EVAL = sorted(f for f in os.listdir(PQ) if f.endswith(".jsonl") and f != "train.jsonl" and not f.startswith("_"))\
+    if os.path.isdir(PQ) else ["dev.jsonl", "test.jsonl", "test_heldout.jsonl", "test_newkinds.jsonl"]
 # vocabulary and system kinds come from the rule files (training/rules.py), never from lists in this script
 SYSTEM_ASSAY = {i: sy["assay"] for i, sy in rules.systems().items() if sy.get("kind") == "assay"}   # old system -> its assay
 HOLDOUT_ORGS = set(rules.mapping("held_out_species").values())
