@@ -344,3 +344,12 @@ Recall holds up off dev (merged 87-89 vs 90.7). Made-up values do not: merged, 1
 held-out species against 1/328 on dev, so the merge's must-ask handling was tuned to dev. On held-out species the merge
 is worse than the reader alone, mainly experimental_unit (16.7 vs 66.7) and subsamples_per_unit (80 vs 90): the merge
 keeps the rules' value for those fields. These splits are now spent; later fixes are checked on dev, train and new data.
+
+### New splits from papers 7750-8199 (after the final test scoring)
+
+All test splits above are spent, so the last 450 unlabelled papers were labelled with the same conventions and split by
+paper number before any rule was mined from them: papers 7750-7974 are `test_draw5` (159 questions, locked, scored
+once at the very end) and papers 7975-8199 are `dev2` (155 questions, a second tuning split, frozen with
+`freeze_split.py --dev` so it never goes to train). Rules alone on dev2: 81.0, 0 made-up values. dev2 is where the merge
+fixes (when to trust the reader's experimental unit and subsamples, when to leave a must-ask field empty) are checked,
+alongside dev.
