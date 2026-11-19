@@ -314,3 +314,8 @@ pair of lines, and typed or selected-for groups are phenotype groups; two mouse 
 several ages" is age; DMEM is a mock arm; "N pens of M birds" gives reps N and M birds per pen; plus methylation,
 over-expressor, MDBK and primary microglia wording. Round 4 added 0.3 points, under the 0.5 stop, so the rounds end
 here (papers 7750-8199 stay unlabelled) and the reader is retrained once (v7).
+
+v7 result (dev, 328 questions; v7 trained on 2896 questions vs v6's ~1900). Alone: v6 88.6, v7 87.6. Merged with
+rules: v6 90.7, v7 90.2. Values invented for must-ask fields when alone: v6 11, v7 8; merged both 1. Check sets are
+within a point of each other (study_examples 94.3 both, fresh_v1 92.8 vs 93.6, fresh_v4 96.5 vs 95.6, grounded 98.9
+both). More labels did not improve the reader, so v6 stays the adopted reader and v7 is kept only for reference.
