@@ -277,6 +277,7 @@ adds under 0.5 points. Labels follow the old convention that "N blocks" is desig
 |---|---|---|---|---|
 | 1 | 5950-6399 | 318 | 71.2 | 73.3 |
 | 2 | 6400-6849 | 270 | 73.3 | 74.9 |
+| 3 | 6850-7299 | 206 | 74.9 | 75.8 |
 
 Round 1 rules: the layout named in the text becomes design.type (`design_layout` rows say which `design` terms are
 layouts, so "2 x 2 factorial" does not answer); `subsample_pattern` reads "5 plants pooled per sample", "replicates of
@@ -296,3 +297,12 @@ and equal side-by-side groups ("8 Lidia and 8 Wagyu") give design.reps; an anima
 (`unit_pattern`); plus organism words (chicks, hens, Sprague-Dawley), growth-cabinet and field-crop settings, mapping
 and association populations, full-length RNA-seq, edited genes, and "potato" no longer matches potato spindle tuber
 viroid or potato dextrose agar. Five round-2 labels listed assays the prompt never states and were corrected.
+
+Round 3 rules: "corn oil" is a vehicle and "durum wheat" is Triticum durum, not maize or bread wheat; a number glued to
+a gene symbol ("zmzfp69 mutant") is not a count but still means a genotype factor; counted groups of lines are summed
+("four cultivars and two hybrids" = 6, `genotype/sum`) and a hybrid with its two parents or wild type with two named
+mutants is 3 levels (a number after the slash is a fixed count); a control arm added after a comma ("vs vehicle, plus
+normoxic controls", cue `extra_control_arm`) is kept as an arm; a counted list beats a two-level default ("normal,
+high-sugar or high-fat diet", `diet_control`); infection contrasts allow longer arms and take virus-free as the mock
+arm; "at 5 and 22 days old" is age; plus rat strain names, callus, liquid culture and cabinets, blastocysts and cultured
+cells, more pooled-per wording, and metabolite GWAS.

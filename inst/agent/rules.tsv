@@ -1,7 +1,7 @@
 category	term	match	pattern	note	source
 organism	Sorghum bicolor	regex	sorghum	regex; first match in this order wins	rules
-organism	Zea mays	regex	\bmaize\b|\bcorn\b	regex; first match in this order wins	rules
-organism	Triticum aestivum	regex	\bwheat\b	regex; first match in this order wins	rules
+organism	Zea mays	regex	\bmaize\b|\bcorn\b(?!\s+(?:oil|starch|syrup|steep|meal|gluten))	regex; first match in this order wins; corn oil, starch and syrup are vehicles and feeds, not maize (narrowed draw 4 round 3)	rules
+organism	Triticum aestivum	regex	(?<!durum )\bwheat\b	regex; first match in this order wins; durum wheat is Triticum durum (narrowed draw 4 round 3)	rules
 organism	Hordeum vulgare	regex	(?<!wild )\bbarley\b	regex; first match in this order wins; wild barley is Hordeum spontaneum	rules
 organism	Glycine max	regex	soybean	regex; first match in this order wins	rules
 organism	Oryza sativa	regex	\brice\b	regex; first match in this order wins	rules
@@ -4436,7 +4436,7 @@ infection_control		value	uninfected controls	control arm of an infection contras
 infection_control		value	uninfected cows	control arm of an infection contrast (pathogen vs mock)	rules
 infection_control		value	uninfected cells	control arm of an infection contrast (pathogen vs mock)	rules
 infection_control		value	mock-treated	control arm of an infection contrast (pathogen vs mock)	rules
-factor_levels	infection/contrast	regex	(?=[^.;?]{0,140}\b(?:infect\w*|inoculat\w*|challeng\w*|infiltrat\w*|spores?|conidia|virus\w*|viral|pathogen\w*|bacteri\w*|fung\w*|nematodes?|mildew|rust|blight)\b)(?=[^.;?]{0,160}\b(?:mock|uninfected|non-?infected|uninoculated|non-?inoculated|unchallenged|(?:sterile |distilled )?water|buffer|pbs)\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	infection_control: a vs/or list of pathogens with a mock or uninfected arm is the infection factor, one level per arm; draw 4 papers	rules
+factor_levels	infection/contrast	regex	(?=[^.;?]{0,140}\b(?:un(?:challenged|infected|inoculated)|infect\w*|inoculat\w*|challeng\w*|infiltrat\w*|spores?|conidia|virus\w*|viral|pathogen\w*|bacteri\w*|fung\w*|nematodes?|mildew|rust|blight)\b)(?=[^.;?]{0,160}\b(?:mock|uninfected|non-?infected|uninoculated|non-?inoculated|unchallenged|(?:sterile |distilled )?water|buffer|pbs|virus-free|pathogen-free)\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,5}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,5})+)\b	infection_control: a vs/or list of pathogens with a mock or uninfected arm is the infection factor, one level per arm; draw 4 papers	rules
 factor_levels	genotype/open	regex	\b(?:gwas|genome-wide association|association (?:mapping|study|analysis|panel)|transcriptome-wide association|qtl mapping|linkage mapping|mapping population|ril population|magic (?:rils|lines|population)|genetic reference panel|segregants|germplasms?)\b	a mapping or association study varies genotype; draw 4 papers	rules
 factor_levels	genotype/open	regex	\b(?:accessions|landraces|inbred lines|inbreds|rils|near-isogenic line pairs|nils|isolines)\b	plural genotype nouns without a count; draw 4 papers	rules
 factor_levels	genotype/pair	regex	\b(?:col-0|wild[- ]type|wt|w1118|ler)\s+(?:and|vs\.?|versus)\s+(?:the\s+)?[a-z]+[0-9][a-z0-9-]*\b|\b[a-z]+[0-9][a-z0-9-]*\s+(?:mutants?\s+)?(?:and|vs\.?|versus)\s+(?:the\s+)?(?:col-0|wild[- ]type|wt|w1118)\b	wild type next to a gene symbol (Col-0 and coi1, jmj15 vs wild type); draw 4 papers	rules
@@ -4523,3 +4523,30 @@ assay	crispr	regex	\b(?:gene|genome)[- ]edited\b|\bedited (?:[a-z-]+\s+){0,2}gen
 assay	overexpression	regex	\bto overexpress\b|\boverexpress(?:es|ed)?\b	draw 4 round 2	rules
 assay	qtl_mapping	regex	\b(?:ril|recombinant inbred line|doubled haploid|f2|mapping|biparental|nam) populations?\b|\b(?:soybean|maize|rice|wheat|barley|sorghum) rils\b	mapping populations phenotyped for a trait; draw 4 round 2	rules
 assay	gwas	regex	\bassociation (?:panel|population)\b	draw 4 round 2	rules
+infection_control		value	virus-free	control arm of an infection contrast (pathogen vs mock)	draw 4 round 3
+infection_control		value	pathogen-free	control arm of an infection contrast (pathogen vs mock)	draw 4 round 3
+infection_control		value	non-viruliferous	control arm of an infection contrast (pathogen vs mock)	draw 4 round 3
+cue	extra_control_arm	regex	^(?:plus|and)\s+(?:[a-z0-9-]+\s+){0,3}(?:controls?|shams?|sham-operated\s+[a-z]+|untreated\s+[a-z]+)$	a control arm added after a comma to an A vs B contrast ("acetazolamide vs vehicle, plus normoxic controls" = 3 arms); draw 4 round 3	rules
+organism	Vitis vinifera	word	microvines	draw 4 round 3	rules
+organism	Vitis vinifera	word	microvine	draw 4 round 3	rules
+factor_levels	genotype/sum	regex	\b({N})\s+(?:[a-z-]+\s+){0,3}?(?:and|plus)\s+({N})\s+(?:[a-z0-9-]+\s+){0,2}?(?:accessions|cultivars|varieties|lines|hybrids|genotypes|inbreds|landraces|strains|mutants)\b	two counted groups of lines: "four commercial cultivars and two hybrids" = 6, "two wild and two cultivated accessions" = 4	draw 4 round 3
+factor_levels	genotype/3	regex	\b(?:hybrids?|f1)\b[^.;?]{0,40}\band (?:its|their) (?:two )?(?:parents|parental (?:lines|inbreds|accessions))\b|\bwild[- ]type,\s+[^,.;?]{1,40},?\s+and\s+[^,.;?]{1,40}?\b(?:mutants?|knockouts?|lines|plants|overexpressors?)\b	a hybrid and its two parents; wild type and two named mutants or lines (3 levels)	draw 4 round 3
+factor_levels	age/list	regex	\b(?:at|aged)\s+(\d+(?:\.\d+)?(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+and\s+|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)\d+(?:\.\d+)?)+)\s*(?:days?|weeks?|months?|years?)\s+(?:old|of age)\b	ages listed and then "old" or "of age": "at 5 and 22 days old", "at 5 and 16 months of age"	draw 4 round 3
+diet_control		value	control	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	control diet	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	basal	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	basal diet	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	normal	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	normal diet	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	standard	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	standard diet	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	chow	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	normal chow	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+diet_control		value	standard chow	the reference arm of a diet list (normal, high-sugar or high-fat diet)	draw 4 round 3
+factor_levels	diet/contrast	regex	(?=[^.;?]{0,80}\bdiets?\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	diet_control: a list of diets with a normal or basal arm, one level per arm	draw 4 round 3
+setting	growth_chamber	regex	\bliquid culture\b|\bcallus\b|\bexplants? on\b|\bgerminat\w+ in the dark\b|\b[a-z]+ cabinets\b|\bculture media\b	plant material in culture vessels or cabinets; draw 4 round 3	rules
+setting	cell_culture	regex	\bblastocysts\b|\bivp\b|\bcells?\b[^.;?]{0,60}\bcultured\b|\bcell suspensions?\b	embryos and cells kept in culture; draw 4 round 3	rules
+setting	mouse	regex	\b(?:wistar|sprague[- ]dawley|long[- ]evans|fischer|holtzman|bdii)\b	rat strains named without the word rat; draw 4 round 3	rules
+subsample_pattern		regex	\b({N})\s+(?:[a-z-]+\s+){1,5}?pooled\s+(?:per|in each|into each)\s+(?:sample|replicate|pool|library|line|genotype|accession|plot|group)\b	units pooled per sample with more words between the count and "pooled" (5 leaf segments from separate plants pooled per sample, 5 ears pooled per line); draw 4 round 3	rules
+subsample_pattern		regex	\bof\s+({N})\s+[a-z-]+\s+pooled\b|\b(?:buckets?|pots?|trays?|cups?|boxes|tubs?)\s+of\s+({N})\s+(?:plants|seedlings)\b	"seeds of 9 progeny pooled", "buckets of 8 plants"; draw 4 round 3	rules
+assay	metabolomics	regex	\bmetabolite (?:gwas|profil\w+|levels|contents?)\b|\bmgwas\b	draw 4 round 3	rules

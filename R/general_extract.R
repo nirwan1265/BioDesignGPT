@@ -174,6 +174,8 @@
       i <- match(nm, have); n <- lv[[nm]]
       if (is.na(i)) { fx[[length(fx) + 1]] <- if (is.na(n)) list(name = nm) else list(name = nm, n_levels = n); have <- c(have, nm) }
       else if (is.null(fx[[i]]$n_levels) && !is.na(n)) fx[[i]]$n_levels <- n
+      # a counted list of more arms beats a two-level default ("normal, high-sugar or high-fat diet")
+      else if (!is.na(n) && identical(as.numeric(fx[[i]]$n_levels), 2) && n > 2) fx[[i]]$n_levels <- n
     }
     spec$factors <- fx
   }
@@ -300,7 +302,10 @@ studyforge_fix <- function(answer, ...) {
         # "in a growth room, X vs mock, 3 plants pooled" keeps only "X vs mock"
         if (!grepl("\\sor\\s", run, perl = TRUE)) {
           segs <- strsplit(run, "\\s*,\\s*", perl = TRUE)[[1]]
-          run <- paste(segs[grepl("\\bvs\\.?\\s|\\bversus\\s", segs, perl = TRUE)], collapse = " vs ")
+          # an extra control arm after the comma ("A vs B, plus normoxic controls"; rules.tsv cue extra_control_arm) stays
+          xa <- tryCatch(.sf_cue("extra_control_arm"), error = function(e) "(?!)")
+          keep <- grepl("\\bvs\\.?\\s|\\bversus\\s", segs, perl = TRUE) | grepl(xa, segs, perl = TRUE)
+          run <- paste(segs[keep], collapse = " vs ")
         }
         items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
         items <- items[nzchar(items)]
@@ -332,8 +337,9 @@ studyforge_fix <- function(answer, ...) {
     n <- switch(r$match[i],
       list = length(regmatches(g[2], gregexpr("\\d+(?:\\.\\d+)?(?:-\\d+(?:\\.\\d+)?)?", g[2], perl = TRUE))[[1]]),
       count = .sf_num(g[2]),
+      sum = sum(vapply(g[-1][nzchar(g[-1])], .sf_num, numeric(1))),   # "four cultivars and two hybrids" = 6
       pair = 2,
-      NA)
+      if (grepl("^\\d+$", r$match[i])) as.numeric(r$match[i]) else NA)   # a fixed count: "a hybrid and its two parents" = 3
     if (!is.na(n) && n < 2) next
     out[[nm]] <- n
   }

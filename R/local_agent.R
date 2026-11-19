@@ -42,8 +42,8 @@
   # a unit between the number and the noun means a measure, not a count ("at 30 kg to diets"; rules.tsv cue count_unit_word)
   unit <- tryCatch(.sf_cue("count_unit_word"), error = function(e) NULL)
   if (!is.null(unit)) stop <- paste0(stop, "(?!(?:", unit, ")\\b)")
-  # a number glued to a name by a hyphen is part of the name ("ago1-38 mutant"), not a count
-  re <- paste0(prefix, "(?<![a-z]\\d-)(?<![a-z]-)(?<![\\d.,])", .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
+  # a number glued to a name ("ago1-38 mutant", "zmzfp69 mutant") is part of the name, not a count
+  re <- paste0(prefix, "(?<![a-z]\\d-)(?<![a-z]-)(?<![\\d.,])(?<![a-z])", .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
                .sf_cue("count_within_rep"), ")")
   m <- regmatches(text, regexpr(re, text, perl = TRUE))
   if (!length(m) || grepl("\\bor\\b", m)) return(NA_real_)  # "two or three reps" is undecided
@@ -122,6 +122,10 @@ extract_spec_local <- function(question) {
   }
   n_geno <- .sf_count_before(text, .sf_list("genotype_count_noun"))
   if (!is.na(n_geno)) add_factor("genotype", n_geno)
+  # a line or mutant named by a gene symbol with a number ("ago1-38 mutant", "mettl3 mutants") is a genotype factor
+  # whose levels are not counted by that number
+  if (is.na(n_geno) && .sf_has(text, paste0("[a-z]-?\\d+\\s+(?:[a-z-]+\\s+){0,2}?(?:", paste(.sf_list("genotype_count_noun"), collapse = "|"), ")\\b")))
+    add_factor("genotype")
   n_chk <- .sf_count_before(text, .sf_group("count_noun", "check"))
   if (!is.na(n_chk)) add_factor("check", n_chk)
   whole_plot_water <- .sf_has(text, .sf_cue("whole_plot_irrigation"))
