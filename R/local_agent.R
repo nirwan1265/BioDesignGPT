@@ -10,6 +10,9 @@
 .sf_num <- function(x) {
   x <- tolower(gsub(",", "", x))
   if (x %in% names(.sf_number_words)) return(unname(.sf_number_words[x]))
+  # words that state a count in other ways ("in triplicate"; rules.tsv count_word_value)
+  cw <- tryCatch(.sf_map("count_word_value"), error = function(e) character())
+  if (x %in% names(cw)) return(as.numeric(cw[[x]]))
   suppressWarnings(as.numeric(x))
 }
 
@@ -36,7 +39,11 @@
   # up to two modifier words between the number and the noun, but never another
   # counted noun or a preposition ("three sites this season" is not 3 seasons)
   stop <- "(?!(?:sites?|locations?|reps?|replicates?|plots?|per|at|in|on|for|this|each|from|and|with|of|blocks?|trays?|cages?|vials?|pots?|benches)\\b)"
-  re <- paste0(prefix, .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
+  # a unit between the number and the noun means a measure, not a count ("at 30 kg to diets"; rules.tsv cue count_unit_word)
+  unit <- tryCatch(.sf_cue("count_unit_word"), error = function(e) NULL)
+  if (!is.null(unit)) stop <- paste0(stop, "(?!(?:", unit, ")\\b)")
+  # a number glued to a name by a hyphen is part of the name ("ago1-38 mutant"), not a count
+  re <- paste0(prefix, "(?<![a-z]\\d-)(?<![a-z]-)(?<![\\d.,])", .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
                .sf_cue("count_within_rep"), ")")
   m <- regmatches(text, regexpr(re, text, perl = TRUE))
   if (!length(m) || grepl("\\bor\\b", m)) return(NA_real_)  # "two or three reps" is undecided
@@ -215,6 +222,14 @@ extract_spec_local <- function(question) {
     if (!length(g)) next
     n <- .sf_num(g[-1][nzchar(g[-1])][1])
     if (!is.na(n) && n >= 2) { set("subsamples_per_unit", n); break }
+  }
+  # an animal kept on its own is the unit ("individually housed rats", "hens in single-bird cages"; rules.tsv
+  # unit_pattern, group 1 is the animal noun)
+  if (is.null(spec$experimental_unit)) for (up in .sf_rules_rows("unit_pattern")$pattern) {
+    g <- regmatches(text, regexec(up, text, perl = TRUE))[[1]]
+    if (length(g) < 2 || !nzchar(g[2])) next
+    u <- sub("(?<!s)s$", "", g[2], perl = TRUE)
+    set("experimental_unit", unname(.sf_map("measured_unit_word")[u] %|na|% u)); break
   }
   if (.sf_has(text, .sf_cue("one_plant_per_pot"))) set("experimental_unit", "pot")
   if (.sf_has(text, .sf_cue("housed_per_cage"))) {

@@ -85,7 +85,7 @@ organism	Setaria viridis	word	setaria		curated terminology (round 3)
 organism	Setaria viridis	word	setaria viridis		curated terminology (round 3)
 organism	Setaria viridis	word	green foxtail		curated terminology (round 3)
 organism	Brachypodium distachyon	word	brachypodium		curated terminology (round 3)
-organism	Solanum tuberosum	word	potato		evidence layer (ENA/GEO studies)
+organism	Solanum tuberosum	regex	\bpotato\b(?!\s+(?:spindle|virus|leafroll|psyllids?|aphids?|beetles?|dextrose|tuber moth|leafhoppers?))	potato, except pathogens, pests and media named after it (potato spindle tuber viroid, potato dextrose agar); narrowed draw 4 round 2	evidence layer (ENA/GEO studies)
 organism	Solanum tuberosum	word	potatoes		evidence layer (ENA/GEO studies)
 organism	Solanum tuberosum	word	solanum tuberosum		evidence layer (ENA/GEO studies)
 organism	Solanum tuberosum	word	s. tuberosum		evidence layer (ENA/GEO studies)
@@ -4436,7 +4436,7 @@ infection_control		value	uninfected controls	control arm of an infection contras
 infection_control		value	uninfected cows	control arm of an infection contrast (pathogen vs mock)	rules
 infection_control		value	uninfected cells	control arm of an infection contrast (pathogen vs mock)	rules
 infection_control		value	mock-treated	control arm of an infection contrast (pathogen vs mock)	rules
-factor_levels	infection/contrast	regex	(?=[^.;?]{0,140}\b(?:infect\w*|inoculat\w*|challeng\w*|infiltrat\w*|spores?|conidia|virus\w*|viral|pathogen\w*|bacteri\w*|fung\w*|nematodes?|mildew|rust|blight)\b)(?=[^.;?]{0,160}\b(?:mock|uninfected|non-?infected|uninoculated|non-?inoculated|unchallenged)\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	infection_control: a vs/or list of pathogens with a mock or uninfected arm is the infection factor, one level per arm; draw 4 papers	rules
+factor_levels	infection/contrast	regex	(?=[^.;?]{0,140}\b(?:infect\w*|inoculat\w*|challeng\w*|infiltrat\w*|spores?|conidia|virus\w*|viral|pathogen\w*|bacteri\w*|fung\w*|nematodes?|mildew|rust|blight)\b)(?=[^.;?]{0,160}\b(?:mock|uninfected|non-?infected|uninoculated|non-?inoculated|unchallenged|(?:sterile |distilled )?water|buffer|pbs)\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	infection_control: a vs/or list of pathogens with a mock or uninfected arm is the infection factor, one level per arm; draw 4 papers	rules
 factor_levels	genotype/open	regex	\b(?:gwas|genome-wide association|association (?:mapping|study|analysis|panel)|transcriptome-wide association|qtl mapping|linkage mapping|mapping population|ril population|magic (?:rils|lines|population)|genetic reference panel|segregants|germplasms?)\b	a mapping or association study varies genotype; draw 4 papers	rules
 factor_levels	genotype/open	regex	\b(?:accessions|landraces|inbred lines|inbreds|rils|near-isogenic line pairs|nils|isolines)\b	plural genotype nouns without a count; draw 4 papers	rules
 factor_levels	genotype/pair	regex	\b(?:col-0|wild[- ]type|wt|w1118|ler)\s+(?:and|vs\.?|versus)\s+(?:the\s+)?[a-z]+[0-9][a-z0-9-]*\b|\b[a-z]+[0-9][a-z0-9-]*\s+(?:mutants?\s+)?(?:and|vs\.?|versus)\s+(?:the\s+)?(?:col-0|wild[- ]type|wt|w1118)\b	wild type next to a gene symbol (Col-0 and coi1, jmj15 vs wild type); draw 4 papers	rules
@@ -4470,3 +4470,56 @@ organism	Bos taurus	word	bulls	draw 4 papers	rules
 organism	Homo sapiens	word	patient	draw 4 papers	rules
 organism	Homo sapiens	word	healthy donors	draw 4 papers	rules
 assay	rnaseq	word	mrna sequencing	draw 4 papers	rules
+plain_control		value	water	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	sterile water	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	distilled water	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	mock	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	medium	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	culture medium	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	alone	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	solvent	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	carrier	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	empty vector	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+plain_control		value	not	a control arm when nothing is infected (sprayed with an elicitor vs water, cytokinin vs mock, paraquat in sucrose vs sucrose alone)	draw 4 round 2
+factor_levels	treatment/contrast	regex	^(?![^.;?]*\b(?:infect\w*|inoculat\w*|challeng\w*|infiltrat\w*|spores?|conidia|virus\w*|viral|pathogen\w*|bacteri\w*|fung\w*|nematodes?|mildew|rust|blight)\b)[^.;?]*?\K\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	plain_control: a vs/or list whose control arm is water, mock or medium, with no pathogen anywhere in the sentence, is the treatment factor; one level per arm	draw 4 round 2
+infestation_control		value	uninfested	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+infestation_control		value	non-infested	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+infestation_control		value	noninfested	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+infestation_control		value	insect-free	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+infestation_control		value	uninfested controls	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+infestation_control		value	uninfested plants	control arm of an insect infestation contrast (aphids vs uninfested)	draw 4 round 2
+factor_levels	infestation/contrast	regex	(?=[^.;?]{0,140}\b(?:infest\w*|aphids?|psyllids?|mites?|caterpillars?|herbivor\w*|larvae|whiteflies|whitefly|thrips|planthoppers?|leafhoppers?|beetles?|weevils?|borers?|armyworms?)\b)(?=[^.;?]{0,160}\b(?:uninfested|non-?infested|insect-free)\b)\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	infestation_control: a vs/or list of insect treatments with an uninfested arm is the infestation factor, one level per arm	draw 4 round 2
+not_arm_lead		regex	\b(?:design|factorial|blocks?|replicates?|replications)$|\bper\s+[a-z]+$	an item of a vs/or list that is the design or a count phrase (randomized complete block design, six seedlings per pot) is not an arm	draw 4 round 2
+not_arm_lead		regex	^(?:hydroponics?|soil|pots?|trays?)\b|\b(?:in|under|inside)\s+(?:(?:a|an|the|their|its|separate|individual)\s+)?(?:[a-z-]+\s+)?(?:greenhouses?|glasshouses?|chambers?|cabinets?|incubators?|field|rooms?|pots?|trays?|plates?|dishes|tanks?|pens?|cages?|barns?|facility)\b	an item of a vs/or list that is the growing setting (hydroponics in a greenhouse) is not an arm	draw 4 round 2
+factor_levels	age/list	regex	\baged?\s+(\d+(?:\.\d+)?(?:(?:\s*,\s*(?:and\s+|or\s+)?|\s+and\s+|\s+or\s+|\s+vs\.?\s+|\s+versus\s+)\d+(?:\.\d+)?)+)\s*(?:h|hours?|d|days?|weeks?|wk|months?|mo|years?)\b	ages listed after aged: "aged 2 vs 12 days" (one level per number)	draw 4 round 2
+not_arm_lead		regex	^[a-z]$	a one-letter item (the C of 20 C) is not an arm	draw 4 round 2
+not_arm_lead		regex	^(?:day|days|night|nights|photoperiod|light)\s+(?:at|of|with)\b	an item that is the tail of a light or temperature regime (a 12 h day at 20 C) is not an arm	draw 4 round 2
+cue	count_unit_word	regex	kg|g|mg|ug|mm|cm|m|ml|l|mm|mmol|umol|h|hrs?|hours?|min|mins|days?|weeks?|months?|years?|c|percent	a measuring unit between a number and a noun: the number is a measure, not a count ("at 30 kg to diets"); draw 4 round 2	rules
+count_word_value	2	value	duplicate	a word that states a count (in triplicate = 3)	draw 4 round 2
+count_word_value	3	value	triplicate	a word that states a count (in triplicate = 3)	draw 4 round 2
+count_word_value	4	value	quadruplicate	a word that states a count (in triplicate = 3)	draw 4 round 2
+count_word_value	5	value	quintuplicate	a word that states a count (in triplicate = 3)	draw 4 round 2
+reps_pattern		regex	\bin\s+(duplicate|triplicate|quadruplicate|quintuplicate)\b	"in triplicate": replicates per group	rules
+reps_pattern		regex	\b({N})\s+(?!(?:h|hours?|days?|weeks?|months?|years?|plants?|seedlings?|leaves|samples?|replicates?|pools?)\b)[a-z][^.;?]{0,70}?\b(?:and|vs\.?|versus)\s+\1\s+(?!(?:h|hours?|days?|weeks?|months?|years?|per)\b)[a-z]	equal groups stated side by side: "8 aggressive Lidia and 8 tame Wagyu", "six high-performing roosters ... and six low-performing"	draw 4 round 2
+unit_pattern		regex	\b(?:individually|singly)[- ]housed\s+(?:[a-z0-9-]+\s+){0,3}?(rats|mice|pigs|piglets|calves|chicks|hens|birds|cows|steers|lambs|ewes|goats|animals)\b	an animal housed alone is the experimental unit (individually housed Sprague-Dawley rats)	draw 4 round 2
+unit_pattern		regex	\b(rats|mice|pigs|piglets|calves|chicks|hens|birds|cows|steers|lambs|ewes|goats|animals)\b[^.;?]{0,60}?\b(?:housed individually|raised individually|kept individually|housed singly|(?:in|into) (?:single|individual)(?:-[a-z]+)? (?:cages|pens|boxes|crates|stalls)|each in (?:its|their) own (?:cage|pen|box|crate|stall))\b	an animal housed alone is the experimental unit (piglets raised individually, hens in single-bird cages)	draw 4 round 2
+organism	Gallus gallus	word	chicks	draw 4 round 2	rules
+organism	Gallus gallus	word	hens	draw 4 round 2	rules
+organism	Gallus gallus	word	roosters	draw 4 round 2	rules
+organism	Gallus gallus	word	cockerels	draw 4 round 2	rules
+organism	Gallus gallus	word	pullets	draw 4 round 2	rules
+organism	Gallus gallus	word	gamecocks	draw 4 round 2	rules
+organism	Gallus gallus	word	broiler	draw 4 round 2	rules
+organism	Bos taurus	word	beef	draw 4 round 2	rules
+organism	Rattus norvegicus	word	sprague-dawley	draw 4 round 2	rules
+organism	Rattus norvegicus	word	sprague dawley	draw 4 round 2	rules
+organism	Rattus norvegicus	word	wistar	draw 4 round 2	rules
+setting	growth_chamber	regex	\b(?:climate|plant|illuminated|light) incubators?\b|\b(?:led|cultivation|growth|plant) (?:cabinets?|shelves|boxes)\b|\bcontrolled[- ]environment (?:facility|facilities|chambers?)\b|\bfilter paper\b|\benamel (?:plates|trays)\b|\bjiffy pellets?\b|\bcone-?tainers\b	growth_chamber settings named by the cabinet or the substrate; draw 4 round 2	rules
+setting	field	regex	\bfield[- ](?:grown\s+)?(?:grapevines?|vines|maize|corn|wheat|rice|soybeans?|trees|plants|crops?)\b|\bin\s+\d+\s+plots\b	field crops named as such (field maize, field grapevines); draw 4 round 2	rules
+design	rcbd	regex	\bin randomi[sz]ed blocks\b	RCBD worded as planted in randomized blocks; draw 4 round 2	rules
+assay	long_read_rna	word	full-length rna-seq	draw 4 round 2	rules
+assay	amplicon	regex	\b(?:fungal|bacterial|microbial|rhizosphere) amplicons?\b	draw 4 round 2	rules
+assay	crispr	regex	\b(?:gene|genome)[- ]edited\b|\bedited (?:[a-z-]+\s+){0,2}genes?\b|\bknocked out\b	draw 4 round 2	rules
+assay	overexpression	regex	\bto overexpress\b|\boverexpress(?:es|ed)?\b	draw 4 round 2	rules
+assay	qtl_mapping	regex	\b(?:ril|recombinant inbred line|doubled haploid|f2|mapping|biparental|nam) populations?\b|\b(?:soybean|maize|rice|wheat|barley|sorghum) rils\b	mapping populations phenotyped for a trait; draw 4 round 2	rules
+assay	gwas	regex	\bassociation (?:panel|population)\b	draw 4 round 2	rules

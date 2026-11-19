@@ -283,9 +283,25 @@ studyforge_fix <- function(answer, ...) {
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       ctrl <- function(x) { w <- strsplit(x, "\\s+")[[1]]; g <- c(w, if (length(w) > 1) paste(utils::head(w, -1), utils::tail(w, -1)))
         any(g %in% vocab) || grepl("^(?:no|without)\\s", x, perl = TRUE) }
-      runs <- regmatches(text, gregexpr(re, text, perl = TRUE))[[1]]
-      for (run in runs) {
-        if (!grepl("\\bvs\\.?\\s|\\bversus\\s|\\sor\\s", run, perl = TRUE)) next   # an "and" list is not a contrast
+      # runs are searched one at a time; a run without vs/or ("per block, trays inoculated with") only moves the search
+      # on by one word, so the contrast that starts inside it ("inoculated with p. sojae vs mock") is still found
+      pos <- 1L
+      repeat {
+        m <- regexpr(re, substring(text, pos), perl = TRUE)
+        if (m < 0) break
+        run <- regmatches(substring(text, pos), m)
+        if (!grepl("\\bvs\\.?\\s|\\bversus\\s|\\sor\\s", run, perl = TRUE)) {   # an "and" list is not a contrast
+          sp <- regexpr("[\\s,]+", run, perl = TRUE)
+          pos <- pos + m - 1L + (if (sp > 0) sp + attr(sp, "match.length") - 1L else nchar(run))
+          next
+        }
+        pos <- pos + m - 1L + nchar(run)
+        # a comma next to a bare "A vs B" (no "or" in the run) closes a clause, it does not add an arm:
+        # "in a growth room, X vs mock, 3 plants pooled" keeps only "X vs mock"
+        if (!grepl("\\sor\\s", run, perl = TRUE)) {
+          segs <- strsplit(run, "\\s*,\\s*", perl = TRUE)[[1]]
+          run <- paste(segs[grepl("\\bvs\\.?\\s|\\bversus\\s", segs, perl = TRUE)], collapse = " vs ")
+        }
         items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
         items <- items[nzchar(items)]
         # a setting phrase caught by the list commas ("in a growth room, salt vs control") is not an arm

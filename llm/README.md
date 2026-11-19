@@ -276,6 +276,7 @@ adds under 0.5 points. Labels follow the old convention that "N blocks" is desig
 | round | papers | new train questions | dev rules before | after |
 |---|---|---|---|---|
 | 1 | 5950-6399 | 318 | 71.2 | 73.3 |
+| 2 | 6400-6849 | 270 | 73.3 | 74.9 |
 
 Round 1 rules: the layout named in the text becomes design.type (`design_layout` rows say which `design` terms are
 layouts, so "2 x 2 factorial" does not answer); `subsample_pattern` reads "5 plants pooled per sample", "replicates of
@@ -285,3 +286,13 @@ a gene symbol, ploidy and NIL pairs; named stresses (salt, nitrogen, CO2 ...) ar
 labels; a setting phrase caught in a vs list is not an arm (`not_arm_lead`); cells, IVP embryos and C. elegans on
 plates are cell culture; seeds in dishes and chambers are growth chamber; and the context assay (RNA-seq) stays
 listed beside another assay that was also named.
+
+Round 2 rules: a vs run is found even when it starts inside a longer comma run, and a comma beside a bare "A vs B"
+ends a clause instead of adding an arm; water, mock or medium is the control arm of a `treatment` contrast only when
+no pathogen is named in the sentence (`plain_control`), and water or buffer is a mock arm for infection; insect
+infestation has its own contrast (`infestation_control`); design phrases, "N seedlings per pot" and growing settings
+are not arms; a number glued to a name ("ago1-38") or followed by a unit ("at 30 kg") is not a count; "in triplicate"
+and equal side-by-side groups ("8 Lidia and 8 Wagyu") give design.reps; an animal housed alone is the unit
+(`unit_pattern`); plus organism words (chicks, hens, Sprague-Dawley), growth-cabinet and field-crop settings, mapping
+and association populations, full-length RNA-seq, edited genes, and "potato" no longer matches potato spindle tuber
+viroid or potato dextrose agar. Five round-2 labels listed assays the prompt never states and were corrected.
