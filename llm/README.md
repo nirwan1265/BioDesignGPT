@@ -319,3 +319,11 @@ v7 result (dev, 328 questions; v7 trained on all 2896 train questions). Alone: v
 rules: v6 90.7, v7 90.2. Values invented for must-ask fields when alone: v6 11, v7 8; merged both 1. Check sets are
 within a point of each other (study_examples 94.3 both, fresh_v1 92.8 vs 93.6, fresh_v4 96.5 vs 95.6, grounded 98.9
 both). More labels did not improve the reader, so v6 stays the adopted reader and v7 is kept only for reference.
+
+Coordinated lists (one rule for the round-3 special cases). `genotype/coord` reads a list of line groups closed by
+and/or/plus and adds each conjunct's number, or 1 for an unnumbered singular ("four cultivars and two hybrids" = 6,
+"a hybrid and its two parents" = 3, "wild type and two named mutants" = 3). The nouns are the `genotype_coord_noun` list.
+A conjunct without the noun ("9 wild and 9 cultivated accessions") counts only when the last conjunct has a number, an
+unnumbered plural ("lines and their hybrids") is not counted, and a list right after "blocks of" or "plots (" is one
+block's contents (cue `coord_not_total`). The round-3 `genotype/sum` and `genotype/3` rows stay as fallbacks. It
+fixes 14 genotype counts on dev and train (train 81.8 → 81.9, dev 76.1 unchanged, check sets unchanged).

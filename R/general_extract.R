@@ -159,6 +159,7 @@
   }
   # factors whose levels are listed or counted ("at 0, 6 and 24 h", "at four times", "over time"): factor_levels rows
   lv <- .sf_level_factors(text)
+  summed <- attr(lv, "summed")
   if (length(lv)) {
     fx <- spec$factors %||% list()
     have <- vapply(fx, function(f) f$name, "")
@@ -176,6 +177,8 @@
       else if (is.null(fx[[i]]$n_levels) && !is.na(n)) fx[[i]]$n_levels <- n
       # a counted list of more arms beats a two-level default ("normal, high-sugar or high-fat diet")
       else if (!is.na(n) && identical(as.numeric(fx[[i]]$n_levels), 2) && n > 2) fx[[i]]$n_levels <- n
+      # a summed list of groups beats the first count alone ("four cultivars and two hybrids": 6, not 4)
+      else if (!is.na(n) && nm %in% summed && n > as.numeric(fx[[i]]$n_levels)) fx[[i]]$n_levels <- n
     }
     spec$factors <- fx
   }
@@ -270,7 +273,8 @@ studyforge_fix <- function(answer, ...) {
 }
 
 # Factors whose levels are listed or counted in the text (rules.tsv category factor_levels, term "<factor>/<how>";
-# {N} is the count_word cue). how says how to read a hit: list = one level per number in group 1 ("at 0, 6, 12 and 24 h"); count =
+# {N} is the count_word cue). coord = a coordinated list of groups, each conjunct adds its own number or 1 ({HEAD} is
+# the noun list named by the note). how says how to read a hit: list = one level per number in group 1 ("at 0, 6, 12 and 24 h"); count =
 # group 1 is the number of levels ("at four times"); pair = two levels ("at baseline and 52 weeks"); wordlist = one
 # level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
 # factor is there, its levels unknown ("sampled over time").
@@ -317,6 +321,30 @@ studyforge_fix <- function(answer, ...) {
       }
       next
     }
+    if (identical(r$match[i], "coord")) {   # a coordinated list of groups: each conjunct adds its own number, or 1
+      # {HEAD} is the noun list named by the note's first word; the first run with two or more conjuncts counts
+      head <- paste(.sf_list(strsplit(r$note[i], "[: ]")[[1]][1]), collapse = "|")
+      re <- gsub("{HEAD}", paste0("(?:", head, ")"), re, fixed = TRUE)
+      num <- paste0("(?<![\\w.-])", .sf_cue("count_word"), "(?![\\w-])")
+      hits <- gregexpr(re, text, perl = TRUE)[[1]]
+      runs <- regmatches(text, list(hits))[[1]]
+      for (h in seq_along(runs)) {
+        run <- runs[h]
+        # a list right after "blocks of" or "plots (" is one block's contents, not the total (cue coord_not_total)
+        if (grepl(.sf_cue("coord_not_total"), substr(text, max(1, hits[h] - 40), hits[h] - 1), perl = TRUE)) next
+        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+|plus\\s+)?|\\s+(?:and|or|plus)\\s+", perl = TRUE)[[1]])
+        items <- items[nzchar(items)]
+        if (length(items) < 2) next
+        # a conjunct without the noun shares the last one's ("9 wild and 9 cultivated accessions"): only when that has a number
+        noun <- grepl(paste0("\\b(?:", head, ")\\b"), items, perl = TRUE)
+        if (!all(noun) && !grepl(num, items[length(items)], perl = TRUE)) next
+        # a conjunct without a number is one level, unless its noun is plural ("lines and their hybrids": not counted)
+        k <- sum(vapply(items, function(x) { m <- regmatches(x, regexpr(num, x, perl = TRUE))
+          if (length(m)) .sf_num(m) else if (grepl("[^s]s$|ies$", x, perl = TRUE)) NA_real_ else 1 }, numeric(1)))
+        if (!is.na(k) && k >= 2) { out[[nm]] <- k; attr(out, "summed") <- c(attr(out, "summed"), nm); break }
+      }
+      next
+    }
     if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
@@ -343,6 +371,7 @@ studyforge_fix <- function(answer, ...) {
       if (grepl("^\\d+$", r$match[i])) as.numeric(r$match[i]) else NA)   # a fixed count: "a hybrid and its two parents" = 3
     if (!is.na(n) && n < 2) next
     out[[nm]] <- n
+    if (identical(r$match[i], "sum")) attr(out, "summed") <- c(attr(out, "summed"), nm)
   }
   out
 }

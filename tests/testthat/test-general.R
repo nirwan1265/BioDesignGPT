@@ -52,3 +52,14 @@ test_that("plans open with the skeleton and studyforge_fix() corrects it", {
   expect_equal(c2$spec$design$reps, 4)
   expect_equal(c2$spec$primary_outcome$name, "gene_expression")
 })
+
+test_that("a coordinated list of line groups adds each conjunct's number, or 1", {
+  g <- function(t) .sf_level_factors(t)[["genotype"]]
+  expect_equal(g("rna-seq of four commercial cultivars and two hybrids under drought"), 6)
+  expect_equal(g("leaves of two wild and two cultivated accessions, 3 replicates"), 4)
+  expect_equal(g("a hybrid and its two parents grown in a greenhouse"), 3)
+  expect_equal(g("wild type and two named mutants, salt vs control"), 3)
+  expect_equal(g("wild type, mutant and complemented lines"), 3)
+  expect_false(identical(g("blocks of 20 plots (18 lines plus 2 checks)"), 20))   # one block's contents
+  expect_false(identical(g("at 10 dpi, 4 birds per line"), 14))                  # a comma alone is not a list
+})
