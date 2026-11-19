@@ -327,3 +327,20 @@ A conjunct without the noun ("9 wild and 9 cultivated accessions") counts only w
 unnumbered plural ("lines and their hybrids") is not counted, and a list right after "blocks of" or "plots (" is one
 block's contents (cue `coord_not_total`). The round-3 `genotype/sum` and `genotype/3` rows stay as fallbacks. It
 fixes 14 genotype counts on dev and train (train 81.8 → 81.9, dev 76.1 unchanged, check sets unchanged).
+
+### Final scoring of the locked test splits (once, v6 reader, after the coord rule)
+
+Overall field recall; in brackets, questions where a must-ask value was filled in (made up).
+
+| Split | Questions | Rules | v6 alone | Rules + v6 |
+|---|---|---|---|---|
+| test | 764 | 74.6 (12) | 88.0 (18) | 89.3 (18) |
+| test_heldout (held-out species) | 87 | 71.7 (7) | 89.0 (4) | 87.4 (7) |
+| test_newkinds (study kinds never trained on) | 100 | 74.8 (2) | 86.7 (3) | 88.6 (2) |
+| test_draw4 | 206 | 77.5 (2) | 88.0 (4) | 88.1 (2) |
+| dev, for comparison | 328 | 76.1 (1) | 88.6 (11) | 90.7 (1) |
+
+Recall holds up off dev (merged 87-89 vs 90.7). Made-up values do not: merged, 18/764 on test (2.4%) and 7/87 on
+held-out species against 1/328 on dev, so the merge's must-ask handling was tuned to dev. On held-out species the merge
+is worse than the reader alone, mainly experimental_unit (16.7 vs 66.7) and subsamples_per_unit (80 vs 90): the merge
+keeps the rules' value for those fields. These splits are now spent; later fixes are checked on dev, train and new data.
