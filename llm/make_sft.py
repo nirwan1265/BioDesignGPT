@@ -62,7 +62,7 @@ def _cue(name):
 def unit_counted(unit, text):
     """The prompt counts the unit as the replicate (cue unit_counted in rules.tsv, the same test merge_specs applies)."""
     w = re.escape(re.sub(r"(?<![su])s$", "", unit.replace("_", " ").lower()))
-    pat = _cue("unit_counted").replace("{U}", w).replace("{N}", _cue("count_word"))
+    pat = _cue("unit_counted").replace("{U}", w).replace("{N}", _cue("count_word")).replace("{LEAD}", _cue("unit_compound_lead"))
     return re.search(pat, text.lower().replace(",", "")) is not None
 
 

@@ -248,7 +248,8 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
 
 .sf_unit_counted <- function(u, text) {
   w <- .sf_re_escape(sub("(?<![su])s$", "", gsub("_", " ", tolower(u)), perl = TRUE))
-  re <- gsub("{N}", .sf_cue("count_word"), gsub("{U}", w, .sf_cue("unit_counted"), fixed = TRUE), fixed = TRUE)
+  re <- gsub("{U}", w, .sf_cue("unit_counted"), fixed = TRUE)
+  re <- gsub("{LEAD}", .sf_cue("unit_compound_lead"), gsub("{N}", .sf_cue("count_word"), re, fixed = TRUE), fixed = TRUE)
   grepl(re, text, perl = TRUE)
 }
 .sf_alias_cache <- new.env()

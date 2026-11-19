@@ -356,6 +356,6 @@ alongside dev.
 
 Readers on dev2 (155 questions). Alone: v6 88.0, v7 89.2; merged with rules: v6 90.2, v7 91.0. Over dev and dev2
 together the two readers tie (merged 90.5 each), so v6 stays. dev2 showed two merge misses, both fixed generally:
-the `unit_counted` cue now reads "15 single-plant replicates" as the plant being the unit, and a questions.tsv row
+the `unit_counted` cue now reads a unit glued to a lead word before "replicate" ("15 single-plant replicates", "per-pot replicates"; lead words in cue `unit_compound_lead`) as the stated unit, and a questions.tsv row
 reads "is X confounded with Y?" as a question about the experimental unit, so the reader's unit is not filled in.
 After these, merged made-up values on dev2 are 0/155 (dev 1/328); train and the check sets are unchanged.
