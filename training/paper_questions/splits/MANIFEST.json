@@ -144,6 +144,39 @@
     "detailed": 84,
     "terse": 6
    }
+  },
+  "test_draw5.jsonl": {
+   "n": 159,
+   "sha256": "a42c9067d3670140ac15b00e5ec359a8be4f072617f7120f5677f96c04dd574d",
+   "members_sha256": "c16bda781468f68e9077a284a6ff9d84c59e34c6b3222bae1cc7a4b5c05d647b",
+   "papers": "paper_7750..paper_7974",
+   "locked": true,
+   "species": {
+    "arabidopsis": 24,
+    "wheat": 19,
+    "rice": 19,
+    "rat": 16,
+    "cattle": 13,
+    "tomato": 10,
+    "pig": 9,
+    "maize": 9,
+    "fly": 8,
+    "chicken": 6,
+    "grape": 5,
+    "soybean": 4,
+    "worm": 4,
+    "barley": 3,
+    "potato": 3,
+    "cotton": 2,
+    "mouse": 2,
+    "yeast": 1,
+    "macaque": 1,
+    "apple": 1
+   },
+   "styles": {
+    "detailed": 114,
+    "question": 45
+   }
   }
  },
  "refreshed": 85

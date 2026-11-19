@@ -5,6 +5,7 @@
     test.jsonl          ~70% of questions from trained species: scored once, at the end
     test_heldout.jsonl  every question from the held-out species (setaria, poplar, zebrafish, xenopus): scored separately
     test_draw4.jsonl    papers 5700-5949, the first 250 of draw 4: locked before any rule was mined from draw 4 (--lock)
+    test_draw5.jsonl    papers 7750-7974: locked before any rule was mined from them (--lock)
 
 Each paper gives at most one question, so splitting by question is splitting by paper. Within trained species
 the split is stratified by species x technique: each stratum's questions are shuffled (seed 2026) and dealt
