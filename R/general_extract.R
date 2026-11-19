@@ -300,14 +300,15 @@ studyforge_fix <- function(answer, ...) {
         pos <- pos + m - 1L + nchar(run)
         # a comma next to a bare "A vs B" (no "or" in the run) closes a clause, it does not add an arm:
         # "in a growth room, X vs mock, 3 plants pooled" keeps only "X vs mock"
-        if (!grepl("\\sor\\s", run, perl = TRUE)) {
+        # (a list that runs into ", vs" is a list of arms: "air-dried, then rehydrated, vs untreated")
+        if (!grepl("\\sor\\s|,\\s*(?:vs\\.?|versus)\\s", run, perl = TRUE)) {
           segs <- strsplit(run, "\\s*,\\s*", perl = TRUE)[[1]]
           # an extra control arm after the comma ("A vs B, plus normoxic controls"; rules.tsv cue extra_control_arm) stays
           xa <- tryCatch(.sf_cue("extra_control_arm"), error = function(e) "(?!)")
           keep <- grepl("\\bvs\\.?\\s|\\bversus\\s", segs, perl = TRUE) | grepl(xa, segs, perl = TRUE)
           run <- paste(segs[keep], collapse = " vs ")
         }
-        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
+        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+|vs\\.?\\s+|versus\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
         items <- items[nzchar(items)]
         # a setting phrase caught by the list commas ("in a growth room, salt vs control") is not an arm
         lead <- tryCatch(.sf_list("not_arm_lead"), error = function(e) character())

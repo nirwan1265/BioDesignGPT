@@ -278,6 +278,7 @@ adds under 0.5 points. Labels follow the old convention that "N blocks" is desig
 | 1 | 5950-6399 | 318 | 71.2 | 73.3 |
 | 2 | 6400-6849 | 270 | 73.3 | 74.9 |
 | 3 | 6850-7299 | 206 | 74.9 | 75.8 |
+| 4 | 7300-7749 | 194 | 75.8 | 76.1 |
 
 Round 1 rules: the layout named in the text becomes design.type (`design_layout` rows say which `design` terms are
 layouts, so "2 x 2 factorial" does not answer); `subsample_pattern` reads "5 plants pooled per sample", "replicates of
@@ -306,3 +307,10 @@ normoxic controls", cue `extra_control_arm`) is kept as an arm; a counted list b
 high-sugar or high-fat diet", `diet_control`); infection contrasts allow longer arms and take virus-free as the mock
 arm; "at 5 and 22 days old" is age; plus rat strain names, callus, liquid culture and cabinets, blastocysts and cultured
 cells, more pooled-per wording, and metabolite GWAS.
+
+Round 4 rules: a comma before vs keeps a list of arms ("air-dried, then rehydrated, vs untreated"); "from 7-week-old
+pigs" is not a setting phrase; "2 of each kept" is not a unit; high/low before a plane, dose, level or density is not a
+pair of lines, and typed or selected-for groups are phenotype groups; two mouse strains are a genotype pair; "at
+several ages" is age; DMEM is a mock arm; "N pens of M birds" gives reps N and M birds per pen; plus methylation,
+over-expressor, MDBK and primary microglia wording. Round 4 added 0.3 points, under the 0.5 stop, so the rounds end
+here (papers 7750-8199 stay unlabelled) and the reader is retrained once (v7).
