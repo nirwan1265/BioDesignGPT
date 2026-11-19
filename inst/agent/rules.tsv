@@ -3351,7 +3351,7 @@ cue	both_sexes	regex	\bmales?\b.*\bfemales?\b|\bfemales?\b.*\bmales?\b|both sexe
 cue	mock_control	regex	\bmock\b|uninfected|non-?infected|non-?inoculated	a mock / uninfected control	rules
 cue	infection_word	regex	infect|inocul|virus|pathogen|challenge	a pathogen or infection (with a mock control: infection factor)	rules
 cue	placebo_control	regex	\bplac[ei]bo\b|\bvehicle\b|\bsham\b|\bmock\b	a placebo / vehicle / sham control (treatment factor)	rules
-cue	one_replicate_stated	regex	\bonly (?:one|1)\b|\b(?:one|single|1) (?:plot|sample|replicate|rep|pool|library)\b|\bno (?:replicat|biological rep)|unreplicated|\bn ?= ?1\b	one replicate stated outright	rules
+cue	one_replicate_stated	regex	\bonly (?:one|1)\b|\b(?:one|single|1) (?:plot|replicate|rep)\b|\b(?:one|single|1) (?:sample|pool|library) (?:per|for each)\b(?![^.?]*\?)|\bno (?:replicat|biological rep)|unreplicated|\bn ?= ?1\b	one replicate stated outright; "one sample each ... how many?" or "three flasks pooled into one library" describe pooling or ask, so they leave the count open	rules
 cue	time_stated	regex	\b\d+ ?(?:h|hr|hrs|hours?|min|days?|d|dpi|hpi|dai|weeks?|wk|months?)\b|time ?points?|time course|diurnal|sampled at|harvested at	sampling times stated (time is a factor)	rules
 cue	temperature_stress	regex	\bcold\b|chill|freez|low temperature|\bheat\b|high temperature	temperature stress named	rules
 cue	cold_stress	regex	\bcold\b|chill|freez|low temperature|\d+ ?c (?:vs|versus) 	cold stress	rules

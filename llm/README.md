@@ -250,3 +250,19 @@ labels (v6).
 | train (rules) | 75.1 | - |
 | new kinds | 72.9 | 88.6 |
 
+**v6 (adopted).** v5's recipe on the schema-4 labels (system = setting, study_type separate). Val set: dev, as
+always; the other sets checked once.
+
+| | v2 | v6 |
+|---|---|---|
+| dev, alone | 85.9 | 88.2 (v6 - v2 = +2.3, CI +1.1 to +3.5) |
+| dev, merged | 89.5 | 89.7 (+0.2, CI -0.5 to +0.9) |
+| dev invented, merged | 1 | 1 |
+| new kinds, alone / merged | 84.8 / 88.6 | 86.7 / 88.8 |
+| check sets, merged | | equal or within one question (fresh v1 94.4 -> 92.8, fresh v4 95.6 -> 96.5) |
+
+v6 answers in the new schema itself (it names study_type; v2 needs the merge to translate). Two cue fixes made on
+dev before the decision: `one_replicate_stated` no longer reads "one library per treatment" or "one sample each
+... how many?" as an unreplicated design, and `questions.tsv` reads "do I need replicate pools?" (replicates) and
+"is the chamber a problem?" (experimental unit). With them v6 merged invents on dev as rarely as v2 (1 of 328).
+
