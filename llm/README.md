@@ -353,3 +353,9 @@ once at the very end) and papers 7975-8199 are `dev2` (155 questions, a second t
 `freeze_split.py --dev` so it never goes to train). Rules alone on dev2: 81.0, 0 made-up values. dev2 is where the merge
 fixes (when to trust the reader's experimental unit and subsamples, when to leave a must-ask field empty) are checked,
 alongside dev.
+
+Readers on dev2 (155 questions). Alone: v6 88.0, v7 89.2; merged with rules: v6 90.2, v7 91.0. Over dev and dev2
+together the two readers tie (merged 90.5 each), so v6 stays. dev2 showed two merge misses, both fixed generally:
+the `unit_counted` cue now reads "15 single-plant replicates" as the plant being the unit, and a questions.tsv row
+reads "is X confounded with Y?" as a question about the experimental unit, so the reader's unit is not filled in.
+After these, merged made-up values on dev2 are 0/155 (dev 1/328); train and the check sets are unchanged.
