@@ -109,7 +109,42 @@
     "typo": 1
    },
    "members_sha256": "4a539f978c942cef0a13b8448cec5f4aaa6e24fdcca95b5ed43fa029b7ebc620"
+  },
+  "test_draw4.jsonl": {
+   "n": 206,
+   "sha256": "bb070c41b88f633e02e2f8e8fd678f42535d5537c02318e2a8db44bf4d328fbb",
+   "members_sha256": "4e8a236de7959c76b5d93504b4125cf1d990798f481a5ced10e3f2758fd8befe",
+   "papers": "paper_5700..paper_5949",
+   "locked": true,
+   "species": {
+    "rat": 26,
+    "pig": 20,
+    "arabidopsis": 18,
+    "rice": 17,
+    "fly": 14,
+    "chicken": 13,
+    "soybean": 13,
+    "wheat": 12,
+    "maize": 10,
+    "cattle": 9,
+    "mouse": 8,
+    "macaque": 7,
+    "human": 6,
+    "worm": 6,
+    "tomato": 5,
+    "grape": 5,
+    "apple": 4,
+    "yeast": 4,
+    "potato": 4,
+    "barley": 3,
+    "cotton": 2
+   },
+   "styles": {
+    "question": 116,
+    "detailed": 84,
+    "terse": 6
+   }
   }
  },
- "refreshed": 78
+ "refreshed": 79
 }

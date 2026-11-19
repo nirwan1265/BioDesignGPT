@@ -4,6 +4,7 @@
     dev.jsonl           ~30% of questions from trained species: for tuning rules, prompts and the reader
     test.jsonl          ~70% of questions from trained species: scored once, at the end
     test_heldout.jsonl  every question from the held-out species (setaria, poplar, zebrafish, xenopus): scored separately
+    test_draw4.jsonl    papers 5700-5949, the first 250 of draw 4: locked before any rule was mined from draw 4 (--lock)
 
 Each paper gives at most one question, so splitting by question is splitting by paper. Within trained species
 the split is stratified by species x technique: each stratum's questions are shuffled (seed 2026) and dealt
@@ -76,8 +77,27 @@ def main():
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--refresh", action="store_true")
+    ap.add_argument("--lock", nargs=3, metavar=("NAME", "FIRST", "LAST"),
+                    help="freeze papers FIRST..LAST (numbers) as a new test split NAME.jsonl; never mined, scored once")
     a = ap.parse_args()
     man = os.path.join(OUT, "MANIFEST.json")
+    if a.lock:
+        name, lo, hi = a.lock[0] + ".jsonl", int(a.lock[1]), int(a.lock[2])
+        m = json.load(open(man))
+        if name in m["files"]:
+            sys.exit(f"{name} is already frozen")
+        rows = [q for q in load() if lo <= int(q["paper"].split("_")[1]) <= hi]
+        frozen = {json.loads(l)["id"] for n in m["files"] for l in open(os.path.join(OUT, n))}
+        if any(q["id"] in frozen for q in rows):
+            sys.exit("some of these questions are already in a frozen split")
+        p = write(name, rows)
+        m["files"][name] = {"n": len(rows), "sha256": sha(p), "members_sha256": members(rows),
+                            "papers": f"paper_{lo:04d}..paper_{hi:04d}", "locked": True,
+                            "species": dict(collections.Counter(r["species"] for r in rows).most_common()),
+                            "styles": dict(collections.Counter(r["style"] for r in rows).most_common())}
+        json.dump(m, open(man, "w"), indent=1)
+        print(f"{name}: {len(rows)} questions frozen from papers {lo}-{hi}")
+        return
     if a.check:
         m = json.load(open(man))
         bad = [n for n, v in m["files"].items() if sha(os.path.join(OUT, n)) != v["sha256"]]
