@@ -1,0 +1,7 @@
+what	name	match	weight	note
+kind	human_cohort	\b(?:patients?|cohorts?|clinical|participants|volunteers|donors|case-control|cases and controls|healthy controls|women|men|children|infants)\b	3	human cohorts and patient studies: the rules find 49% of their fields
+kind	cell_lines	\b(?:cell lines?|cultured cells|primary cells|organoids?|in vitro|transfect\w*|knock-?down|sirna|shrna|crispr screen|passages?)\b	2.5	cell-line and in-vitro studies
+kind	mapping	\b(?:gwas|genome-wide association|qtl|linkage map\w*|bulk(?:ed)? segregant|bsa|mapping population|recombinant inbred|rils?|f2 population|backcross|doubled haploid|nested association|magic population)\b	2.5	mapping studies: the most invented values in the new-kinds test
+kind	mutant_lines	\b(?:mutants?|knockouts?|transgenic|overexpress\w*|crispr|edited|mutagenesis|tilling)\b	1.5	mutant and transgenic lines
+kind	population	\b(?:experimental evolution|mutation accumulation|selection lines|natural populations?|wild populations?|demograph\w*|domestication)\b	1.5	population and evolution studies
+kind	stated_layout	\b(?:randomi[sz]ed|blocks?|split-plot|latin square|replicat\w+ plots?|pens?|cages?|litters?)\b	1.3	papers that state their design layout (more to learn per paper)
