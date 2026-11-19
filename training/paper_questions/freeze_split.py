@@ -6,6 +6,7 @@
     test_heldout.jsonl  every question from the held-out species (setaria, poplar, zebrafish, xenopus): scored separately
     test_draw4.jsonl    papers 5700-5949, the first 250 of draw 4: locked before any rule was mined from draw 4 (--lock)
     test_draw5.jsonl    papers 7750-7974: locked before any rule was mined from them (--lock)
+    dev2.jsonl          papers 7975-8199: a second tuning split, frozen so it never goes to train (--dev)
 
 Each paper gives at most one question, so splitting by question is splitting by paper. Within trained species
 the split is stratified by species x technique: each stratum's questions are shuffled (seed 2026) and dealt
@@ -80,10 +81,13 @@ def main():
     ap.add_argument("--refresh", action="store_true")
     ap.add_argument("--lock", nargs=3, metavar=("NAME", "FIRST", "LAST"),
                     help="freeze papers FIRST..LAST (numbers) as a new test split NAME.jsonl; never mined, scored once")
+    ap.add_argument("--dev", nargs=3, metavar=("NAME", "FIRST", "LAST"),
+                    help="freeze papers FIRST..LAST as a new tuning split NAME.jsonl: kept out of train, may be mined")
     a = ap.parse_args()
     man = os.path.join(OUT, "MANIFEST.json")
-    if a.lock:
-        name, lo, hi = a.lock[0] + ".jsonl", int(a.lock[1]), int(a.lock[2])
+    if a.lock or a.dev:
+        arg = a.lock or a.dev
+        name, lo, hi = arg[0] + ".jsonl", int(arg[1]), int(arg[2])
         m = json.load(open(man))
         if name in m["files"]:
             sys.exit(f"{name} is already frozen")
@@ -93,11 +97,12 @@ def main():
             sys.exit("some of these questions are already in a frozen split")
         p = write(name, rows)
         m["files"][name] = {"n": len(rows), "sha256": sha(p), "members_sha256": members(rows),
-                            "papers": f"paper_{lo:04d}..paper_{hi:04d}", "locked": True,
+                            "papers": f"paper_{lo:04d}..paper_{hi:04d}", "locked": bool(a.lock),
+                            "role": "test" if a.lock else "dev",
                             "species": dict(collections.Counter(r["species"] for r in rows).most_common()),
                             "styles": dict(collections.Counter(r["style"] for r in rows).most_common())}
         json.dump(m, open(man, "w"), indent=1)
-        print(f"{name}: {len(rows)} questions frozen from papers {lo}-{hi}")
+        print(f"{name}: {len(rows)} questions frozen from papers {lo}-{hi} ({'test, locked' if a.lock else 'tuning'})")
         return
     if a.check:
         m = json.load(open(man))

@@ -177,7 +177,41 @@
     "detailed": 114,
     "question": 45
    }
+  },
+  "dev2.jsonl": {
+   "n": 155,
+   "sha256": "fe0cd73b45fc3fb78f5aa8a1b197be4e86e336db34427d1be53c489ccde5aad0",
+   "members_sha256": "c2e94f792b31f5f489a1116a905a519b787718273a6364c5aa0bb170ef0e4900",
+   "papers": "paper_7975..paper_8199",
+   "locked": false,
+   "role": "dev",
+   "species": {
+    "rat": 24,
+    "arabidopsis": 23,
+    "cattle": 16,
+    "chicken": 15,
+    "rice": 11,
+    "wheat": 11,
+    "fly": 9,
+    "tomato": 8,
+    "pig": 8,
+    "maize": 6,
+    "soybean": 4,
+    "worm": 4,
+    "potato": 4,
+    "barley": 3,
+    "grape": 3,
+    "cotton": 2,
+    "yeast": 1,
+    "macaque": 1,
+    "mouse": 1,
+    "apple": 1
+   },
+   "styles": {
+    "detailed": 119,
+    "question": 36
+   }
   }
  },
- "refreshed": 85
+ "refreshed": 86
 }
