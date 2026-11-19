@@ -266,3 +266,22 @@ dev before the decision: `one_replicate_stated` no longer reads "one library per
 ... how many?" as an unreplicated design, and `questions.tsv` reads "do I need replicate pools?" (replicates) and
 "is the chamber a problem?" (experimental unit). With them v6 merged invents on dev as rarely as v2 (1 of 328).
 
+
+**Draw 4 (2,500 more papers, gap-weighted).** `sample_papers.py --weights draws/draw4_weights.tsv` drew papers 5700-8199
+toward human cohorts, cell lines, mapping and rare organisms. Papers 5700-5949 were labelled first and frozen as
+`splits/test_draw4.jsonl` (`freeze_split.py --lock`); no rule is ever written from them. The rest is read in rounds of
+about 450 papers: label, mine the rules' misses on the new training questions only, rescore dev, and stop when a round
+adds under 0.5 points. Labels follow the old convention that "N blocks" is design.reps.
+
+| round | papers | new train questions | dev rules before | after |
+|---|---|---|---|---|
+| 1 | 5950-6399 | 318 | 71.2 | 73.3 |
+
+Round 1 rules: the layout named in the text becomes design.type (`design_layout` rows say which `design` terms are
+layouts, so "2 x 2 factorial" does not answer); `subsample_pattern` reads "5 plants pooled per sample", "replicates of
+30 pooled flies", "bulks of 20 plants" (count only, the unit stays a question); infection levels come from a pathogen
+vs mock run (`infection/contrast`, `infection_control`); genotype from mapping and association wording, Col-0 next to
+a gene symbol, ploidy and NIL pairs; named stresses (salt, nitrogen, CO2 ...) are `treatment` synonyms as in most
+labels; a setting phrase caught in a vs list is not an arm (`not_arm_lead`); cells, IVP embryos and C. elegans on
+plates are cell culture; seeds in dishes and chambers are growth chamber; and the context assay (RNA-seq) stays
+listed beside another assay that was also named.

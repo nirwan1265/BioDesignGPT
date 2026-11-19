@@ -54,7 +54,7 @@ dict(paper="paper_6370", style="detailed", prompt="RNA-seq of Arabidopsis Col-0 
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="light", n_levels=2), dict(name="temperature", n_levels=2)], design=dict(reps=5)),
      ask=[P], note="2 x 2 x 2"),
 dict(paper="paper_6371", style="detailed", prompt="Grain dormancy of 1557 wheat MAGIC F7 lines in a glasshouse partially replicated design with 20% of lines replicated, ten blocks of four benches each laid out 12 rows x 5 columns, four check cultivars replicated at least 7 times.",
-     spec=dict(system="greenhouse", organism="Triticum aestivum", assays=["qtl_mapping"], factors=[dict(name="genotype", n_levels=1557)], design=dict(blocks=10)),
+     spec=dict(system="greenhouse", organism="Triticum aestivum", assays=["qtl_mapping"], factors=[dict(name="genotype", n_levels=1557)]),
      ask=[P], note="p-rep"),
 dict(paper="paper_6372", skip="senescence mechanism"),
 dict(paper="paper_6373", style="question", prompt="Endometrium and embryo RNA-seq of Tibetan gilts at day 28 of pregnancy, comparing healthy vs arresting embryos within the same uteri, 3 gilts. Are embryos within a gilt independent?",

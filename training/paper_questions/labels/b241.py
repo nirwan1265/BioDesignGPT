@@ -32,7 +32,7 @@ dict(paper="paper_6011", style="detailed", prompt="RNA-seq of in vitro apple pla
      ask=[P], note="2 x 2"),
 dict(paper="paper_6012", skip="leukemia chromatin mechanism"),
 dict(paper="paper_6013", style="detailed", prompt="Common scab and yield of potato treated with Bacillus velezensis Y6 vs untreated, in field plots with 3 blocks.",
-     spec=dict(system="field", organism="Solanum tuberosum", factors=[dict(name="treatment", n_levels=2)], design=dict(blocks=3), experimental_unit="plot"),
+     spec=dict(system="field", organism="Solanum tuberosum", factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3), experimental_unit="plot"),
      ask=[P], note="biocontrol"),
 dict(paper="paper_6014", style="question", prompt="Faecal 16S of weaned piglets randomly allotted to a fly maggot peptide diet vs a basal diet in a completely randomized design. Is the pen or the piglet my unit?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet", n_levels=2)], design=dict(type="crd")),

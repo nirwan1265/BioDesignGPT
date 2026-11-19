@@ -109,12 +109,12 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
 
 # the term a text names first: a written pattern (regex row) wins, else the earliest word-row match in the text
 # ("Friesian calves fed grape pomace" names the calves first)
-.sf_first_named <- function(text, category) {
+.sf_first_named <- function(text, category, terms = NULL) {
   t <- .sf_rules_rows(category, c("regex", "word"))
   rx <- unique(t$term[t$match == "regex"])
   p <- .sf_rules(category)
   pos <- vapply(seq_along(p), function(i) { m <- regexpr(p[[i]], text, perl = TRUE); if (m > 0) as.numeric(m) else Inf }, 0)
-  hit <- which(is.finite(pos))
+  hit <- which(is.finite(pos) & (is.null(terms) | names(p) %in% terms))   # terms: only these may answer
   if (!length(hit)) return(character())
   written <- hit[names(p)[hit] %in% rx & seq_along(p)[hit] <= sum(t$match == "regex")]
   if (length(written)) return(names(p)[written[1]])

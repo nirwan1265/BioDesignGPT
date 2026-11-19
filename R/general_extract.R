@@ -288,6 +288,9 @@ studyforge_fix <- function(answer, ...) {
         if (!grepl("\\bvs\\.?\\s|\\bversus\\s|\\sor\\s", run, perl = TRUE)) next   # an "and" list is not a contrast
         items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
         items <- items[nzchar(items)]
+        # a setting phrase caught by the list commas ("in a growth room, salt vs control") is not an arm
+        lead <- tryCatch(.sf_list("not_arm_lead"), error = function(e) character())
+        items <- items[!vapply(items, function(x) any(vapply(lead, grepl, logical(1), x = x, perl = TRUE)), logical(1))]
         if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) { out[[nm]] <- length(items); break }
       }
       next

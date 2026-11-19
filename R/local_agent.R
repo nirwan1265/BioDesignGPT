@@ -162,6 +162,10 @@ extract_spec_local <- function(question) {
   set("design.reps", .sf_count_before(text, reps_nouns))
   tc <- regmatches(text, regexpr(.sf_cue("n_treated_and_n_control"), text, perl = TRUE))
   if (length(tc)) set("design.reps", .sf_num(regmatches(tc, regexpr(.sf_num_re, tc, perl = TRUE))))
+  # the field or bench layout when the text names one (rules.tsv design rows whose term is a design_layout; a
+  # treatment structure such as "2 x 2 factorial" is not a layout and does not answer)
+  lay <- .sf_first_named(text, "design", .sf_list("design_layout"))
+  if (length(lay)) set("design.type", lay)
   set("design.locations", .sf_count_before(text, .sf_list("location_noun")))
   set("design.seasons", .sf_count_before(text, .sf_list("season_noun")))
   if (.sf_has(text, .sf_cue("one_season"))) set("design.seasons", 1)
@@ -202,6 +206,15 @@ extract_spec_local <- function(question) {
     set("measurement_unit", unname(meas))
     set("subsamples_per_unit", n_sub)
     set("experimental_unit", exp)
+  }
+  # other ways of stating the units pooled or measured per sample (rules.tsv subsample_pattern; {N} is the
+  # count_word cue): "5 plants pooled per sample", "replicates of 30 pooled flies", "bulks of 20 plants".
+  # They give the count only: what the experimental unit is stays a question
+  if (is.null(spec$subsamples_per_unit)) for (sp in .sf_rules_rows("subsample_pattern")$pattern) {
+    g <- regmatches(text, regexec(gsub("{N}", .sf_cue("count_word"), sp, fixed = TRUE), text, perl = TRUE))[[1]]
+    if (!length(g)) next
+    n <- .sf_num(g[-1][nzchar(g[-1])][1])
+    if (!is.na(n) && n >= 2) { set("subsamples_per_unit", n); break }
   }
   if (.sf_has(text, .sf_cue("one_plant_per_pot"))) set("experimental_unit", "pot")
   if (.sf_has(text, .sf_cue("housed_per_cage"))) {
@@ -270,13 +283,16 @@ extract_spec_local <- function(question) {
   if (length(orgs) && identical(spec$study_type, "functional_validation")) set("organism", orgs[1])
   if (sys_now %in% .sf_systems_where(lists_assays = TRUE)) {
     as <- find_all("assay")
-    as <- setdiff(as, if (!sys_now %in% .sf_systems_where(rnaseq_gwas_are_assays = TRUE)) .sf_list("context_assay"))
-    as <- setdiff(as, .sf_generic_of(as))
+    # the assay that is the context ("RNA-seq of ...") is not listed on its own; next to another assay it is one
+    # of the assays ("m6A-seq and RNA-seq"). find_all matches the longest phrase, so a generic label found here
+    # was said in its own words and stays (the generic_assay rows matter for the reader, not here)
+    ctx_as <- if (!sys_now %in% .sf_systems_where(rnaseq_gwas_are_assays = TRUE)) .sf_list("context_assay")
+    if (!length(setdiff(as, ctx_as))) as <- setdiff(as, ctx_as)
     if (length(as)) set("assays", as)
   } else {
     # a field, greenhouse or animal study that maps a trait lists its assays too (mapping_assay in rules.tsv)
     as <- find_all("assay")
-    if (length(intersect(as, .sf_list("mapping_assay")))) set("assays", setdiff(as, .sf_generic_of(as)))
+    if (length(intersect(as, .sf_list("mapping_assay")))) set("assays", as)
   }
   # the mating of a stated population (F2, backcross, RILs ...) whatever the setting
   if (!identical(sys_now, "breeding_genetics")) {

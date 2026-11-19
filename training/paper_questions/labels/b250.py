@@ -49,7 +49,7 @@ dict(paper="paper_6244", style="question", prompt="RNA-seq of 7-day-old rice rs3
      spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="treatment", n_levels=3)]),
      ask=["design.reps", "subsamples_per_unit"], note="2 x 3"),
 dict(paper="paper_6245", style="detailed", prompt="Wild barley accessions in pots, drought (no watering for 12 days at flowering) vs control, each accession and treatment replicated once in each of six blocks.",
-     spec=dict(organism="Hordeum spontaneum", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="water", n_levels=2)], design=dict(type="rcbd", blocks=6), experimental_unit="pot"),
+     spec=dict(organism="Hordeum spontaneum", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="water", n_levels=2)], design=dict(type="rcbd", reps=6), experimental_unit="pot"),
      ask=[P], note="RBD"),
 dict(paper="paper_6246", style="question", prompt="RNA-seq of epithelial and stromal cells from cow endometria treated with progesterone vs vehicle. Is each cow a block?",
      spec=dict(system="cell_culture", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="cell_type", n_levels=2)]),

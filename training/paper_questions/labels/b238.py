@@ -17,7 +17,7 @@ dict(paper="paper_5930", style="question", prompt="Leaf lipidomics of Arabidopsi
      spec=dict(system="greenhouse", organism="Arabidopsis thaliana", assays=["lipidomics", "overexpression"], factors=[dict(name="genotype", n_levels=2), dict(name="water", n_levels=2)]),
      ask=["design.reps"], note="2 x 2"),
 dict(paper="paper_5931", style="detailed", prompt="Vernalized wheat in 4 L pots in a growth chamber under suboptimal vs optimal pre-anthesis watering, then inoculated with Fusarium graminearum vs mock at anthesis, randomized complete block design with 4 blocks.",
-     spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["metabolomics"], factors=[dict(name="water", n_levels=2), dict(name="infection", n_levels=2)], design=dict(type="rcbd", blocks=4), experimental_unit="pot"),
+     spec=dict(system="growth_chamber", organism="Triticum aestivum", assays=["metabolomics"], factors=[dict(name="water", n_levels=2), dict(name="infection", n_levels=2)], design=dict(type="rcbd", reps=4), experimental_unit="pot"),
      ask=[P], note="2 x 2 RCBD"),
 dict(paper="paper_5932", style="question", prompt="Developing seed RNA-seq of rice lines overexpressing cysteine or methionine biosynthetic enzymes along with a methionine-rich storage protein vs wild type, single plants in individual pots in a growth chamber. How many plants per line?",
      spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["rnaseq", "overexpression"], factors=[dict(name="genotype")]),

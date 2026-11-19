@@ -43,7 +43,7 @@ dict(paper="paper_5865", style="question", prompt="RNA-seq of C. elegans raised 
      spec=dict(system="cell_culture", organism="Caenorhabditis elegans", assays=["rnaseq"], factors=[dict(name="diet", n_levels=2), dict(name="age", n_levels=2)], subsamples_per_unit=25),
      ask=["design.reps"], note="2 x 2"),
 dict(paper="paper_5866", style="detailed", prompt="Early growth and RNA-seq of rice cultivar 9311 vs a low-vigour cultivar in IRRI nutrient solution in a greenhouse, 3 blocks, sampled over the first weeks.",
-     spec=dict(system="greenhouse", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="time")], design=dict(blocks=3)),
+     spec=dict(system="greenhouse", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="time")], design=dict(reps=3)),
      ask=["subsamples_per_unit"], note="blocks"),
 dict(paper="paper_5867", style="question", prompt="Faecal 16S of 135 weaned piglets randomized to diets with different sources and doses of zinc oxide and copper, housed in pens. Is the pen my unit?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet")]),
