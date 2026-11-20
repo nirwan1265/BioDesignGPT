@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "designs": [
     {
       "id": "crd",
@@ -56,7 +56,7 @@
       "use_when": "Many genotypes (tens to hundreds) so complete blocks would be heterogeneous.",
       "strength": "Controls within-replicate field heterogeneity with small incomplete blocks.",
       "tradeoff": "Requires mixed-model analysis; block size must divide the number of entries.",
-      "model": "y ~ genotype + rep + (1 | rep:block)",
+      "model": "y ~ treatment + rep + (1 | rep:block)",
       "systems": [
         "field",
         "greenhouse"
@@ -64,7 +64,8 @@
       "example_sources": [
         "10.3389/fpls.2022.999692",
         "10.1186/s13007-019-0527-4"
-      ]
+      ],
+      "analysis_note": "treatment = genotype/entry; block = incomplete block within rep. Original model text: y ~ genotype + rep + (1 | rep:block)"
     },
     {
       "id": "split",
@@ -78,7 +79,7 @@
       "use_when": "One factor is hard to randomize at small scale (irrigation, temperature chamber, tillage) and is applied to whole plots; the other factor (genotype) is randomized within them.",
       "strength": "Practical for irrigation x genotype trials; precise subplot and interaction tests.",
       "tradeoff": "Whole-plot factor has its own, larger error term and few df; power for it is low unless many blocks.",
-      "model": "y ~ main * sub + block + (1 | block:main)",
+      "model": "y ~ treatment * treatment2 + block + (1 | block:treatment)",
       "systems": [
         "field",
         "greenhouse",
@@ -86,7 +87,8 @@
       ],
       "example_sources": [
         "10.1002/csc2.20171"
-      ]
+      ],
+      "analysis_note": "treatment = main-plot factor, treatment2 = subplot factor; (1 | block:treatment) is the main-plot error. Original model text: y ~ main * sub + block + (1 | block:main)"
     },
     {
       "id": "factorial",
@@ -99,7 +101,7 @@
       "use_when": "Interest in interactions (genotype x treatment, treatment x sex) and all combinations can be randomized at the same unit level.",
       "strength": "Tests main effects and interactions efficiently.",
       "tradeoff": "Number of cells grows multiplicatively; interaction power needs larger n than main effects.",
-      "model": "y ~ A * B + block",
+      "model": "y ~ treatment * treatment2 + block",
       "systems": [
         "greenhouse",
         "growth_chamber",
@@ -107,7 +109,8 @@
         "cell_culture",
         "drosophila",
         "livestock"
-      ]
+      ],
+      "analysis_note": "treatment = factor A, treatment2 = factor B. Original model text: y ~ A * B + block"
     },
     {
       "id": "augmented",
@@ -121,13 +124,14 @@
       "use_when": "Large number of new entries with seed for only one plot each; replicated checks estimate error and block effects.",
       "strength": "Screens many unreplicated lines.",
       "tradeoff": "Low precision for new entries; error df comes only from checks.",
-      "model": "y ~ check_or_entry + block",
+      "model": "y ~ treatment + block",
       "systems": [
         "field"
       ],
       "example_sources": [
         "Federer 1956 Hawaiian Planters' Record 55:191-208"
-      ]
+      ],
+      "analysis_note": "treatment holds checks and test entries as levels; checks estimate the block effects. Original model text: y ~ check_or_entry + block"
     },
     {
       "id": "prep",
@@ -140,13 +144,14 @@
       "use_when": "Early-generation multi-environment trials where only a fraction of lines can be replicated.",
       "strength": "More efficient than augmented designs for the same plot count.",
       "tradeoff": "Needs spatial or mixed-model analysis; layout generation is non-trivial.",
-      "model": "y ~ (1 | genotype) + spatial terms",
+      "model": "y ~ (1 | treatment) + (1 | row) + (1 | col)",
       "systems": [
         "field"
       ],
       "example_sources": [
         "10.1198/108571106X154443"
-      ]
+      ],
+      "analysis_note": "Add a spatial residual (AR1xAR1 or SpATS) where the grid trend remains. Original model text: y ~ (1 | genotype) + spatial terms"
     },
     {
       "id": "repeated_measures",
@@ -182,7 +187,7 @@
       "use_when": "Gradients may run in either direction (fields, greenhouse benches, chamber shelves) and replicates are contiguous rectangles.",
       "strength": "Removes row and column variation within each replicate.",
       "tradeoff": "Layout generation needs specialist software; analysis needs a mixed model.",
-      "model": "y ~ genotype + rep + (1 | rep:row) + (1 | rep:col)",
+      "model": "y ~ treatment + rep + (1 | rep:row) + (1 | rep:col)",
       "systems": [
         "field",
         "greenhouse",
@@ -190,7 +195,8 @@
       ],
       "example_sources": [
         "arXiv:2505.12569"
-      ]
+      ],
+      "analysis_note": "Layout generator: FielDHub::row_column. Original model text: y ~ genotype + rep + (1 | rep:row) + (1 | rep:col)"
     },
     {
       "id": "spatial_analysis",
@@ -203,7 +209,7 @@
       "use_when": "Any field or bench trial laid out on a row x column grid; especially large or low-input trials.",
       "strength": "Large precision gains (residual variance -49% for sorghum yield in one study).",
       "tradeoff": "Needs coordinates for every plot; model checking required.",
-      "model": "y ~ genotype + f(row, col) + (1 | row) + (1 | col)",
+      "model": "y ~ treatment + (1 | row) + (1 | col)",
       "systems": [
         "field",
         "greenhouse"
@@ -211,7 +217,8 @@
       "example_sources": [
         "10.1007/s00122-017-2894-4",
         "10.1111/j.1439-037X.2012.00529.x"
-      ]
+      ],
+      "analysis_note": "Full analysis adds a smooth f(row, col) (SpATS) or AR1xAR1 residual (asreml/sommer); this formula is the row/col random-effect core. Original model text: y ~ genotype + f(row, col) + (1 | row) + (1 | col)"
     },
     {
       "id": "diagonal_checks",
@@ -226,13 +233,14 @@
       "use_when": "Hundreds to thousands of unreplicated lines; checks spread evenly over the field to model spatial trend.",
       "strength": "Even check coverage supports spatial adjustment.",
       "tradeoff": "Checks use plots; entries still unreplicated.",
-      "model": "y ~ (1|genotype) + check + spatial terms",
+      "model": "y ~ (1 | treatment) + check + (1 | row) + (1 | col)",
       "systems": [
         "field"
       ],
       "example_sources": [
         "10.1002/csc2.21336"
-      ]
+      ],
+      "analysis_note": "Add a spatial trend model for the diagonal checks. Original model text: y ~ (1|genotype) + check + spatial terms"
     },
     {
       "id": "line_source",
@@ -246,13 +254,14 @@
       "use_when": "Water level is the treatment and is created by a single sprinkler line, so it cannot be randomized.",
       "strength": "Many water levels from one line; cheap.",
       "tradeoff": "Water level is not randomized; needs a correlation model and careful interpretation.",
-      "model": "y ~ genotype * irrigation * side + (1|block) + (1|block:side) + (1|block:irrigation), Toeplitz along distance",
+      "model": "y ~ treatment * treatment2 + (1 | block) + (1 | block:treatment2)",
       "systems": [
         "field"
       ],
       "example_sources": [
         "Hanks et al. 1980 SSSAJ 44:886-888"
-      ]
+      ],
+      "analysis_note": "treatment = genotype, treatment2 = irrigation level (distance from the line). Full model also has side of the line and a Toeplitz correlation along distance. Original model text: y ~ genotype * irrigation * side + (1|block) + (1|block:side) + (1|block:irrigation), Toeplitz along distance"
     },
     {
       "id": "augmented_tray",
@@ -267,7 +276,7 @@
       "use_when": "Many genotypes in seedling trays or flats (chamber or greenhouse) with too few seeds or cells for full replication.",
       "strength": "Tray effects estimated from repeated checks; entries need not be replicated.",
       "tradeoff": "Entries compared with low precision; checks use cells.",
-      "model": "y ~ check_or_entry + (1 | tray) (+ cell row/col if needed)",
+      "model": "y ~ treatment + (1 | block)",
       "systems": [
         "growth_chamber",
         "greenhouse"
@@ -275,7 +284,8 @@
       "example_sources": [
         "Federer 1956",
         "10.1198/108571106X154443"
-      ]
+      ],
+      "analysis_note": "block = tray; add cell row/col if needed. Original model text: y ~ check_or_entry + (1 | tray) (+ cell row/col if needed)"
     },
     {
       "id": "chamber_runs",
@@ -289,13 +299,14 @@
       "use_when": "Temperature, CO2, light or photoperiod treatments that are set per chamber.",
       "strength": "Separates treatment from chamber identity.",
       "tradeoff": "Needs >=2 chambers per level or repeated runs swapping assignments; few df.",
-      "model": "y ~ treatment + (1 | run) + (1 | run:chamber)",
+      "model": "y ~ treatment + (1 | block) + (1 | block:unit)",
       "systems": [
         "growth_chamber"
       ],
       "example_sources": [
         "10.1186/s13007-015-0088-0"
-      ]
+      ],
+      "analysis_note": "block = chamber run, unit = chamber. Original model text: y ~ treatment + (1 | run) + (1 | run:chamber)"
     },
     {
       "id": "vial_lifespan",
@@ -309,13 +320,14 @@
       "use_when": "Lifespan, fecundity or survival assays in vials.",
       "strength": "Each rearing bottle supplies every treatment, so rearing effects are blocked.",
       "tradeoff": "Many vials to transfer; vial is the unit for food/drug treatments.",
-      "model": "coxme(Surv(age, dead) ~ treatment + (1 | vial) + (1 | bottle))",
+      "model": "y ~ treatment + (1 | unit) + (1 | block)",
       "systems": [
         "drosophila"
       ],
       "example_sources": [
         "10.1007/978-1-4939-6371-3_18"
-      ]
+      ],
+      "analysis_note": "Survival outcome: fit coxme(Surv(age, dead) ~ treatment + (1 | vial) + (1 | bottle)); unit = vial, block = bottle. The formula is the Gaussian fallback for mean lifespan. Original model text: coxme(Surv(age, dead) ~ treatment + (1 | vial) + (1 | bottle))"
     },
     {
       "id": "diallel",
@@ -327,13 +339,14 @@
       "use_when": "Estimate general and specific combining ability (GCA/SCA) among a modest number of parents (about 5-12).",
       "strength": "Every parent combination; separates additive (GCA) and non-additive (SCA) effects.",
       "tradeoff": "Crosses grow as p(p-1)/2; reciprocals double it; usually limited to fixed parents.",
-      "model": "y ~ GCA_i + GCA_j + SCA_ij + env + rep(env)",
+      "model": "y ~ env + (1 | treatment) + (1 | treatment2) + (1 | treatment:treatment2)",
       "systems": [
         "breeding_genetics"
       ],
       "example_sources": [
         "Griffing 1956, Aust J Biol Sci 9:463-493"
-      ]
+      ],
+      "analysis_note": "treatment = parent i, treatment2 = parent j; the two random terms approximate GCA and the interaction SCA (a multi-membership GCA model needs sommer/asreml). Original model text: y ~ GCA_i + GCA_j + SCA_ij + env + rep(env)"
     },
     {
       "id": "nc_design",
@@ -346,13 +359,14 @@
       "use_when": "Estimate additive and dominance variance with more parents than a diallel allows; NC II for heterotic groups (males x females).",
       "strength": "Scales to many parents; NC II gives GCA for both sexes/groups.",
       "tradeoff": "Needs controlled pollination; many crosses to test across environments.",
-      "model": "y ~ (1|male) + (1|female) + (1|male:female) + env",
+      "model": "y ~ env + (1 | treatment) + (1 | treatment2) + (1 | treatment:treatment2)",
       "systems": [
         "breeding_genetics"
       ],
       "example_sources": [
         "Comstock & Robinson 1948, Biometrics 4:254-266"
-      ]
+      ],
+      "analysis_note": "treatment = male, treatment2 = female (NC I: female nested in male, NC II: crossed). Original model text: y ~ (1|male) + (1|female) + (1|male:female) + env"
     },
     {
       "id": "mapping_population",
@@ -366,13 +380,14 @@
       "use_when": "QTL mapping or combined linkage-association mapping.",
       "strength": "Known pedigree; NAM combines linkage power with association resolution.",
       "tradeoff": "Years of selfing; segregation distortion and residual heterozygosity.",
-      "model": "y ~ family + QTL + (1|line) + design terms",
+      "model": "y ~ treatment2 + rep + (1 | treatment) + (1 | rep:block)",
       "systems": [
         "breeding_genetics"
       ],
       "example_sources": [
         "10.1534/genetics.107.074245"
-      ]
+      ],
+      "analysis_note": "treatment = line, treatment2 = family; the QTL scan is a separate step on line BLUPs. Original model text: y ~ family + QTL + (1|line) + design terms"
     },
     {
       "id": "met_fa",
@@ -386,14 +401,15 @@
       "use_when": "Same entries in several locations/years; interest in stability and GxE.",
       "strength": "Models environment-specific variances and genetic correlations.",
       "tradeoff": "Needs enough environments (>= 5-6) for FA structures; complex fitting.",
-      "model": "y ~ env + (1|env:rep) + FA(env):genotype",
+      "model": "y ~ treatment * env + (1 | env:rep)",
       "systems": [
         "field",
         "multi_environment"
       ],
       "example_sources": [
         "Smith, Cullis & Thompson 2001, Biometrics 57:1138-1147"
-      ]
+      ],
+      "analysis_note": "Full model uses a factor-analytic FA(k) genotype-by-environment covariance (asreml/sommer). Original model text: y ~ env + (1|env:rep) + FA(env):genotype"
     },
     {
       "id": "gh_field_validation",
@@ -407,7 +423,7 @@
       "use_when": "A cheap early greenhouse trait is proposed to predict field performance.",
       "strength": "Tests transferability directly.",
       "tradeoff": "Pot conditions differ from field; small genotype sets give unstable correlations.",
-      "model": "cor(BLUP_gh, BLUP_field) with CI; or bivariate mixed model",
+      "model": "y ~ treatment * env + (1 | env:block)",
       "systems": [
         "multi_environment",
         "greenhouse",
@@ -415,7 +431,8 @@
       ],
       "example_sources": [
         "10.3389/fpls.2018.00587"
-      ]
+      ],
+      "analysis_note": "env = greenhouse vs field; the question is answered by the correlation of genotype BLUPs between environments. Original model text: cor(BLUP_gh, BLUP_field) with CI; or bivariate mixed model"
     },
     {
       "id": "gwas_eqtl",
@@ -429,7 +446,7 @@
       "use_when": "Link trait associations to genes via expression.",
       "strength": "Prioritises causal genes; colocalization tests a shared variant.",
       "tradeoff": "Expression is tissue/time specific; needs hundreds of genotypes for eQTL power.",
-      "model": "GWAS: y ~ SNP + Q + (1|K); eQTL per gene; coloc / TWAS",
+      "model": "y ~ rep + (1 | treatment)",
       "systems": [
         "multi_omics"
       ],
@@ -437,7 +454,8 @@
         "10.1038/ng1702",
         "10.1371/journal.pgen.1004383",
         "10.1038/ng.3506"
-      ]
+      ],
+      "analysis_note": "treatment = genotype; genotype BLUPs from this model feed the GWAS (y ~ SNP + Q + (1|K)) and eQTL/coloc/TWAS steps. Original model text: GWAS: y ~ SNP + Q + (1|K); eQTL per gene; coloc / TWAS"
     },
     {
       "id": "riboseq_rnaseq",
@@ -450,7 +468,7 @@
       "use_when": "Translation efficiency or translational regulation between conditions.",
       "strength": "Separates transcriptional from translational change.",
       "tradeoff": "Low input yields, rRNA contamination, arrest artifacts.",
-      "model": "footprints ~ condition * assay (xtail / RiboDiff / anota)",
+      "model": "y ~ treatment * treatment2",
       "systems": [
         "ribo_seq",
         "multi_omics"
@@ -458,7 +476,8 @@
       "example_sources": [
         "10.1016/j.csbj.2018.04.001",
         "10.1126/science.1168978"
-      ]
+      ],
+      "analysis_note": "treatment = condition, treatment2 = assay (footprint vs mRNA); counts go to xtail / RiboDiff / anota2seq. Original model text: footprints ~ condition * assay (xtail / RiboDiff / anota)"
     },
     {
       "id": "atac_replicated",
@@ -471,7 +490,7 @@
       "use_when": "Differential chromatin accessibility or regulatory region discovery.",
       "strength": "Maps accessible regions with low input.",
       "tradeoff": "Organellar reads in plants; Tn5 bias; needs IDR-reproducible peaks.",
-      "model": "counts ~ condition + prep_day (DESeq2/edgeR on consensus peaks)",
+      "model": "y ~ treatment + block",
       "systems": [
         "atac_seq",
         "multi_omics"
@@ -479,7 +498,8 @@
       "example_sources": [
         "10.1093/nar/gkw1179",
         "10.1038/nmeth.2688"
-      ]
+      ],
+      "analysis_note": "block = nuclei-prep day; counts on consensus peaks go to DESeq2/edgeR with the same design. Original model text: counts ~ condition + prep_day (DESeq2/edgeR on consensus peaks)"
     },
     {
       "id": "cross_species_validation",
@@ -493,10 +513,1167 @@
       "use_when": "Confirm a candidate gene's function in the crop and a model organism (e.g., sorghum + Arabidopsis, or mouse + fly).",
       "strength": "Two independent systems make an artefact unlikely.",
       "tradeoff": "Orthologs may differ in function; transformation is slow in many crops.",
-      "model": "phenotype ~ allele + (1|line) + block, per organism",
+      "model": "y ~ treatment + block + (1 | unit)",
       "systems": [
         "functional_validation"
-      ]
+      ],
+      "analysis_note": "Fit per organism; treatment = allele, unit = line. Original model text: phenotype ~ allele + (1|line) + block, per organism"
+    },
+    {
+      "id": "latin_square",
+      "name": "Latin Square Design",
+      "engine": "agricolae::design.lsd",
+      "requires": [
+        "treatments",
+        "rows",
+        "cols"
+      ],
+      "constraints": "The number of treatments, rows, and columns must be equal, and each treatment occurs once per row and column.",
+      "use_when": "Use when two perpendicular nuisance gradients affect experimental units.",
+      "strength": "Controls two blocking gradients with relatively few experimental units.",
+      "tradeoff": "Requires a square layout and assumes treatment-by-block interactions are negligible.",
+      "model": "y ~ treatment + row + col",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "balanced_incomplete_block",
+      "name": "Balanced Incomplete Block Design",
+      "engine": "agricolae::design.bib",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Every block contains fewer treatments than the total, and all treatment pairs must occur together equally often.",
+      "use_when": "Use when field blocks, cages, chambers, or assay batches cannot accommodate all treatments.",
+      "strength": "Allows balanced comparisons with smaller and more homogeneous blocks.",
+      "tradeoff": "Feasible combinations of treatment number, block size, replication, and pairwise concurrence are restricted.",
+      "model": "y ~ treatment + (1 | block)",
+      "analysis_note": "Check BIBD incidence and concurrence feasibility before generating the layout.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "strip_plot",
+      "name": "Strip-Plot or Split-Block Design",
+      "engine": "agricolae::design.strip",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Two treatment factors are randomized independently to intersecting strips within each replicate.",
+      "use_when": "Use when both factors require large application units, such as irrigation strips crossed with fertilizer strips.",
+      "strength": "Makes crossed whole-strip treatments operationally feasible.",
+      "tradeoff": "Main effects have separate whole-strip error strata and may be less precise than the interaction.",
+      "model": "y ~ treatment * treatment2 + (1 | rep) + (1 | rep:treatment) + (1 | rep:treatment2)",
+      "analysis_note": "The residual represents intersection-level error, so preserve the two independent strip randomizations.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "split_split_plot",
+      "name": "Split-Split-Plot Design",
+      "engine": "FielDHub::split_split_plot",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Three nested treatment factors require whole plots, subplots, and sub-subplots with separate randomization stages.",
+      "use_when": "Use when three treatments differ in the scale at which they can be applied.",
+      "strength": "Accommodates treatment factors requiring progressively smaller experimental units.",
+      "tradeoff": "Requires three error strata and sufficient replication of whole plots.",
+      "model": "y ~ treatment * treatment2 + (1 | rep) + (1 | rep:treatment) + (1 | rep:treatment:treatment2)",
+      "analysis_note": "The schema lacks treatments3, so this formula is incomplete and cannot estimate third-factor effects until the schema is extended.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "livestock"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "crossover_ab_ba",
+      "name": "Two-Treatment Two-Period AB/BA Crossover Design",
+      "engine": "not_implemented (see crossdes::get.plan)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "Exactly two treatments and two periods are required, with subjects randomized to AB or BA sequences.",
+      "use_when": "Use when the same mouse, animal, or culture preparation can receive both reversible interventions.",
+      "strength": "Each subject acts as its own control, reducing between-subject variability.",
+      "tradeoff": "Carryover, period effects, and insufficient washout can bias treatment comparisons.",
+      "model": "y ~ treatment + period + sequence + (1 | subject)",
+      "analysis_note": "Validate washout and carryover assumptions; the listed generator requires a wrapper or custom sequence allocation for an explicit AB/BA implementation.",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "youden_square",
+      "name": "Youden Square or Incomplete Latin Square Design",
+      "engine": "agricolae::design.youden",
+      "requires": [
+        "treatments",
+        "reps",
+        "rows",
+        "cols"
+      ],
+      "constraints": "A balanced incomplete arrangement must satisfy the chosen row, column, and treatment concurrence structure.",
+      "use_when": "Use when two blocking directions matter but a complete Latin square is too large.",
+      "strength": "Provides row-column blocking with fewer experimental units than a complete Latin square.",
+      "tradeoff": "Not every combination of treatment number and incomplete-block size is feasible.",
+      "model": "y ~ treatment + row + col",
+      "analysis_note": "Validate treatment concurrence and estimability rather than treating the arrangement as an ordinary complete Latin square.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "cluster_randomized",
+      "name": "Cluster-Randomized Experimental Design",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "reps"
+      ],
+      "constraints": "Treatments must be assigned independently to clusters such as cages, pens, tanks, chambers, or plots rather than their members.",
+      "use_when": "Use when an intervention is shared by every organism inside a housing or growing unit.",
+      "strength": "Matches randomization to the physical scale of treatment delivery.",
+      "tradeoff": "Within-cluster correlation reduces effective sample size and requires more independent clusters.",
+      "model": "y ~ treatment + (1 | unit)",
+      "analysis_note": "The CRD generator can randomize cluster labels but does not implement the cluster-specific layout; power calculations must account for intraclass correlation.",
+      "systems": [
+        "mouse",
+        "livestock",
+        "drosophila",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "nested_subsampling",
+      "name": "Hierarchical Nested Subsampling Design",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects"
+      ],
+      "constraints": "Measurements must retain the identity of their parent experimental unit and any intermediate sampling level.",
+      "use_when": "Use for leaves within plants, plants within pots, flies within vials, or cells within culture wells.",
+      "strength": "Separates experimental-unit variation from within-unit biological variation.",
+      "tradeoff": "Subsamples do not provide additional independent treatment replication.",
+      "model": "y ~ treatment + (1 | unit) + (1 | unit:subject)",
+      "analysis_note": "The formula assumes subjects are nested within units; a separate leaf or measurement identifier is needed if additional sampling levels are modeled.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "ancova_baseline",
+      "name": "Randomized Design with Baseline Covariate Adjustment",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects"
+      ],
+      "constraints": "Baseline values must be measured before intervention and linked to the corresponding experimental units.",
+      "use_when": "Use when pretreatment body weight, initial plant size, or initial assay activity predicts the final response.",
+      "strength": "Baseline adjustment can improve precision and correct chance initial imbalances.",
+      "tradeoff": "Requires reliable baseline measurements and assessment of the baseline-response relationship.",
+      "model": "y ~ treatment",
+      "analysis_note": "The allowed schema excludes a baseline covariate, so this is only the unadjusted fallback model; true ANCOVA requires adding a baseline variable and fitting y ~ treatment + baseline.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "greenhouse_bench_position_latin_square",
+      "name": "Greenhouse Bench-by-Position Latin Square",
+      "engine": "agricolae::design.lsd",
+      "requires": [
+        "treatments",
+        "rows",
+        "cols"
+      ],
+      "constraints": "Bench and position factors must each have the same number of levels as treatments.",
+      "use_when": "Use when greenhouse treatment responses may be influenced by bench location and perpendicular position gradients.",
+      "strength": "Controls two greenhouse positional gradients without requiring a separate replicate for every bench-position combination.",
+      "tradeoff": "Cannot independently estimate complex bench-by-position interactions.",
+      "model": "y ~ treatment + row + col",
+      "analysis_note": "Map row and col to the two physical nuisance gradients and verify that the treatment layout is a valid Latin square.",
+      "systems": [
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "repeated_measures_baseline",
+      "name": "Repeated-Measures Design Including Baseline",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "Each subject must have a stable identifier and an explicitly labeled pretreatment baseline time point.",
+      "use_when": "Use for plant growth, animal body weight, behavioral activity, or cell viability measured repeatedly.",
+      "strength": "Uses within-subject information to characterize response trajectories.",
+      "tradeoff": "Requires assumptions about within-subject covariance and a strategy for missing time points.",
+      "model": "y ~ treatment * time + (1 | subject)",
+      "analysis_note": "This is a longitudinal response model including baseline as a time level, not baseline-adjusted ANCOVA; add appropriate covariance or random-slope structures when needed.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "graeco_latin_square",
+      "name": "Graeco-Latin Square Design",
+      "engine": "agricolae::design.graeco",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "rows",
+        "cols"
+      ],
+      "constraints": "Two treatment classifications must form orthogonal Latin squares of compatible order.",
+      "use_when": "Use when two treatment classifications and two nuisance blocking gradients must be accommodated in one square.",
+      "strength": "Balances two treatment classifications against two blocking gradients.",
+      "tradeoff": "Has strict combinatorial requirements and limited ability to estimate interactions.",
+      "model": "y ~ treatment + treatment2 + row + col",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "latin_rectangle",
+      "name": "Latin Rectangle Design",
+      "engine": "not_implemented (see FielDHub::row_column; no Latin-rectangle generator in FielDHub)",
+      "requires": [
+        "treatments",
+        "rows",
+        "cols"
+      ],
+      "constraints": "The selected dimensions must permit the supported Latin-rectangle arrangement with balanced treatment placement.",
+      "use_when": "Use when the experiment has a rectangular growing area rather than a square.",
+      "strength": "Offers structured positional balance without requiring equal field dimensions.",
+      "tradeoff": "Treatment balance and estimability are more restricted than in a complete Latin square.",
+      "model": "y ~ treatment + row + col",
+      "analysis_note": "Validate the specific Latin-rectangle construction because not every rectangular treatment arrangement has the same balance properties.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "resolvable_incomplete_block",
+      "name": "Resolvable Incomplete Block Design",
+      "engine": "FielDHub::incomplete_blocks",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Each replicate must contain every treatment exactly once while subdividing that replicate into smaller blocks.",
+      "use_when": "Use when many genotypes must be evaluated in small locally homogeneous field blocks.",
+      "strength": "Reduces local environmental noise while preserving complete treatment replication.",
+      "tradeoff": "Requires treatment and block counts compatible with the chosen resolution.",
+      "model": "y ~ treatment + (1 | rep) + (1 | rep:block)",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "square_lattice",
+      "name": "Square Lattice Design",
+      "engine": "FielDHub::square_lattice",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "The number of treatments must be a perfect square with block size equal to its square root.",
+      "use_when": "Use for moderately large genotype trials where complete blocks are too heterogeneous.",
+      "strength": "Organizes many genotypes into equal-sized incomplete blocks.",
+      "tradeoff": "Restricts treatment numbers and typically needs appropriate replication to achieve useful balance.",
+      "model": "y ~ treatment + (1 | rep) + (1 | rep:block)",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "rectangular_lattice",
+      "name": "Rectangular Lattice Design",
+      "engine": "FielDHub::rectangular_lattice",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Treatment counts, block sizes, and replication must satisfy a supported rectangular lattice structure.",
+      "use_when": "Use in breeding trials whose entry numbers fit rectangular lattice arrangements.",
+      "strength": "Provides local incomplete-block control for genotype comparisons.",
+      "tradeoff": "Valid design parameters are more limited than for general incomplete-block designs.",
+      "model": "y ~ treatment + (1 | rep) + (1 | rep:block)",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "cyclic_block",
+      "name": "Cyclic Incomplete Block Design",
+      "engine": "agricolae::design.cyclic",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Treatment allocations must follow a valid cyclic incidence structure for the selected parameters.",
+      "use_when": "Use when a cyclic incomplete-block arrangement provides a convenient balanced or partially balanced layout.",
+      "strength": "Generates structured treatment allocations using repeated cyclic shifts.",
+      "tradeoff": "Some treatment and block combinations cannot produce the desired balance.",
+      "model": "y ~ treatment + (1 | rep) + (1 | block)",
+      "analysis_note": "Include rep only when the generated design has genuine replicate groups; verify connectedness and treatment concurrence.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "partially_replicated",
+      "name": "Partially Replicated Design",
+      "engine": "FielDHub::partially_replicated",
+      "requires": [
+        "treatments",
+        "reps",
+        "rows",
+        "cols"
+      ],
+      "constraints": "Some entries receive multiple independent experimental units while others remain unreplicated.",
+      "use_when": "Use in early breeding trials with many candidate genotypes and limited land.",
+      "strength": "Concentrates limited replication on a selected subset of entries.",
+      "tradeoff": "Unreplicated entries depend heavily on model-based error estimation and spatial adjustment.",
+      "model": "y ~ treatment + (1 | row) + (1 | col)",
+      "analysis_note": "The existing input schema cannot specify per-entry replication allocation, so that additional metadata is required.",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "augmented_rcbd",
+      "name": "Augmented Randomized Complete Block Design",
+      "engine": "FielDHub::RCBD_augmented",
+      "requires": [
+        "treatments",
+        "checks",
+        "block_size",
+        "reps"
+      ],
+      "constraints": "Repeated check treatments must be included across blocks while new test entries may be unreplicated.",
+      "use_when": "Use for preliminary screening of hundreds of breeding lines against common checks.",
+      "strength": "Accommodates many candidate entries with relatively few plots.",
+      "tradeoff": "Most new entries have weaker direct precision than replicated checks.",
+      "model": "y ~ treatment + block",
+      "analysis_note": "Represent checks as treatment levels in the model and use their repeated observations to estimate block variation.",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "multi_environment_trial",
+      "name": "Multi-Environment Genotype Evaluation Design",
+      "engine": "not_implemented (see FielDHub::RCBD)",
+      "requires": [
+        "treatments",
+        "reps"
+      ],
+      "constraints": "Experimental randomization must be performed separately within each environment and its replicate blocks.",
+      "use_when": "Use when crop genotypes are evaluated across locations, years, or management environments.",
+      "strength": "Supports estimation of genotype-by-environment interactions and stability.",
+      "tradeoff": "Environmental heterogeneity and unbalanced missing trials complicate inference.",
+      "model": "y ~ treatment * env + (1 | env:rep)",
+      "analysis_note": "The requires vocabulary lacks environment counts and labels, so a multi-environment wrapper is required; FA covariance and genotype stability analyses need specialized models.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "randomized_matched_pairs",
+      "name": "Matched-Pair Randomized Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "reps"
+      ],
+      "constraints": "Each matched pair must contain comparable experimental units with treatment randomized within the pair.",
+      "use_when": "Use for animals, donor cultures, or plants paired by initial size or genotype.",
+      "strength": "Removes matched-pair variability from treatment comparisons.",
+      "tradeoff": "Matching can be inefficient if pairing variables poorly predict the outcome.",
+      "model": "y ~ treatment + block",
+      "analysis_note": "Assign each matched pair a unique block identifier before randomization.",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "split_body",
+      "name": "Split-Body or Paired-Site Randomized Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "subjects"
+      ],
+      "constraints": "Different treatment conditions must be randomized to distinct comparable sites within each subject.",
+      "use_when": "Use when opposite limbs, matched tissues, or paired culture preparations can receive different treatments.",
+      "strength": "Controls subject-level variability through within-subject comparisons.",
+      "tradeoff": "Treatment spillover or systemic responses can violate independence between sites.",
+      "model": "y ~ treatment + (1 | subject)",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "litter_blocked",
+      "name": "Litter-Blocked Randomized Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects"
+      ],
+      "constraints": "Treatments must be randomized within litters when individual offspring are independently treated.",
+      "use_when": "Use in mouse or livestock studies where litter origin influences development and physiology.",
+      "strength": "Controls shared maternal and early-life sources of variation.",
+      "tradeoff": "Treatment comparisons may be limited by litter size and within-litter treatment availability.",
+      "model": "y ~ treatment + (1 | block)",
+      "analysis_note": "Block denotes litter; when an intervention is applied to the dam or entire litter, the litter rather than offspring is the experimental unit.",
+      "systems": [
+        "mouse",
+        "livestock"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "batch_blocked",
+      "name": "Batch-Blocked Randomized Experimental Design",
+      "engine": "agricolae::design.rcbd",
+      "requires": [
+        "treatments",
+        "reps"
+      ],
+      "constraints": "Each batch must include the intended treatment comparisons with randomization performed independently within batch.",
+      "use_when": "Use when cell-culture passages, processing days, or growth-chamber runs introduce batch variation.",
+      "strength": "Prevents avoidable confounding of treatment with processing batch.",
+      "tradeoff": "Incomplete or unbalanced batches can reduce treatment comparability.",
+      "model": "y ~ treatment + (1 | block)",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "drosophila",
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "longitudinal_repeated_measures",
+      "name": "Longitudinal Repeated-Measures Design",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "The same identifiable subjects must be observed repeatedly under a defined time schedule.",
+      "use_when": "Use for repeated plant height, animal weight, hormone concentration, or growth measurements.",
+      "strength": "Estimates treatment-associated changes and interactions with time.",
+      "tradeoff": "Subject attrition and residual autocorrelation require careful modeling.",
+      "model": "y ~ treatment * time + (1 | subject)",
+      "analysis_note": "A random intercept does not automatically model AR1 temporal correlation; use an appropriate longitudinal covariance model when required.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "cluster_longitudinal",
+      "name": "Cluster-Randomized Longitudinal Design",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "Treatment must be assigned at the cluster level while repeated measurements preserve cluster and subject identities.",
+      "use_when": "Use when cages, pens, or tanks receive treatments and individual animals are measured over time.",
+      "strength": "Models both shared-cluster variation and repeated subject observations.",
+      "tradeoff": "Requires sufficient independent clusters and can have complex correlation structures.",
+      "model": "y ~ treatment * time + (1 | unit) + (1 | unit:subject)",
+      "systems": [
+        "mouse",
+        "livestock",
+        "drosophila",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "stepped_wedge_cluster",
+      "name": "Stepped-Wedge Cluster-Randomized Design",
+      "engine": "not_implemented (see crossdes::get.plan)",
+      "requires": [
+        "treatments",
+        "reps",
+        "time_points"
+      ],
+      "constraints": "Clusters must transition from control to intervention according to randomized rollout times without switching back.",
+      "use_when": "Use when all animal groups or facilities must eventually receive an intervention.",
+      "strength": "Allows phased intervention delivery while providing contemporaneous comparisons.",
+      "tradeoff": "Treatment timing can be confounded with secular trends if period effects are inadequately modeled.",
+      "model": "y ~ treatment + period + (1 | unit)",
+      "analysis_note": "The referenced crossover package does not directly implement stepped-wedge randomization; a custom rollout generator and period-adjusted analysis are required.",
+      "systems": [
+        "livestock",
+        "mouse",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "cluster_crossover",
+      "name": "Cluster-Randomized Crossover Design",
+      "engine": "not_implemented (see crossdes::get.plan)",
+      "requires": [
+        "treatments",
+        "reps",
+        "time_points"
+      ],
+      "constraints": "Whole clusters must switch interventions across periods according to randomized sequences.",
+      "use_when": "Use when pens or group-housed animals can receive different treatments in separate periods.",
+      "strength": "Provides within-cluster comparisons while preserving cluster-level intervention delivery.",
+      "tradeoff": "Carryover and period effects can be difficult to separate.",
+      "model": "y ~ treatment + period + sequence + (1 | unit)",
+      "analysis_note": "Crossover sequences must be assigned to clusters, not individual animals.",
+      "systems": [
+        "livestock",
+        "mouse",
+        "drosophila"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "williams_crossover",
+      "name": "Williams Balanced Crossover Design",
+      "engine": "crossdes::williams",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "Treatment sequences must satisfy a Williams construction that balances treatment occurrence and first-order carryover.",
+      "use_when": "Use when several reversible treatments must be compared repeatedly within subjects.",
+      "strength": "Balances direct treatment exposure and first-order treatment order effects.",
+      "tradeoff": "Requires sufficient subjects, periods, and washout to preserve the intended balance.",
+      "model": "y ~ treatment + period + sequence + (1 | subject)",
+      "analysis_note": "The formula does not explicitly estimate carryover; analyze carryover separately if scientifically justified.",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "incomplete_block_crossover",
+      "name": "Incomplete-Block Crossover Design",
+      "engine": "crossdes::williams.BIB",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points",
+        "block_size"
+      ],
+      "constraints": "Each subject receives only a subset of treatments, with the subset allocation and ordering satisfying crossover balance conditions.",
+      "use_when": "Use when too many treatments exist for each subject to receive every treatment.",
+      "strength": "Reduces subject burden while preserving structured treatment comparisons.",
+      "tradeoff": "Incomplete treatment exposure complicates pairwise comparisons and carryover assessment.",
+      "model": "y ~ treatment + period + sequence + (1 | subject)",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "latin_square_crossover",
+      "name": "Latin Square Crossover Design",
+      "engine": "crossdes::des.MOLS",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "Treatment sequences must form an eligible Latin-square-based crossover arrangement.",
+      "use_when": "Use when subjects receive treatments in multiple periods and period balance is important.",
+      "strength": "Balances treatment representation across subjects and periods.",
+      "tradeoff": "Latin-square period balance alone does not guarantee adequate carryover balance.",
+      "model": "y ~ treatment + period + (1 | subject)",
+      "analysis_note": "The function constructs crossover plans based on mutually orthogonal Latin squares and is not a universal generator for all Latin square crossover sizes.",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "factorial_longitudinal",
+      "name": "Two-Factor Longitudinal Factorial Design",
+      "engine": "not_implemented (see DoE.base::fac.design)",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "subjects",
+        "time_points"
+      ],
+      "constraints": "All planned treatment combinations must be assigned to independent subjects before repeated measurement begins.",
+      "use_when": "Use for genotype-by-stress experiments measuring growth or physiological responses over time.",
+      "strength": "Estimates interactions among the two factors and their temporal trajectories.",
+      "tradeoff": "Three-way interactions require substantial sample size and complete treatment coverage.",
+      "model": "y ~ treatment * treatment2 * time + (1 | subject)",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "factorial_rcbd",
+      "name": "Factorial Randomized Complete Block Design",
+      "engine": "FielDHub::full_factorial",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Every block must contain the planned combinations of both treatment factors.",
+      "use_when": "Use for genotype-by-treatment or fertilizer-by-irrigation experiments with environmental blocking.",
+      "strength": "Estimates factorial main effects and interactions while controlling block variation.",
+      "tradeoff": "The required number of plots increases multiplicatively with factor levels.",
+      "model": "y ~ treatment * treatment2 + (1 | block)",
+      "analysis_note": "Configure the generator for blocked factorial randomization rather than interpreting an unblocked factorial allocation as RCBD.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "strip_split_plot",
+      "name": "Strip-Split-Plot Design",
+      "engine": "not_implemented (see FielDHub::strip_plot)",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Two crossed strips must be subdivided by an additional treatment factor that has its own randomization level.",
+      "use_when": "Use when irrigation and fertilizer strips intersect and a third treatment is applied within intersections.",
+      "strength": "Accommodates three factors with different operational application scales.",
+      "tradeoff": "Multiple randomization strata complicate precision and error-term selection.",
+      "model": "y ~ treatment * treatment2 + (1 | rep) + (1 | rep:treatment) + (1 | rep:treatment2)",
+      "analysis_note": "The generic schema lacks the third factor and the referenced generator constructs only the two-factor strip plot; a custom split-stage generator and full analysis model are necessary.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "fractional_factorial",
+      "name": "Two-Level Fractional Factorial Design",
+      "engine": "FrF2::FrF2",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "The number of factors, runs, and generators must define a valid fractional factorial with a chosen resolution.",
+      "use_when": "Use to screen several culture-medium components or stress factors with limited experimental runs.",
+      "strength": "Tests many factors with substantially fewer runs than a complete factorial.",
+      "tradeoff": "Aliasing confounds selected effects and interactions.",
+      "model": "y ~ treatment * treatment2",
+      "analysis_note": "The current schema supports only two named factor columns; additional factors and the alias structure must be represented before this can support genuine high-dimensional screening.",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "plackett_burman",
+      "name": "Plackett-Burman Screening Design",
+      "engine": "FrF2::pb",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Factors are normally studied at two levels using a compatible screening run count.",
+      "use_when": "Use for screening many media ingredients, fermentation conditions, or laboratory processing factors.",
+      "strength": "Estimates many main effects with a small number of runs.",
+      "tradeoff": "Main effects can be confounded with interactions.",
+      "model": "y ~ treatment + treatment2",
+      "analysis_note": "Only two factor variables are available in the generic schema, so additional factor columns are required to represent a standard multi-factor Plackett-Burman design.",
+      "systems": [
+        "growth_chamber",
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "central_composite",
+      "name": "Central Composite Response Surface Design",
+      "engine": "rsm::ccd",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Continuous treatment factors must have defined ranges, center points, and suitable axial settings.",
+      "use_when": "Use to optimize temperature, pH, nutrient concentration, or incubation conditions.",
+      "strength": "Supports estimation of curvature and a second-order response surface.",
+      "tradeoff": "Axial settings may require operating conditions beyond the original factorial ranges.",
+      "model": "y ~ treatment + treatment2 + I(treatment^2) + I(treatment2^2) + treatment:treatment2",
+      "analysis_note": "Treatment variables must be numeric and the layout generator also needs center-point and axial-distance settings not represented in requires.",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "box_behnken",
+      "name": "Box-Behnken Response Surface Design",
+      "engine": "rsm::bbd",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "A standard Box-Behnken design requires at least three quantitative factors with suitable coded levels.",
+      "use_when": "Use to optimize multi-factor culture, enzyme, or fermentation conditions without testing every extreme combination.",
+      "strength": "Supports quadratic response-surface estimation with fewer extreme experimental settings.",
+      "tradeoff": "Cannot be represented completely using only two treatment-factor columns.",
+      "model": "y ~ treatment + treatment2 + I(treatment^2) + I(treatment2^2) + treatment:treatment2",
+      "analysis_note": "This formula is only a two-factor projection; add at least a third quantitative factor before generating or analyzing a genuine Box-Behnken design.",
+      "systems": [
+        "growth_chamber",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "d_optimal",
+      "name": "D-Optimal Experimental Design",
+      "engine": "AlgDesign::optFederov",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "A candidate design space and an estimable target model must be defined before optimization.",
+      "use_when": "Use when candidate treatment combinations are irregular or conventional factorial layouts are impractical.",
+      "strength": "Selects runs to maximize information for a prespecified regression model.",
+      "tradeoff": "Performance depends strongly on the candidate set and assumed model.",
+      "model": "y ~ treatment * treatment2",
+      "analysis_note": "The model supplied to optFederov and the candidate design matrix must be constructed separately.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "orthogonal_array",
+      "name": "Orthogonal Array Experimental Design",
+      "engine": "DoE.base::oa.design",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "The factor levels and requested run count must be compatible with an available orthogonal array.",
+      "use_when": "Use for efficient multifactor screening of culture conditions or laboratory workflows.",
+      "strength": "Maintains balanced representation of selected factor combinations.",
+      "tradeoff": "Only interactions supported by the selected array are independently estimable.",
+      "model": "y ~ treatment + treatment2",
+      "analysis_note": "The schema must be extended to store additional factors and the orthogonal-array column assignment.",
+      "systems": [
+        "growth_chamber",
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "microplate_row_column",
+      "name": "Microplate Row-Column Randomized Design",
+      "engine": "not_implemented (see FielDHub::row_column)",
+      "requires": [
+        "treatments",
+        "reps",
+        "rows",
+        "cols"
+      ],
+      "constraints": "Treatments must be allocated to wells while balancing row, column, and plate-level nuisance effects.",
+      "use_when": "Use for 96-well or 384-well viability, enzyme, and high-throughput screening assays.",
+      "strength": "Reduces systematic confounding from plate position and dispensing gradients.",
+      "tradeoff": "Edge effects and spatial dependence may persist despite balanced allocation.",
+      "model": "y ~ treatment + (1 | rep) + (1 | row) + (1 | col)",
+      "analysis_note": "The field row-column generator requires an adapter to respect plate geometry, reserved wells, controls, and multiple plates.",
+      "systems": [
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "sequencing_batch_balanced",
+      "name": "Balanced Sequencing-Batch Assignment Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Samples from all intended treatment groups must be distributed across sequencing or library-preparation batches.",
+      "use_when": "Use for RNA-seq, ATAC-seq, methylome, or other sequencing experiments where processing batches may introduce bias.",
+      "strength": "Prevents treatment effects from being completely confounded with processing batch.",
+      "tradeoff": "Batch balancing cannot eliminate all technical variation or correct a fully confounded study.",
+      "model": "y ~ treatment + block",
+      "analysis_note": "This formula is a simplified continuous-outcome model; RNA-seq count analysis generally needs an appropriate count model such as a DESeq2 design including batch.",
+      "systems": [
+        "sequencing",
+        "cell_culture",
+        "mouse",
+        "drosophila",
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "paired_donor_culture",
+      "name": "Paired-Donor Cell Culture Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "reps"
+      ],
+      "constraints": "Each donor must contribute comparable independent culture preparations randomized across treatments.",
+      "use_when": "Use for primary cells or organoids obtained from multiple donors.",
+      "strength": "Accounts for donor-to-donor heterogeneity while estimating treatment effects.",
+      "tradeoff": "Limited donor numbers can constrain biological generalization.",
+      "model": "y ~ treatment + (1 | subject)",
+      "analysis_note": "Donor is the subject identifier, and technical wells or repeated measurements must not be counted as additional independent donors.",
+      "systems": [
+        "cell_culture",
+        "sequencing"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "split_batch_sequencing",
+      "name": "Split-Batch Technical Processing Design",
+      "engine": "not_implemented (see agricolae::design.rcbd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects"
+      ],
+      "constraints": "Biological samples must be divided into aliquots and their processing assignments randomized across technical batches.",
+      "use_when": "Use when testing library-preparation protocols or sequencing platforms using aliquots of the same biological samples.",
+      "strength": "Separates biological sample variability from technical processing differences.",
+      "tradeoff": "Aliquots are correlated and cannot be treated as independent biological replicates.",
+      "model": "y ~ treatment + (1 | subject) + (1 | block)",
+      "analysis_note": "Define subject as biological sample and block as processing batch; add an appropriate mean-variance model for sequencing counts.",
+      "systems": [
+        "sequencing",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "dose_response",
+      "name": "Randomized Dose-Response Design",
+      "engine": "agricolae::design.crd",
+      "requires": [
+        "treatments",
+        "reps"
+      ],
+      "constraints": "Treatment levels must represent prespecified doses with independent randomized experimental units.",
+      "use_when": "Use for drug response, pesticide toxicity, fertilizer concentration, or salt-gradient studies.",
+      "strength": "Estimates changes in biological response across controlled exposure levels.",
+      "tradeoff": "A linear model may not describe thresholds, saturation, or toxicity curves.",
+      "model": "y ~ treatment",
+      "analysis_note": "Store doses numerically for regression or as categories for separate comparisons; nonlinear EC50 and LD50 estimation requires specialized models.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "nested_growth_chamber",
+      "name": "Chamber-Clustered Randomized Design",
+      "engine": "not_implemented (see agricolae::design.crd)",
+      "requires": [
+        "treatments",
+        "reps",
+        "subjects"
+      ],
+      "constraints": "Treatments applied to entire chambers must be replicated across independent chambers or independent chamber runs.",
+      "use_when": "Use for temperature, light, or atmospheric CO2 treatments applied to whole growth chambers.",
+      "strength": "Correctly identifies chambers as experimental units for chamber-level treatments.",
+      "tradeoff": "Few independent chambers create low treatment-level degrees of freedom.",
+      "model": "y ~ treatment + (1 | unit)",
+      "analysis_note": "Plants inside one chamber are subsamples for chamber-level interventions; chamber runs only provide independent replication when treatment assignment and carryover are appropriately controlled.",
+      "systems": [
+        "growth_chamber",
+        "greenhouse",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "randomized_complete_block_repeated",
+      "name": "Repeated-Measures Randomized Complete Block Design",
+      "engine": "FielDHub::RCBD",
+      "requires": [
+        "treatments",
+        "reps",
+        "time_points"
+      ],
+      "constraints": "Treatments must be randomized within complete blocks and the same experimental units followed at each scheduled time.",
+      "use_when": "Use for longitudinal field or greenhouse measurements from blocked treatments.",
+      "strength": "Combines local blocking with within-unit temporal comparisons.",
+      "tradeoff": "Repeated observations introduce correlation not addressed by an ordinary RCBD analysis.",
+      "model": "y ~ treatment * time + (1 | block) + (1 | unit)",
+      "analysis_note": "Assign globally unique unit identifiers and use an appropriate temporal covariance structure if residual serial correlation is substantial.",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "multi_location_augmented",
+      "name": "Multi-Location Augmented Block Design",
+      "engine": "not_implemented (see FielDHub::RCBD_augmented)",
+      "requires": [
+        "treatments",
+        "checks",
+        "reps",
+        "block_size"
+      ],
+      "constraints": "Repeated checks must link unreplicated or sparsely replicated test entries across blocks and environments.",
+      "use_when": "Use for preliminary multi-location breeding evaluations with large candidate populations.",
+      "strength": "Enables comparison of many unreplicated entries using recurring checks and environmental information.",
+      "tradeoff": "Treatment estimates can be sensitive to missing checks and model assumptions.",
+      "model": "y ~ treatment * env + (1 | env:block)",
+      "analysis_note": "Generate augmented designs independently by environment and assess whether each treatment-by-environment effect is estimable before fitting the full interaction.",
+      "systems": [
+        "field",
+        "greenhouse"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "nested_factorial",
+      "name": "Nested Factorial Experimental Design",
+      "engine": "not_implemented (see DoE.base::fac.design)",
+      "requires": [
+        "treatments",
+        "treatments2",
+        "reps"
+      ],
+      "constraints": "Levels of the second factor must belong to specific levels of the first factor rather than representing a fully crossed factorial.",
+      "use_when": "Use when biological strains, culture preparations, or treatment subclasses are unique within higher-level groups.",
+      "strength": "Represents hierarchical treatment structures without inventing impossible factor combinations.",
+      "tradeoff": "Nested effects are not interpretable as fully crossed interactions.",
+      "model": "y ~ treatment + treatment:treatment2",
+      "analysis_note": "The referenced factorial generator requires an adapter to create genuine nested rather than fully crossed combinations.",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "livestock",
+        "drosophila",
+        "cell_culture"
+      ],
+      "example_sources": []
+    },
+    {
+      "id": "blocked_crossover",
+      "name": "Blocked Crossover Design",
+      "engine": "not_implemented (see crossdes::williams)",
+      "requires": [
+        "treatments",
+        "subjects",
+        "time_points",
+        "reps"
+      ],
+      "constraints": "Treatment sequences must be randomized within defined subject blocks while retaining crossover period balance.",
+      "use_when": "Use for crossover experiments where animals differ systematically by litter, sex, or initial physiological status.",
+      "strength": "Combines within-subject control with blocking of known baseline heterogeneity.",
+      "tradeoff": "More restrictive sequence allocation can make complete balance difficult.",
+      "model": "y ~ treatment + period + sequence + (1 | block) + (1 | subject)",
+      "analysis_note": "Generate crossover sequences first and then perform block-constrained allocation of those sequences to subjects.",
+      "systems": [
+        "mouse",
+        "livestock",
+        "cell_culture"
+      ],
+      "example_sources": []
     }
-  ]
+  ],
+  "model_terms": {
+    "description": "Every model is an R formula lm()/lme4::lmer() can fit as written, using only these generic terms; study_spec.json analysis.terms says what each stands for in a given study.",
+    "terms": [
+      "y",
+      "treatment",
+      "treatment2",
+      "block",
+      "rep",
+      "row",
+      "col",
+      "unit",
+      "subject",
+      "time",
+      "env",
+      "period",
+      "sequence",
+      "check"
+    ]
+  }
 }

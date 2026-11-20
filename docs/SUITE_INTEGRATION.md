@@ -16,7 +16,7 @@ own private copy of the design.
 
 | File | What it is | Read by |
 |---|---|---|
-| `study_spec.json` | The StudySpec: system, organism, factors and levels, experimental unit, subsamples per unit, blocking factors, reps, design.chosen, randomization_seed, power settings, `analysis.model`, `handoff_version` | Simitall, Bioana, Biopaint |
+| `study_spec.json` | The StudySpec: system, organism, factors and levels, experimental unit, subsamples per unit, blocking factors, reps, design.chosen, randomization_seed, power settings, `analysis.model`, `analysis.terms`, `analysis.note`, `handoff_version` | Simitall, Bioana, Biopaint |
 | `field_layout.csv` | One row per experimental unit: plot/pot/cage id, block, treatment (and row/col for spatial designs) | Simitall, Biopaint |
 | `sample_metadata_template.tsv` | The layout plus `sample_id` (e.g. `SF_rcbd_0001`), `date_measured`, `primary_outcome`, `notes` left empty | Simitall fills it; Bioana reads it |
 | `unit_audit.json` (optional) | Pseudoreplication audit: what the true unit is and why | Bioana |
@@ -27,9 +27,13 @@ Key fields for the other heads:
 - `experimental_unit` and `subsamples_per_unit`: subsamples (leaves of one plant, birds in one pen) are **not**
   independent. Simitall simulates them nested in the unit; Bioana averages them or fits the unit as a random effect.
 - `design.chosen` and `analysis.model`: the model that matches the design, from `inst/registry/design_catalog.json`
-  (e.g. RCBD `y ~ treatment + block`, alpha lattice `y ~ genotype + rep + (1 | rep:block)`,
-  split plot `y ~ main * sub + block + (1 | block:main)`). `y` is the primary outcome; the other terms are columns of
-  the layout.
+  (74 designs, e.g. RCBD `y ~ treatment + block`, alpha lattice `y ~ treatment + rep + (1 | rep:block)`,
+  split plot `y ~ treatment * treatment2 + block + (1 | block:treatment)`). Every catalog model is an R formula
+  `lm()`/`lme4::lmer()` fits as written (a test checks this), using only the generic terms in the catalog's
+  `model_terms`: `y treatment treatment2 block rep row col unit subject time env period sequence check`.
+- `analysis.terms`: what each generic term stands for in this study (e.g. `treatment = genotype`, `unit = plot`,
+  `block = block`) and `layout_columns`, the terms that are columns of `field_layout.csv`. `y` is the primary
+  outcome. `analysis.note` carries what the formula cannot say (spatial AR1, survival, GCA/SCA, count models).
 - `blocking_factors`: blocks, litters, batches, benches. Simitall adds their variance; Bioana keeps them in the model.
 - `power.minimum_detectable_difference`, `power.residual_sd`: the effect and noise Simitall should use by default.
 - Fields recorded under `assumptions` were not stated by the user; treat them as defaults the user may change.
@@ -84,3 +88,11 @@ before simulating or analyzing. Package name is still `studyforge` while the ren
 > vocabulary in rule files, deterministic code for numbers, commit to main as nirwan1265 with no attribution.
 > First task: a Simitall function that takes a Biodes output folder and writes simulated `primary_outcome`,
 > `counts.tsv` and `sim_truth.json`, then a Bioana function that fits `analysis.model` and recovers the truth.
+
+## Adding designs
+
+Designs live in `inst/registry/design_catalog.json` (not rules.tsv). One object per design: `id`, `name`, `engine`
+(R generator or `not_implemented (see pkg::fn)`), `requires`, `constraints`, `use_when`, `strength`, `tradeoff`,
+`model` (generic terms only, fittable as written), optional `analysis_note`, `systems`, `example_sources` (real DOIs
+only). `tests/testthat/test-catalog.R` fails if a model does not fit or uses another term. A new design is only
+proposed to users once a candidate rule points to it (`.sf_candidates` in `R/local_agent.R`).

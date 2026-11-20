@@ -121,7 +121,11 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   # the analysis model that matches the chosen design (design_catalog.json), so Bioana and Simitall read it
   # from the spec instead of looking it up; y is the primary outcome, terms are the layout's columns
   cat_d <- Filter(function(d) identical(d$id, spec$design$chosen), load_registry("design_catalog")$designs)
-  if (length(cat_d)) spec$analysis$model <- cat_d[[1]]$model
+  if (length(cat_d)) {
+    spec$analysis$model <- cat_d[[1]]$model
+    if (!is.null(cat_d[[1]]$analysis_note)) spec$analysis$note <- cat_d[[1]]$analysis_note
+    spec$analysis$terms <- .sf_model_terms(spec, book)
+  }
   spec$handoff_version <- load_registry("study_spec.schema")$version
   spath <- file.path(outdir, "study_spec.json")
   jsonlite::write_json(spec, spath, auto_unbox = TRUE, pretty = TRUE, null = "null")
@@ -142,3 +146,15 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
 }
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
+
+# What each generic model term stands for in this study (design_catalog.json model_terms): treatment and treatment2
+# are the first two factors in the spec, unit the experimental unit, block the first blocking factor; a term that is
+# also a column of the layout says so, so Bioana and Simitall know which column to use.
+.sf_model_terms <- function(spec, book = NULL) {
+  f <- vapply(spec$factors %||% list(), function(x) x$name %||% NA_character_, character(1))
+  out <- list(treatment = f[1], treatment2 = f[2], unit = spec$experimental_unit,
+              block = unlist(spec$blocking_factors)[1] %||% (if (!is.null(book) && "block" %in% names(book)) "block"))
+  out <- Filter(function(v) length(v) && !is.na(v), out)
+  if (!is.null(book)) out$layout_columns <- intersect(load_registry("design_catalog")$model_terms$terms, names(book))
+  out
+}
