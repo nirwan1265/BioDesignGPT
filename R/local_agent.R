@@ -546,6 +546,11 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   candidates <- .sf_candidates(spec)
   designs <- lapply(candidates, lookup_design)
+  # the candidates the engine proposed are the spec's design.candidates unless the user named their own
+  if (length(candidates) && is.null(spec$design$candidates)) {
+    spec$design$candidates <- as.list(candidates)
+    v <- validate_spec(spec)
+  }
   sysset <- .sf_system_set(spec)
   hazards <- if (length(sysset)) setup_hazards(sysset) else list()
   if (length(hazards)) {
@@ -561,6 +566,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   known <- vapply(load_registry("experimental_systems")$systems, `[[`, "", "id")
   questions <- unique(unlist(lapply(intersect(sysset, known), system_questions)))
   if (is.null(questions)) questions <- character()
+  questions <- questions[!vapply(questions, .sf_question_answered, logical(1), spec = spec)]
   questions <- unique(c(.sf_text_questions(spec, question), questions))   # what the words leave open comes first
   notes <- if (length(sysset)) protocol_notes(system = sysset) else list()
   org_word <- tolower(strsplit(spec$organism %||% "", " ")[[1]][1])
@@ -763,4 +769,22 @@ launch_studyforge <- function(...) {
     else if (length(k) == 2 && is.list(spec[[k[1]]])) spec[[k[1]]][[k[2]]] <- NULL
   }
   spec
+}
+
+# A checklist question is already answered when an answered_by row (rules.tsv) matches its text and every field the
+# row names is stated in the spec by the user, not filled in as an assumption. factor:NAME means a factor called NAME
+# with levels (for time, the factor itself).
+.sf_question_answered <- function(q, spec) {
+  r <- .sf_rules_rows("answered_by")
+  if (!NROW(r)) return(FALSE)
+  hit <- which(vapply(r$pattern, function(p) grepl(p, tolower(q), perl = TRUE), logical(1)))
+  stated <- function(path) {
+    if (startsWith(path, "factor:")) {
+      nm <- sub("^factor:", "", path)
+      f <- Filter(function(x) identical(x$name, nm), spec$factors %||% list())
+      return(length(f) > 0 && (nm %in% c("time", "age", "stage") || !is.null(f[[1]]$n_levels)))
+    }
+    !is.null(spec_get(spec, path)) && is.null(spec$assumptions[[path]])
+  }
+  any(vapply(hit, function(i) all(vapply(strsplit(r$term[i], " ")[[1]], stated, logical(1))), logical(1)))
 }

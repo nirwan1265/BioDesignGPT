@@ -63,3 +63,12 @@ test_that("a coordinated list of line groups adds each conjunct's number, or 1",
   expect_false(identical(g("blocks of 20 plots (18 lines plus 2 checks)"), 20))   # one block's contents
   expect_false(identical(g("at 10 dpi, 4 birds per line"), 14))                  # a comma alone is not a list
 })
+
+test_that("checklist questions the prompt already answers are not asked again", {
+  a <- studyforge_ask("GWAS for grain yield in 200 maize inbred lines, 2 reps, RCBD in the field")
+  expect_false(any(grepl("^Primary outcome and its unit", a$all_questions)))
+  expect_false(any(grepl("^Number of entries/genotypes", a$all_questions)))
+  expect_false("design.candidates" %in% a$validation$missing)
+  b <- studyforge_ask("120 maize lines for drought tolerance at two locations")   # no outcome stated
+  expect_true(any(grepl("^Primary outcome and its unit", b$all_questions)))
+})
