@@ -473,7 +473,33 @@ extract_spec_local <- function(question) {
   fam <- setdiff(.sf_system_set(spec), sys)
   if ("ribo_seq" %in% fam) cand <- c(cand, "riboseq_rnaseq")
   if ("atac_seq" %in% fam) cand <- c(cand, "atac_replicated")
-  unique(cand)
+  .sf_cover_factors(unique(cand), spec)
+}
+
+# The factor structure decides first. A design covers two or more randomized factors when its catalog model has a
+# second treatment term (treatment2), or time when one of the factors is time. Covering candidates move to the front;
+# when none covers, split goes first if a factor is applied to main plots, else factorial.
+.sf_cover_factors <- function(cand, spec) {
+  rf <- .sf_randomized_factors(spec)
+  if (length(rf) < 2) return(cand)
+  models <- vapply(load_registry("design_catalog")$designs, function(d) d$model, "")
+  names(models) <- vapply(load_registry("design_catalog")$designs, `[[`, "", "id")
+  covers <- function(id) {
+    m <- models[id]; if (is.na(m)) return(FALSE)
+    v <- all.vars(stats::as.formula(m))
+    "treatment2" %in% v || ("time" %in% v && "time" %in% rf && length(rf) == 2)
+  }
+  ok <- vapply(cand, covers, logical(1))
+  if (any(ok)) return(c(cand[ok], cand[!ok]))
+  applied <- unlist(lapply(spec$factors %||% list(), `[[`, "applied_to"))
+  unique(c(if (any(applied %in% "main_plot")) "split" else "factorial", cand))
+}
+
+# Factors that are randomized to experimental units; factors measured within a unit (tissues of one plant, cue
+# list within_unit_factor in rules.tsv) are not
+.sf_randomized_factors <- function(spec) {
+  nm <- vapply(spec$factors %||% list(), function(x) x$name %||% "", "")
+  setdiff(nm[nzchar(nm)], .sf_list("within_unit_factor"))
 }
 
 .sf_recipe <- function(spec, candidates) {

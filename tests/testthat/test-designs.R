@@ -68,3 +68,18 @@ test_that("the hand-off spec records the chosen design's analysis model and the 
   expect_equal(j$analysis$model, "y ~ treatment + block")
   expect_equal(j$handoff_version, load_registry("study_spec.schema")$version)
 })
+
+test_that("layout_from_spec keeps every factor, crosses randomized ones and repeats units over tissues", {
+  s <- new_spec(); s$system <- "greenhouse"; s$design$reps <- 3
+  s$factors <- list(list(name = "genotype", n_levels = 2), list(name = "water", n_levels = 2), list(name = "tissue", n_levels = 2))
+  expect_equal(.sf_candidates(s)[1], "factorial")
+  b <- layout_from_spec(s, seed = 1)
+  expect_true(all(c("genotype", "water", "tissue") %in% names(b)))
+  expect_equal(nrow(b), 2 * 2 * 3 * 2)
+  expect_equal(nrow(unique(b[c("genotype", "water")])), 4)
+  t1 <- new_spec(); t1$factors <- list(list(name = "time", n_levels = 4)); t1$design$reps <- 3
+  expect_equal(sort(unique(layout_from_spec(t1)$time)), paste0("time_", 1:4))
+  p <- new_spec(); p$system <- "field"; p$factors <- list(list(name = "genotype", n_levels = 149)); p$design$reps <- 2
+  expect_match(paste(attr(layout_from_spec(p), "layout_notes"), collapse = " "), "no alpha lattice")
+  expect_error(layout_from_spec(new_spec()), "missing: factors")
+})

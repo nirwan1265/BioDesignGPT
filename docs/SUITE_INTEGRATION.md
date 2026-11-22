@@ -31,12 +31,31 @@ Key fields for the other heads:
   split plot `y ~ treatment * treatment2 + block + (1 | block:treatment)`). Every catalog model is an R formula
   `lm()`/`lme4::lmer()` fits as written (a test checks this), using only the generic terms in the catalog's
   `model_terms`: `y treatment treatment2 block rep row col unit subject time env period sequence check`.
-- `analysis.terms`: what each generic term stands for in this study (e.g. `treatment = genotype`, `unit = plot`,
-  `block = block`) and `layout_columns`, the terms that are columns of `field_layout.csv`. `y` is the primary
+- `analysis.terms`: the layout column each generic term uses in this study (e.g. `treatment = genotype`,
+  `treatment2 = water`, `block = block`, `unit = plot`), `layout_columns` (those that are columns of
+  `field_layout.csv`) and `uncovered_factors` (factors in the layout the catalog model does not hold, such as a third
+  factor or tissue; add them as fixed effects). `y` is the primary
   outcome. `analysis.note` carries what the formula cannot say (spatial AR1, survival, GCA/SCA, count models).
 - `blocking_factors`: blocks, litters, batches, benches. Simitall adds their variance; Bioana keeps them in the model.
 - `power.minimum_detectable_difference`, `power.residual_sd`: the effect and noise Simitall should use by default.
 - Fields recorded under `assumptions` were not stated by the user; treat them as defaults the user may change.
+
+## Building the layout: `layout_from_spec(spec, seed)`
+
+Simitall must not build its own layout from the spec. Biodes exports `layout_from_spec()` (R/designs.R):
+
+- every factor in the spec ends up in the layout as a column with its own name (`genotype`, `water`, `time`, ...);
+- two or more randomized factors are crossed (`factorial`, or `split` when a factor is `applied_to: main_plot`);
+  the design choice (`.sf_candidates`) now puts a design whose catalog model holds the factors first;
+- factors measured within a unit (rules.tsv `within_unit_factor`, e.g. tissue) repeat each unit's row;
+- time as the only factor is randomized like a treatment (destructive sampling);
+- alpha lattices try every valid block size and fall back to complete blocks with a note when none exists;
+- every default it used is in `attr(book, "layout_notes")` (copied to `design.layout_notes` in the spec);
+- when it cannot build, it stops with the missing field named: `missing: factors`, `missing: factors.n_levels`,
+  `missing: design.reps`, `missing: design.checks`. Those are questions for the user, not simulator gaps.
+
+On Biodes' dev and train specs (3,224 questions), every spec with factors, level counts and replicates gets a
+layout that keeps all its factors (1,609 of 1,615; the other 6 are augmented designs without named checks).
 
 ## Simitall (simulate)
 
