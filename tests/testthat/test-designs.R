@@ -83,3 +83,15 @@ test_that("layout_from_spec keeps every factor, crosses randomized ones and repe
   expect_match(paste(attr(layout_from_spec(p), "layout_notes"), collapse = " "), "no alpha lattice")
   expect_error(layout_from_spec(new_spec()), "missing: factors")
 })
+
+test_that("a factor named treatment keeps its own column in factorial and split layouts", {
+  s <- new_spec(); s$design$reps <- 3
+  s$factors <- list(list(name = "treatment", n_levels = 2), list(name = "time", n_levels = 3))
+  b <- layout_from_spec(s, seed = 1)
+  expect_setequal(unique(b$treatment), c("treatment_1", "treatment_2"))
+  expect_setequal(unique(b$time), paste0("time_", 1:3))
+  expect_true("treatment_combination" %in% names(b))
+  s$system <- "field"; s$factors[[1]]$applied_to <- "main_plot"
+  b2 <- layout_from_spec(s, seed = 1)
+  expect_setequal(unique(b2$treatment), c("treatment_1", "treatment_2"))
+})

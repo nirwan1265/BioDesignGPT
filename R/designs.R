@@ -57,7 +57,8 @@ make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial",
                                    design = "rcbd", seed = seed)$book
       data.frame(plot = b$plots, subplot = b$splots, rep = b$block, block = b$block,
                  main = b[[4]], sub = b[[5]],
-                 treatment = paste(b[[4]], b[[5]], sep = ":"))
+                 treatment = paste(b[[4]], b[[5]], sep = ":"),
+                 treatment_combination = paste(b[[4]], b[[5]], sep = ":"))
     },
     factorial = {
       if (is.null(factor_levels) || is.null(names(factor_levels))) {
@@ -69,7 +70,10 @@ make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial",
       for (i in seq_along(factor_levels)) {
         out[[names(factor_levels)[i]]] <- factor_levels[[i]][as.integer(b[[2 + i]])]
       }
-      out$treatment <- do.call(paste, c(out[names(factor_levels)], sep = ":"))
+      # the joined levels go to treatment_combination; treatment holds them too unless a factor is itself
+      # called treatment, whose own column must not be overwritten
+      out$treatment_combination <- do.call(paste, c(out[names(factor_levels)], sep = ":"))
+      if (!"treatment" %in% names(factor_levels)) out$treatment <- out$treatment_combination
       out
     },
     augmented = {
