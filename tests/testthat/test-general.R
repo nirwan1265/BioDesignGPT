@@ -99,3 +99,11 @@ test_that("stated counts, asked replicates, panels and genetic units are read", 
   b <- extract_spec_local("bsa-seq of an f2 population: bulks of 30 plants from the top and bottom 10% for plant height")
   expect_equal(b$genetics[c("unit", "individuals_per_bulk", "bulk_fraction")], list(unit = "bulk", individuals_per_bulk = 30, bulk_fraction = 10))
 })
+
+test_that("a panel whose size is open still gets a plan (no crash in the starter code)", {
+  a <- studyforge_ask("GWAS of a clonal potato panel for tuber traits in the field. How many clones should I phenotype?")
+  expect_true("genotype" %in% vapply(a$spec$factors, `[[`, "", "name"))
+  expect_type(a$recipe, "character")
+  r <- studyforge:::.sf_recipe(list(factors = list(list(name = "genotype")), assays = list("gwas")), "alpha")
+  expect_match(r, "make_design\\(\"alpha\"")
+})

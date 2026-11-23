@@ -342,6 +342,37 @@ Edit `data-raw/study_examples.json`, then rebuild with `Rscript data-raw/build_e
 testthat::test_local()
 ```
 
+## Future work
+
+### More data
+- **Older human and mouse studies.** In the evidence tables, mouse studies only cover 2024-2026 and human studies
+  2025-2026, while every other species goes back to about 2010. Re-run `data-raw/evidence/harvest_evidence.R` for
+  *Homo sapiens* and *Mus musculus* over earlier years (2010-2023) so published practice for the two most-studied
+  organisms is not just the last two years.
+- **More papers.** The paper questions come from about 3,650 open-access papers (34 species x 42 techniques).
+  Label more, aimed at the kinds with few examples: amplicon/16S/ITS microbiome, small RNA-seq, methylation, m6A,
+  Ribo-seq, Hi-C, scATAC, BSA/pool-seq and population resequencing. All locked test splits except `test_draw5`
+  are spent, so new labels should come with a new locked test split.
+- **More organisms.** Some organisms have little or no data for some study kinds. Yeast has 301 evidence studies
+  and 71 paper questions but no amplicon/microbiome study at all, so a yeast amplicon question has nothing to
+  learn from. Add species that are missing or thin: sheep, goat, duck, honeybee, mosquito and other insects,
+  salmon/tilapia, canola, cassava, sugarcane, peanut, pepper, cucumber, more trees, and fungal and oomycete
+  pathogens. Sorghum itself is thin (47 evidence studies, 66 paper questions).
+
+### Biodes
+- Move design-candidate choice (`.sf_candidates` in `R/local_agent.R`) into a rules table, so the 50 newer catalog
+  designs (Latin square, cluster-randomized, crossover, batch-blocked sequencing, ...) are proposed when a question
+  calls for them.
+- Fill `example_sources` (real DOIs) for the catalog designs that have none.
+- "N blocks" sets the replicate count but not `blocking_factors`; show the block as a blocking factor.
+- Retrain the reader only when the labels grow substantially (v7 with 950 more questions tied v6).
+
+### Suite
+- Simitall simulators for the data types Biodes designs but Simitall cannot simulate yet: small RNA-seq,
+  methylation, 16S/ITS microbiome, m6A, Ribo-seq, Hi-C, scATAC; then BSA/pool-seq and population models from
+  `spec$genetics`.
+- Bioana (fit `analysis.model` on real or simulated data) and Biopaint (layout maps, power curves, results plots).
+
 ## Scope and caveats
 
 - Animal-study output is a planning recommendation, not an ethics approval; final designs need statistician, veterinarian and IACUC review.

@@ -507,7 +507,9 @@ extract_spec_local <- function(question) {
 .sf_recipe <- function(spec, candidates) {
   f <- spec$factors %||% list()
   geno <- Filter(function(x) x$name == "genotype", f)
-  n <- if (length(geno)) geno[[1]]$n_levels else 12
+  # an open genotype count (a panel whose size the user has not given yet) uses the stated layout default
+  n <- if (length(geno) && !is.null(geno[[1]]$n_levels)) geno[[1]]$n_levels else
+    as.integer(.sf_layout_default("factor:genotype", spec) %||% 12)
   reps <- spec$design$reps %||% 3
   first <- candidates[1] %||% "rcbd"
   trt <- sprintf('paste0("G", 1:%s)', n)
