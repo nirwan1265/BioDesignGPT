@@ -325,8 +325,8 @@ extract_spec_local <- function(question) {
     mt <- find_all("mating")
     if (length(mt)) {
       set("population.mating", mt[1])
-      if (mt[1] %in% c("ril", "nam", "dh")) set("population.type", mt[1])
-      if (mt[1] %in% c("ril", "dh", "biparental")) set("population.parents", 2)
+      mp <- .sf_mating_props(mt[1])
+      for (k in grep("^population\\.", names(mp), value = TRUE)) set(k, .sf_num_or_chr(mp[[k]]))
     }
     g <- regmatches(text, regexpr(.sf_cue("n_generations"), text, perl = TRUE))
     if (length(g)) set("population.generations", .sf_num(regmatches(g, regexpr(.sf_num_re, g, perl = TRUE))))
@@ -454,8 +454,9 @@ extract_spec_local <- function(question) {
   } else if (sys == "breeding_genetics") {
     mt <- spec$population$mating %||% ""
     q <- tolower(spec$question %||% "")
-    cand <- c(cand, if (mt == "diallel") "diallel", if (mt == "nc_design") "nc_design",
-              if (mt %in% c("nam", "ril", "dh", "biparental", "selfing", "sib_mating", "backcross") || .sf_has(q, .sf_cue("mapping_intent"))) "mapping_population",
+    mc <- unlist(.sf_mating_props(mt)[names(.sf_mating_props(mt)) == "candidate"])
+    cand <- c(cand, mc[mc != "mapping_population"],
+              if ("mapping_population" %in% mc || .sf_has(q, .sf_cue("mapping_intent"))) "mapping_population",
               if (!is.null(spec$design$locations)) "met_fa", "alpha")
   } else if (sys == "multi_environment") {
     cand <- c(cand, if (length(spec$environments) > 1 || .sf_has(tolower(spec$question %||% ""), .sf_cue("controlled_setting_mention"))) "gh_field_validation", "met_fa", "alpha", "spatial_analysis")
@@ -906,3 +907,13 @@ mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
   }
   list()
 }
+
+# what a stated mating implies (rules.tsv mating_property: "key=value" rows); repeated keys (candidate) all kept
+.sf_mating_props <- function(mating) {
+  r <- tryCatch(.sf_rules_rows("mating_property"), error = function(e) NULL)
+  if (is.null(r) || !length(mating) || !nzchar(mating[1])) return(list())
+  kv <- r$pattern[r$term == mating[1]]
+  stats::setNames(as.list(sub("^[^=]*=", "", kv)), sub("=.*", "", kv))
+}
+
+.sf_num_or_chr <- function(x) if (grepl("^-?[0-9.]+$", x)) as.numeric(x) else x

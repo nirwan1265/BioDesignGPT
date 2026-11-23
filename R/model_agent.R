@@ -49,8 +49,9 @@ merge_specs <- function(rule, model, question, judgments = FALSE) {
     fg <- model$population$filial_generation
     if (!grepl(paste0("\\bf", fg, "\\b"), text, perl = TRUE)) model$population$filial_generation <- NULL
   }
-  if (identical(model$population$mating, "nam") && !is.null(model$population$parents)) {
-    if (!stated(model$population$parents - 1)) model$population$parents <- NULL
+  off <- .sf_mating_props(model$population$mating %||% "")$parents_offset
+  if (!is.null(off) && !is.null(model$population$parents)) {
+    if (!stated(model$population$parents - as.numeric(off))) model$population$parents <- NULL
   } else if (!is.null(model$population$parents)) {
     pn <- model$population$parents
     parts_ok <- stated(pn) || {
