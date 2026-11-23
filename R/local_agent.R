@@ -593,6 +593,20 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   questions <- unique(unlist(lapply(intersect(sysset, known), system_questions)))
   if (is.null(questions)) questions <- character()
   questions <- questions[!vapply(questions, .sf_question_answered, logical(1), spec = spec)]
+  # a factor without a level count cannot be laid out: ask for the count first (wording: rules.tsv level_question)
+  open_lv <- vapply(Filter(function(f) nzchar(f$name %||% "") && is.null(f$n_levels) && !length(f$levels),
+                           spec$factors %||% list()), `[[`, "", "name")
+  if (length(open_lv)) {
+    lq <- .sf_rules_rows("level_question")
+    ask_lv <- vapply(open_lv, function(nm) { q <- lq$pattern[lq$term == nm]; if (!length(q)) q <- lq$pattern[lq$term == "*"]
+      gsub("{F}", nm, q[1], fixed = TRUE) }, "")
+    questions <- unique(c(ask_lv, questions))
+    v$missing <- unique(c(v$missing, paste0("factors.", open_lv, ".n_levels")))
+  }
+  if (!length(spec$factors)) {
+    q0 <- .sf_rules_rows("level_question"); q0 <- q0$pattern[q0$term == "_none"]
+    if (length(q0)) questions <- unique(c(q0[1], questions))
+  }
   questions <- unique(c(.sf_text_questions(spec, question), questions))   # what the words leave open comes first
   notes <- if (length(sysset)) protocol_notes(system = sysset) else list()
   org_word <- tolower(strsplit(spec$organism %||% "", " ")[[1]][1])

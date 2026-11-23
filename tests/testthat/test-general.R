@@ -72,3 +72,15 @@ test_that("checklist questions the prompt already answers are not asked again", 
   b <- studyforge_ask("120 maize lines for drought tolerance at two locations")   # no outcome stated
   expect_true(any(grepl("^Primary outcome and its unit", b$all_questions)))
 })
+
+test_that("a factor without a level count, or no factor at all, is asked about", {
+  a <- studyforge_ask("RNA-seq of Arabidopsis wild type and photolesion repair mutants under UV, 3 replicates")
+  g <- Filter(function(f) identical(f$name, "genotype"), a$spec$factors)
+  expect_length(g, 1); expect_null(g[[1]]$n_levels)
+  expect_true("factors.genotype.n_levels" %in% a$validation$missing)
+  expect_match(a$all_questions[1], "How many genotypes")
+  b <- studyforge_ask("Leaf RNA-seq of maize sampled at several time points after drought vs control, 3 replicates")
+  expect_true(any(grepl("How many time points", b$all_questions)))
+  m <- studyforge_ask("How many macaques do I need for mapping genetic effects on DNA methylation?")
+  expect_match(m$all_questions[1], "What do you compare or map")
+})
