@@ -166,9 +166,15 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   if ("time" %in% mv && identical(out$treatment2, "time")) out$treatment2 <- setdiff(rf, c("time", out$treatment))[1]
   out <- Filter(function(v) length(v) && !is.na(v), out)
   if (length(mv)) out <- out[intersect(names(out), c(mv, "unit"))]
+  # model terms that are layout columns themselves (rep, block, row, col, period, sequence, check) map to that column
+  if (!is.null(book)) for (v in setdiff(intersect(mv, names(book)), c("y", names(out)))) out[[v]] <- v
+  if (!is.null(spec$genetics$unit)) out$genetic_unit <- spec$genetics$unit
+  envc <- if (!is.null(book)) intersect(c("location", "season"), names(book)) else character()
+  if (length(envc) && "env" %in% mv) out$env <- paste(envc, collapse = ":")
   if (!is.null(book)) {
-    out$layout_columns <- intersect(unlist(out[setdiff(names(out), "unit")]), names(book))
-    out$uncovered_factors <- setdiff(intersect(allf, names(book)), unlist(out))
+    used <- unlist(out[setdiff(names(out), c("unit", "env", "genetic_unit"))])
+    out$uncovered_factors <- setdiff(intersect(c(allf, if (!"env" %in% mv) envc), names(book)), used)
+    out$layout_columns <- intersect(c(used, envc), names(book))
   }
   out
 }
@@ -186,6 +192,25 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
 #'   an error naming the missing spec field when it cannot build one.
 #' @export
 layout_from_spec <- function(spec, seed = 42) {
+  # several locations or seasons: an independent randomization in each environment, labelled by location/season
+  nloc <- as.integer(spec$design$locations %||% 1); nsea <- as.integer(spec$design$seasons %||% 1)
+  if (nloc > 1 || nsea > 1) {
+    env <- expand.grid(season = paste0("season_", seq_len(nsea)), location = paste0("location_", seq_len(nloc)),
+                       stringsAsFactors = FALSE)
+    one <- spec; one$design$locations <- NULL; one$design$seasons <- NULL
+    parts <- lapply(seq_len(nrow(env)), function(i) {
+      b <- layout_from_spec(one, seed = seed + i - 1)
+      if (nloc > 1) b$location <- env$location[i]
+      if (nsea > 1) b$season <- env$season[i]
+      b
+    })
+    book <- do.call(rbind, parts)
+    attr(book, "design") <- attr(parts[[1]], "design"); attr(book, "seed") <- seed
+    attr(book, "layout_notes") <- c(attr(parts[[1]], "layout_notes"),
+      sprintf("%d environments (%d location(s) x %d season(s)), each randomized separately (seeds %d-%d)",
+              nrow(env), nloc, nsea, seed, seed + nrow(env) - 1))
+    return(book)
+  }
   notes <- character()
   f <- Filter(function(x) nzchar(x$name %||% ""), spec$factors %||% list())
   if (!length(f)) stop("layout_from_spec: the spec has no factors (missing: factors).", call. = FALSE)
@@ -199,7 +224,6 @@ layout_from_spec <- function(spec, seed = 42) {
     stop(sprintf("layout_from_spec: no level count for %s (missing: factors.n_levels).",
                  paste(names(lv)[vapply(lv, is.null, logical(1))], collapse = ", ")), call. = FALSE)
   reps <- spec$design$reps
-  if (is.null(reps)) stop("layout_from_spec: no replicate count (missing: design.reps).", call. = FALSE)
   within <- intersect(names(lv), .sf_list("within_unit_factor"))
   rand <- setdiff(names(lv), within)
   if (!length(rand)) { rand <- within[1]; within <- within[-1]; notes <- c(notes, sprintf("%s is the only factor, so it is randomized to units", rand)) }
@@ -211,6 +235,7 @@ layout_from_spec <- function(spec, seed = 42) {
     if (any(unlist(applied[rand]) %in% "main_plot") && "split" %in% c(cand, "split")) "split" else "factorial"
   } else (utils::head(setdiff(cand, c("split", "factorial")), 1) %||% "rcbd")
   if (!length(design) || is.na(design)) design <- "rcbd"
+  if (is.null(reps) && design != "augmented") stop("layout_from_spec: no replicate count (missing: design.reps).", call. = FALSE)
   if (length(rand) >= 2 && !design %in% cand[1]) notes <- c(notes, sprintf("%d randomized factors (%s): %s design keeps them all", length(rand), paste(rand, collapse = ", "), design))
   book <- switch(design,
     factorial = make_design("factorial", factor_levels = lv[rand], reps = reps, seed = seed),
@@ -219,7 +244,7 @@ layout_from_spec <- function(spec, seed = 42) {
       if (length(sp) > 1) notes <- c(notes, sprintf("split plot holds two factors; %s crossed into the subplot", paste(sp, collapse = " x ")))
       sub <- do.call(paste, c(expand.grid(lv[sp], stringsAsFactors = FALSE), sep = ":"))
       b <- make_design("split", treatments = lv[[mp]], treatments2 = sub, reps = reps, seed = seed)
-      b[[mp]] <- b$main; parts <- do.call(rbind, strsplit(b$sub, ":", fixed = TRUE))
+      b[[mp]] <- as.character(b$main); parts <- do.call(rbind, strsplit(as.character(b$sub), ":", fixed = TRUE))
       for (i in seq_along(sp)) b[[sp[i]]] <- parts[, i]
       b
     },
@@ -236,7 +261,18 @@ layout_from_spec <- function(spec, seed = 42) {
       } else if (!identical(k, spec$design$block_size)) notes <- c(notes, sprintf("block size %d for %d entries (spec has no usable design.block_size)", k, n))
       b[[rand]] <- b$treatment; b
     },
-    augmented = stop("layout_from_spec: augmented designs need check entries (missing: design.checks).", call. = FALSE),
+    augmented = {
+      ck <- spec$design$checks
+      if (is.null(ck)) {
+        ck <- as.integer(.sf_layout_default("design.checks", spec) %||% 4)
+        notes <- c(notes, sprintf("%d check entries assumed (rules.tsv layout_default design.checks; spec has no design.checks)", ck))
+      }
+      ck <- if (is.numeric(ck) && length(ck) == 1) paste0("check_", seq_len(ck)) else as.character(unlist(ck))
+      n <- length(lv[[rand]])
+      nb <- reps %||% max(2, ceiling(n / as.numeric(.sf_layout_default("design.entries_per_block", spec) %||% 20)))
+      if (is.null(reps)) notes <- c(notes, sprintf("%d blocks for %d unreplicated entries (spec has no design.reps)", nb, n))
+      b <- make_design("augmented", treatments = lv[[rand]], checks = ck, reps = nb, seed = seed); b[[rand]] <- b$treatment; b
+    },
     { b <- make_design(design, treatments = lv[[rand]], reps = reps, seed = seed); b[[rand]] <- b$treatment; b })
   if (length(within)) {
     grid <- expand.grid(lv[within], stringsAsFactors = FALSE)
@@ -250,4 +286,44 @@ layout_from_spec <- function(spec, seed = 42) {
   }
   attr(book, "layout_notes") <- notes
   book
+}
+
+# The stated default for a layout field (rules.tsv layout_default), most specific first: factor:NAME@ASSAY,
+# factor:NAME, factor:*; or a design.* field.
+.sf_layout_default <- function(field, spec = NULL) {
+  r <- .sf_rules_rows("layout_default")
+  if (!NROW(r)) return(NULL)
+  keys <- field
+  if (startsWith(field, "factor:")) keys <- c(paste0(field, "@", unlist(spec$assays)), field, "factor:*")
+  hit <- r$pattern[match(keys, r$term)]
+  hit <- hit[!is.na(hit)]
+  if (length(hit)) hit[1] else NULL
+}
+
+#' Fill the numbers a layout needs with stated defaults, each flagged as an assumption
+#'
+#' Only for fields the user left open after being asked: a factor without a level count, and the check entries of
+#' an augmented design. Values come from rules.tsv `layout_default`; each one is written to `spec$assumptions` as
+#' "assumed default (rules.tsv layout_default)" so it is never mistaken for something the user said. Replicates are
+#' not defaulted: a "how many per group?" question is a power sweep (`power.solve_for`).
+#' @param spec A StudySpec.
+#' @return The spec with defaults filled.
+#' @export
+fill_layout_defaults <- function(spec) {
+  tag <- "assumed default (rules.tsv layout_default)"
+  for (i in seq_along(spec$factors)) {
+    f <- spec$factors[[i]]
+    if (nzchar(f$name %||% "") && is.null(f$n_levels) && !length(f$levels)) {
+      v <- .sf_layout_default(paste0("factor:", f$name), spec)
+      if (!is.null(v)) {
+        spec$factors[[i]]$n_levels <- as.integer(v)
+        spec$assumptions[[paste0("factors.", f$name, ".n_levels")]] <- tag
+      }
+    }
+  }
+  if (identical(spec$design$chosen %||% spec$design$type, "augmented") && is.null(spec$design$checks)) {
+    spec$design$checks <- as.integer(.sf_layout_default("design.checks", spec) %||% 4)
+    spec$assumptions[["design.checks"]] <- tag
+  }
+  spec
 }

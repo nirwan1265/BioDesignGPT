@@ -84,3 +84,18 @@ test_that("a factor without a level count, or no factor at all, is asked about",
   m <- studyforge_ask("How many macaques do I need for mapping genetic effects on DNA methylation?")
   expect_match(m$all_questions[1], "What do you compare or map")
 })
+
+test_that("stated counts, asked replicates, panels and genetic units are read", {
+  f <- function(t) { s <- extract_spec_local(t); setNames(vapply(s$factors, function(x) x$n_levels %||% NA_real_, 1), vapply(s$factors, `[[`, "", "name")) }
+  expect_equal(f("RNA-seq of wheat leaves, vernalized vs non-vernalized plants, 3 replicates")[["treatment"]], 2)
+  expect_equal(f("maize lines carrying 0 to 3 mutant copies of the gene, 4 replicates")[["genotype"]], 4)
+  expect_equal(f("RNA-seq of BC1 to BC6 lines and W22 in the field, 3 replicates")[["genotype"]], 7)
+  expect_false("infection" %in% names(Filter(Negate(is.na), f("leaves sampled at 0, 6, 12 and 24 h after inoculation, 3 replicates"))))
+  expect_equal(f("berries sampled 0, 20 and 40 days after treatment, 3 replicates")[["time"]], 3)
+  a <- studyforge_ask("RNA-seq of maize leaves under drought vs control. How many plants per group?")
+  expect_equal(a$spec$power$solve_for, "reps")
+  m <- extract_spec_local("how many macaques do i need for eqtl mapping of dna methylation?")
+  expect_true("genotype" %in% vapply(m$factors, `[[`, "", "name"))
+  b <- extract_spec_local("bsa-seq of an f2 population: bulks of 30 plants from the top and bottom 10% for plant height")
+  expect_equal(b$genetics[c("unit", "individuals_per_bulk", "bulk_fraction")], list(unit = "bulk", individuals_per_bulk = 30, bulk_fraction = 10))
+})

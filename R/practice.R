@@ -60,6 +60,7 @@
 #' published_practice("sorghum", "RNA-seq", "leaf")
 #' published_practice("mouse")
 published_practice <- function(organism, technique = NULL, tissue = NULL, n_cite = 3) {
+  organism <- .sf_str1(organism)
   tb <- .sf_practice_tables()
   p <- tb$practice
   if (is.null(p)) stop("Published-practice tables not found; reinstall studyforge.", call. = FALSE)

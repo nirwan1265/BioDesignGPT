@@ -350,6 +350,8 @@ extract_spec_local <- function(question) {
   }
 
   spec <- .sf_general_layer(spec, text)
+  spec <- .sf_panel_genotype(spec)
+  spec <- .sf_genetics(spec, text)
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -609,7 +611,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   questions <- unique(c(.sf_text_questions(spec, question), questions))   # what the words leave open comes first
   notes <- if (length(sysset)) protocol_notes(system = sysset) else list()
-  org_word <- tolower(strsplit(spec$organism %||% "", " ")[[1]][1])
+  org_word <- tolower(strsplit(.sf_str1(spec$organism), " ")[[1]][1])
   if (!is.na(org_word) && nzchar(org_word)) {
     hits <- Filter(function(n) grepl(org_word, tolower(paste(n$citation, paste(unlist(n$tags), collapse = " "), n$lesson))), notes)
     if (length(hits)) notes <- c(hits, Filter(function(n) !n$id %in% vapply(hits, `[[`, "", "id"), notes))
@@ -808,8 +810,33 @@ launch_studyforge <- function(...) {
     } else if (length(k) == 1) spec[[k]] <- NULL
     else if (length(k) == 2 && is.list(spec[[k[1]]])) spec[[k[1]]][[k[2]]] <- NULL
   }
+  .sf_mark_solve_for(spec, question)
+}
+
+# A replicate count the user asks for ("how many per group?"), or never states, is solved for, not assumed:
+# power.solve_for = "reps" (solve_for_reason "asked" or "not_stated") with the range to sweep (rules.tsv
+# layout_default power.reps_range), so a simulator runs a power sweep.
+.sf_mark_solve_for <- function(spec, question) {
+  if (is.null(spec$design$reps)) {
+    asked <- "design.reps" %in% .sf_asked_fields(question) || .sf_reps_open(question)
+    spec$power$solve_for <- "reps"
+    spec$power$solve_for_reason <- if (asked) "asked" else "not_stated"
+    rr <- as.integer(strsplit(.sf_layout_default("power.reps_range", spec) %||% "3-12", "-", fixed = TRUE)[[1]])
+    spec$power$reps_range <- as.list(rr)
+  }
   spec
 }
+
+#' Mark what the user's question leaves open
+#'
+#' Clears the fields the question asks about (questions.tsv) and, when it asks for the replicate count, sets
+#' `power.solve_for = "reps"` and `power.reps_range` so a simulator sweeps replicate numbers instead of assuming one.
+#' Use it on a spec built elsewhere (e.g. a reviewed spec) together with the user's question.
+#' @param spec A StudySpec.
+#' @param question The user's question text.
+#' @return The spec.
+#' @export
+mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
 
 # A checklist question is already answered when an answered_by row (rules.tsv) matches its text and every field the
 # row names is stated in the spec by the user, not filled in as an assumption. factor:NAME means a factor called NAME
@@ -827,4 +854,13 @@ launch_studyforge <- function(...) {
     !is.null(spec_get(spec, path)) && is.null(spec$assumptions[[path]])
   }
   any(vapply(hit, function(i) all(vapply(strsplit(r$term[i], " ")[[1]], stated, logical(1))), logical(1)))
+}
+
+# One string from a spec field that may be NULL, NA, a list or several values (a spec from another tool, or several
+# organisms): the first non-missing value as character, else "". strsplit()/tolower() on NA would stop with
+# "non-character argument".
+.sf_str1 <- function(x) {
+  x <- unlist(x)
+  x <- x[!is.na(x)]
+  if (!length(x)) "" else as.character(x[1])
 }

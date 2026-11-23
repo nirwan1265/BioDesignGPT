@@ -54,8 +54,29 @@ Simitall must not build its own layout from the spec. Biodes exports `layout_fro
 - when it cannot build, it stops with the missing field named: `missing: factors`, `missing: factors.n_levels`,
   `missing: design.reps`, `missing: design.checks`. Those are questions for the user, not simulator gaps.
 
-On Biodes' dev and train specs (3,224 questions), every spec with factors, level counts and replicates gets a
-layout that keeps all its factors (1,609 of 1,615; the other 6 are augmented designs without named checks).
+Several locations or seasons (`design.locations`, `design.seasons`) give one independent randomization per
+environment, with `location` / `season` columns (listed in `analysis.terms.uncovered_factors` when the model has no
+`env` term). An augmented design without named checks uses the stated default number of checks, with a note.
+
+### When numbers are missing (schema 0.5.0)
+
+- `fill_layout_defaults(spec)`: a factor without a level count, and augmented checks, get the stated defaults in
+  rules.tsv `layout_default` (time 3, genotype 3, genotype in a GWAS/eQTL/QTL/genomic-prediction panel 200, any
+  other factor 3, checks 4). Each is recorded in `spec$assumptions` as "assumed default (rules.tsv
+  layout_default)". Use it only after the user was asked (Biodes asks the level-count question first).
+- Replicates are never defaulted. When reps are open, the spec says `power.solve_for = "reps"`,
+  `power.reps_range = [3, 12]` and `power.solve_for_reason` = `asked` (the user asked how many) or `not_stated`.
+  Simitall runs a power sweep over that range.
+- `mark_asked(spec, question)`: applies the same to a spec built elsewhere (e.g. a reviewed spec): clears what the
+  question asks about and sets `power.solve_for`.
+- Panels: a GWAS/eQTL/QTL-mapping/genomic-prediction spec always has a `genotype` factor (count asked when missing).
+- `spec$genetics` (also `analysis.terms.genetic_unit`): `unit` = `line` | `bulk` | `population`, and when stated
+  `individuals_per_bulk`, `bulk_fraction` (percent tail), `generations`. Rules: rules.tsv `genetic_unit`,
+  `genetic_field`.
+
+On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
+3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you
+compare or map?".
 
 ## Simitall (simulate)
 

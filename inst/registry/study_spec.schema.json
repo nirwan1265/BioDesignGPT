@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -33,7 +33,16 @@
     "assays",
     "organisms",
     "environments",
-    "population.filial_generation"
+    "population.filial_generation",
+    "power.solve_for",
+    "power.reps_range",
+    "genetics.unit",
+    "genetics.individuals_per_bulk",
+    "genetics.bulk_fraction",
+    "genetics.generations",
+    "design.checks",
+    "design.layout_notes",
+    "power.solve_for_reason"
   ],
   "enums": {
     "system": [
@@ -64,5 +73,16 @@
       "multi_omics",
       "functional_validation"
     ]
+  },
+  "field_notes": {
+    "power.solve_for": "set to \"reps\" when the user asks how many per group: run a power sweep over power.reps_range instead of assuming a replicate count",
+    "power.reps_range": "[min, max] replicate counts for the sweep (rules.tsv layout_default power.reps_range)",
+    "genetics.unit": "what the genetic unit is: line (panel/population of lines or individuals), bulk (BSA, QTL-seq, MutMap pools) or population (selection scans, pool-seq per population)",
+    "genetics.individuals_per_bulk": "individuals pooled into one bulk",
+    "genetics.bulk_fraction": "percent tail of the phenotype distribution each bulk takes",
+    "genetics.generations": "generations of selection or evolution",
+    "design.checks": "check entries of an augmented design (a count or names)",
+    "design.layout_notes": "every default layout_from_spec used",
+    "power.solve_for_reason": "\"asked\" (the user asked how many) or \"not_stated\" (no replicate count given)"
   }
 }

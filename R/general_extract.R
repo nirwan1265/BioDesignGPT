@@ -90,6 +90,8 @@
     g <- regmatches(m, regexec(re1, m, perl = TRUE))[[1]]
     n <- .sf_num(g[2]); mods <- trimws(g[3]); noun <- g[4]; of_x <- if (length(g) >= 5) g[5] else ""
     if (is.na(n) || n < 2 || n > 5000) next
+    # a measuring unit right after the number makes it a measure, not a count ("24 h after inoculation")
+    if (grepl(paste0("^(?:", .sf_cue("count_unit_word"), ")\\b"), mods, perl = TRUE)) next
     if (grepl(paste0("^(", paste(.sf_list("genotype_noun_general"), collapse = "|"), ")$"), noun)) {
       out[[length(out) + 1]] <- list(name = "genotype", n = n, phrase = m); next
     }
@@ -124,6 +126,35 @@
   norm <- vapply(grams, .sf_norm_tissue, "")
   hit <- norm[norm %in% vocab]
   if (length(hit)) unname(hit[1]) else NULL
+}
+
+# A panel or population assay (rules.tsv panel_assay: GWAS, eQTL, QTL mapping, genomic prediction) always varies
+# genotype: add the factor when no rule did, with its level count left open to be asked
+.sf_panel_genotype <- function(spec) {
+  if (!length(intersect(unlist(spec$assays), .sf_list("panel_assay")))) return(spec)
+  have <- vapply(spec$factors %||% list(), function(f) f$name %||% "", "")
+  if (!any(have %in% c("genotype", "population", "phenotype_group"))) spec$factors <- c(spec$factors %||% list(), list(list(name = "genotype")))
+  spec
+}
+
+# What the genetic unit is (rules.tsv genetic_unit: bulk, population; a panel assay without either is line) and the
+# numbers that go with it (genetic_field: individuals_per_bulk, bulk_fraction, generations), in spec$genetics
+.sf_genetics <- function(spec, text) {
+  gu <- .sf_rules_rows("genetic_unit")
+  unit <- NULL
+  for (i in seq_len(NROW(gu))) if (grepl(gu$pattern[i], text, perl = TRUE)) { unit <- gu$term[i]; break }
+  if (is.null(unit) && length(intersect(unlist(spec$assays), .sf_list("panel_assay")))) unit <- "line"
+  if (is.null(unit)) return(spec)
+  spec$genetics$unit <- unit
+  gf <- .sf_rules_rows("genetic_field")
+  for (i in seq_len(NROW(gf))) {
+    if (!is.null(spec$genetics[[gf$term[i]]])) next
+    re <- gsub("{N}", .sf_cue("count_word"), gf$pattern[i], fixed = TRUE)
+    g <- regmatches(text, regexec(re, text, perl = TRUE))[[1]]
+    if (length(g)) { v <- g[-1][nzchar(g[-1])][1]; n <- suppressWarnings(as.numeric(v)); if (is.na(n)) n <- .sf_num(v)
+      if (!is.na(n)) spec$genetics[[gf$term[i]]] <- n }
+  }
+  spec
 }
 
 # factor words specific enough to count as a stated factor even without a number
@@ -368,10 +399,19 @@ studyforge_fix <- function(answer, ...) {
       count = .sf_num(g[2]),
       sum = sum(vapply(g[-1][nzchar(g[-1])], .sf_num, numeric(1))),   # "four cultivars and two hybrids" = 6
       pair = 2,
+      # "0 to 3 copies" = 4, "BC1 to BC6 and W22" = 7: the first two numeric groups bound an inclusive range, each
+      # later non-numeric group is one more named level
+      range = {
+        x <- g[-1]; num <- grepl("^\\d+$", x)
+        if (sum(num) < 2) NA else {
+          k <- which(num)[1:2]; extra <- x[-seq_len(k[2])]
+          as.numeric(x[k[2]]) - as.numeric(x[k[1]]) + 1 + sum(nzchar(extra) & !grepl("^\\d+$", extra))
+        }
+      },
       if (grepl("^\\d+$", r$match[i])) as.numeric(r$match[i]) else NA)   # a fixed count: "a hybrid and its two parents" = 3
     if (!is.na(n) && n < 2) next
     out[[nm]] <- n
-    if (identical(r$match[i], "sum")) attr(out, "summed") <- c(attr(out, "summed"), nm)
+    if (r$match[i] %in% c("sum", "range")) attr(out, "summed") <- c(attr(out, "summed"), nm)
   }
   out
 }

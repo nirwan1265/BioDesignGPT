@@ -95,3 +95,18 @@ test_that("a factor named treatment keeps its own column in factorial and split 
   b2 <- layout_from_spec(s, seed = 1)
   expect_setequal(unique(b2$treatment), c("treatment_1", "treatment_2"))
 })
+
+test_that("layout defaults are flagged, augmented builds with assumed checks, environments are randomized separately", {
+  s <- new_spec(); s$assays <- list("gwas"); s$factors <- list(list(name = "genotype"), list(name = "time"))
+  s2 <- fill_layout_defaults(s)
+  expect_equal(vapply(s2$factors, function(f) f$n_levels, 1), c(200, 3))
+  expect_match(s2$assumptions[["factors.time.n_levels"]], "assumed default")
+  a <- new_spec(); a$factors <- list(list(name = "genotype", n_levels = 60)); a$design$chosen <- "augmented"
+  b <- layout_from_spec(fill_layout_defaults(a))
+  expect_equal(sum(!b$is_check), 60)
+  e <- new_spec(); e$factors <- list(list(name = "genotype", n_levels = 6)); e$design$reps <- 2
+  e$design$locations <- 2; e$design$seasons <- 2
+  be <- layout_from_spec(e)
+  expect_equal(nrow(be), 6 * 2 * 4)
+  expect_setequal(unique(paste(be$location, be$season)), c("location_1 season_1", "location_1 season_2", "location_2 season_1", "location_2 season_2"))
+})
