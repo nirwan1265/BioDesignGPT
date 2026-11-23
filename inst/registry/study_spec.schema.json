@@ -1,5 +1,5 @@
 {
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -42,7 +42,11 @@
     "genetics.generations",
     "design.checks",
     "design.layout_notes",
-    "power.solve_for_reason"
+    "power.solve_for_reason",
+    "assay_kinds",
+    "population.backcross_generations",
+    "population.self_generations",
+    "population.derived_generation"
   ],
   "enums": {
     "system": [
@@ -83,6 +87,10 @@
     "genetics.generations": "generations of selection or evolution",
     "design.checks": "check entries of an augmented design (a count or names)",
     "design.layout_notes": "every default layout_from_spec used",
-    "power.solve_for_reason": "\"asked\" (the user asked how many) or \"not_stated\" (no replicate count given)"
+    "power.solve_for_reason": "\"asked\" (the user asked how many) or \"not_stated\" (no replicate count given)",
+    "assay_kinds": "finer assay names read from the text (rules.tsv assay_kind), e.g. dnase_seq, faire_seq, amplicon_16s, crispr_screen, proteomics, mpra; assays keeps the coarse labels",
+    "population.backcross_generations": "backcross generations from breeding notation (BC3F2 -> 3)",
+    "population.self_generations": "selfing generations after the F1 (F6 -> 5)",
+    "population.derived_generation": "generation the lines were derived from (F2:3 -> 2)"
   }
 }

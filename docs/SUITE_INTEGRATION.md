@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.4.0`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.1`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -73,6 +73,20 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
 - `spec$genetics` (also `analysis.terms.genetic_unit`): `unit` = `line` | `bulk` | `population`, and when stated
   `individuals_per_bulk`, `bulk_fraction` (percent tail), `generations`. Rules: rules.tsv `genetic_unit`,
   `genetic_field`.
+
+### Outcome type, assay kinds, breeding generations (schema 0.5.1)
+
+- `primary_outcome.type`: `survival` only for death/lifespan/time-to-event/censored wording; `ordinal` for scores and
+  scales; `binary` for yes/no outcomes; `count` for counts; otherwise `continuous`. Flowering time stays
+  `continuous` (days to flowering is a measured trait, not a censored event unless the user says so). Rules:
+  rules.tsv `outcome_type`.
+- `assay_kinds`: finer assay names (`dnase_seq`, `faire_seq`, `dap_seq`, `selex`, `amplicon_16s`, `amplicon_its`,
+  `amplicon_genotyping`, `tcr_seq`, `bcr_seq`, `crispr_screen`, `proteomics`, `starr_seq`, `mpra`). `assays` keeps
+  the coarse labels the scoring uses; simulate from `assay_kinds` when present. Rules: rules.tsv `assay_kind`.
+- `population.backcross_generations`, `population.filial_generation`, `population.self_generations`,
+  `population.derived_generation` from notation such as BC3F2, F2:3, BC1F3:5, RIL F6. Rules: rules.tsv
+  `generation_notation`. A count after the colon (F2:3) is never read as a level count.
+- WGS and GBS panels are panels (`panel_assay`), so they get a `genotype` factor like GWAS.
 
 On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
 3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you

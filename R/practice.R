@@ -144,6 +144,7 @@ print.studyforge_practice <- function(x, ...) {
 # tissue named in the question that the table has rows for (e.g. "leaves" -> "leaf")
 .sf_tissue_in_question <- function(question, organism, technique) {
   if (is.null(question) || !nzchar(question)) return(NULL)
+  organism <- .sf_str1(organism)   # several organisms: the first one's table
   p <- .sf_practice_tables()$practice
   have <- unique(p$tissue[p$organism == organism & p$technique == technique & p$tissue != "all"])
   if (!length(have)) return(NULL)

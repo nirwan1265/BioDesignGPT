@@ -83,7 +83,7 @@
     out[[length(out) + 1]] <- list(name = nm, n = n, phrase = m)
   }
   # P1: "<N> [m1 m2] <noun> [of|for <X>]"
-  re1 <- paste0("(?<![\\w.])", .sf_num_re, "\\s+((?:", stop, "[a-z][a-z-]*\\s+){0,2}?)(", nouns, ")\\b",
+  re1 <- paste0("(?<![\\w.:/])", .sf_num_re, "\\s+((?:", stop, "[a-z][a-z-]*\\s+){0,2}?)(", nouns, ")\\b",
                 "(?:\\s+(?:of|for)\\s+(?:the\\s+|different\\s+)?([a-z][a-z-]*(?:\\s+[a-z][a-z-]*)?))?")
   for (m in regmatches(text, gregexpr(re1, text, perl = TRUE))[[1]]) {
     if (any(vapply(p2_spans, function(sp) grepl(m, sp, fixed = TRUE), logical(1)))) next

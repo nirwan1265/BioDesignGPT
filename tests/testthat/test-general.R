@@ -107,3 +107,19 @@ test_that("a panel whose size is open still gets a plan (no crash in the starter
   r <- studyforge:::.sf_recipe(list(factors = list(list(name = "genotype")), assays = list("gwas")), "alpha")
   expect_match(r, "make_design\\(\"alpha\"")
 })
+
+test_that("outcome type, assay kinds and breeding notation are read from rules", {
+  ot <- function(t) extract_spec_local(t)$primary_outcome$type %||% NA
+  expect_equal(ot("lifespan of Drosophila on two diets"), "survival")
+  expect_equal(ot("flowering time of 200 maize lines"), "continuous")
+  expect_equal(ot("disease score on a 1-5 scale in wheat, 2 treatments"), "ordinal")
+  expect_setequal(unlist(extract_spec_local("DNase-seq and FAIRE-seq of maize leaves")$assay_kinds), c("dnase_seq", "faire_seq"))
+  expect_equal(unlist(extract_spec_local("16S amplicon sequencing of rhizosphere soil, 2 treatments")$assay_kinds), "amplicon_16s")
+  p <- extract_spec_local("RNA-seq of BC3F2 plants in the field")$population
+  expect_equal(p[c("backcross_generations", "filial_generation", "self_generations")], list(backcross_generations = 3, filial_generation = 2, self_generations = 1))
+  q <- extract_spec_local("BC1F3:5 lines of wheat under heat, 3 replicates")
+  expect_equal(q$population$derived_generation, 3)
+  expect_false("genotype" %in% vapply(q$factors, `[[`, "", "name"))
+  g <- extract_spec_local("120 F2:3 families of maize under drought, 2 replicates")$factors
+  expect_equal(Filter(function(x) x$name == "genotype", g)[[1]]$n_levels, 120)
+})

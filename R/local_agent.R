@@ -43,7 +43,7 @@
   unit <- tryCatch(.sf_cue("count_unit_word"), error = function(e) NULL)
   if (!is.null(unit)) stop <- paste0(stop, "(?!(?:", unit, ")\\b)")
   # a number glued to a name ("ago1-38 mutant", "zmzfp69 mutant") is part of the name, not a count
-  re <- paste0(prefix, "(?<![a-z]\\d-)(?<![a-z]-)(?<![\\d.,])(?<![a-z])", .sf_num_re, "\\s+(?:", stop, "[a-z-]+\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
+  re <- paste0(prefix, "(?<![a-z]\\d-)(?<![a-z]-)(?<![\\d.,])(?<![a-z])(?<![:/])", .sf_num_re, "\\s+(?:", stop, "[a-z][a-z0-9:-]*\\s+){0,2}?(?:", paste(nouns, collapse = "|"), ")\\b(?!",
                .sf_cue("count_within_rep"), ")")
   m <- regmatches(text, regexpr(re, text, perl = TRUE))
   if (!length(m) || grepl("\\bor\\b", m)) return(NA_real_)  # "two or three reps" is undecided
@@ -107,10 +107,11 @@ extract_spec_local <- function(question) {
   out <- unique(orx$term[vapply(orx$pattern, function(p) .sf_has(text, p), logical(1))])
   phrase <- .sf_outcome_text(text)
   if (!length(out) && !is.null(phrase)) out <- unique(.sf_find_all(phrase, "outcome"))
-  if (length(out) == 1) {
-    set("primary_outcome.name", out)
-    set("primary_outcome.type", if (out == "lifespan") "survival" else "continuous")
-  }
+  if (length(out) == 1) set("primary_outcome.name", out)
+  # the outcome's type from rules.tsv outcome_type (outcome name, then the question); a named outcome with no
+  # matching row is continuous
+  otype <- .sf_outcome_type(text, if (length(out) == 1) out else NULL)
+  if (!is.null(otype)) set("primary_outcome.type", otype) else if (length(out) == 1) set("primary_outcome.type", "continuous")
 
   # factors
   factors <- list()
@@ -313,6 +314,8 @@ extract_spec_local <- function(question) {
     as <- find_all("assay")
     if (length(intersect(as, .sf_list("mapping_assay")))) set("assays", as)
   }
+  # breeding generation notation (BC3F2, F2:3, BC1F3:5, RIL F6) whatever the setting
+  for (nm in names(gen <- .sf_generation_notation(text))) spec <- spec_set(spec, paste0("population.", nm), gen[[nm]])
   # the mating of a stated population (F2, backcross, RILs ...) whatever the setting
   if (!identical(sys_now, "breeding_genetics")) {
     mt <- find_all("mating")
@@ -352,6 +355,7 @@ extract_spec_local <- function(question) {
   spec <- .sf_general_layer(spec, text)
   spec <- .sf_panel_genotype(spec)
   spec <- .sf_genetics(spec, text)
+  kinds <- .sf_assay_kinds(text); if (length(kinds)) spec$assay_kinds <- as.list(kinds)
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -865,4 +869,40 @@ mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
   x <- unlist(x)
   x <- x[!is.na(x)]
   if (!length(x)) "" else as.character(x[1])
+}
+
+# primary_outcome.type: the first rules.tsv outcome_type row matching the outcome name or the question
+.sf_outcome_type <- function(text, outcome = NULL) {
+  r <- .sf_rules_rows("outcome_type")
+  for (i in seq_len(NROW(r)))
+    if ((!is.null(outcome) && grepl(r$pattern[i], outcome, perl = TRUE)) || grepl(r$pattern[i], text, perl = TRUE))
+      return(r$term[i])
+  NULL
+}
+
+# finer assay kinds (rules.tsv assay_kind), every match kept
+.sf_assay_kinds <- function(text) {
+  r <- .sf_rules_rows("assay_kind")
+  unique(r$term[vapply(r$pattern, function(p) grepl(p, text, perl = TRUE), logical(1))])
+}
+
+# breeding generation notation (rules.tsv generation_notation): the first matching row names its captured numbers
+# (bc, f, fl); the filial generation is the later one, self generations are filial - 1
+.sf_generation_notation <- function(text) {
+  r <- .sf_rules_rows("generation_notation")
+  for (i in seq_len(NROW(r))) {
+    g <- regmatches(text, regexec(r$pattern[i], text, perl = TRUE))[[1]]
+    if (!length(g)) next
+    v <- suppressWarnings(as.numeric(g[-1])); v <- v[!is.na(v)]
+    nm <- strsplit(r$term[i], ",", fixed = TRUE)[[1]]
+    if (length(v) < length(nm)) next
+    x <- setNames(as.list(v[seq_along(nm)]), nm)
+    out <- list()
+    if (!is.null(x$bc)) out$backcross_generations <- x$bc
+    f <- x$fl %||% x$f
+    if (!is.null(f)) { out$filial_generation <- f; out$self_generations <- f - 1 }
+    if (!is.null(x$fl)) out$derived_generation <- x$f
+    return(out)
+  }
+  list()
 }
