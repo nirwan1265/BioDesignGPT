@@ -123,3 +123,14 @@ test_that("outcome type, assay kinds and breeding notation are read from rules",
   g <- extract_spec_local("120 F2:3 families of maize under drought, 2 replicates")$factors
   expect_equal(Filter(function(x) x$name == "genotype", g)[[1]]$n_levels, 120)
 })
+
+test_that("before/after, sampling intervals, named parents and group lists are counted", {
+  lv <- function(t, f) { x <- Filter(function(g) g$name == f, extract_spec_local(t)$factors); if (length(x)) x[[1]]$n_levels %||% NA else NULL }
+  expect_equal(lv("Whole-blood RNA-seq from pigs infected with ASFV vs mock, sampled before and after infection.", "time"), 2)
+  expect_equal(lv("RNA-seq of chicks sampled every 4 h over 24 h, randomized.", "time"), 6)
+  expect_equal(lv("Leaf RNA-seq of Brachypodium under submergence vs control, sampled every 4 h over two days.", "time"), 12)
+  expect_null(lv("Root RNA-seq of Arabidopsis exposed to sound vibration every 3 h for 10 days vs silent controls.", "time"))
+  expect_equal(lv("Hippocampus RNA-seq of 30 HXB/BXH recombinant inbred rat strains and their BN and SHR parents.", "genotype"), 32)
+  expect_equal(lv("Forty male rats split into sham, ischaemia-reperfusion, and ischaemic preconditioning plus ischaemia-reperfusion groups; myocardial RNA-seq.", "treatment"), 3)
+  expect_equal(lv("Colonic faecal 16S of rats on a normal diet, a high-fat diet, or high-fat diet with kiwifruit extract.", "diet"), 3)
+})

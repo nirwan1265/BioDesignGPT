@@ -26,7 +26,7 @@ dict(paper="paper_2760", style="terse", prompt="MeRIP-seq of C2C12 cells with ME
 dict(paper="paper_2761", skip="library screen"),
 dict(paper="paper_2762", skip="gene family GWAS"),
 dict(paper="paper_2763", style="question", prompt="RNA-seq of 14-day-old Brachypodium in a growth room under submergence vs control, sampled every 4 h over two days, 5 plants pooled per sample. How many replicates per time point?",
-     spec=dict(system="growth_chamber", organism="Brachypodium distachyon", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time")], subsamples_per_unit=5),
+     spec=dict(system="growth_chamber", organism="Brachypodium distachyon", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=12)], subsamples_per_unit=5),
      ask=["design.reps"], note="diel time course"),
 dict(paper="paper_2764", style="terse", prompt="CUT&Tag of Zelda and a histone mark in regenerating vs undamaged Drosophila wing discs, 2 biological replicates.",
      spec=dict(system="drosophila", organism="Drosophila melanogaster", assays=["chip_seq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=2)),

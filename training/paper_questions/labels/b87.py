@@ -17,7 +17,7 @@ dict(paper="paper_2157", style="question", prompt="GWAS of yield traits in 184 P
      spec=dict(system="field", organism="Triticum aestivum", assays=["gbs"], factors=[dict(name="genotype", n_levels=184), dict(name="temperature", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="RCBD 3 reps x 2 years"),
 dict(paper="paper_2158", style="detailed", prompt="Leaf RNA-seq of Atlantic potato in a growth chamber under short and long days, sampled every 2 h for 24 h, three plants per time point.",
-     spec=dict(system="growth_chamber", organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="photoperiod", n_levels=2), dict(name="time", n_levels=13)], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="photoperiod", n_levels=2), dict(name="time", n_levels=12)], design=dict(reps=3)),
      ask=[P], note="diel x 3"),
 dict(paper="paper_2159", skip="transposon detection method"),
 dict(paper="paper_2160", style="terse", prompt="RNA-seq of greenhouse potato leaves after leafminer feeding vs undamaged controls, 3 biological replicates.",

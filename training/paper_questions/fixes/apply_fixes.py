@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Apply reviewed label fixes to the label sources, then rebuild batches and splits.
 
-fixes/*.tsv rows: id, factor, n_levels, evidence. Each row adds a level count the prompt states to a factor the
-label left open. `evidence` must appear verbatim in the prompt (checked here), so every fix can be audited
+fixes/*.tsv rows: id, factor, n_levels, evidence[, old]. Each row adds a level count the prompt states to a factor the
+label left open; a row with `old` changes that existing count instead (a convention decided after labelling). `evidence` must appear verbatim in the prompt (checked here), so every fix can be audited
 against the question text. Only tuning splits (dev, dev2, train) may be fixed; a row for a test split stops the run.
 
     python3 fixes/apply_fixes.py
@@ -42,8 +42,13 @@ for f in sorted(glob.glob(os.path.join(PQ, "labels", "b*.py"))):
         nxt = re.search(r"^(dict\(paper=|\{'paper':)", s[m.end():], re.M)
         a, b = m.start(), m.end() + (nxt.start() if nxt else len(s) - m.end())
         block, fac, n = s[a:b], re.escape(r["factor"]), r["n_levels"]
-        new = re.sub(r'dict\(name="' + fac + r'"(?![^)]*n_levels)', f'dict(name="{r["factor"]}", n_levels={n}', block, count=1)
-        if new == block:
+        o = (r.get("old") or "").strip()
+        if o:
+            new = re.sub(r'(dict\(name="' + fac + r'", n_levels=)' + o + r'\b', r'\g<1>' + n, block, count=1)
+            new = re.sub(r"(\{'name': '" + fac + r"', 'n_levels': )" + o + r"\b", r"\g<1>" + n, new, count=1)
+        else:
+            new = re.sub(r'dict\(name="' + fac + r'"(?![^)]*n_levels)', f'dict(name="{r["factor"]}", n_levels={n}', block, count=1)
+        if new == block and not o:
             new = re.sub(r"\{'name': '" + fac + r"'(?![^}]*'n_levels')", "{'name': '" + r["factor"] + "', 'n_levels': " + n, block, count=1)
         if new != block:
             s, changed = s[:a] + new + s[b:], True

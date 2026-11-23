@@ -195,7 +195,7 @@
     fx <- spec$factors %||% list()
     have <- vapply(fx, function(f) f$name, "")
     # an arm list already read as another factor (infection vs mock, diet vs chow, dose vs vehicle) is not a treatment
-    owned <- c("infection", "diet", "dose", "antibiotic", "injury", "disease", "phenotype_group")
+    owned <- .sf_list("arm_factor")
     if ("treatment" %in% names(lv) && any(have %in% owned)) lv$treatment <- NULL
     # disease and phenotype_group are one group factor: the group_by_* cues pick the name, as for the reader
     for (g in intersect(names(lv), c("disease", "phenotype_group"))) {
@@ -348,6 +348,13 @@ studyforge_fix <- function(answer, ...) {
         # a setting phrase caught by the list commas ("in a growth room, salt vs control") is not an arm
         lead <- tryCatch(.sf_list("not_arm_lead"), error = function(e) character())
         items <- items[!vapply(items, function(x) any(vapply(lead, grepl, logical(1), x = x, perl = TRUE)), logical(1))]
+        # an extra control arm after the run in the same clause (", plus sham-operated rats"; cue extra_control_arm)
+        if (grepl("\\sor\\s", run, perl = TRUE)) {
+          tail_cl <- sub("[.;?].*$", "", substring(text, pos))
+          xa <- tryCatch(.sf_cue("extra_control_arm"), error = function(e) "(?!)")
+          nx <- regmatches(tail_cl, regexpr("^[^,]*,\\s*\\K(?:plus|and)\\s+[^,]+", tail_cl, perl = TRUE))
+          if (length(nx) && grepl(xa, trimws(nx), perl = TRUE)) items <- c(items, trimws(nx))
+        }
         if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) { out[[nm]] <- length(items); break }
       }
       next
@@ -376,6 +383,16 @@ studyforge_fix <- function(answer, ...) {
       }
       next
     }
+    if (identical(r$match[i], "grouplist")) {   # "split into sham, I-R, and IPC plus I-R groups" = 3
+      g <- regmatches(text, regexec(re, text, perl = TRUE))[[1]]
+      if (!length(g)) next
+      items <- trimws(strsplit(g[2], "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+or\\s+|\\s+and\\s+(?=(?:an?\\s+)?[a-z0-9-]+\\s*(?:,|$))|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
+      items <- items[nzchar(items)]
+      # an item naming several groups at once ("several doses", "different strains") leaves the count open
+      openw <- tryCatch(.sf_cue("open_group_item"), error = function(e) "(?!)")
+      if (length(items) >= 2 && !any(grepl(openw, items, perl = TRUE))) out[[nm]] <- length(items)
+      next
+    }
     if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
@@ -397,8 +414,20 @@ studyforge_fix <- function(answer, ...) {
     n <- switch(r$match[i],
       list = length(regmatches(g[2], gregexpr("\\d+(?:\\.\\d+)?(?:-\\d+(?:\\.\\d+)?)?", g[2], perl = TRUE))[[1]]),
       count = .sf_num(g[2]),
-      sum = sum(vapply(g[-1][nzchar(g[-1])], .sf_num, numeric(1))),   # "four cultivars and two hybrids" = 6
+      # "four cultivars and two hybrids" = 6; a group that is not a number counts its named conjuncts
+      # ("30 strains and their BN and SHR parents" = 32)
+      sum = sum(vapply(g[-1][nzchar(g[-1])], function(x) { v <- .sf_num(x)
+        if (is.na(v)) length(strsplit(trimws(x), "\\s*,\\s*(?:and\\s+)?|\\s+and\\s+", perl = TRUE)[[1]]) else v }, numeric(1))),
       pair = 2,
+      # "every 4 h over 24 h" = 6, "every 4 h over two days" = 12: span / step, the start point is not counted again;
+      # groups: step, step unit, span (empty for "a day" / "the day" = 1), span unit; hours per unit in time_unit
+      interval = {
+        u <- .sf_rules_rows("time_unit")
+        hrs <- function(x) { k <- which(vapply(u$pattern, grepl, logical(1), x = x, perl = TRUE))[1]
+          if (is.na(k)) NA_real_ else as.numeric(u$term[k]) }
+        span <- if (nzchar(g[4])) .sf_num(g[4]) else 1
+        floor(span * hrs(g[5]) / (.sf_num(g[2]) * hrs(g[3])) + 1e-9)
+      },
       # "0 to 3 copies" = 4, "BC1 to BC6 and W22" = 7: the first two numeric groups bound an inclusive range, each
       # later non-numeric group is one more named level
       range = {

@@ -1,0 +1,5 @@
+id	factor	n_levels	evidence	old
+pq_2158	time	12	sampled every 2 h for 24 h	13
+pq_2763	time	12	sampled every 4 h over two days	
+pq_3752	time	4	sampled every 6 h across the day	
+pq_4129	time	8	sampled every 3 h over a day	
