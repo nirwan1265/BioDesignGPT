@@ -36,7 +36,7 @@ dict(paper="paper_8116", style="detailed", prompt="Gastrocnemius RNA-seq of 3-we
      spec=dict(system="mouse", organism="Mus musculus", assays=["rnaseq"], factors=[dict(name="diet", n_levels=2), dict(name="treatment", n_levels=2)], design=dict(reps=12)),
      ask=[P], note="2 x 2"),
 dict(paper="paper_8117", style="detailed", prompt="GWAS of fruit citric acid in about 400 tomato accessions grown in a greenhouse, with pericarp RNA-seq at the turning stage for eQTL mapping.",
-     spec=dict(system="greenhouse", organism="Solanum lycopersicum", assays=["gwas", "eqtl"], factors=[dict(name="genotype")]),
+     spec=dict(system="greenhouse", organism="Solanum lycopersicum", assays=["gwas", "eqtl"], factors=[dict(name="genotype", n_levels=400)]),
      ask=[P], note="panel"),
 dict(paper="paper_8118", style="question", prompt="PBMC RNA-seq of BLV-infected Holstein cows with high vs low proviral load. How many cows per group?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="phenotype_group", n_levels=2)]),

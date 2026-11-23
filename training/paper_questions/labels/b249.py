@@ -48,7 +48,7 @@ dict(paper="paper_6217", style="question", prompt="RNA-seq of primary cortical a
      ask=["experimental_unit"], note="culture batches"),
 dict(paper="paper_6218", skip="enzyme moonlighting mechanism"),
 dict(paper="paper_6219", style="question", prompt="RNA-seq of bud and tuber tissues of stored Russet Burbank potatoes treated with 1,4-dimethylnaphthalene vs untreated at 8 C, 3 biological replicates. Is the storage chamber my unit?",
-     spec=dict(organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="tissue")], design=dict(reps=3)),
+     spec=dict(organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="tissue", n_levels=2)], design=dict(reps=3)),
      ask=["experimental_unit"], note="chamber-level treatment"),
 dict(paper="paper_6220", skip="drug pharmacokinetics"),
 dict(paper="paper_6221", skip="tumour screen"),

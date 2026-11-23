@@ -40,7 +40,7 @@ dict(paper="paper_5569", style="detailed", prompt="Berry RNA-seq of Ruidu Hongyu
 dict(paper="paper_5571", skip="yeast fermentation"),
 {'paper': 'paper_5572', 'style': 'question', 'prompt': 'ChIP-seq and MNase-seq of FLAG-H2Av in stable Drosophila S2 lines, induced vs uninduced metallothionein promoter. How many biological replicates?', 'spec': {'system': 'cell_culture', 'organism': 'Drosophila melanogaster', 'assays': ['chip_seq', 'mnase_seq'], 'factors': [{'name': 'treatment', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: induction'},
 dict(paper="paper_5573", style="question", prompt="Ileal and colonic digesta 16S of finishing pigs fed normal or protein-restricted diets, pigs allocated in randomized blocks. How many pigs per diet?",
-     spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet"), dict(name="tissue", n_levels=2)]),
+     spec=dict(system="livestock", organism="Sus scrofa", assays=["amplicon"], factors=[dict(name="diet", n_levels=2), dict(name="tissue", n_levels=2)]),
      ask=["design.reps"], note="protein restriction"),
 {'paper': 'paper_5574', 'style': 'detailed', 'prompt': 'RNA-seq of tomato pericarp at 39 days post anthesis from sldml2 CRISPR mutants vs Ailsa Craig, 3 biological replicates per genotype.', 'spec': {'system': 'greenhouse', 'organism': 'Solanum lycopersicum', 'assays': ['rnaseq', 'crispr'], 'factors': [{'name': 'genotype', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: mutant vs WT'},
 ]

@@ -17,7 +17,7 @@ dict(paper="paper_4157", style="question", prompt="scRNA-seq of frontal cortex f
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["single_cell"], factors=[dict(name="treatment")]),
      ask=["design.reps"], note="stimulation modes"),
 dict(paper="paper_4158", style="question", prompt="Colonic faecal 16S of rats on a normal diet, a high-fat diet, or high-fat diet with kiwifruit polyphenol extract. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet", n_levels=3)]),
      ask=["design.reps"], note="polyphenol"),
 dict(paper="paper_4159", style="terse", prompt="RNA-seq of the snow alga Chlamydomonas nivalis held at 4 C vs 22 C for 3 days, 2 biological replicates.",
      spec=dict(system="cell_culture", organism="Chlamydomonas nivalis", assays=["rnaseq"], factors=[dict(name="temperature", n_levels=2)], design=dict(reps=2)),

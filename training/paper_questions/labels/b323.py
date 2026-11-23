@@ -15,7 +15,7 @@ dict(paper="paper_8055", style="question", prompt="Blood RNA-seq of Holstein cow
      spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="infection", n_levels=3)], design=dict(reps=5)),
      ask=["experimental_unit"], note="herd confounded"),
 dict(paper="paper_8056", style="question", prompt="Berry RNA-seq of field Merlot grapevines under hoop houses, 3 houses exposed to simulated wildfire smoke and 3 control houses, before and at veraison. Is the hoop house my unit?",
-     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="stage", n_levels=2), dict(name="time")], design=dict(reps=3)),
+     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="stage", n_levels=2), dict(name="time", n_levels=2)], design=dict(reps=3)),
      ask=["experimental_unit"], note="hoop houses"),
 dict(paper="paper_8057", style="detailed", prompt="Hippocampus RNA-seq of single-housed adult male Sprague-Dawley rats given corticosterone vs vehicle after training, 4 biological replicates of 2 pooled rats.",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=4), subsamples_per_unit=2),

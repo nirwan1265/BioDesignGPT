@@ -47,7 +47,7 @@ dict(paper="paper_3946", style="question", prompt="small RNA-seq of ileum from p
      spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=2)], design=dict(reps=4)),
      ask=[P], note="4 v 4"),
 dict(paper="paper_3947", style="detailed", prompt="Berry RNA-seq at harvest of Nebbiolo grapevines sprayed for years with chemical or alternative fungicides vs untreated, four randomized blocks of eight vines per treatment.",
-     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment")], design=dict(reps=4), subsamples_per_unit=8, experimental_unit="plot"),
+     spec=dict(system="field", organism="Vitis vinifera", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=4), subsamples_per_unit=8, experimental_unit="plot"),
      ask=[P], note="RCBD x 4"),
 dict(paper="paper_3948", skip="lncRNA mechanism"),
 dict(paper="paper_3949", skip="mitosis mechanism"),

@@ -27,7 +27,7 @@ dict(paper="paper_2412", style="terse", prompt="RNA-seq of B73 maize seedlings a
      ask=[P], note="3x2x3"),
 {'paper': 'paper_2413', 'style': 'question', 'prompt': 'Fine mapping brown fibre in upland cotton: three F2 populations from Handan208 x a brown-fibre mutant grown at two field sites over two years, plus a resequenced GWAS panel. How many F2 plants do I need?', 'spec': {'system': 'field', 'organism': 'Gossypium hirsutum', 'assays': ['qtl_mapping', 'gwas'], 'population': {'mating': 'biparental'}, 'design': {'locations': 2, 'seasons': 2}}, 'ask': ['factors.genotype.n_levels'], 'note': 'round 1: F2 fine mapping'},
 dict(paper="paper_2414", style="question", prompt="small RNA-seq of jejunum and uterus from female piglets fed zearalenone-contaminated vs control diets. How many piglets per diet?",
-     spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="diet"), dict(name="tissue", n_levels=2)]),
+     spec=dict(system="livestock", organism="Sus scrofa", assays=["small_rnaseq"], factors=[dict(name="diet", n_levels=2), dict(name="tissue", n_levels=2)]),
      ask=["design.reps"], note="diet x tissue"),
 dict(paper="paper_2415", style="terse", prompt="INTACT-Hi-C of Arabidopsis endosperm nuclei vs leaf nuclei, 2 biological replicates.",
      spec=dict(organism="Arabidopsis thaliana", assays=["hic"], factors=[dict(name="tissue", n_levels=2)], design=dict(reps=2)),

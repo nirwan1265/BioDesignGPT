@@ -17,7 +17,7 @@ dict(paper="paper_2307", style="question", prompt="RNA-seq of young and old Arab
      spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="tissue", n_levels=2), dict(name="time")], subsamples_per_unit=5),
      ask=["design.reps"], note="age x flooding x time"),
 dict(paper="paper_2308", style="terse", prompt="Root RNA-seq of wild-type and phr mutant rice inoculated with Rhizophagus irregularis vs mock in a growth chamber, 3 biological replicates.",
-     spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="infection", n_levels=2)], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Oryza sativa", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="genotype x AM x 3"),
 dict(paper="paper_2309", style="terse", prompt="RNA-seq of bovine rumen epithelial primary cells treated with butyrate vs control, 3 replicates.",
      spec=dict(system="cell_culture", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2)], design=dict(reps=3)),

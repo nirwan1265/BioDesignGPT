@@ -1,7 +1,7 @@
 P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_5650", style="question", prompt="Faecal 16S of Albino Oxford and Dark Agouti rats at three and six months of age on control or obesogenic diets. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="genotype", n_levels=2), dict(name="age", n_levels=2), dict(name="diet")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="genotype", n_levels=2), dict(name="age", n_levels=2), dict(name="diet", n_levels=2)]),
      ask=["design.reps"], note="strain x age x diet"),
 {'paper': 'paper_5651', 'style': 'question', 'prompt': 'QTL for anaerobic germination in 188 rice RILs, seeds from the middle of each field plot germinated under water. How many replicate trays per line?', 'spec': {'system': 'growth_chamber', 'organism': 'Oryza sativa', 'assays': ['qtl_mapping'], 'factors': [{'name': 'genotype', 'n_levels': 188}], 'population': {'mating': 'ril'}}, 'ask': ['design.reps'], 'note': 'round 1: RILs'},
 dict(paper="paper_5652", style="detailed", prompt="Leaf RNA-seq of V3 B73 maize in a growth room after Ostrinia furnacalis feeding, jasmonic acid treatment, or control, 3 replicates each pooling 10 plants.",
@@ -10,7 +10,7 @@ dict(paper="paper_5652", style="detailed", prompt="Leaf RNA-seq of V3 B73 maize 
 dict(paper="paper_5653", skip="gene family"),
 dict(paper="paper_5654", skip="atlas"),
 dict(paper="paper_5655", skip="piRNA cluster"),
-{'paper': 'paper_5656', 'style': 'detailed', 'prompt': 'RNA-seq of whole C. elegans at dauer and post-dauer from AMPK mutants vs daf-2 controls, 3 replicates each.', 'spec': {'system': 'bulk_rnaseq', 'organism': 'Caenorhabditis elegans', 'assays': ['rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'stage', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 2 x 2'},
+{'paper': 'paper_5656', 'style': 'detailed', 'prompt': 'RNA-seq of whole C. elegans at dauer and post-dauer from AMPK mutants vs daf-2 controls, 3 replicates each.', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['rnaseq'], 'factors': [{'name': 'genotype', 'n_levels': 2}, {'name': 'stage', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 2 x 2'},
 dict(paper="paper_5657", skip="reanalysis"),
 {'paper': 'paper_5658', 'style': 'detailed', 'prompt': 'Whole-transcriptome RNA-seq of muscle satellite cells from 11-day-old Sujiang piglets with PLAG1 overexpression vs empty vector, 3 replicates.', 'spec': {'system': 'cell_culture', 'organism': 'Sus scrofa', 'assays': ['rnaseq', 'small_rnaseq', 'overexpression'], 'factors': [{'name': 'genotype', 'n_levels': 2}], 'design': {'reps': 3}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: OE vs EV'},
 dict(paper="paper_5659", skip="cell lines"),

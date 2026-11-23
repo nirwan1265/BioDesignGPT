@@ -31,7 +31,7 @@ dict(paper="paper_4015", style="detailed", prompt="RNA-seq of leaves and stems o
      spec=dict(system="growth_chamber", organism="Solanum tuberosum", assays=["rnaseq"], factors=[dict(name="time", n_levels=7)], design=dict(reps=3)),
      ask=[P], note="7 x 3"),
 dict(paper="paper_4016", style="question", prompt="small RNA-seq of heart, liver, testis, epididymis and sperm from male mice fed different diets, group-housed up to five per cage. Is the cage or the mouse my unit?",
-     spec=dict(system="mouse", organism="Mus musculus", assays=["small_rnaseq"], factors=[dict(name="diet"), dict(name="tissue")]),
+     spec=dict(system="mouse", organism="Mus musculus", assays=["small_rnaseq"], factors=[dict(name="diet"), dict(name="tissue", n_levels=5)]),
      ask=["experimental_unit"], note="cage-level diet"),
 dict(paper="paper_4017", skip="method"),
 dict(paper="paper_4018", skip="experimental evolution"),

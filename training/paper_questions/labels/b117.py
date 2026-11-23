@@ -17,7 +17,7 @@ dict(paper="paper_2904", style="detailed", prompt="WGBS and RNA-seq of Micro-Tom
      ask=[P], note="postharvest x 3"),
 dict(paper="paper_2905", skip="cfDNA method"),
 dict(paper="paper_2906", style="question", prompt="Whole-blood RNA-seq from pigs infected with a low- or high-pathogenic ASFV isolate, sampled before and after infection, 3 pigs per isolate. Is 3 enough?",
-     spec=dict(system="livestock", organism="Sus scrofa", assays=["rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="time")], design=dict(reps=3)),
+     spec=dict(system="livestock", organism="Sus scrofa", assays=["rnaseq"], factors=[dict(name="infection", n_levels=2), dict(name="time", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="repeated sampling"),
 dict(paper="paper_2907", style="question", prompt="RNA-seq of scion and rootstock from reciprocally grafted Verticillium-resistant and susceptible tomato near-isogenic lines, infected vs mock, in a growth room. How many plants per graft combination?",
      spec=dict(system="growth_chamber", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=4), dict(name="infection", n_levels=2), dict(name="tissue", n_levels=2)]),

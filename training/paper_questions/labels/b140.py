@@ -31,7 +31,7 @@ dict(paper="paper_3491", style="terse", prompt="Root RNA-seq of 2-week-old Brach
      ask=[P], note="2 x 3"),
 {'paper': 'paper_3492', 'style': 'question', 'prompt': 'GWAS of anxiety-like and nociceptive behaviour in 662 outbred Sprague-Dawley rats from a commercial vendor, housed two per cage, males and females in separate rooms. Does room need to be in the model?', 'spec': {'system': 'mouse', 'organism': 'Rattus norvegicus', 'assays': ['gwas'], 'factors': [{'name': 'sex', 'n_levels': 2}]}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: sex confounded with room'},
 dict(paper="paper_3493", style="question", prompt="Liver RNA-seq and faecal 16S of Sprague-Dawley rats: controls, ANIT-induced cholestasis, and cholestasis treated with Da-Huang-Xiao-Shi decoction. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq", "amplicon"], factors=[dict(name="treatment")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq", "amplicon"], factors=[dict(name="treatment", n_levels=3)]),
      ask=["design.reps"], note="herbal intervention"),
 dict(paper="paper_3494", style="detailed", prompt="RNA-seq of synchronised wild-type, cht7 and complemented Chlamydomonas in photobioreactors over a 12 h light:12 h dark cycle, sampled at many times, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Chlamydomonas reinhardtii", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3), dict(name="time")], design=dict(reps=3)),

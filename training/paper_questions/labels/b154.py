@@ -1,7 +1,7 @@
 P = "power.minimum_detectable_difference"
 L = [
 dict(paper="paper_3825", style="question", prompt="scRNA-seq of bronchoalveolar lavage from rhesus macaques given high-dose intravenous vs standard intradermal BCG, sampled before and after vaccination. How many macaques per route?",
-     spec=dict(organism="Macaca mulatta", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),
+     spec=dict(organism="Macaca mulatta", assays=["single_cell"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=2)]),
      ask=["design.reps"], note="BCG routes"),
 dict(paper="paper_3826", skip="meta-analysis"),
 {'paper': 'paper_3827', 'style': 'question', 'prompt': 'Drought adaptation in Cape Verde Arabidopsis: 152 Santo Antao lines and 24 Moroccan lines grown in a growth chamber under short days, with existing genome sequences. How many plants per line?', 'spec': {'system': 'growth_chamber', 'organism': 'Arabidopsis thaliana', 'assays': ['gwas'], 'factors': [{'name': 'population', 'n_levels': 2}]}, 'ask': ['design.reps'], 'note': 'round 1: island vs mainland lines'},
@@ -35,7 +35,7 @@ dict(paper="paper_3846", style="question", prompt="RNA-seq of aerial tissue of 3
      spec=dict(system="growth_chamber", organism="Brachypodium distachyon", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], subsamples_per_unit=3),
      ask=["design.reps"], note="cold memory"),
 dict(paper="paper_3847", style="question", prompt="Faecal 16S of female rats on chow, continuous cafeteria diet, or intermittent cafeteria diet, sampled before and after the diets. Is the cage or the rat my unit?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet", n_levels=3), dict(name="time")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="diet", n_levels=3), dict(name="time", n_levels=2)]),
      ask=["experimental_unit"], note="group housing"),
 dict(paper="paper_3848", style="question", prompt="RNA-seq of CC-5390 Chlamydomonas in photobioreactors under 12 h days of low vs high light, sampled across the diurnal cycle. How many independent photobioreactor runs do I need?",
      spec=dict(system="cell_culture", organism="Chlamydomonas reinhardtii", assays=["rnaseq"], factors=[dict(name="light", n_levels=2), dict(name="time")]),

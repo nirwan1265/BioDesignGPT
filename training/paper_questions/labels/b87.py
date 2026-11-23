@@ -39,7 +39,7 @@ dict(paper="paper_2167", style="terse", prompt="scRNA-seq of regenerating muscle
 dict(paper="paper_2168", skip="descriptive pools"),
 {'paper': 'paper_2169', 'style': 'terse', 'prompt': 'scRNA-seq and ATAC-seq of rice ZH11 root tips (meristematic and elongation zones) from 5-day seedlings on filter paper, 2 replicates per zone.', 'spec': {'organism': 'Oryza sativa', 'assays': ['single_cell', 'atac_seq'], 'factors': [{'name': 'tissue', 'n_levels': 2}], 'design': {'reps': 2}}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: 2 zones x 2'},
 dict(paper="paper_2170", style="question", prompt="RNA-seq of caruncular and intercaruncular endometrium and conceptus tissues from heifers carrying in vitro-produced vs AI-derived pregnancies, terminated at day 18 or 25. How many heifers per group?",
-     spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=2), dict(name="tissue")]),
+     spec=dict(system="livestock", organism="Bos taurus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time", n_levels=2), dict(name="tissue", n_levels=3)]),
      ask=["design.reps"], note="2x2 x tissues"),
 dict(paper="paper_2171", skip="cell mechanism"),
 dict(paper="paper_2172", style="terse", prompt="Histone ChIP-seq of dopaminergic neuron nuclei from socially isolated vs group-housed Canton S males, 3 biological replicates.",

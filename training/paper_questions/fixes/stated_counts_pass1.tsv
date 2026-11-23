@@ -1,0 +1,49 @@
+id	factor	n_levels	evidence
+pq_1258	genotype	4	0 to 3 mutant copies
+pq_1357	time	15	weekly from week 3 to week 17
+pq_8056	time	2	before and at veraison
+pq_8117	genotype	400	about 400 tomato accessions
+pq_1753	treatment	2	vs non-vernalized controls
+pq_1755	genotype	2	wild-type and RH20 transgenic
+pq_2023	fraction	4	whole leaf, epiphytic mycelium, haustoria and infected epidermis microsomes
+pq_2170	tissue	3	caruncular and intercaruncular endometrium and conceptus tissues
+pq_2308	genotype	2	wild-type and phr mutant
+pq_2342	cell_type	5	neutrophils and T, B, NK and monocyte populations
+pq_2414	diet	2	zearalenone-contaminated vs control diets
+pq_2759	temperature	2	under control or heat stress
+pq_2860	treatment	3	sham, ischaemia-reperfusion, and ischaemic preconditioning plus ischaemia-reperfusion groups
+pq_3044	disease	2	into mastitis and healthy groups
+pq_3088	treatment	3	with or without induced diabetes, vs chow controls
+pq_3093	diet	2	magnesium-deficient vs adequate diets
+pq_3202	temperature	3	under ongoing cold, after cold, or control
+pq_3241	treatment	5	at 20, 40, 60 or 80 Gy or UV
+pq_3341	treatment	3	vehicle or Wnt / TGF-beta pathway inhibitors
+pq_3493	treatment	3	controls, ANIT-induced cholestasis, and cholestasis treated with
+pq_3690	diet	2	restricted or ad libitum
+pq_3712	treatment	3	or no pretreatment before myocardial ischaemia-reperfusion, plus sham-operated rats
+pq_3847	time	2	sampled before and after the diets
+pq_2906	time	2	sampled before and after infection
+pq_3825	time	2	sampled before and after vaccination
+pq_4521	time	2	sampled before and after African swine fever virus infection
+pq_3947	treatment	3	chemical or alternative fungicides vs untreated
+pq_4016	tissue	5	heart, liver, testis, epididymis and sperm
+pq_4032	time	2	sampled in late gestation and lactation
+pq_4087	genotype	33	32 maize UniformMu transcription factor mutants vs W22 controls
+pq_4135	genotype	2	with and without RBgh2
+pq_4158	diet	3	a normal diet, a high-fat diet, or high-fat diet with kiwifruit polyphenol extract
+pq_4486	treatment	2	carbon-ion-irradiated vs unirradiated seed
+pq_4532	tissue	20	about 20 organs per rat
+pq_4780	treatment	3	polysaccharides or vehicle, plus normal controls
+pq_4852	treatment	4	gamma, electron or proton irradiation vs unirradiated
+pq_5436	treatment	3	under salt or drought treatments vs control
+pq_5498	infection	2	conidia or water
+pq_5573	diet	2	normal or protein-restricted diets
+pq_5650	diet	2	on control or obesogenic diets
+pq_6132	genotype	3	truncated CRY1 vs full-length CRY1 vs wild type
+pq_6152	genotype	6	Ailsa Craig tomato fruit and ripening mutants (rin, nor, Cnr and CRISPR PL and PG2a)
+pq_6219	tissue	2	bud and tuber tissues
+pq_6319	time	2	sampled before and after calving
+pq_6755	genotype	496	496 soybean accessions
+pq_7339	genotype	32	30 HXB/BXH recombinant inbred rat strains and their BN and SHR parents
+pq_7359	time	6	every 4 h over 24 h
+pq_7521	time	7	0.5, 6, 12, 24, 48 and 72 h and after recovery

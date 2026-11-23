@@ -30,7 +30,7 @@ dict(paper="paper_3239", style="question", prompt="small RNA-seq of lung and blo
 dict(paper="paper_3240", style="question", prompt="Fifty-four castrated male Gottingen minipigs weight-stratified into four diet groups; WGBS on a subset. How many pigs per diet for the methylome?",
      spec=dict(system="livestock", organism="Sus scrofa", assays=["methylation"], factors=[dict(name="diet", n_levels=4)]),
      ask=["design.reps"], note="4 diets"),
-{'paper': 'paper_3241', 'style': 'question', 'prompt': 'Whole-genome sequencing of C. elegans DNA repair mutants and N2 after ionizing radiation at 20, 40, 60 or 80 Gy or UV, clonal lines grown from irradiated L4s. How many clonal lines per genotype and dose?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['wgs'], 'factors': [{'name': 'genotype'}, {'name': 'treatment'}]}, 'ask': ['design.reps'], 'note': 'round 1: mutagenesis by genotype'},
+{'paper': 'paper_3241', 'style': 'question', 'prompt': 'Whole-genome sequencing of C. elegans DNA repair mutants and N2 after ionizing radiation at 20, 40, 60 or 80 Gy or UV, clonal lines grown from irradiated L4s. How many clonal lines per genotype and dose?', 'spec': {'organism': 'Caenorhabditis elegans', 'assays': ['wgs'], 'factors': [{'name': 'genotype'}, {'name': 'treatment', 'n_levels': 5}]}, 'ask': ['design.reps'], 'note': 'round 1: mutagenesis by genotype'},
 dict(paper="paper_3242", skip="tumour model"),
 dict(paper="paper_3243", skip="thymocyte 3D genome"),
 dict(paper="paper_3244", style="question", prompt="Medial preoptic area methylome of offspring from Long-Evans dams given bisphenol vs vehicle in pregnancy, with high vs low postnatal maternal care, 6 per group. Is the dam my unit?",

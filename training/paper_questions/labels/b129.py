@@ -7,7 +7,7 @@ dict(paper="paper_3201", style="terse", prompt="RNA-seq of second leaves of Ails
      spec=dict(organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
 dict(paper="paper_3202", style="detailed", prompt="Leaf RNA-seq of two maize genotypes in growth chambers under ongoing cold, after cold, or control, 3 independent repeats each pooling 5 seedlings.",
-     spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="temperature")], design=dict(reps=3), subsamples_per_unit=5),
+     spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="temperature", n_levels=3)], design=dict(reps=3), subsamples_per_unit=5),
      ask=[P], note="genotype x temperature history"),
 dict(paper="paper_3203", style="question", prompt="Brain methylome of 3 Riwoqe yak females from high-altitude farms and 3 Sanjiang cattle females from lowland farms. Can I separate species from altitude?",
      spec=dict(system="livestock", organism="Bos taurus", assays=["methylation"], factors=[dict(name="species", n_levels=2)], design=dict(reps=3)),

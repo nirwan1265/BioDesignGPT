@@ -19,7 +19,7 @@ dict(paper="paper_4133", style="detailed", prompt="Peel RNA-seq of orchard Newha
      ask=[P], note="rootstock x stage"),
 dict(paper="paper_4134", skip="genomics and metabolomics"),
 dict(paper="paper_4135", style="question", prompt="RNA-seq of leaves of barley lines with and without RBgh2 adult plant resistance in a growth chamber, inoculated with powdery mildew vs mock and sampled at several times, pots in randomized complete blocks. How many blocks?",
-     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="infection", n_levels=2), dict(name="time")]),
+     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2), dict(name="time")]),
      ask=["design.reps"], note="RCBD"),
 dict(paper="paper_4136", skip="glial atlas"),
 dict(paper="paper_4137", skip="method"),

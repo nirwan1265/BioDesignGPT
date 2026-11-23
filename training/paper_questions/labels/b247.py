@@ -5,7 +5,7 @@ dict(paper="paper_6150", style="detailed", prompt="Head blight severity of barle
      ask=[P], note="QTL lines in rows"),
 dict(paper="paper_6151", skip="inflorescence mechanism"),
 dict(paper="paper_6152", style="question", prompt="RNA-seq of field-grown Ailsa Craig tomato fruit and ripening mutants (rin, nor, Cnr and CRISPR PL and PG2a) inoculated with Botrytis cinerea vs mock at unripe and ripe stages. How many fruits per genotype and stage?",
-     spec=dict(system="field", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="genotype"), dict(name="infection", n_levels=2), dict(name="stage", n_levels=2)]),
+     spec=dict(system="field", organism="Solanum lycopersicum", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=6), dict(name="infection", n_levels=2), dict(name="stage", n_levels=2)]),
      ask=["design.reps"], note="fruits on plants"),
 dict(paper="paper_6153", style="detailed", prompt="Cold tolerance GWAS of tomato accessions, at least 3 replications of 5-week-old potted plants per accession moved from a greenhouse into a 4 C cool room for 5-7 days.",
      spec=dict(system="greenhouse", organism="Solanum lycopersicum", assays=["gwas"], factors=[dict(name="genotype")], design=dict(reps=3)),

@@ -25,7 +25,7 @@ dict(paper="paper_3710", style="question", prompt="Faecal metagenomics of 4-week
      ask=["experimental_unit"], note="minitrial"),
 dict(paper="paper_3711", skip="aneuploidy"),
 dict(paper="paper_3712", style="question", prompt="Heart RNA-seq of Sprague-Dawley rats given electro-acupuncture at Neiguan or no pretreatment before myocardial ischaemia-reperfusion, plus sham-operated rats. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)]),
      ask=["design.reps"], note="acupuncture"),
 dict(paper="paper_3713", style="question", prompt="RNA-seq of satellite cell cultures from broiler pectoralis under hypoxia vs normoxia, sampled at several times. Is the bird or the culture well my unit?",
      spec=dict(system="cell_culture", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="time")]),

@@ -18,7 +18,7 @@ dict(paper="paper_2757", style="terse", prompt="small RNA-seq of MDBK cells infe
      ask=[P], note="2 x 3"),
 dict(paper="paper_2758", skip="selection panel"),
 dict(paper="paper_2759", style="terse", prompt="RNA-seq of Arabidopsis seeds that developed under control or heat stress in a growth chamber, at the heart, bent cotyledon and mature stages, 3 biological replicates.",
-     spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="temperature"), dict(name="stage", n_levels=3)], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="temperature", n_levels=2), dict(name="stage", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="temp x stage x 3"),
 dict(paper="paper_2760", style="terse", prompt="MeRIP-seq of C2C12 cells with METTL3 knockdown vs control, as proliferating myoblasts and differentiating myotubes, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Mus musculus", assays=["m6a_seq"], factors=[dict(name="genotype", n_levels=2), dict(name="stage", n_levels=2)], design=dict(reps=3)),

@@ -18,7 +18,7 @@ dict(paper="paper_6130", style="question", prompt="Jejunal mucosa RNA-seq of abo
      ask=["design.reps"], note="2 x 2 RCBD"),
 dict(paper="paper_6131", skip="m6A machinery mechanism"),
 dict(paper="paper_6132", style="detailed", prompt="RNA-seq of Arabidopsis seedlings on half MS plates under blue light, cry1 mutants expressing truncated CRY1 vs full-length CRY1 vs wild type, 2 biological replicates.",
-     spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="genotype")], design=dict(reps=2)),
+     spec=dict(system="growth_chamber", organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=3)], design=dict(reps=2)),
      ask=[P], note="truncations"),
 dict(paper="paper_6133", style="terse", prompt="RNA-seq of day-1 adult C. elegans mbl-1 mutants vs wild type at 20 C, 3 biological replicates.",
      spec=dict(system="cell_culture", organism="Caenorhabditis elegans", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2)], design=dict(reps=3)),

@@ -50,7 +50,7 @@ dict(paper="paper_2020", style="question", prompt="Whole-fly RNA-seq of 10-day-o
 dict(paper="paper_2021", skip="cell line mechanism"),
 dict(paper="paper_2022", skip="microarray"),
 dict(paper="paper_2023", style="detailed", prompt="small RNA-seq of fractions from barley leaves 4 days after powdery mildew inoculation in a growth chamber: whole leaf, epiphytic mycelium, haustoria and infected epidermis microsomes, 3 replicates.",
-     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["small_rnaseq"], factors=[dict(name="fraction")], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["small_rnaseq"], factors=[dict(name="fraction", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="fractions x 3"),
 dict(paper="paper_2024", skip="population methylome"),
 ]

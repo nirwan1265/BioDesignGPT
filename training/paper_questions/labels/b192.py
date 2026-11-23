@@ -12,7 +12,7 @@ dict(paper="paper_4779", style="detailed", prompt="Breast muscle RNA-seq of Ross
      spec=dict(system="livestock", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="stage", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="2x4x3"),
 dict(paper="paper_4780", style="question", prompt="Caecal 16S of rats with loperamide-induced constipation given Platycodon grandiflorum polysaccharides or vehicle, plus normal controls, in randomized blocks. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="treatment")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["amplicon"], factors=[dict(name="treatment", n_levels=3)]),
      ask=["design.reps"], note="constipation model"),
 dict(paper="paper_4781", skip="repair mechanism"),
 dict(paper="paper_4782", skip="cell line"),

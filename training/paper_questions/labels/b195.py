@@ -3,7 +3,7 @@ L = [
 dict(paper="paper_4850", skip="mutant"),
 dict(paper="paper_4851", skip="population genomics"),
 dict(paper="paper_4852", style="detailed", prompt="RNA-seq of Fox 1 barley seedlings grown in pots in a growth chamber from grain exposed to gamma, electron or proton irradiation vs unirradiated, 3 pooled biological replicates.",
-     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="treatment")], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Hordeum vulgare", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="radiation types"),
 {'paper': 'paper_4853', 'style': 'detailed', 'prompt': 'Single-nucleus RNA-seq and multiome of the female reproductive system of Artemia franciscana, 25 mated females pooled per replicate, two replicates for the multiome.', 'spec': {'organism': 'Artemia franciscana', 'assays': ['single_cell'], 'design': {'reps': 2}, 'subsamples_per_unit': 25}, 'ask': ['power.minimum_detectable_difference'], 'note': 'round 1: pooled females'},
 dict(paper="paper_4854", skip="gene family"),

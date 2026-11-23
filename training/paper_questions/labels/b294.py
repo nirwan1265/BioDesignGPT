@@ -29,7 +29,7 @@ dict(paper="paper_7337", style="question", prompt="Root RNA-seq of soybean in hy
      ask=["experimental_unit"], note="troughs"),
 dict(paper="paper_7338", skip="yeast tRNA"),
 dict(paper="paper_7339", style="detailed", prompt="Hippocampus RNA-seq of 30 HXB/BXH recombinant inbred rat strains and their BN and SHR parents, 5 biological replicates.",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["eqtl"], factors=[dict(name="genotype")], design=dict(reps=5)),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["eqtl"], factors=[dict(name="genotype", n_levels=32)], design=dict(reps=5)),
      ask=[P], note="RI panel"),
 dict(paper="paper_7340", style="question", prompt="Testis methylation and RNA-seq of male C57BL/6J mice given nicotine, nicotine then a recovery period, or saline, 3 mice pooled per sample. How many pools per group?",
      spec=dict(system="mouse", organism="Mus musculus", assays=["methylation", "rnaseq"], factors=[dict(name="treatment", n_levels=3)], subsamples_per_unit=3),

@@ -15,7 +15,7 @@ dict(paper="paper_1255", style="question", prompt="How many replicates for MeRIP
 dict(paper="paper_1256", skip="genome assembly"),
 dict(paper="paper_1257", skip="chimera genotyping"),
 dict(paper="paper_1258", style="detailed", prompt="Wheat Cadenza TILLING lines with met1-1 mutations in different homoeologs, segregating F3 plants with 0 to 3 mutant copies, greenhouse, randomised; fourth-leaf RNA-seq on 3 biological replicates per genotype and WGBS on a subset.",
-     spec=dict(system="greenhouse", organism="Triticum aestivum", assays=["rnaseq", "methylation"], factors=[dict(name="genotype")], design=dict(reps=3)),
+     spec=dict(system="greenhouse", organism="Triticum aestivum", assays=["rnaseq", "methylation"], factors=[dict(name="genotype", n_levels=4)], design=dict(reps=3)),
      ask=[P], note="homoeolog dosage series"),
 dict(paper="paper_1259", skip="descriptive repertoire profiling"),
 dict(paper="paper_1260", skip="cultivar resequencing"),

@@ -29,7 +29,7 @@ dict(paper="paper_3340", style="terse", prompt="mPFC RNA-seq of WKY rats given k
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="3 x 3"),
 dict(paper="paper_3341", style="detailed", prompt="RNA-seq of chick lens explants after mock cataract surgery, treated with vehicle or Wnt / TGF-beta pathway inhibitors at several times, 3 independent repeats.",
-     spec=dict(system="cell_culture", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="treatment"), dict(name="time")], design=dict(reps=3)),
+     spec=dict(system="cell_culture", organism="Gallus gallus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3), dict(name="time")], design=dict(reps=3)),
      ask=[P], note="explants"),
 dict(paper="paper_3342", style="question", prompt="Hindgut RNA-seq of embryos from rat dams given ethylenethiourea vs vehicle, at gestational days 14, 15 and 16. Is the dam or the embryo my unit?",
      spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=2), dict(name="stage", n_levels=3)]),

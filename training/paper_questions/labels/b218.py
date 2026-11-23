@@ -18,7 +18,7 @@ dict(paper="paper_5433", style="question", prompt="Faecal 16S of Duroc and Iberi
 dict(paper="paper_5434", skip="light mechanism"),
 dict(paper="paper_5435", skip="yeast mechanism"),
 dict(paper="paper_5436", style="detailed", prompt="Leaf RNA-seq of in vitro rooted apple GDDH13 cuttings under salt or drought treatments vs control, 3 biological replicates.",
-     spec=dict(system="growth_chamber", organism="Malus domestica", assays=["rnaseq"], factors=[dict(name="treatment")], design=dict(reps=3)),
+     spec=dict(system="growth_chamber", organism="Malus domestica", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)], design=dict(reps=3)),
      ask=[P], note="stress x 3"),
 dict(paper="paper_5437", skip="tumour screen"),
 dict(paper="paper_5438", skip="atlas"),

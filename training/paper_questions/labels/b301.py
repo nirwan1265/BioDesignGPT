@@ -42,7 +42,7 @@ dict(paper="paper_7520", style="detailed", prompt="Leaf RNA-seq of resistant RK1
      spec=dict(system="growth_chamber", organism="Zea mays", assays=["rnaseq"], factors=[dict(name="genotype", n_levels=2), dict(name="infection", n_levels=2)], design=dict(reps=3)),
      ask=[P], note="2 x 2"),
 dict(paper="paper_7521", style="detailed", prompt="RNA-seq of Arabidopsis under high light sampled at 0.5, 6, 12, 24, 48 and 72 h and after recovery, 2 biological replicates.",
-     spec=dict(organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="time")], design=dict(reps=2)),
+     spec=dict(organism="Arabidopsis thaliana", assays=["rnaseq"], factors=[dict(name="time", n_levels=7)], design=dict(reps=2)),
      ask=[P], note="time series"),
 dict(paper="paper_7522", skip="chlorophyll mechanism"),
 dict(paper="paper_7523", skip="allele series"),

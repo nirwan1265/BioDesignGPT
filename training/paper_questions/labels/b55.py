@@ -14,7 +14,7 @@ dict(paper="paper_1356", style="question", prompt="Small RNA-seq of leaves of re
      spec=dict(system="growth_chamber", organism="Glycine max", assays=["small_rnaseq"], factors=[dict(name="infection", n_levels=5)], subsamples_per_unit=9),
      ask=["design.reps"], note="pooled, unreplicated"),
 dict(paper="paper_1357", style="detailed", prompt="Field drought study with sorghum RTx430 and BTx642: control, pre-flowering drought and post-flowering drought, 3 replicate plots each (16 x 8 m) in a randomised block design; leaf, root, rhizosphere and soil sampled weekly from week 3 to week 17 for microbiome sequencing.",
-     spec=dict(system="field", organism="Sorghum bicolor", factors=[dict(name="water", n_levels=3), dict(name="genotype", n_levels=2), dict(name="tissue", n_levels=4), dict(name="time")], design=dict(reps=3), experimental_unit="plot"),
+     spec=dict(system="field", organism="Sorghum bicolor", factors=[dict(name="water", n_levels=3), dict(name="genotype", n_levels=2), dict(name="tissue", n_levels=4), dict(name="time", n_levels=15)], design=dict(reps=3), experimental_unit="plot"),
      ask=[P], gaps=["assay:amplicon_16s", "repeated_measures"], note="3 x 2 x 3 plots, weekly"),
 dict(paper="paper_1358", style="question", prompt="How many mice per group for scATAC-seq of sorted Muller glia from retinas with AAV Oct4 overexpression, glial Rbpj (Notch) knockout, both, or neither?",
      spec=dict(organism="Mus musculus", assays=["single_cell", "atac_seq"], factors=[dict(name="treatment", n_levels=2), dict(name="genotype", n_levels=2)]),

@@ -17,7 +17,7 @@ dict(paper="paper_2858", style="question", prompt="scRNA-seq of small intestine 
      ask=["design.reps"], note="2 diets"),
 dict(paper="paper_2859", skip="stem cell differentiation"),
 dict(paper="paper_2860", style="question", prompt="Forty male rats split into sham, ischaemia-reperfusion, and ischaemic preconditioning plus ischaemia-reperfusion groups; myocardial RNA-seq. How many rats per group?",
-     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment")]),
+     spec=dict(system="mouse", organism="Rattus norvegicus", assays=["rnaseq"], factors=[dict(name="treatment", n_levels=3)]),
      ask=["design.reps"], note="surgery groups"),
 dict(paper="paper_2861", style="question", prompt="Bacterial wilt resistance of tomato breeding lines in a greenhouse bioassay, completely randomized with two replications. Is two enough?",
      spec=dict(system="greenhouse", organism="Solanum lycopersicum", factors=[dict(name="genotype")], design=dict(reps=2)),
