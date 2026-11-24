@@ -134,3 +134,18 @@ test_that("before/after, sampling intervals, named parents and group lists are c
   expect_equal(lv("Forty male rats split into sham, ischaemia-reperfusion, and ischaemic preconditioning plus ischaemia-reperfusion groups; myocardial RNA-seq.", "treatment"), 3)
   expect_equal(lv("Colonic faecal 16S of rats on a normal diet, a high-fat diet, or high-fat diet with kiwifruit extract.", "diet"), 3)
 })
+
+test_that("vocabulary tables: cell types, fractions, reference genotypes, named events, clause boundaries", {
+  lv <- function(t, f) { x <- Filter(function(g) g$name == f, extract_spec_local(t)$factors); if (length(x)) x[[1]]$n_levels %||% NA else NULL }
+  expect_equal(lv("RNA-seq of oocytes and granulosa cells from beef cows in the hot vs cool season.", "cell_type"), 2)
+  expect_equal(lv("RNA-seq of 32 maize UniformMu transcription factor mutants vs W22 controls.", "genotype"), 33)
+  expect_true(is.na(lv("small RNA-seq of C. elegans eri-7, eri-1, ergo-1 mutants and N2.", "genotype")))   # "ergo-1" is a name, not 1
+  expect_equal(lv("RNA-seq of Arabidopsis under high light sampled at 0.5, 6, 12, 24, 48 and 72 h and after recovery.", "time"), 7)
+  expect_equal(lv("Leaf RNA-seq of rice, susceptible Diantun 502 and resistant Diantun 506, sprayed with Magnaporthe oryzae conidia or water.", "infection"), 2)
+  expect_equal(lv("16S of finishing pigs fed normal or protein-restricted diets, pigs allocated in randomized blocks.", "diet"), 2)
+  expect_equal(lv("Stigma RNA-seq of maize B73 in pots of 10 seedlings in a greenhouse, self-pollinated, cross-pollinated, inoculated with a fungus or left untreated, 3 biological replicates.", "treatment"), 4)
+  expect_true(is.na(lv("small RNA-seq of Col-0 leaves inoculated with mock or a series of Pseudomonas syringae strains.", "infection")))
+  expect_equal(lv("Root RNA-seq of tomato seedlings, salt vs control sampled at several early times.", "treatment"), 2)
+  expect_equal(.sf_norm_tissue("haustoria"), "haustorium")
+  expect_equal(.sf_norm_tissue("ovaries"), "ovary")
+})

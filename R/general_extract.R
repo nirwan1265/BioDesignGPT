@@ -315,7 +315,7 @@ studyforge_fix <- function(answer, ...) {
   how <- sub("^[^/]*/", "", r$term); r$term <- sub("/.*$", "", r$term); r$match <- how
   for (i in seq_len(nrow(r))) {
     nm <- r$term[i]; if (nm %in% names(out) && !is.na(out[[nm]])) next
-    re <- gsub("{N}", .sf_cue("count_word"), r$pattern[i], fixed = TRUE)
+    re <- .sf_expand_vocab(gsub("{N}", .sf_cue("count_word"), r$pattern[i], fixed = TRUE))
     if (identical(r$match[i], "contrast")) {   # a vs/or run with a control arm: one level per arm
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       ctrl <- function(x) { w <- strsplit(x, "\\s+")[[1]]; g <- c(w, if (length(w) > 1) paste(utils::head(w, -1), utils::tail(w, -1)))
@@ -333,6 +333,27 @@ studyforge_fix <- function(answer, ...) {
           next
         }
         pos <- pos + m - 1L + nchar(run)
+        # a list does not run back across a verb that applies something ("..., sprayed with conidia or water"; rules.tsv
+        # list_breaking_verb followed by a preposition): the arms start after it
+        brk <- .sf_expand_vocab("\\b(?:{vocab:list_breaking_verb})\\s+(?:with|to|in|on|onto|into|under|at|by|for|from)\\s+")
+        core <- regexpr("(?:^|\\s)(?:or|vs\\.?|versus)\\s", run, perl = TRUE)
+        # not when the verb phrase is itself an arm, parallel to a participle arm ("inoculated with a fungus or left
+        # untreated"), and not "with vs without"
+        bm <- regexpr(brk, substr(run, 1, core), perl = TRUE)
+        if (bm > 0) {
+          rest <- substring(run, bm + attr(bm, "match.length"))
+          other <- sub("^.*?(?:^|\\s)(?:or|vs\\.?|versus)\\s+", "", rest, perl = TRUE)
+          if (!grepl("^(?:or|vs\\.?|versus)\\s", rest, perl = TRUE) && !grepl("^(?:left|kept|not)\\b|^[a-z-]+ed\\b", other, perl = TRUE)) run <- rest
+        }
+        # comma segments after the last vs/or segment start a new clause (", pigs allocated in blocks"), unless they
+        # add a control arm (cue extra_control_arm)
+        segs0 <- strsplit(run, "\\s*,\\s*", perl = TRUE)[[1]]
+        kc <- suppressWarnings(max(which(grepl("(?:^|\\s)(?:or|vs\\.?|versus)\\s", segs0, perl = TRUE))))
+        if (is.finite(kc) && kc < length(segs0)) {
+          xa0 <- tryCatch(.sf_cue("extra_control_arm"), error = function(e) "(?!)")
+          tl <- segs0[-seq_len(kc)]
+          run <- paste(c(segs0[seq_len(kc)], tl[grepl(xa0, tl, perl = TRUE) | grepl("^plus\\s", tl, perl = TRUE)]), collapse = ", ")
+        }
         # a comma next to a bare "A vs B" (no "or" in the run) closes a clause, it does not add an arm:
         # "in a growth room, X vs mock, 3 plants pooled" keeps only "X vs mock"
         # (a list that runs into ", vs" is a list of arms: "air-dried, then rehydrated, vs untreated")
@@ -343,7 +364,8 @@ studyforge_fix <- function(answer, ...) {
           keep <- grepl("\\bvs\\.?\\s|\\bversus\\s", segs, perl = TRUE) | grepl(xa, segs, perl = TRUE)
           run <- paste(segs[keep], collapse = " vs ")
         }
-        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+|vs\\.?\\s+|versus\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+", perl = TRUE)[[1]])
+        # " / " with spaces separates arms ("vehicle or Wnt / TGF-beta inhibitors"); "Wnt/beta-catenin" is one name
+        items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+|vs\\.?\\s+|versus\\s+)?|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+|\\s+/\\s+", perl = TRUE)[[1]])
         items <- items[nzchar(items)]
         # a setting phrase caught by the list commas ("in a growth room, salt vs control") is not an arm
         lead <- tryCatch(.sf_list("not_arm_lead"), error = function(e) character())
@@ -355,7 +377,12 @@ studyforge_fix <- function(answer, ...) {
           nx <- regmatches(tail_cl, regexpr("^[^,]*,\\s*\\K(?:plus|and)\\s+[^,]+", tail_cl, perl = TRUE))
           if (length(nx) && grepl(xa, trimws(nx), perl = TRUE)) items <- c(items, trimws(nx))
         }
-        if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) { out[[nm]] <- length(items); break }
+        # an arm that names several groups at once ("a series of strains", "different isolates"): levels open
+        oq <- tryCatch(.sf_cue("open_quantifier"), error = function(e) "(?!)")
+        if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) {
+          # a trailing when-phrase belongs to time, not to the arm ("salt vs control at several times")
+          heads <- sub("\\s+(?:at|over|during|across|throughout|sampled)\\b.*$", "", items, perl = TRUE)
+          out[[nm]] <- if (any(grepl(oq, heads, perl = TRUE))) NA else length(items); break }
       }
       next
     }
@@ -411,7 +438,15 @@ studyforge_fix <- function(answer, ...) {
     }
     g <- regmatches(text, regexec(re, text, perl = TRUE))[[1]]
     if (!length(g)) next
-    n <- switch(r$match[i],
+    # a named event after a list is one more level ("at 6, 24 and 72 h and after recovery"; cue list_extra_event)
+    extra <- 0
+    if (identical(r$match[i], "list")) {
+      mm <- regexpr(re, text, perl = TRUE)
+      after <- substring(text, mm + attr(mm, "match.length"))
+      ev <- tryCatch(.sf_expand_vocab(.sf_cue("list_extra_event")), error = function(e) "(?!)")
+      if (grepl(ev, after, perl = TRUE)) extra <- 1
+    }
+    n <- extra + switch(r$match[i],
       list = length(regmatches(g[2], gregexpr("\\d+(?:\\.\\d+)?(?:-\\d+(?:\\.\\d+)?)?", g[2], perl = TRUE))[[1]]),
       count = .sf_num(g[2]),
       # "four cultivars and two hybrids" = 6; a group that is not a number counts its named conjuncts
@@ -443,4 +478,16 @@ studyforge_fix <- function(answer, ...) {
     if (r$match[i] %in% c("sum", "range")) attr(out, "summed") <- c(attr(out, "summed"), nm)
   }
   out
+}
+
+# {vocab:category} in a rule pattern stands for that rules.tsv category's words, as literal alternatives (longest first)
+.sf_expand_vocab <- function(re) {
+  m <- regmatches(re, gregexpr("\\{vocab:([a-z_]+)\\}", re, perl = TRUE))[[1]]
+  for (tok in unique(m)) {
+    w <- tryCatch(.sf_list(sub("^\\{vocab:([a-z_]+)\\}$", "\\1", tok)), error = function(e) character())
+    w <- unique(w[nzchar(w)]); w <- w[order(-nchar(w))]
+    alt <- if (length(w)) paste(gsub("([.\\\\|()\\[\\]{}^$*+?/-])", "\\\\\\1", w, perl = TRUE), collapse = "|") else "(?!)"
+    re <- gsub(tok, alt, re, fixed = TRUE)
+  }
+  re
 }

@@ -21,12 +21,15 @@
 # spec system / assay canonical terms -> evidence technique labels
 
 
+# singular of a tissue word or two-word phrase: irregular plurals from rules.tsv irregular_plural (leaves, haustoria,
+# mitochondria), then English endings (-ies -> -y, -s dropped); the last word of a phrase carries the plural
 .sf_norm_tissue <- function(x) {
   t <- tolower(trimws(x))
-  map <- c(leaves = "leaf", roots = "root", seedlings = "seedling", seeds = "seed", shoots = "shoot")
-  t <- if (t %in% names(map)) unname(map[t]) else t
-  t <- sub("^(.+[^s])s$", "\\1", t)
-  if (t == "leave") "leaf" else t
+  irr <- tryCatch(.sf_map("irregular_plural"), error = function(e) character())   # plural -> singular
+  w <- strsplit(t, "\\s+")[[1]]; if (!length(w)) return(t)
+  last <- w[length(w)]
+  last <- if (last %in% names(irr)) unname(irr[[last]]) else if (grepl("[^aeiou]ies$", last)) sub("ies$", "y", last) else sub("^(.+[^s])s$", "\\1", last)
+  paste(c(utils::head(w, -1), last), collapse = " ")
 }
 
 .sf_resolve_technique <- function(technique, techs) {

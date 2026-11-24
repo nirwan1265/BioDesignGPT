@@ -1,0 +1,118 @@
+category	word	reason
+tissue_word	capillary	capillary electrophoresis
+tissue_word	scale	rating scale
+tissue_word	grain	grain yield is a trait
+tissue_word	tiller	tiller number is a trait
+cell_type_word	initial cell	initial cell density
+cell_type_word	transfer cell	transfer = verb
+cell_type_word	motor cell	rare, ambiguous
+fraction_word	nucleus	brain nuclei (caudate nucleus)
+fraction_word	conditioned medium	usually a treatment
+fraction_word	virion	not a sample fraction
+fraction_word	spore	life stage, not fraction
+fraction_word	hypha	life stage
+fraction_word	appressorium	infection stage
+fraction_word	sclerotium	life stage
+fraction_word	biofilm	growth mode
+fraction_word	haustoria	plural; handled by irregular_plural
+reference_genotype	julius	common English word / name
+reference_genotype	knight	common English word / name
+reference_genotype	williams	common English word / name
+reference_genotype	jack	common English word / name
+reference_genotype	clark	common English word / name
+reference_genotype	jackson	common English word / name
+reference_genotype	marmande	common English word / name
+reference_genotype	roma	common English word / name
+reference_genotype	san marzano	common English word / name
+reference_genotype	celebrity	common English word / name
+reference_genotype	better boy	common English word / name
+reference_genotype	brandywine	common English word / name
+reference_genotype	sweet sorghum rio	common English word / name
+reference_genotype	lewis	common English word / name
+reference_genotype	copenhagen	common English word / name
+reference_genotype	cornish	common English word / name
+reference_genotype	sussex	common English word / name
+reference_genotype	landrace	common English word / name
+reference_genotype	highland	common English word / name
+shared_head_noun	diets	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	fungicides	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	treatments	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	media	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	doses	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	regimes	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	fertilizers	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	extracts	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	strains	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	cultivars	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	genotypes	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	lines	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	accessions	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	ecotypes	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	populations	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	groups	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	conditions	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	environments	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	concentrations	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	gradients	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	rates	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	compounds	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	reagents	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	antibiotics	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	antifungals	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	herbicides	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	insecticides	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	biopesticides	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	inoculants	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	isolates	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	microbes	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	fungi	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	salts	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	buffers	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	sugars	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	carbohydrates	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	proteins	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	hormones	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	inhibitors	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	activators	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	antagonists	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	stimulants	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	additives	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	adjuvants	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	lipids	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	vitamins	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	minerals	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	peptides	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	antibodies	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	vectors	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	plasmids	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	transgenes	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	alleles	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	knockouts	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	interventions	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	challenges	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	stressors	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	irrigation schedules	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	feeding schedules	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	time points	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	sampling times	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	growth stages	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	sites	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	locations	not used: the over-counts were clause boundaries, not shared nouns
+shared_head_noun	cell types	not used: the over-counts were clause boundaries, not shared nouns
+time_event_word	desiccation	a treatment, not a sampling event
+time_event_word	stratification	a treatment, not a sampling event
+time_event_word	vernalization	a treatment, not a sampling event
+time_event_word	feeding	a treatment, not a sampling event
+time_event_word	starvation	a treatment, not a sampling event
+time_event_word	dehydration	a treatment, not a sampling event
+time_event_word	heat shock	a treatment, not a sampling event
+time_event_word	anesthesia	a treatment, not a sampling event
+time_event_word	exposure	a treatment, not a sampling event
+time_event_word	injury	a treatment, not a sampling event
+time_event_word	cell synchronization	not a time point
+time_event_word	mitosis	not a time point
+time_event_word	apoptosis onset	not a time point
+time_event_word	passage	not a time point
+time_event_word	transfection	a treatment, not a sampling event
+time_event_word	repression	not a time point
+time_event_word	endpoint	not a time point
