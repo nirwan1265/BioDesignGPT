@@ -4338,6 +4338,7 @@ treatment_control		value	no treatment	a control arm next to a treatment ("safene
 treatment_control		value	water control	a control arm next to a treatment ("safener vs untreated", "ketamine ... or saline")	curated terminology (paper questions)
 treatment_control		value	mock-treated	a control arm next to a treatment ("safener vs untreated", "ketamine ... or saline")	curated terminology (paper questions)
 treatment_control		value	ethanol control	a control arm next to a treatment ("safener vs untreated", "ketamine ... or saline")	curated terminology (paper questions)
+factor_levels	treatment/splitarm	regex	\b([a-z][^,;.]*?),\s*with or without\s+([^,;.]+?),\s*(?:vs\.?|versus|or|compared with)\s+([^,;.]+)	"high-fat diet, with or without diabetes, vs chow" = 3; "chow or HFD, with or without drug" (no vs after it) stays a second factor	vocabulary pass 2 (reviewed)
 factor_levels	treatment/grouplist	regex	\b(?:split|divided|randomi[sz]ed|assigned|allocated)\s+(?:in)?to\s+([a-z0-9][^.;?:()]*?)\s+groups\b	"split into sham, I-R, and IPC plus I-R groups" = 3; an item like "several doses" leaves it open (cue open_group_item)	stated-count pass 1 (dev/dev2/train misses)
 factor_levels	treatment/grouplist	regex	\b[a-z]+s\s*:\s+((?:controls?|shams?|vehicle|untreated)\b[^.;?]+)	"rats: controls, ANIT cholestasis, and cholestasis treated with X" = 3	stated-count pass 1 (dev/dev2/train misses)
 factor_levels	treatment/contrast	regex	\b((?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3}(?:(?:\s*,\s*(?:and\s+|or\s+|vs\.?\s+|versus\s+)?|\s+or\s+|\s+vs\.?\s+|\s+versus\s+|\s+/\s+)(?!(?:and|or|vs|versus)\b)[a-z][a-z0-9-]*(?:\s+(?!(?:and|or|vs|versus)\b)[a-z0-9][a-z0-9-]*){0,3})+)\b	treatment_control: a vs/or list with a control arm is a treatment factor, one level per arm; a list owned by another factor (an infection with mock, a diet with chow) is left to that factor	curated terminology (paper questions)
@@ -5653,3 +5654,56 @@ cell_type_word		value	erythrocyte	immune or blood cell	vocabulary pass (added by
 cue	open_quantifier	regex	\b(?:several|different|various|multiple|a series of|a range of|graded)\b	an arm of a vs/or contrast that names several groups at once: the count stays open	vocabulary pass (chatgpt tables, reviewed)
 within_unit_factor		word	cell_type	cell types sorted from one sample (neutrophils and B cells of one animal) are measured within the unit, not randomized	vocabulary pass
 within_unit_factor		word	fraction	fractions of one sample (nucleus and cytoplasm, pellet and supernatant) are measured within the unit, not randomized	vocabulary pass
+stage_word		value	gestation	pregnancy physiological stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	lactation	milk production stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	estrus	sexual receptivity stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	anestrus	reproductive inactivity stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	proestrus	preovulatory cycle stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	metestrus	postestrus cycle stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	diestrus	luteal cycle stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	dry period	nonlactating dairy stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	puberty	sexual maturation stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	menopause	reproductive senescence stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	molt	shedding and renewal stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	diapause	developmental arrest stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	dormancy	temporarily inactive physiological state	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	hibernation	prolonged metabolic suppression	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	torpor	reduced metabolic activity	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	aestivation	seasonal inactivity during heat	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	embryogenesis	embryonic development stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	organogenesis	organ formation stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	gastrulation	embryonic germ layer formation	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	neurulation	neural tube formation stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	metamorphosis	developmental body transformation	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	pupation	pupal development stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	germination	seed activation stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	stem elongation	plant vegetative development stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	grain filling	cereal seed accumulation stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	fruiting	fruit production stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	bolting	rapid reproductive stem elongation	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	rosetting	basal leaf development stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	maturation	developmental completion stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	ovulation	oocyte release stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	implantation	embryo attachment stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	parturition	birth physiological stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	weaning	transition from maternal milk	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	spawning	gamete release reproductive stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	overwintering	winter survival state	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	vegetative growth	nonreproductive growth stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	reproductive growth	reproductive development stage	vocabulary pass 2 (chatgpt, reviewed)
+stage_word		value	bud burst	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	full bloom	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	full-bloom	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	squaring	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	mid-log	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	two-leaf	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	three-leaf	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	four-leaf	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	five-leaf	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+stage_word		value	six-leaf	stage named in tuning-split papers ("at the X stage", 3+ mentions)	mined from dev/dev2/train papers
+tissue_word		value	caruncular endometrium	tissue phrase (modifier + organ) not in the ontologies	vocabulary pass 2 (added by hand)
+tissue_word		value	intercaruncular endometrium	tissue phrase (modifier + organ) not in the ontologies	vocabulary pass 2 (added by hand)
+tissue_word		value	visceral adipose tissue	tissue phrase (modifier + organ) not in the ontologies	vocabulary pass 2 (added by hand)
+tissue_word		value	cotyledonary placenta	tissue phrase (modifier + organ) not in the ontologies	vocabulary pass 2 (added by hand)
+tissue_word		value	intercotyledonary placenta	tissue phrase (modifier + organ) not in the ontologies	vocabulary pass 2 (added by hand)
+cue	exposure_period	regex	\b(?:during|through|throughout)\s+(?:the\s+)?[^,;.]*	a list item that says when a treatment ran ("dams fed low protein during gestation and lactation") is the exposure window, not a group of stages	vocabulary pass 2 (reviewed)

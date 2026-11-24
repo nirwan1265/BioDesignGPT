@@ -423,16 +423,35 @@ studyforge_fix <- function(answer, ...) {
     if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
       vocab <- .sf_list(strsplit(r$note[i], "[: ]")[[1]][1])
       bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
+      period <- tryCatch(.sf_cue("exposure_period"), error = function(e) "(?!)")
       named <- function(x) {
         if (any(vapply(bad, function(b) grepl(b, x, fixed = TRUE), logical(1)))) return(FALSE)
         w <- strsplit(x, "\\s+")[[1]]; n <- length(w)
         grams <- c(w, if (n > 1) paste(w[-n], w[-1]), if (n > 2) paste(w[1:(n - 2)], w[2:(n - 1)], w[3:n]))
         any(vapply(grams, .sf_norm_tissue, "") %in% vocab | grams %in% vocab)
       }
-      runs <- regmatches(text, gregexpr(re, text, perl = TRUE))[[1]]
+      # a bare modifier shares the head of a later item when the joined phrase is in the table: "caruncular and
+      # intercaruncular endometrium", "right and left ventricle", "CD4 and CD8 T cells"; "male and female liver" is not
+      # (the item's last word is the modifier; the joined phrase must itself be a table entry, not merely contain one)
+      in_vocab <- function(p) p %in% vocab || .sf_norm_tissue(p) %in% vocab
+      shares_head <- function(x, later) {
+        x <- utils::tail(strsplit(x, "\\s+")[[1]], 1)
+        for (y in later) {
+          w <- strsplit(y, "\\s+")[[1]]
+          for (s in seq_along(w)[-1]) for (e in s:length(w)) if (in_vocab(paste(x, paste(w[s:e], collapse = " ")))) return(TRUE)
+          if (named(y)) break
+        }
+        FALSE
+      }
+      # a phrase that says when a treatment ran ("fed low protein during gestation and lactation") is the exposure
+      # window, not groups: it is taken out before the lists are read (cue exposure_period)
+      wtext <- gsub(period, " , ", text, perl = TRUE)
+      runs <- regmatches(wtext, gregexpr(re, wtext, perl = TRUE))[[1]]
       for (run in runs) {
         items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+and\\s+|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+|\\s*/\\s*", perl = TRUE)[[1]])
-        k <- sum(vapply(items, named, logical(1)))
+        ok <- vapply(items, named, logical(1))
+        for (j in which(!ok)) if (j < length(items)) ok[j] <- shares_head(items[j], items[(j + 1):length(items)])
+        k <- sum(ok)
         if (k >= 2) { out[[nm]] <- k; break }
       }
       next
@@ -455,6 +474,9 @@ studyforge_fix <- function(answer, ...) {
       sum = sum(vapply(g[-1][nzchar(g[-1])], function(x) { v <- .sf_num(x)
         if (is.na(v)) length(strsplit(trimws(x), "\\s*,\\s*(?:and\\s+)?|\\s+and\\s+", perl = TRUE)[[1]]) else v }, numeric(1))),
       pair = 2,
+      # "high-fat diet, with or without diabetes, vs chow" = 3: the group before "with or without" splits in two, the
+      # groups after vs are added (groups: arm, the with-or-without item, the other arms)
+      splitarm = 2 + length(strsplit(trimws(g[4]), "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+and\\s+|\\s+or\\s+", perl = TRUE)[[1]]),
       # "every 4 h over 24 h" = 6, "every 4 h over two days" = 12: span / step, the start point is not counted again;
       # groups: step, step unit, span (empty for "a day" / "the day" = 1), span unit; hours per unit in time_unit
       interval = {

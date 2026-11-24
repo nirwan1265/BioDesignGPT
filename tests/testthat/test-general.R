@@ -158,3 +158,14 @@ test_that("ontology words (inst/agent/vocab) count tissue lists the hand tables 
   expect_false("lunar" %in% .sf_list("tissue_word"))   # a one-word synonym that is not the name's head word
   expect_false("pupa" %in% .sf_list("tissue_word"))    # owned by stage_word
 })
+
+test_that("shared heads, stage nouns, exposure windows and with-or-without arms", {
+  lv <- function(t, f) { x <- Filter(function(g) g$name == f, extract_spec_local(t)$factors); if (length(x)) x[[1]]$n_levels %||% NA else NULL }
+  expect_equal(lv("RNA-seq of caruncular and intercaruncular endometrium and conceptus tissues from heifers.", "tissue"), 3)
+  expect_equal(lv("Right and left ventricle RNA-seq of adult male rats kept in hypoxia vs normoxia.", "tissue"), 2)
+  expect_null(lv("RNA-seq of male and female liver from mice on two diets.", "tissue"))      # "male liver" is not a tissue
+  expect_equal(lv("Sorted CD4 and CD8 T cells from mice infected vs mock.", "cell_type"), 2)
+  expect_equal(lv("Faecal 16S of sows sampled in late gestation and lactation.", "stage"), 2)
+  expect_null(lv("Prostate RNA-seq of offspring of dams fed normal vs low protein during gestation and lactation.", "stage"))
+  expect_equal(.sf_level_factors("embryo rna-seq from rats on a high-fat diet, with or without induced diabetes, vs chow controls.")$treatment, 3)
+})

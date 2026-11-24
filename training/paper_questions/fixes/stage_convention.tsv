@@ -1,0 +1,4 @@
+id	factor	n_levels	evidence	new_name
+pq_4032	time	2	sampled in late gestation and lactation	stage
+pq_4235	time	3	sampled at neonatal, pre-weaning and post-weaning ages	stage
+pq_3805	time	2	at weaning and in adulthood	stage

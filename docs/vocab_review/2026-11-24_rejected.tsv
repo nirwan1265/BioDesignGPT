@@ -119,3 +119,70 @@ time_event_word	endpoint	not a time point
 tissue_word	navel	navel orange (fruit type), not the body part
 tissue_word	stripe	stripe rust / stripe pattern
 tissue_word	cuticular wax	a measured trait, not a tissue
+stage_word	establishment	too generic ("stand establishment")
+stage_word	emergence	"weeks after emergence" is a time origin
+stage_word	regeneration	a process, also time_event_word
+stage_word	brooding	rare, ambiguous
+stage_word	senescence	already an outcome word
+side_word	left	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	right	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	ipsilateral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	contralateral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	proximal	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	distal	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	upper	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	lower	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	anterior	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	posterior	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	dorsal	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	ventral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	medial	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	lateral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	rostral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	caudal	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	cranial	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	superior	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	inferior	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	central	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	peripheral	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	superficial	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	deep	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	inner	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	outer	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	apical	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	basal	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	adaxial	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+side_word	abaxial	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	fresh	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	frozen	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	fixed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	dried	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	whole	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	intact	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	homogenized	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	thawed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	cryopreserved	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	lyophilized	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	snap-frozen	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	flash-frozen	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	paraffin-embedded	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	formalin-fixed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	ethanol-fixed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	preserved	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	stabilized	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	sectioned	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	microdissected	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	pulverized	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	lysed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	clarified	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	filtered	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	centrifuged	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	washed	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	perfused	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	stained	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	mounted	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	dissected	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	pooled	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	sorted	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	decalcified	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
+handling_word	permeabilized	not used: the head-sharing check needs the joined phrase in the tissue table, so no skip list is needed
