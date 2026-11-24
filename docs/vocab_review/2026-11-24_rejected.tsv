@@ -116,3 +116,6 @@ time_event_word	passage	not a time point
 time_event_word	transfection	a treatment, not a sampling event
 time_event_word	repression	not a time point
 time_event_word	endpoint	not a time point
+tissue_word	navel	navel orange (fruit type), not the body part
+tissue_word	stripe	stripe rust / stripe pattern
+tissue_word	cuticular wax	a measured trait, not a tissue

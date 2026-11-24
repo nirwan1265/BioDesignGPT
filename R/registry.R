@@ -76,11 +76,15 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
 # Python reads the same file (inst/python/rulebook.py), so R and Python follow one set of rules.
 .sf_rules_cache <- new.env(parent = emptyenv())
 
+# inst/agent/vocab/*.tsv: large generated word tables in the same columns (e.g. ontology_terms.tsv from
+# tools/import_ontologies.py), read after rules.tsv so the hand-written rows keep their priority
 .sf_rules_table <- function() {
   if (is.null(.sf_rules_cache$t)) {
+    rd <- function(f) utils::read.delim(f, quote = "", comment.char = "", stringsAsFactors = FALSE,
+                                        colClasses = "character", na.strings = character())
     f <- system.file("agent", "rules.tsv", package = "studyforge")
-    .sf_rules_cache$t <- utils::read.delim(f, quote = "", comment.char = "", stringsAsFactors = FALSE,
-                                           colClasses = "character", na.strings = character())
+    v <- sort(Sys.glob(file.path(dirname(f), "vocab", "*.tsv")))
+    .sf_rules_cache$t <- do.call(rbind, c(list(rd(f)), lapply(v, rd)))
   }
   .sf_rules_cache$t
 }
@@ -134,7 +138,11 @@ match_pseudoreplication_rules <- function(measurement_unit, experimental_unit) {
 }
 
 # word list: the patterns of a category, in file order
-.sf_list <- function(category) .sf_rules_rows(category)$pattern
+.sf_list <- function(category) {   # cached: the generated vocab tables make the full table large
+  key <- paste0("list:", category)
+  if (is.null(.sf_rules_cache[[key]])) .sf_rules_cache[[key]] <- .sf_rules_rows(category)$pattern
+  .sf_rules_cache[[key]]
+}
 
 # lookup: named character vector (pattern -> term)
 .sf_map <- function(category) {

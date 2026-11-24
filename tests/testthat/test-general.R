@@ -149,3 +149,12 @@ test_that("vocabulary tables: cell types, fractions, reference genotypes, named 
   expect_equal(.sf_norm_tissue("haustoria"), "haustorium")
   expect_equal(.sf_norm_tissue("ovaries"), "ovary")
 })
+
+test_that("ontology words (inst/agent/vocab) count tissue lists the hand tables miss", {
+  lv <- function(t, f) { x <- Filter(function(g) g$name == f, extract_spec_local(t)$factors); if (length(x)) x[[1]]$n_levels %||% NA else NULL }
+  expect_equal(lv("RNA-seq of longissimus dorsi, psoas major and semimembranosus from Hanwoo bulls with high vs low daily weight gain.", "tissue"), 3)
+  expect_equal(lv("Retina and telencephalon RNA-seq of chick embryos incubated in light vs dark.", "tissue"), 2)
+  expect_true("longissimus" %in% .sf_list("tissue_word"))
+  expect_false("lunar" %in% .sf_list("tissue_word"))   # a one-word synonym that is not the name's head word
+  expect_false("pupa" %in% .sf_list("tissue_word"))    # owned by stage_word
+})

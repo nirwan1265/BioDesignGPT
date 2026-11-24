@@ -425,7 +425,8 @@ studyforge_fix <- function(answer, ...) {
       bad <- tryCatch(.sf_list("not_tissue_phrase"), error = function(e) character())
       named <- function(x) {
         if (any(vapply(bad, function(b) grepl(b, x, fixed = TRUE), logical(1)))) return(FALSE)
-        w <- strsplit(x, "\\s+")[[1]]; grams <- c(w, if (length(w) > 1) paste(utils::head(w, -1), utils::tail(w, -1)))
+        w <- strsplit(x, "\\s+")[[1]]; n <- length(w)
+        grams <- c(w, if (n > 1) paste(w[-n], w[-1]), if (n > 2) paste(w[1:(n - 2)], w[2:(n - 1)], w[3:n]))
         any(vapply(grams, .sf_norm_tissue, "") %in% vocab | grams %in% vocab)
       }
       runs <- regmatches(text, gregexpr(re, text, perl = TRUE))[[1]]

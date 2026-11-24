@@ -6,6 +6,7 @@ Columns: category | term | match | pattern | note | source
           value  a literal value the code looks up or uses (lists, lookup maps, prompt phrases)
 Order within a category is priority.
 """
+import glob
 import csv, functools, os, re
 
 try:   # PCRE features the R side uses (\K) need the regex module; without it \K is dropped (same hits, wider span)
@@ -34,8 +35,12 @@ def path():
 
 @functools.lru_cache(None)
 def rows():
-    with open(path(), encoding="utf-8") as f:
-        return tuple(csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+    """rules.tsv, then the generated word tables in agent/vocab/*.tsv (same columns), as R reads them"""
+    out = []
+    for p in [path()] + sorted(glob.glob(os.path.join(os.path.dirname(path()), "vocab", "*.tsv"))):
+        with open(p, encoding="utf-8") as f:
+            out.extend(csv.DictReader(f, delimiter="\t", quoting=csv.QUOTE_NONE))
+    return tuple(out)
 
 
 def of(category, match=None):
