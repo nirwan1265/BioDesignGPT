@@ -110,3 +110,10 @@ test_that("layout defaults are flagged, augmented builds with assumed checks, en
   expect_equal(nrow(be), 6 * 2 * 4)
   expect_setequal(unique(paste(be$location, be$season)), c("location_1 season_1", "location_1 season_2", "location_2 season_1", "location_2 season_2"))
 })
+
+test_that("cell types and fractions are measured within the unit, not randomized", {
+  s <- extract_spec_local("RNA-seq of neutrophils, macrophages and B cells from mice on chow vs high-fat diet, 4 mice per diet.")
+  b <- layout_from_spec(s, 1)
+  expect_equal(nrow(b), 2 * 4 * 3)
+  expect_true(all(table(b$plot) == 3))
+})

@@ -5651,3 +5651,5 @@ cell_type_word		value	monocyte	immune or blood cell	vocabulary pass (added by ha
 cell_type_word		value	lymphocyte	immune or blood cell	vocabulary pass (added by hand)
 cell_type_word		value	erythrocyte	immune or blood cell	vocabulary pass (added by hand)
 cue	open_quantifier	regex	\b(?:several|different|various|multiple|a series of|a range of|graded)\b	an arm of a vs/or contrast that names several groups at once: the count stays open	vocabulary pass (chatgpt tables, reviewed)
+within_unit_factor		word	cell_type	cell types sorted from one sample (neutrophils and B cells of one animal) are measured within the unit, not randomized	vocabulary pass
+within_unit_factor		word	fraction	fractions of one sample (nucleus and cytoplasm, pellet and supernatant) are measured within the unit, not randomized	vocabulary pass
