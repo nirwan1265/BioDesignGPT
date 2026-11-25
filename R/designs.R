@@ -128,12 +128,15 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   if (length(cat_d)) {
     spec$analysis$model <- cat_d[[1]]$model
     if (!is.null(cat_d[[1]]$analysis_note)) spec$analysis$note <- cat_d[[1]]$analysis_note
+    spec$analysis$terms <- .sf_model_terms(spec, book, cat_d[[1]]$model)
     # the same units measured at every level of an occasion factor: the unit is a random effect, whatever the layout
     rep_f <- unlist(spec$repeated_factors)
-    if (length(rep_f) && !grepl("(1 | unit)", cat_d[[1]]$model, fixed = TRUE))
+    if (isTRUE(spec$analysis$terms$paired))
+      spec$analysis$note <- paste(c(spec$analysis$note, sprintf("the same %s at every %s level: each block is one %s (paired design); no extra random effect",
+        spec$experimental_unit %||% "unit", paste(rep_f, collapse = "/"), spec$experimental_unit %||% "unit")), collapse = "; ")
+    else if (length(rep_f) && !grepl("(1 | unit)", cat_d[[1]]$model, fixed = TRUE))
       spec$analysis$note <- paste(c(spec$analysis$note, sprintf("the same %s is measured at every %s level: add (1 | unit)",
         spec$experimental_unit %||% "unit", paste(rep_f, collapse = "/"))), collapse = "; ")
-    spec$analysis$terms <- .sf_model_terms(spec, book, cat_d[[1]]$model)
     if (length(attr(book, "layout_notes"))) spec$design$layout_notes <- as.list(attr(book, "layout_notes"))
   }
   spec$handoff_version <- load_registry("study_spec.schema")$version
@@ -178,8 +181,15 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   if (!is.null(spec$genetics$unit)) out$genetic_unit <- spec$genetics$unit
   if (!is.null(spec$repeated_factors)) out$repeated_factors <- as.list(unlist(spec$repeated_factors))
   if ("subject" %in% mv && is.null(out$subject)) out$subject <- spec$experimental_unit %||% "unit"
-  # the layout column that identifies one experimental unit (its rows repeat across within-unit levels)
-  if (!is.null(book)) out$unit_column <- intersect(c("plot", "unit", "pot", "cage"), names(book))[1]
+  # the layout column that identifies one experimental unit (its rows repeat across within-unit levels); when the
+  # repeated occasion is the only factor it is the treatment and each block is one unit (a paired design), so the
+  # unit is the block column and no extra random effect is needed
+  if (!is.null(book)) {
+    paired <- length(unlist(spec$repeated_factors)) && !length(setdiff(.sf_randomized_factors(spec), unlist(spec$repeated_factors))) &&
+      !is.null(out$block) && out$block %in% names(book)
+    out$unit_column <- if (paired) out$block else intersect(c("plot", "unit", "pot", "cage"), names(book))[1]
+    if (paired) out$paired <- TRUE
+  }
   envc <- if (!is.null(book)) intersect(c("location", "season"), names(book)) else character()
   if (length(envc) && "env" %in% mv) out$env <- paste(envc, collapse = ":")
   if (!is.null(book)) {

@@ -105,7 +105,9 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
 - When an occasion factor is repeated, the layout's design is the repeated-measures form of what was built (rules.tsv
   `repeated_variant`: rcbd -> `randomized_complete_block_repeated` `y ~ treatment * time + (1 | block) + (1 | unit)`,
   crd -> `repeated_measures`, factorial -> `factorial_longitudinal`). `analysis.terms.unit_column` names the layout
-  column that identifies one unit (`plot`), whose rows repeat across the occasion levels.
+  column that identifies one unit (`plot`), whose rows repeat across the occasion levels. When the repeated occasion
+  is the only factor ("the same cows at 15 and 30 days postpartum"), it is the treatment of an rcbd and each block is
+  one unit (a paired design): `analysis.terms.paired = true`, `unit_column = "block"`, and no extra random effect.
 - Numeric levels (schema 0.5.3): "at 24, 48 and 72 h" gives `levels` ["24 h","48 h","72 h"], `values` [24,48,72],
   `unit` "h" (rules.tsv `time_unit_name`); the layout uses the labels.
 

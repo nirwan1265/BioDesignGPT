@@ -161,3 +161,14 @@ test_that("same-units cue: only the unit itself, not a shared source; embryonic 
   expect_equal(r("Liver RNA-seq of cows slaughtered in late gestation or in early lactation, two diets, 6 cows per diet and stage."), "")
   expect_equal(r("Leaf RNA-seq of leaves from the same plants at 1, 3 and 7 days after drought vs control, 4 plants per treatment."), "time")
 })
+
+test_that("repeated occasion as the only factor: paired rcbd, unit is the block, no (1 | unit) note", {
+  a <- studyforge_ask("Endometrial RNA-seq of biopsies taken from the same beef cows at 15 and 30 days postpartum, 3 cows.", provider = "local")
+  tf <- Filter(function(f) f$name == "time", a$spec$factors)[[1]]
+  expect_equal(tf$values, c(15, 30)); expect_equal(tf$unit, "d")
+  a$spec$design$reps <- a$spec$design$reps %||% 3   # "3 cows" is read as the replicate count only in some phrasings
+  b <- layout_from_spec(a$spec, 1); d <- file.path(tempdir(), "paired"); unlink(d, TRUE)
+  write_design_package(b, a$spec, d); j <- jsonlite::fromJSON(file.path(d, "study_spec.json"))
+  expect_true(j$analysis$terms$paired); expect_equal(j$analysis$terms$unit_column, "block")
+  expect_false(grepl("add (1 | unit)", j$analysis$note, fixed = TRUE))
+})
