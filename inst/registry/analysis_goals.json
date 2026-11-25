@@ -1,0 +1,259 @@
+{
+  "version": "0.1.0",
+  "owner": "Biodes (studyforge)",
+  "contract": "Bioana docs/contracts/analysis_goals.md (2026-11-25)",
+  "fields": {
+    "id": "goal id written into study_spec.json analysis.goals / primary_goal",
+    "test": "wald | lrt (full vs reduced model) | wald_or_lrt (Wald for one coefficient, joint for several) | other (not a coefficient test)",
+    "required_terms": "goal-term slots analysis.model must contain: factor_a/factor_b (two generic terms, time allowed), time, numeric",
+    "data_types": "assay labels the goal applies to; * = any",
+    "description": "one line shown to the user",
+    "replicate_multiplier": "replicates needed relative to a main effect of the same size (interaction about 4x); Biodes widens power.reps_range by it",
+    "effect_definition": "what analysis.goal_effect.size measures (Simitall plants it, Bioana tests it)",
+    "simulated": "Simitall can plant truth for it today"
+  },
+  "goals": [
+    {
+      "id": "treatment_effect",
+      "test": "wald",
+      "required_terms": [],
+      "data_types": [
+        "*"
+      ],
+      "description": "Does the outcome differ between treatment levels (each level vs the reference)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "difference between a treatment level and the reference, on the outcome scale",
+      "simulated": true
+    },
+    {
+      "id": "interaction",
+      "test": "wald_or_lrt",
+      "required_terms": [
+        "factor_a",
+        "factor_b"
+      ],
+      "data_types": [
+        "*"
+      ],
+      "description": "Does the effect of one factor differ across the levels of another (G x E, genotype x treatment, group x time)?",
+      "replicate_multiplier": 4,
+      "effect_definition": "difference of differences on the outcome scale",
+      "simulated": true
+    },
+    {
+      "id": "time_course",
+      "test": "lrt",
+      "required_terms": [
+        "time"
+      ],
+      "data_types": [
+        "*"
+      ],
+      "description": "Does the outcome change over time at all (any pattern)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "largest change between time points on the outcome scale",
+      "simulated": true
+    },
+    {
+      "id": "trend",
+      "test": "wald",
+      "required_terms": [
+        "numeric"
+      ],
+      "data_types": [
+        "*"
+      ],
+      "description": "Is there a slope along a numeric factor (dose, gradient, concentration)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "change per unit of the numeric factor, on the outcome scale",
+      "simulated": true
+    },
+    {
+      "id": "transcript_usage",
+      "test": "lrt",
+      "required_terms": [],
+      "data_types": [
+        "rnaseq",
+        "long_read_rnaseq",
+        "scrnaseq"
+      ],
+      "description": "Do isoform proportions change, not gene totals?",
+      "replicate_multiplier": 1,
+      "effect_definition": "change in isoform proportion",
+      "simulated": false
+    },
+    {
+      "id": "differential_abundance",
+      "test": "wald",
+      "required_terms": [],
+      "data_types": [
+        "amplicon",
+        "metagenomics",
+        "metatranscriptomics",
+        "microbiome",
+        "16s"
+      ],
+      "description": "Which taxa change in abundance between groups?",
+      "replicate_multiplier": 1,
+      "effect_definition": "log fold change in a taxon's abundance",
+      "simulated": true
+    },
+    {
+      "id": "community_composition",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "amplicon",
+        "metagenomics",
+        "microbiome",
+        "16s"
+      ],
+      "description": "Does the whole community differ between groups (beta diversity, PERMANOVA)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "share of taxa shifted or PERMANOVA R2",
+      "simulated": true
+    },
+    {
+      "id": "alpha_diversity",
+      "test": "wald",
+      "required_terms": [],
+      "data_types": [
+        "amplicon",
+        "metagenomics",
+        "microbiome",
+        "16s"
+      ],
+      "description": "Does within-sample diversity differ between groups?",
+      "replicate_multiplier": 1,
+      "effect_definition": "difference in a diversity index",
+      "simulated": true
+    },
+    {
+      "id": "cell_composition",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "scrnaseq",
+        "snrnaseq",
+        "scatac",
+        "cytometry"
+      ],
+      "description": "Do cell-type proportions shift between groups?",
+      "replicate_multiplier": 1,
+      "effect_definition": "change in a cell type's proportion",
+      "simulated": false
+    },
+    {
+      "id": "association",
+      "test": "wald",
+      "required_terms": [],
+      "data_types": [
+        "gwas",
+        "eqtl",
+        "association_mapping",
+        "twas",
+        "wgs",
+        "gbs",
+        "genotyping"
+      ],
+      "description": "Which markers are associated with the trait (GWAS, eQTL)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "marker effect (allele substitution) on the outcome scale",
+      "simulated": true
+    },
+    {
+      "id": "qtl_mapping",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "qtl_mapping",
+        "genotyping",
+        "gbs"
+      ],
+      "description": "Where are the QTL in an experimental cross?",
+      "replicate_multiplier": 1,
+      "effect_definition": "QTL effect (additive) and LOD",
+      "simulated": true
+    },
+    {
+      "id": "genomic_prediction",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "genomic_prediction",
+        "gwas",
+        "genotyping",
+        "gbs",
+        "wgs"
+      ],
+      "description": "How well do markers predict untested lines (prediction accuracy)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "prediction accuracy (correlation)",
+      "simulated": true
+    },
+    {
+      "id": "variance_components",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "*"
+      ],
+      "description": "How much variance is genetic (heritability, BLUPs, G x E stability)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "variance component or heritability",
+      "simulated": true
+    },
+    {
+      "id": "ranking",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "*"
+      ],
+      "description": "Which entries are best (selection, ranking of lines)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "difference between selected and mean entries",
+      "simulated": true
+    },
+    {
+      "id": "survival",
+      "test": "wald",
+      "required_terms": [],
+      "data_types": [
+        "*"
+      ],
+      "description": "Does time to an event differ between groups?",
+      "replicate_multiplier": 1,
+      "effect_definition": "hazard ratio",
+      "simulated": true
+    },
+    {
+      "id": "biomarker_classification",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "*"
+      ],
+      "description": "Can the measurements classify samples into groups (biomarker, classifier)?",
+      "replicate_multiplier": 1,
+      "effect_definition": "classification accuracy (AUC)",
+      "simulated": false
+    },
+    {
+      "id": "coexpression_network",
+      "test": "other",
+      "required_terms": [],
+      "data_types": [
+        "rnaseq",
+        "scrnaseq",
+        "proteomics",
+        "metabolomics",
+        "microarray"
+      ],
+      "description": "Which features form co-regulated modules, and do modules relate to traits?",
+      "replicate_multiplier": 1,
+      "effect_definition": "module-trait correlation",
+      "simulated": false
+    }
+  ]
+}

@@ -216,6 +216,22 @@
         }
       }
     }
+    # a generic numeric factor (rules.tsv generic_level_factor: dose) whose list names another factor already in
+    # the spec ("0, 100 or 150 mM NaCl" is salt) gives that factor its levels and values instead
+    for (gn in intersect(.sf_list("generic_level_factor"), names(lv))) {
+      fw <- setdiff(.sf_find_all(attr(lv, "spans")[[gn]] %||% "", "factor"), c(gn, "treatment"))
+      if (length(fw) == 1 && !(fw %in% names(lv))) {
+        a_v <- attr(lv, "values"); a_s <- attr(lv, "spans"); a_m <- attr(lv, "summed")
+        k <- match(fw, have)
+        if (!is.na(k)) {
+          if (is.null(fx[[k]]$n_levels) && !is.na(lv[[gn]])) fx[[k]]$n_levels <- lv[[gn]]
+          if (identical(as.numeric(fx[[k]]$n_levels), as.numeric(lv[[gn]]))) a_v[[fw]] <- a_v[[gn]]
+        } else lv[[fw]] <- lv[[gn]]   # not in the spec yet: the count is read under the factor the list names
+        a_v[[fw]] <- a_v[[fw]] %||% a_v[[gn]]; a_v[[gn]] <- NULL
+        lv[[gn]] <- NULL
+        attr(lv, "values") <- a_v; attr(lv, "spans") <- a_s; attr(lv, "summed") <- a_m
+      }
+    }
     vals <- attr(lv, "values")
     # disease and phenotype_group are one group factor: the group_by_* cues pick the name, as for the reader
     for (g in intersect(names(lv), c("disease", "phenotype_group"))) {
@@ -235,6 +251,7 @@
       if (!is.na(j) && !is.null(vv) && identical(as.numeric(fx[[j]]$n_levels), as.numeric(length(vv$values))) && is.null(fx[[j]]$levels)) {
         fx[[j]]$values <- vv$values
         if (!is.null(vv$unit)) fx[[j]]$unit <- vv$unit
+        fx[[j]]$scale <- .sf_level_scale(vv$values)   # linear, or log for equal ratios (1, 10, 100)
         fx[[j]]$levels <- trimws(paste(format(vv$values, trim = TRUE, drop0trailing = TRUE), vv$unit %||% ""))
       }
     }
@@ -535,7 +552,10 @@ studyforge_fix <- function(answer, ...) {
       if (length(v) == n) {
         mm <- regexpr(re, text, perl = TRUE)
         ctx <- substr(text, mm, mm + attr(mm, "match.length") + 15)
-        un <- .sf_unit_name(regmatches(ctx, gregexpr("[a-z]+", ctx))[[1]])
+        # the list with the rest of its clause: "... mM NaCl in a growth chamber" (not the next clause)
+        e <- mm + attr(mm, "match.length")
+        spans[[nm]] <- paste0(substr(text, mm, e - 1), sub("[,;.].*$", "", substr(text, e, e + 40), perl = TRUE))
+        un <- .sf_unit_name(regmatches(ctx, gregexpr("[a-z\u00b5\u00b0%/]+", ctx, perl = TRUE))[[1]])
         vals[[nm]] <- list(values = v, unit = un)
       }
     }
@@ -546,7 +566,8 @@ studyforge_fix <- function(answer, ...) {
 
 # the first word that names a time unit (rules.tsv time_unit_name: canonical name, word pattern), else NULL
 .sf_unit_name <- function(words) {
-  u <- tryCatch(.sf_rules_rows("time_unit_name"), error = function(e) NULL)
+  # time units first, then other level units (rules.tsv level_unit_name: dose, concentration, temperature, ...)
+  u <- tryCatch(rbind(.sf_rules_rows("time_unit_name"), .sf_rules_rows("level_unit_name")), error = function(e) NULL)
   if (is.null(u)) return(NULL)
   for (w in words) { k <- which(vapply(u$pattern, function(p) grepl(p, w, perl = TRUE), logical(1)))
     if (length(k)) return(u$term[k[1]]) }

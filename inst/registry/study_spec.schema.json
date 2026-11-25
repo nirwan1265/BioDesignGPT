@@ -1,5 +1,5 @@
 {
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -49,7 +49,14 @@
     "population.derived_generation",
     "repeated_factors",
     "factors[].values",
-    "factors[].unit"
+    "factors[].unit",
+    "analysis.goals",
+    "analysis.primary_goal",
+    "analysis.goal_terms",
+    "analysis.goal_effect",
+    "power.goal",
+    "power.reps_note",
+    "factors[].scale"
   ],
   "enums": {
     "system": [
@@ -97,6 +104,13 @@
     "population.derived_generation": "generation the lines were derived from (F2:3 -> 2)",
     "repeated_factors": "occasion factors (time, stage, age) measured on the same units at every level: [] = different units at each level (destructive), absent = not stated (asked). Listed factors are within-unit in the layout and the unit is a random effect, (1 | unit); also in analysis.terms.repeated_factors",
     "factors[].values": "numeric level values read from the text (\"at 24, 48 and 72 h\": [24, 48, 72]); levels then carry the labels (\"24 h\", ...)",
-    "factors[].unit": "unit of factors[].values (rules.tsv time_unit_name: min, h, d, wk, mo, yr)"
+    "factors[].unit": "unit of factors[].values: time (rules.tsv time_unit_name: min, h, d, wk, mo, yr) or any other numeric factor (level_unit_name: mg/kg, uM, %, Gy, ...)",
+    "analysis.goals": "analysis goals this study answers, most important first (ids from inst/registry/analysis_goals.json); read from the question, else defaults by data type (rules.tsv goal_default), else treatment_effect; an assumed goal is listed in assumptions[\"analysis.goals\"]",
+    "analysis.primary_goal": "the first goal: Biodes sizes the replicate sweep for it (power.goal, power.reps_range widened by the registry replicate_multiplier), Simitall plants truth for it",
+    "analysis.goal_terms": "per goal id, the generic model terms the goal tests: interaction two terms (time allowed; \"env\" for several locations/seasons), time_course the time term, trend the numeric term. The model is extended with the interaction/time/numeric term when the catalog model lacks it (noted in analysis.note)",
+    "analysis.goal_effect": "per goal id {size, scale, definition}; size = power.minimum_detectable_difference when stated, else listed in assumptions; time_course also {shape: monotone|saturating|transient|delayed, peak {value, unit}, half_time {value, unit}, scope: within_group} when stated",
+    "power.goal": "the goal the replicate sweep is sized for (= analysis.primary_goal)",
+    "power.reps_note": "why the replicate range was widened, or that stated replicates may be few for the goal",
+    "factors[].scale": "linear, or log when the positive numeric values are equally spaced on a log scale (1, 10, 100; 6, 12, 24, 48)"
   }
 }

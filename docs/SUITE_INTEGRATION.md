@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.3`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.0`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -113,6 +113,32 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   one unit (a paired design): `analysis.terms.paired = true`, `unit_column = "block"`, and no extra random effect.
 - Numeric levels (schema 0.5.3): "at 24, 48 and 72 h" gives `levels` ["24 h","48 h","72 h"], `values` [24,48,72],
   `unit` "h" (rules.tsv `time_unit_name`); the layout uses the labels.
+
+### Analysis goals (schema 0.6.0; contract: Bioana `docs/contracts/analysis_goals.md`)
+
+- Vocabulary: `inst/registry/analysis_goals.json` (Biodes owns it; Bioana keys `engine_selection.tsv` to its ids,
+  Simitall plants truth for the primary goal). 17 goals: `treatment_effect`, `interaction`, `time_course`, `trend`,
+  `transcript_usage`, `differential_abundance`, `community_composition`, `alpha_diversity`, `cell_composition`,
+  `association`, `qtl_mapping`, `genomic_prediction`, `variance_components`, `ranking`, `survival`,
+  `biomarker_classification`, `coexpression_network`. Each has `test` (wald | lrt | wald_or_lrt | other),
+  `required_terms`, `data_types`, `replicate_multiplier`, `effect_definition`, `simulated`.
+- Spec: `analysis.goals` (most important first), `analysis.primary_goal`, `analysis.goal_terms` (per goal, generic
+  model terms: interaction two terms, time allowed, `env` for several locations/seasons; time_course the time term;
+  trend the numeric term), `analysis.goal_effect` (per goal {size, scale, definition}; time_course adds shape, peak,
+  half_time, scope when stated). `power.goal` = primary goal; the replicate sweep is widened by the registry
+  multiplier (interaction x4), or `power.reps_note` warns when stated replicates are few for the goal.
+- Where goals come from: the question (rules.tsv `analysis_goal`), else the data (`goal_default`: amplicon and
+  metagenomics -> differential_abundance + community_composition; GWAS/eQTL -> association; survival outcome ->
+  survival), else `treatment_effect`, recorded in `assumptions["analysis.goals"]` (assumptions is an object keyed by
+  field path; the value says why). When the design can answer more than one goal and the question names none,
+  Biodes asks (rules.tsv `goal_question`), e.g. "Do you want genes/features that differ between genotype levels,
+  genes/features whose change over time differs between genotype levels, or genes/features that change over time at
+  all?".
+- The model holds what each goal tests: when the catalog model lacks the interaction, time or numeric term, Biodes
+  adds it (noted in `analysis.note`). A goal the design cannot answer (interaction with one factor) is dropped with
+  a note.
+- Numeric levels of any factor: `values`, `unit` (time units, or rules.tsv `level_unit_name`: mg/kg, uM, %, Gy,
+  ...) and `scale` (linear | log).
 
 On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
 3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you

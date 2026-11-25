@@ -357,6 +357,9 @@ extract_spec_local <- function(question) {
   spec <- .sf_genetics(spec, text)
   kinds <- .sf_assay_kinds(text); if (length(kinds)) spec$assay_kinds <- as.list(kinds)
   spec <- .sf_repeated_on_unit(spec, text)
+  # analysis goals the question names (R/goals.R; rules.tsv analysis_goal) and time-course details
+  g <- .sf_goals_from_text(text); if (length(g)) spec$analysis$goals <- as.list(g)
+  tc <- .sf_time_course_detail(text); if (length(tc)) spec$analysis$time_course <- tc
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -670,6 +673,8 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     questions <- unique(c(ask_lv, questions))
     v$missing <- unique(c(v$missing, paste0("factors.", open_lv, ".n_levels")))
   }
+  # no goal named and the design can answer more than one: ask which (rules.tsv goal_question)
+  if (!length(spec$analysis$goals)) { gq <- .sf_goal_question(spec); if (!is.null(gq)) questions <- unique(c(questions, gq)) }
   # an occasion factor (time, stage, age) without "same units at every level?" answered: ask it (rules.tsv
   # occasion_question; {F} factor, {U} experimental unit)
   occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))

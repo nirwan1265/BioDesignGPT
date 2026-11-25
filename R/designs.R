@@ -138,6 +138,8 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
       spec$analysis$note <- paste(c(spec$analysis$note, sprintf("the same %s is measured at every %s level: add (1 | unit)",
         spec$experimental_unit %||% "unit", paste(rep_f, collapse = "/"))), collapse = "; ")
     if (length(attr(book, "layout_notes"))) spec$design$layout_notes <- as.list(attr(book, "layout_notes"))
+    # analysis goals for this model (R/goals.R): goals, primary_goal, goal_terms, goal_effect, power for the goal
+    spec <- .sf_fill_goals(spec)
   }
   spec$handoff_version <- load_registry("study_spec.schema")$version
   spath <- file.path(outdir, "study_spec.json")
