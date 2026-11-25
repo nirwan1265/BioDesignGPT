@@ -152,7 +152,7 @@ test_that("same-units cue: only the unit itself, not a shared source; embryonic 
   r <- function(q) { s <- extract_spec_local(q); if (is.null(s$repeated_factors)) "absent" else paste(unlist(s$repeated_factors), collapse = ",") }
   # a reviewed spec with a stage factor (how Simitall calls it)
   rv <- .sf_repeated_on_unit(list(factors = list(list(name = "stage", n_levels = 4))),
-    "Single-cell RNA and ATAC of pig myogenesis in two breeds: somites at E16, E18 and E21 and myotome at E28, each sample a mix of 5 embryos from the same sow.")
+    "Heart RNA-seq of rat embryos at E12, E14 and E16 in two strains, each sample a pool of 3 embryos from the same dam.")
   expect_length(rv$repeated_factors, 0); expect_false(is.null(rv$repeated_factors))
   hv <- .sf_repeated_on_unit(list(factors = list(list(name = "stage", n_levels = 2))),
     "Ovarian follicle RNA-seq of laying hens in individual cages, prehierarchal vs selected follicles from the same hen.")
@@ -179,7 +179,7 @@ test_that("same X must be the measured subject; before/after on living subjects 
   expect_equal(rp("Faecal 16S of Iberian and Landrace piglets produced by embryo transfer into the same recipient sows, sampled at 21 and 60 days."), "absent")
   expect_equal(rp("Whole-blood RNA-seq from pigs infected with a low- or high-pathogenic ASFV isolate, sampled before and after infection, 3 pigs per isolate."), "time")
   expect_equal(rp("Faecal 16S over time from 12 SLA dd minipigs and 12 Large White pigs."), "time")
-  expect_equal(rp("Muscle RNA-seq of lean Yorkshire vs fat-type Qinyu pigs, before and after the growth turning point."), "absent")
-  expect_equal(rp("PRO-seq of Drosophila S2 cells after GAF or LacZ RNAi, before and after heat shock."), "absent")
-  expect_equal(rp("RNA-seq of potato in pots under low or sufficient phosphate, sampled before and after tuberization from several organs."), "absent")
+  expect_equal(rp("Liver RNA-seq of two pig breeds, before and after weaning, 6 pigs per breed and stage."), "absent")
+  expect_equal(rp("RNA-seq of HeLa cells transfected with a siRNA or scrambled control, before and after serum starvation."), "absent")
+  expect_equal(rp("RNA-seq of tomato plants in pots under low or high nitrogen, sampled before and after flowering from roots and leaves."), "absent")
 })

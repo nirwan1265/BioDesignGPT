@@ -524,8 +524,8 @@ extract_spec_local <- function(question) {
   occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))
   if (!length(occ)) return(spec)
   t <- tolower(text)
-  # "a mix of 5 embryos from the same sow": the things measured are whole individuals (rules.tsv unit terms listed in
-  # whole_individual_unit) that only share a source, so "the same sow" says nothing about repeated measurement; such
+  # "embryos pooled from the same dam": the things measured are whole individuals (rules.tsv unit terms listed in
+  # whole_individual_unit) that only share a source, so "the same dam" says nothing about repeated measurement; such
   # phrases are taken out before the same-units cue is read ("follicles from the same hen" stays)
   src <- gregexpr("\\b([a-z-]+)\\s+(?:from|of|born to|out of)\\s+the\\s+same\\s+[a-z-]+", t, perl = TRUE)
   hits <- regmatches(t, src)[[1]]
@@ -541,7 +541,9 @@ extract_spec_local <- function(question) {
   # recipient sows" names the sows, not the piglets (subject = the first living-subject noun, cue living_subject;
   # a generic X like "animals" matches any subject, cue generic_individual)
   sing <- function(w) sub("(?<=[^s])s$", "", sub("ies$", "y", w, perl = TRUE), perl = TRUE)
-  subj <- regmatches(t, regexpr(.sf_cue("living_subject"), t, perl = TRUE))
+  ts <- gsub(.sf_cue("donor_phrase"), " ", t, perl = TRUE)   # donors are a source, not the subject
+  subj <- regmatches(ts, regexpr(.sf_cue("living_subject"), ts, perl = TRUE))
+  if (!length(subj)) subj <- regmatches(ts, regexpr(.sf_cue("repeatable_unit"), ts, perl = TRUE))
   same_hits <- regmatches(t, gregexpr(.sf_cue("same_units_over_occasions"), t, perl = TRUE))[[1]]
   same_ok <- vapply(same_hits, function(h) {
     if (!grepl("\\bsame\\b", h)) return(TRUE)
@@ -554,7 +556,8 @@ extract_spec_local <- function(question) {
   # faeces, milk, a biopsy) is the same subjects (cues repeat_occasion_phrase, nondestructive_sample, living_subject)
   if (any(same_ok)) spec$repeated_factors <- as.list(rep_occ)
   else if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
-  else if (length(subj) && .sf_has(t, .sf_cue("repeat_occasion_phrase")) && .sf_has(t, .sf_cue("nondestructive_sample")))
+  else if (length(subj) && .sf_has(t, .sf_cue("repeat_occasion_phrase")) && .sf_has(t, .sf_cue("nondestructive_sample")) &&
+           !.sf_has(t, .sf_cue("group_specific_occasion")))
     spec$repeated_factors <- as.list(rep_occ)
   spec
 }
