@@ -361,6 +361,19 @@ extract_spec_local <- function(question) {
   g <- .sf_goals_from_text(text); if (length(g)) spec$analysis$goals <- as.list(g)
   tc <- .sf_time_course_detail(text); if (length(tc)) spec$analysis$time_course <- tc
   pu <- .sf_per_unit_effect(text); if (!is.null(pu)) spec$analysis$per_unit_effect <- pu
+  # the outcome's scale: unit, usual level, residual SD (a CV with a usual level gives the SD)
+  os <- .sf_outcome_scale(text)
+  if (!is.null(os$unit)) spec$primary_outcome$unit <- os$unit
+  if (!is.null(os$baseline_mean)) spec$primary_outcome$baseline_mean <- os$baseline_mean
+  if (!is.null(os$residual_sd)) spec$power$residual_sd <- os$residual_sd
+  if (!is.null(os$mdd)) spec$power$minimum_detectable_difference <- os$mdd
+  if (!is.null(os$cv)) {
+    spec$power$cv <- os$cv
+    if (is.null(os$residual_sd) && !is.null(os$baseline_mean)) {
+      spec$power$residual_sd <- os$cv / 100 * os$baseline_mean
+      spec$assumptions[["power.residual_sd"]] <- "from the stated CV x baseline mean"
+    }
+  }
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -673,6 +686,19 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
       gsub("{F}", nm, q[1], fixed = TRUE) }, "")
     questions <- unique(c(ask_lv, questions))
     v$missing <- unique(c(v$missing, paste0("factors.", open_lv, ".n_levels")))
+  }
+  # an effect with a real unit but no SD or CV: a simulator's default noise would be on an arbitrary scale, so ask
+  # for the usual level and its spread in that unit (rules.tsv scale_question)
+  if (!is.null(spec$primary_outcome$unit) && is.null(spec$power$residual_sd)) {
+    sq <- .sf_rules_rows("scale_question"); sq <- sq$pattern[sq$term == "*"][1]
+    if (!is.na(sq)) {
+      y <- gsub("_", " ", .sf_str1(spec$primary_outcome$name) %||% "outcome")
+      questions <- unique(c(questions, gsub("{U}", { eu <- .sf_str1(spec$experimental_unit); if (length(eu) && nzchar(eu)) eu else "experimental unit" }, gsub("{unit}", spec$primary_outcome$unit,
+        gsub("{Y}", y, sq, fixed = TRUE), fixed = TRUE), fixed = TRUE)))
+    }
+    spec$assumptions[["power.residual_sd"]] <- sprintf("not stated: asked (the effect is in %s)", spec$primary_outcome$unit)
+    if (is.null(spec$primary_outcome$baseline_mean))
+      spec$assumptions[["primary_outcome.baseline_mean"]] <- sprintf("not stated: asked (in %s)", spec$primary_outcome$unit)
   }
   # no goal named and the design can answer more than one: ask which (rules.tsv goal_question)
   if (!length(spec$analysis$goals)) { gq <- .sf_goal_question(spec); if (!is.null(gq)) questions <- unique(c(questions, gq)) }

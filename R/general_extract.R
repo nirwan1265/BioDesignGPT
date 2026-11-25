@@ -585,9 +585,10 @@ studyforge_fix <- function(answer, ...) {
 }
 
 # the first word that names a time unit (rules.tsv time_unit_name: canonical name, word pattern), else NULL
-.sf_unit_name <- function(words) {
+.sf_unit_name <- function(words, outcome = FALSE) {
   # time units first, then other level units (rules.tsv level_unit_name: dose, concentration, temperature, ...)
-  u <- tryCatch(rbind(.sf_rules_rows("time_unit_name"), .sf_rules_rows("level_unit_name")), error = function(e) NULL)
+  u <- tryCatch(rbind(.sf_rules_rows("time_unit_name"), .sf_rules_rows("level_unit_name"),
+    if (isTRUE(outcome)) .sf_rules_rows("outcome_unit_name")), error = function(e) NULL)
   if (is.null(u)) return(NULL)
   # a unit written as two words ("kg N/ha") is tried joined first, then each word alone
   if (length(words) >= 2) words <- c(rbind(paste0(words[-length(words)], words[-1]), words[-length(words)]), words[length(words)])

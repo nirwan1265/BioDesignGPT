@@ -105,6 +105,23 @@
   tc
 }
 
+# the outcome's scale as stated: the unit an effect is given in (cue effect_unit), a residual SD (residual_sd_stated),
+# a CV (cv_stated) and a usual level (baseline_mean_stated). Units: rules.tsv time/level/outcome_unit_name.
+.sf_outcome_scale <- function(text) {
+  t <- tolower(text); out <- list()
+  grab <- function(cue) regmatches(t, regexec(tryCatch(.sf_cue(cue), error = function(e) "(?!)"), t, perl = TRUE))[[1]]
+  # only outcome units (rules.tsv outcome_unit_name): "30 min", "50 C" are settings, not the outcome's scale
+  ou <- .sf_rules_rows("outcome_unit_name")
+  u <- function(x) if (length(x) && !is.na(x) && nzchar(x)) { k <- which(vapply(ou$pattern, grepl, logical(1), x = x, perl = TRUE)); if (length(k)) ou$term[k[1]] }
+  g <- grab("effect_unit"); if (length(g)) out$unit <- u(g[2])
+  g <- grab("residual_sd_stated"); if (length(g)) { out$residual_sd <- as.numeric(g[2]); if (length(g) >= 3) out$sd_unit <- u(g[3]) }
+  g <- grab("cv_stated"); if (length(g)) out$cv <- as.numeric(g[2])
+  g <- grab("mdd_stated"); if (length(g) && !identical(g[3], "fold")) { out$mdd <- as.numeric(g[2]); if (length(g) >= 3) out$mdd_unit <- u(g[3]) }
+  g <- grab("baseline_mean_stated"); if (length(g) && !is.null(u(g[3]))) { out$baseline_mean <- as.numeric(g[2]); out$mean_unit <- u(g[3]) }
+  out$unit <- out$unit %||% out$mdd_unit %||% out$mean_unit %||% out$sd_unit
+  out
+}
+
 # numeric levels: linear or log spacing (equal ratios of at least 2 between successive positive values)
 .sf_level_scale <- function(v) {
   v <- sort(unique(v[is.finite(v) & v > 0]))   # a zero control does not decide the spacing (0, 1, 10, 100 is log)

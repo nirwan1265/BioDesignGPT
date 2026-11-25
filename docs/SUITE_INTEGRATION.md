@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.3`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.4`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -148,6 +148,13 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
 - (0.6.3) A trend's `goal_effect` adds `per_unit` ("kg N/ha", or "log10 uM" when log-scaled). "0.5 t/ha per 50 kg N"
   gives size 0.01 per kg N/ha; a change stated per a linear amount makes the factor `scale: linear` even when its
   levels double (recorded in `assumptions["factors.<name>.scale"]`). A stated change per unit makes `trend` a goal.
+- (0.6.4) The outcome's scale: `primary_outcome.unit` (the unit an effect, SD or usual level is stated in; rules.tsv
+  `outcome_unit_name`), `primary_outcome.baseline_mean`, `power.residual_sd`, `power.cv` (CV with a mean gives the SD),
+  and `power.minimum_detectable_difference` from "detect a 5 cm difference" (never from a fold change). When an effect
+  has a unit but no SD or CV is stated, `residual_sd` and `baseline_mean` are absent, `assumptions` says
+  "not stated: asked (the effect is in t/ha)" and Biodes asks for both (rules.tsv `scale_question`). A simulator
+  should not put an effect with a real unit on default noise in arbitrary units: when SD is absent, simulate on the
+  standardized scale (effect / SD unknown: report it) or wait for the answer.
 - (0.6.3) A generic numeric list whose unit names a factor (rules.tsv `unit_factor`: kg N/ha -> nitrogen, degC ->
   temperature, dS/m -> salt, lux -> light) is that factor. A two-level pair "X and Y" carries its level names.
 - `goal_effect.scale` (schema 0.6.1) is the model scale for the data type (rules.tsv `effect_scale`): identity

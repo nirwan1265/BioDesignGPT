@@ -1,5 +1,5 @@
 {
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -58,7 +58,10 @@
     "power.reps_note",
     "factors[].scale",
     "factors[].log_offset",
-    "factors[].log_base"
+    "factors[].log_base",
+    "primary_outcome.unit",
+    "primary_outcome.baseline_mean",
+    "power.cv"
   ],
   "enums": {
     "system": [
@@ -116,6 +119,10 @@
     "factors[].scale": "linear, or log when the positive numeric values are equally spaced on a log scale (1, 10, 100; 6, 12, 24, 48)",
     "factors[].log_offset": "with scale = log and a zero level: fit log10(x + log_offset); log_offset = the smallest positive level",
     "factors[].log_base": "base of a log-scaled factor (10): fit log10(x + log_offset)",
-    "factors[].levels": "level labels; a two-level pair written \"X and Y\" carries its names (\"wild type\", \"mutant\")"
+    "factors[].levels": "level labels; a two-level pair written \"X and Y\" carries its names (\"wild type\", \"mutant\")",
+    "primary_outcome.unit": "unit the outcome and its effects are stated in (rules.tsv outcome_unit_name: t/ha, cm, mg/dL, %, ...)",
+    "primary_outcome.baseline_mean": "stated usual level of the outcome, in primary_outcome.unit",
+    "power.cv": "stated coefficient of variation (percent); with baseline_mean it gives power.residual_sd",
+    "power.residual_sd": "in primary_outcome.unit when that is set; when an effect has a unit and no SD or CV is stated, residual_sd is absent, assumptions says \"not stated: asked\", and the scale question is asked"
   }
 }

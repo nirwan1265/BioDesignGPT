@@ -78,3 +78,16 @@ test_that("a within-group scope resolves to a named level; a per-amount change g
   expect_equal(n$analysis$primary_goal, "trend")
   expect_equal(n$analysis$goal_effect$trend$size, 0.01); expect_equal(n$analysis$goal_effect$trend$per_unit, "kg N/ha")
 })
+
+test_that("the outcome's unit, usual level and spread are read, or asked for when an effect has a unit", {
+  a <- studyforge_ask("Barley given 0, 30, 60, 120 kg N/ha in 4 blocks, yield expected to rise by 0.3 t/ha per 30 kg N.", provider = "local")
+  expect_equal(a$spec$primary_outcome$unit, "t/ha"); expect_null(a$spec$power$residual_sd)
+  expect_true(any(grepl("usual .* t/ha", a$all_questions)))
+  expect_match(a$spec$assumptions[["power.residual_sd"]], "asked")
+  b <- studyforge_ask("Barley given 0, 30, 60, 120 kg N/ha in 4 blocks, yield is about 6 t/ha with a CV of 12%, expected to rise by 0.3 t/ha per 30 kg N.", provider = "local")
+  expect_equal(b$spec$primary_outcome$baseline_mean, 6); expect_equal(b$spec$power$residual_sd, 0.72)
+  c <- studyforge_ask("Two oat cultivars in 6 blocks; plant height usually around 100 cm, SD 8 cm; we want to detect a 6 cm difference between cultivars.", provider = "local")
+  expect_equal(c$spec$power$residual_sd, 8); expect_equal(c$spec$power$minimum_detectable_difference, 6); expect_equal(c$spec$primary_outcome$unit, "cm")
+  d <- studyforge_ask("We want to detect a 2-fold change in expression between treated and control mice.", provider = "local")
+  expect_null(d$spec$power$minimum_detectable_difference)
+})
