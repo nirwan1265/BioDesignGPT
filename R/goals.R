@@ -59,6 +59,19 @@
   q
 }
 
+# the scale an effect is stated and tested on, from the data type (rules.tsv effect_scale: term = scale, pattern =
+# an assay label or outcome:<type>; counts -> log2, methylation -> M, binary -> logit; otherwise identity)
+.sf_effect_scale <- function(spec) {
+  r <- .sf_rules_rows("effect_scale")
+  keys <- c(paste0("outcome:", spec$primary_outcome$type %||% ""), unlist(spec$assays))
+  for (k in keys) { h <- r$term[r$pattern == k]; if (length(h)) return(h[1]) }
+  "identity"
+}
+
+# a log-scaled numeric factor with a zero level (an untreated control) is fitted as log(x + offset); the offset is
+# the smallest positive level, written into the spec so Simitall and Bioana use the same one
+.sf_log_offset <- function(v) { v <- v[is.finite(v)]; if (any(v == 0) && any(v > 0)) min(v[v > 0]) else NULL }
+
 # numeric levels: linear or log spacing (equal ratios of at least 2 between successive positive values)
 .sf_level_scale <- function(v) {
   v <- sort(unique(v[is.finite(v) & v > 0]))   # a zero control does not decide the spacing (0, 1, 10, 100 is log)
@@ -146,7 +159,7 @@
   mdd <- spec$power$minimum_detectable_difference
   ge <- list()
   for (g in goals) {
-    e <- list(size = mdd, scale = "outcome", definition = reg[[g]]$effect_definition)
+    e <- list(size = mdd, scale = .sf_effect_scale(spec), definition = reg[[g]]$effect_definition)
     if (identical(g, "time_course")) e <- c(e, spec$analysis$time_course %||% list())
     ge[[g]] <- e[!vapply(e, is.null, logical(1))]
     if (is.null(mdd)) spec$assumptions[[paste0("analysis.goal_effect.", g, ".size")]] <- "not stated: use power.minimum_detectable_difference default"

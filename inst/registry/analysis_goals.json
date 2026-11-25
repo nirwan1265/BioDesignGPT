@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "owner": "Biodes (studyforge)",
   "contract": "Bioana docs/contracts/analysis_goals.md (2026-11-25)",
   "fields": {
@@ -9,7 +9,7 @@
     "data_types": "assay labels the goal applies to; * = any",
     "description": "one line shown to the user",
     "replicate_multiplier": "replicates needed relative to a main effect of the same size (interaction about 4x); Biodes widens power.reps_range by it",
-    "effect_definition": "what analysis.goal_effect.size measures (Simitall plants it, Bioana tests it)",
+    "effect_definition": "what analysis.goal_effect.size measures, on analysis.goal_effect.scale (Simitall plants it, Bioana tests it)",
     "simulated": "Simitall can plant truth for it today"
   },
   "goals": [
@@ -22,7 +22,7 @@
       ],
       "description": "Does the outcome differ between treatment levels (each level vs the reference)?",
       "replicate_multiplier": 1,
-      "effect_definition": "difference between a treatment level and the reference, on the outcome scale",
+      "effect_definition": "difference between a treatment level and the reference, on goal_effect.scale",
       "simulated": true
     },
     {
@@ -37,7 +37,7 @@
       ],
       "description": "Does the effect of one factor differ across the levels of another (G x E, genotype x treatment, group x time)?",
       "replicate_multiplier": 4,
-      "effect_definition": "difference of differences on the outcome scale",
+      "effect_definition": "difference of differences on goal_effect.scale",
       "simulated": true
     },
     {
@@ -51,7 +51,7 @@
       ],
       "description": "Does the outcome change over time at all (any pattern)?",
       "replicate_multiplier": 1,
-      "effect_definition": "largest change between time points on the outcome scale",
+      "effect_definition": "largest change between time points on goal_effect.scale",
       "simulated": true
     },
     {
@@ -65,7 +65,7 @@
       ],
       "description": "Is there a slope along a numeric factor (dose, gradient, concentration)?",
       "replicate_multiplier": 1,
-      "effect_definition": "change per unit of the numeric factor, on the outcome scale",
+      "effect_definition": "change per unit of the numeric factor, on goal_effect.scale",
       "simulated": true
     },
     {
@@ -158,7 +158,7 @@
       ],
       "description": "Which markers are associated with the trait (GWAS, eQTL)?",
       "replicate_multiplier": 1,
-      "effect_definition": "marker effect (allele substitution) on the outcome scale",
+      "effect_definition": "marker effect (allele substitution) on goal_effect.scale",
       "simulated": true
     },
     {

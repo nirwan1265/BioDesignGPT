@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -56,7 +56,8 @@
     "analysis.goal_effect",
     "power.goal",
     "power.reps_note",
-    "factors[].scale"
+    "factors[].scale",
+    "factors[].log_offset"
   ],
   "enums": {
     "system": [
@@ -108,9 +109,10 @@
     "analysis.goals": "analysis goals this study answers, most important first (ids from inst/registry/analysis_goals.json); read from the question, else defaults by data type (rules.tsv goal_default), else treatment_effect; an assumed goal is listed in assumptions[\"analysis.goals\"]",
     "analysis.primary_goal": "the first goal: Biodes sizes the replicate sweep for it (power.goal, power.reps_range widened by the registry replicate_multiplier), Simitall plants truth for it",
     "analysis.goal_terms": "per goal id, the generic model terms the goal tests: interaction two terms (time allowed; \"env\" for several locations/seasons), time_course the time term, trend the numeric term. The model is extended with the interaction/time/numeric term when the catalog model lacks it (noted in analysis.note)",
-    "analysis.goal_effect": "per goal id {size, scale, definition}; size = power.minimum_detectable_difference when stated, else listed in assumptions; time_course also {shape: monotone|saturating|transient|delayed, peak {value, unit}, half_time {value, unit}, scope: within_group} when stated",
+    "analysis.goal_effect": "per goal id {size, scale, definition}; scale is the model scale for the data type (rules.tsv effect_scale): identity (continuous outcome), log2 (counts: RNA-seq, peaks, amplicons, intensities), M (methylation), logit (binary, ordinal), log (count outcome), log_hazard (survival); an interaction is a difference of differences on that scale; size = power.minimum_detectable_difference when stated, else listed in assumptions; time_course also {shape: monotone|saturating|transient|delayed, peak {value, unit}, half_time {value, unit}, scope: within_group} when stated",
     "power.goal": "the goal the replicate sweep is sized for (= analysis.primary_goal)",
     "power.reps_note": "why the replicate range was widened, or that stated replicates may be few for the goal",
-    "factors[].scale": "linear, or log when the positive numeric values are equally spaced on a log scale (1, 10, 100; 6, 12, 24, 48)"
+    "factors[].scale": "linear, or log when the positive numeric values are equally spaced on a log scale (1, 10, 100; 6, 12, 24, 48)",
+    "factors[].log_offset": "with scale = log and a zero level: the levels are fitted as log(x + log_offset); log_offset = the smallest positive level"
   }
 }

@@ -34,3 +34,13 @@ test_that("goals: read, asked, defaulted, written with terms, effect and power",
   expect_equal(unlist(g$j$analysis$goal_terms$interaction), c("treatment", "env"))
   expect_match(g$j$analysis$model, "treatment:env")
 })
+
+test_that("effect scale follows the data type; a zero dose on a log scale gets an offset", {
+  expect_equal(.sf_effect_scale(list(assays = list("rnaseq"))), "log2")
+  expect_equal(.sf_effect_scale(list(assays = list("methylation"))), "M")
+  expect_equal(.sf_effect_scale(list(primary_outcome = list(type = "binary"))), "logit")
+  expect_equal(.sf_effect_scale(list(primary_outcome = list(type = "continuous"))), "identity")
+  s <- extract_spec_local("Arabidopsis seedlings treated with 0, 1, 10 and 100 uM ABA, dose-response RNA-seq, 3 replicates.")
+  d <- Filter(function(f) f$name == "dose", s$factors)[[1]]
+  expect_equal(d$scale, "log"); expect_equal(d$log_offset, 1)
+})

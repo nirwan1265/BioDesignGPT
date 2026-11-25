@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.0`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.1`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -138,7 +138,11 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   adds it (noted in `analysis.note`). A goal the design cannot answer (interaction with one factor) is dropped with
   a note.
 - Numeric levels of any factor: `values`, `unit` (time units, or rules.tsv `level_unit_name`: mg/kg, uM, %, Gy,
-  ...) and `scale` (linear | log).
+  ...) and `scale` (linear | log). A log-scaled factor with a zero level carries `log_offset` (the smallest positive
+  level): fit log(x + log_offset).
+- `goal_effect.scale` (schema 0.6.1) is the model scale for the data type (rules.tsv `effect_scale`): identity
+  (continuous outcome), log2 (counts and intensities), M (methylation), logit (binary, ordinal), log (count outcome),
+  log_hazard (survival). Truth and tests use that scale; an interaction is a difference of differences on it.
 
 On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
 3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you
