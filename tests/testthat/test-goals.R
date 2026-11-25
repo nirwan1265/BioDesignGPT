@@ -62,3 +62,19 @@ test_that("trend size only from a per-unit change; peak implies a time course; s
   w <- pkg("Time-course RNA-seq of wild-type and mutant roots at 0, 6, 24 and 48 h, 3 replicates; genes change over time only in the mutant.")
   expect_equal(w$analysis$goal_effect$time_course$group, "mutant"); expect_equal(w$analysis$goal_effect$time_course$group_factor, "genotype")
 })
+
+test_that("a within-group scope resolves to a named level; a per-amount change gives a per-unit slope on a linear factor", {
+  pkg <- function(q) { a <- studyforge_ask(q, provider = "local"); s <- a$spec; s$design$reps <- s$design$reps %||% 3
+    d <- file.path(tempdir(), paste0("g3", sample.int(1e6, 1))); write_design_package(layout_from_spec(s, 1), s, d)
+    jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE) }
+  w <- pkg("Wild type and mutant tomato, leaves sampled at 0, 3, 9 and 27 h after wounding, only the mutant is expected to respond, peak at 9 h, 4 plants per genotype per time.")
+  g <- Filter(function(f) f$name == "genotype", w$factors)[[1]]
+  expect_equal(unlist(g$levels), c("wild type", "mutant"))
+  tc <- w$analysis$goal_effect$time_course
+  expect_equal(tc$scope, "within_group"); expect_equal(tc$group, "mutant"); expect_equal(tc$group_factor, "genotype")
+  n <- pkg("Wheat given 0, 40, 80, 160 kg N/ha in 3 blocks, grain yield expected to rise by 0.4 t/ha per 40 kg N.")
+  f <- Filter(function(f) f$name == "nitrogen", n$factors)[[1]]
+  expect_equal(unlist(f$values), c(0, 40, 80, 160)); expect_equal(f$unit, "kg N/ha"); expect_equal(f$scale, "linear"); expect_null(f$log_offset)
+  expect_equal(n$analysis$primary_goal, "trend")
+  expect_equal(n$analysis$goal_effect$trend$size, 0.01); expect_equal(n$analysis$goal_effect$trend$per_unit, "kg N/ha")
+})

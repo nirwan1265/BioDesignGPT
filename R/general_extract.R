@@ -220,6 +220,10 @@
     # the spec ("0, 100 or 150 mM NaCl" is salt) gives that factor its levels and values instead
     for (gn in intersect(.sf_list("generic_level_factor"), names(lv))) {
       fw <- setdiff(.sf_find_all(attr(lv, "spans")[[gn]] %||% "", "factor"), c(gn, "treatment"))
+      # no factor word in the list: its unit may name the factor (rules.tsv unit_factor: kg N/ha is nitrogen)
+      un <- attr(lv, "values")[[gn]]$unit
+      if (!length(fw) && !is.null(un)) { uf <- .sf_rules_rows("unit_factor")
+        k <- which(vapply(uf$pattern, grepl, logical(1), x = un, perl = TRUE)); if (length(k)) fw <- uf$term[k[1]] }
       if (length(fw) == 1 && !(fw %in% names(lv))) {
         a_v <- attr(lv, "values"); a_s <- attr(lv, "spans"); a_m <- attr(lv, "summed")
         k <- match(fw, have)
@@ -258,6 +262,9 @@
         }
         fx[[j]]$levels <- trimws(paste(format(vv$values, trim = TRUE, drop0trailing = TRUE), vv$unit %||% ""))
       }
+      # a pair that names its two levels ("wild type and mutant")
+      nn <- attr(lv, "named")[[nm]]
+      if (!is.na(j) && length(nn) == 2 && identical(as.numeric(fx[[j]]$n_levels), 2) && is.null(fx[[j]]$levels)) fx[[j]]$levels <- nn
     }
     spec$factors <- fx
   }
@@ -358,7 +365,7 @@ studyforge_fix <- function(answer, ...) {
 # level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
 # factor is there, its levels unknown ("sampled over time").
 .sf_level_factors <- function(text) {
-  spans <- list(); vals <- list(); arms <- list()   # text each count was read from; numeric levels; contrast arms
+  spans <- list(); vals <- list(); arms <- list(); pair_names <- list()   # text each count was read from; numeric levels; contrast arms; named pair levels
   r <- .sf_rules_rows("factor_levels")
   out <- list()
   how <- sub("^[^/]*/", "", r$term); r$term <- sub("/.*$", "", r$term); r$match <- how
@@ -455,7 +462,11 @@ studyforge_fix <- function(answer, ...) {
         # a conjunct without a number is one level, unless its noun is plural ("lines and their hybrids": not counted)
         k <- sum(vapply(items, function(x) { m <- regmatches(x, regexpr(num, x, perl = TRUE))
           if (length(m)) .sf_num(m) else if (grepl("[^s]s$|ies$", x, perl = TRUE)) NA_real_ else 1 }, numeric(1)))
-        if (!is.na(k) && k >= 2) { out[[nm]] <- k; attr(out, "summed") <- c(attr(out, "summed"), nm); break }
+        if (!is.na(k) && k >= 2) { out[[nm]] <- k; attr(out, "summed") <- c(attr(out, "summed"), nm)
+          # two unnumbered conjuncts name the two levels ("wild type and mutant")
+          if (k == 2 && length(items) == 2 && !any(grepl(num, items, perl = TRUE)))
+            pair_names[[nm]] <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", items, perl = TRUE))
+          break }
       }
       next
     }
@@ -549,6 +560,11 @@ studyforge_fix <- function(answer, ...) {
       if (grepl("^\\d+$", r$match[i])) as.numeric(r$match[i]) else NA)   # a fixed count: "a hybrid and its two parents" = 3
     if (!is.na(n) && n < 2) next
     out[[nm]] <- n; spans[[nm]] <- g[1]
+    # a pair written "X and Y" / "X vs Y" names its two levels ("wild type and mutant")
+    if (r$match[i] %in% c("pair", "coord") && identical(as.numeric(n), 2)) {
+      pp <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", strsplit(trimws(g[1]), "\\s+(?:and|vs\\.?|versus)\\s+", perl = TRUE)[[1]], perl = TRUE))
+      if (length(pp) == 2 && all(nzchar(pp)) && all(lengths(strsplit(pp, "\\s+")) <= 3)) pair_names[[nm]] <- pp
+    }
     if (r$match[i] %in% c("sum", "range")) attr(out, "summed") <- c(attr(out, "summed"), nm)
     # a list of numbers keeps its values and unit ("at 24, 48 and 72 h": 24 48 72, h; units: rules.tsv time_unit_name)
     if (identical(r$match[i], "list") && !extra) {
@@ -564,7 +580,7 @@ studyforge_fix <- function(answer, ...) {
       }
     }
   }
-  attr(out, "spans") <- spans; attr(out, "values") <- vals; attr(out, "arms") <- arms
+  attr(out, "spans") <- spans; attr(out, "values") <- vals; attr(out, "arms") <- arms; attr(out, "named") <- pair_names
   out
 }
 
@@ -573,6 +589,8 @@ studyforge_fix <- function(answer, ...) {
   # time units first, then other level units (rules.tsv level_unit_name: dose, concentration, temperature, ...)
   u <- tryCatch(rbind(.sf_rules_rows("time_unit_name"), .sf_rules_rows("level_unit_name")), error = function(e) NULL)
   if (is.null(u)) return(NULL)
+  # a unit written as two words ("kg N/ha") is tried joined first, then each word alone
+  if (length(words) >= 2) words <- c(rbind(paste0(words[-length(words)], words[-1]), words[-length(words)]), words[length(words)])
   for (w in words) { k <- which(vapply(u$pattern, function(p) grepl(p, w, perl = TRUE), logical(1)))
     if (length(k)) return(u$term[k[1]]) }
   NULL

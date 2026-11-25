@@ -84,7 +84,25 @@
 # a stated change per unit of a numeric factor ("a 5% increase per 10-fold dose"; cue per_unit_effect) -> its number
 .sf_per_unit_effect <- function(text) {
   g <- regmatches(tolower(text), regexec(tryCatch(.sf_cue("per_unit_effect"), error = function(e) "(?!)"), tolower(text), perl = TRUE))[[1]]
-  if (length(g) >= 2) as.numeric(g[2]) else NULL
+  # groups: size, the amount after "per" (0.5 per 50 kg = 0.01 per kg), a log word ("per 10-fold": per log10 unit)
+  if (length(g) < 2) return(NULL)
+  per <- if (length(g) >= 3 && nzchar(g[3])) as.numeric(g[3]) else 1
+  list(size = as.numeric(g[2]) / per, per = if (length(g) >= 4 && nzchar(g[4])) "log" else "linear")
+}
+
+# the group a within-group time course names: a factor level it matches ("mutant" is the genotype level "mutant"),
+# else the factor its word belongs to; a word that is neither is dropped (scope stays within_group, group unknown)
+.sf_resolve_group <- function(spec, tc) {
+  if (is.null(tc$group)) return(tc)
+  w <- tolower(tc$group)
+  for (f in spec$factors %||% list()) {
+    lv <- tolower(unlist(f$levels))
+    hit <- lv[lv == w | grepl(paste0("\\b", w, "\\b"), lv, perl = TRUE)]
+    if (length(hit) == 1) { tc$group <- unlist(f$levels)[match(hit, lv)]; tc$group_factor <- f$name; return(tc) }
+  }
+  have <- vapply(spec$factors %||% list(), function(f) f$name %||% "", "")
+  if (!(tc$group_factor %||% "") %in% have) { tc$group <- NULL; tc$group_factor <- NULL }
+  tc
 }
 
 # numeric levels: linear or log spacing (equal ratios of at least 2 between successive positive values)
@@ -173,12 +191,29 @@
   # goal_effect for each goal: size from the stated minimum detectable difference, else listed as an assumption
   # size from the registry's size_from: a difference between levels (power.minimum_detectable_difference) or a
   # stated change per unit (spec$analysis$per_unit_effect, cue per_unit_effect) for a slope
-  src <- list(minimum_detectable_difference = spec$power$minimum_detectable_difference, per_unit_effect = spec$analysis$per_unit_effect)
+  pu <- spec$analysis$per_unit_effect
+  if (is.numeric(pu)) pu <- list(size = pu, per = "linear")
+  # a change stated per linear amount ("per 50 kg N") fits the factor on its linear scale, even when its levels are
+  # spaced by equal ratios
+  if ("trend" %in% goals && !is.null(pu) && !is.null(gt$trend)) {
+    k <- which(vapply(spec$factors, function(f) identical(f$name, terms[[gt$trend]]), logical(1)))[1]
+    if (!is.na(k)) {
+      f <- spec$factors[[k]]
+      if (identical(pu$per, "linear") && identical(f$scale, "log")) {
+        f$scale <- "linear"; f$log_base <- NULL; f$log_offset <- NULL
+        spec$assumptions[[paste0("factors.", f$name, ".scale")]] <- "linear: the stated change is per unit, not per fold"
+      }
+      pu$per_unit <- if (identical(f$scale, "log")) paste("log10", f$unit %||% "") else f$unit
+      spec$factors[[k]] <- f
+    }
+  }
+  src <- list(minimum_detectable_difference = spec$power$minimum_detectable_difference, per_unit_effect = pu$size)
   ge <- list()
   for (g in goals) {
     sf <- reg[[g]]$size_from %||% "minimum_detectable_difference"
     e <- list(size = src[[sf]], scale = .sf_effect_scale(spec), definition = reg[[g]]$effect_definition)
-    if (identical(g, "time_course")) e <- c(e, spec$analysis$time_course %||% list())
+    if (identical(g, "time_course")) e <- c(e, .sf_resolve_group(spec, spec$analysis$time_course %||% list()))
+    if (identical(g, "trend") && !is.null(pu$per_unit)) e$per_unit <- trimws(pu$per_unit)
     ge[[g]] <- e[!vapply(e, is.null, logical(1))]
     if (is.null(src[[sf]])) spec$assumptions[[paste0("analysis.goal_effect.", g, ".size")]] <-
       if (sf == "per_unit_effect") "not stated: use the treatment effect over the factor's range" else "not stated: use power.minimum_detectable_difference default"
