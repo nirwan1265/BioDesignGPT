@@ -147,3 +147,17 @@ test_that("Simitall repeated-measures cases: same animals across stages/times; t
   z <- extract_spec_local("Maize lines under drought vs control, leaves at anthesis and grain filling, 4 plots each.")
   expect_setequal(vapply(z$factors, `[[`, "", "name"), c("water", "stage"))
 })
+
+test_that("same-units cue: only the unit itself, not a shared source; embryonic days are destructive", {
+  r <- function(q) { s <- extract_spec_local(q); if (is.null(s$repeated_factors)) "absent" else paste(unlist(s$repeated_factors), collapse = ",") }
+  # a reviewed spec with a stage factor (how Simitall calls it)
+  rv <- .sf_repeated_on_unit(list(factors = list(list(name = "stage", n_levels = 4))),
+    "Single-cell RNA and ATAC of pig myogenesis in two breeds: somites at E16, E18 and E21 and myotome at E28, each sample a mix of 5 embryos from the same sow.")
+  expect_length(rv$repeated_factors, 0); expect_false(is.null(rv$repeated_factors))
+  hv <- .sf_repeated_on_unit(list(factors = list(list(name = "stage", n_levels = 2))),
+    "Ovarian follicle RNA-seq of laying hens in individual cages, prehierarchal vs selected follicles from the same hen.")
+  expect_equal(unlist(hv$repeated_factors), "stage")
+  expect_equal(r("Liver biopsies from the same cows in late gestation and again in early lactation, 6 cows per diet, two diets."), "stage")
+  expect_equal(r("Liver RNA-seq of cows slaughtered in late gestation or in early lactation, two diets, 6 cows per diet and stage."), "")
+  expect_equal(r("Leaf RNA-seq of leaves from the same plants at 1, 3 and 7 days after drought vs control, 4 plants per treatment."), "time")
+})

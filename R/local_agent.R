@@ -524,8 +524,21 @@ extract_spec_local <- function(question) {
   occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))
   if (!length(occ)) return(spec)
   t <- tolower(text)
+  # "a mix of 5 embryos from the same sow": the things measured are whole individuals (rules.tsv unit terms listed in
+  # whole_individual_unit) that only share a source, so "the same sow" says nothing about repeated measurement; such
+  # phrases are taken out before the same-units cue is read ("follicles from the same hen" stays)
+  src <- gregexpr("\\b([a-z-]+)\\s+(?:from|of|born to|out of)\\s+the\\s+same\\s+[a-z-]+", t, perl = TRUE)
+  hits <- regmatches(t, src)[[1]]
+  whole <- .sf_list("whole_individual_unit")
+  for (h in hits) if (length(intersect(.sf_find_all(sub("\\s.*$", "", h), "unit"), whole))) t <- sub(h, " ", t, fixed = TRUE)
+  # an open question ("should I sample the same cows repeatedly?") and "the same rat as controls" (a within-unit
+  # control, not an occasion) say nothing either (cues undecided_question, same_unit_as_control)
+  for (cu in c("undecided_question", "same_unit_as_control")) t <- gsub(tryCatch(.sf_cue(cu), error = function(e) "(?!)"), " ", t, perl = TRUE)
+  # "four age groups": that occasion factor is between units even when another one is repeated (cue occasion_groups)
+  og <- tryCatch(.sf_cue("occasion_groups"), error = function(e) "(?!)")
+  rep_occ <- occ[!vapply(occ, function(f) grepl(gsub("{F}", f, og, fixed = TRUE), t, perl = TRUE), logical(1))]
   # an explicit "same / again / repeatedly" wins over a kill word ("bled weekly, sacrificed at the end")
-  if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(occ)
+  if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(rep_occ)
   else if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
   spec
 }
