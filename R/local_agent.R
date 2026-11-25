@@ -537,9 +537,25 @@ extract_spec_local <- function(question) {
   # "four age groups": that occasion factor is between units even when another one is repeated (cue occasion_groups)
   og <- tryCatch(.sf_cue("occasion_groups"), error = function(e) "(?!)")
   rep_occ <- occ[!vapply(occ, function(f) grepl(gsub("{F}", f, og, fixed = TRUE), t, perl = TRUE), logical(1))]
-  # an explicit "same / again / repeatedly" wins over a kill word ("bled weekly, sacrificed at the end")
-  if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(rep_occ)
+  # "the same X" counts only when X is the measured subject: "piglets produced by embryo transfer into the same
+  # recipient sows" names the sows, not the piglets (subject = the first living-subject noun, cue living_subject;
+  # a generic X like "animals" matches any subject, cue generic_individual)
+  sing <- function(w) sub("(?<=[^s])s$", "", sub("ies$", "y", w, perl = TRUE), perl = TRUE)
+  subj <- regmatches(t, regexpr(.sf_cue("living_subject"), t, perl = TRUE))
+  same_hits <- regmatches(t, gregexpr(.sf_cue("same_units_over_occasions"), t, perl = TRUE))[[1]]
+  same_ok <- vapply(same_hits, function(h) {
+    if (!grepl("\\bsame\\b", h)) return(TRUE)
+    x <- utils::tail(strsplit(trimws(h), "\\s+")[[1]], 1)
+    !length(subj) || grepl(.sf_cue("generic_individual"), x, perl = TRUE) || !grepl(.sf_cue("living_subject"), x, perl = TRUE) ||
+      sing(x) == sing(utils::tail(strsplit(subj, "\\s+")[[1]], 1))
+  }, logical(1))
+  # an explicit "same / again / repeatedly" wins over a kill word ("bled weekly, sacrificed at the end"); without
+  # either, "before and after X" / "over time" on living subjects with a sample that does not kill them (blood,
+  # faeces, milk, a biopsy) is the same subjects (cues repeat_occasion_phrase, nondestructive_sample, living_subject)
+  if (any(same_ok)) spec$repeated_factors <- as.list(rep_occ)
   else if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
+  else if (length(subj) && .sf_has(t, .sf_cue("repeat_occasion_phrase")) && .sf_has(t, .sf_cue("nondestructive_sample")))
+    spec$repeated_factors <- as.list(rep_occ)
   spec
 }
 

@@ -98,7 +98,10 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   `same_units_over_occasions`, e.g. "from the same 7 boars at puberty and at maturity", and
   `different_units_per_occasion`, e.g. "sacrificed at each time"); `[]` means destructive sampling; absent means not
   stated, and Biodes asks "Are the same {unit}s sampled at every stage, or different {unit}s at each stage?" (rules.tsv
-  `occasion_question`). Listed factors are within-unit in `layout_from_spec()` (each unit repeats across their
+  `occasion_question`). "The same X" counts only when X is the measured subject (cue `living_subject`: "piglets ...
+  into the same recipient sows" does not count); "before and after X" / "over time" on living subjects with a sample
+  that does not kill them (cue `nondestructive_sample`: blood, faeces, milk, a biopsy) also means the same subjects;
+  plant organs, cultured cells and destructive samples stay asked. Listed factors are within-unit in `layout_from_spec()` (each unit repeats across their
   levels), appear in `analysis.terms.repeated_factors`, and `analysis.note` says "add (1 | unit)" when the catalog
   model lacks it.
 - `cell_type` and `fraction` are within-unit factors, like `tissue` (rules.tsv `within_unit_factor`).

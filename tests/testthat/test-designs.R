@@ -172,3 +172,14 @@ test_that("repeated occasion as the only factor: paired rcbd, unit is the block,
   expect_true(j$analysis$terms$paired); expect_equal(j$analysis$terms$unit_column, "block")
   expect_false(grepl("add (1 | unit)", j$analysis$note, fixed = TRUE))
 })
+
+test_that("same X must be the measured subject; before/after on living subjects with a non-destructive sample is repeated", {
+  rp <- function(q, f = "time") { v <- .sf_repeated_on_unit(list(factors = list(list(name = f, n_levels = 2))), q)$repeated_factors
+    if (is.null(v)) "absent" else paste(unlist(v), collapse = ",") }
+  expect_equal(rp("Faecal 16S of Iberian and Landrace piglets produced by embryo transfer into the same recipient sows, sampled at 21 and 60 days."), "absent")
+  expect_equal(rp("Whole-blood RNA-seq from pigs infected with a low- or high-pathogenic ASFV isolate, sampled before and after infection, 3 pigs per isolate."), "time")
+  expect_equal(rp("Faecal 16S over time from 12 SLA dd minipigs and 12 Large White pigs."), "time")
+  expect_equal(rp("Muscle RNA-seq of lean Yorkshire vs fat-type Qinyu pigs, before and after the growth turning point."), "absent")
+  expect_equal(rp("PRO-seq of Drosophila S2 cells after GAF or LacZ RNAi, before and after heat shock."), "absent")
+  expect_equal(rp("RNA-seq of potato in pots under low or sufficient phosphate, sampled before and after tuberization from several organs."), "absent")
+})
