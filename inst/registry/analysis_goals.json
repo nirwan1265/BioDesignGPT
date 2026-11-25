@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "owner": "Biodes (studyforge)",
   "contract": "Bioana docs/contracts/analysis_goals.md (2026-11-25)",
   "fields": {
@@ -10,7 +10,8 @@
     "description": "one line shown to the user",
     "replicate_multiplier": "replicates needed relative to a main effect of the same size (interaction about 4x); Biodes widens power.reps_range by it",
     "effect_definition": "what analysis.goal_effect.size measures, on analysis.goal_effect.scale (Simitall plants it, Bioana tests it)",
-    "simulated": "Simitall can plant truth for it today"
+    "simulated": "Simitall can plant truth for it today",
+    "size_from": "where goal_effect.size comes from: minimum_detectable_difference (a difference between levels), or per_unit_effect (a stated change per unit of the numeric factor; trend). Not stated: size is absent and listed in assumptions"
   },
   "goals": [
     {
@@ -23,7 +24,8 @@
       "description": "Does the outcome differ between treatment levels (each level vs the reference)?",
       "replicate_multiplier": 1,
       "effect_definition": "difference between a treatment level and the reference, on goal_effect.scale",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "interaction",
@@ -38,7 +40,8 @@
       "description": "Does the effect of one factor differ across the levels of another (G x E, genotype x treatment, group x time)?",
       "replicate_multiplier": 4,
       "effect_definition": "difference of differences on goal_effect.scale",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "time_course",
@@ -52,7 +55,8 @@
       "description": "Does the outcome change over time at all (any pattern)?",
       "replicate_multiplier": 1,
       "effect_definition": "largest change between time points on goal_effect.scale",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "trend",
@@ -66,7 +70,8 @@
       "description": "Is there a slope along a numeric factor (dose, gradient, concentration)?",
       "replicate_multiplier": 1,
       "effect_definition": "change per unit of the numeric factor, on goal_effect.scale",
-      "simulated": true
+      "simulated": true,
+      "size_from": "per_unit_effect"
     },
     {
       "id": "transcript_usage",
@@ -80,7 +85,8 @@
       "description": "Do isoform proportions change, not gene totals?",
       "replicate_multiplier": 1,
       "effect_definition": "change in isoform proportion",
-      "simulated": false
+      "simulated": false,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "differential_abundance",
@@ -96,7 +102,8 @@
       "description": "Which taxa change in abundance between groups?",
       "replicate_multiplier": 1,
       "effect_definition": "log fold change in a taxon's abundance",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "community_composition",
@@ -111,7 +118,8 @@
       "description": "Does the whole community differ between groups (beta diversity, PERMANOVA)?",
       "replicate_multiplier": 1,
       "effect_definition": "share of taxa shifted or PERMANOVA R2",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "alpha_diversity",
@@ -126,7 +134,8 @@
       "description": "Does within-sample diversity differ between groups?",
       "replicate_multiplier": 1,
       "effect_definition": "difference in a diversity index",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "cell_composition",
@@ -141,7 +150,8 @@
       "description": "Do cell-type proportions shift between groups?",
       "replicate_multiplier": 1,
       "effect_definition": "change in a cell type's proportion",
-      "simulated": false
+      "simulated": false,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "association",
@@ -159,7 +169,8 @@
       "description": "Which markers are associated with the trait (GWAS, eQTL)?",
       "replicate_multiplier": 1,
       "effect_definition": "marker effect (allele substitution) on goal_effect.scale",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "qtl_mapping",
@@ -173,7 +184,8 @@
       "description": "Where are the QTL in an experimental cross?",
       "replicate_multiplier": 1,
       "effect_definition": "QTL effect (additive) and LOD",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "genomic_prediction",
@@ -189,7 +201,8 @@
       "description": "How well do markers predict untested lines (prediction accuracy)?",
       "replicate_multiplier": 1,
       "effect_definition": "prediction accuracy (correlation)",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "variance_components",
@@ -201,7 +214,8 @@
       "description": "How much variance is genetic (heritability, BLUPs, G x E stability)?",
       "replicate_multiplier": 1,
       "effect_definition": "variance component or heritability",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "ranking",
@@ -213,7 +227,8 @@
       "description": "Which entries are best (selection, ranking of lines)?",
       "replicate_multiplier": 1,
       "effect_definition": "difference between selected and mean entries",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "survival",
@@ -225,7 +240,8 @@
       "description": "Does time to an event differ between groups?",
       "replicate_multiplier": 1,
       "effect_definition": "hazard ratio",
-      "simulated": true
+      "simulated": true,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "biomarker_classification",
@@ -237,7 +253,8 @@
       "description": "Can the measurements classify samples into groups (biomarker, classifier)?",
       "replicate_multiplier": 1,
       "effect_definition": "classification accuracy (AUC)",
-      "simulated": false
+      "simulated": false,
+      "size_from": "minimum_detectable_difference"
     },
     {
       "id": "coexpression_network",
@@ -253,7 +270,8 @@
       "description": "Which features form co-regulated modules, and do modules relate to traits?",
       "replicate_multiplier": 1,
       "effect_definition": "module-trait correlation",
-      "simulated": false
+      "simulated": false,
+      "size_from": "minimum_detectable_difference"
     }
   ]
 }

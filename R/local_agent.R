@@ -360,6 +360,7 @@ extract_spec_local <- function(question) {
   # analysis goals the question names (R/goals.R; rules.tsv analysis_goal) and time-course details
   g <- .sf_goals_from_text(text); if (length(g)) spec$analysis$goals <- as.list(g)
   tc <- .sf_time_course_detail(text); if (length(tc)) spec$analysis$time_course <- tc
+  pu <- .sf_per_unit_effect(text); if (!is.null(pu)) spec$analysis$per_unit_effect <- pu
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)

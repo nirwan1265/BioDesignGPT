@@ -44,3 +44,21 @@ test_that("effect scale follows the data type; a zero dose on a log scale gets a
   d <- Filter(function(f) f$name == "dose", s$factors)[[1]]
   expect_equal(d$scale, "log"); expect_equal(d$log_offset, 1)
 })
+
+test_that("trend size only from a per-unit change; peak implies a time course; scope names the group; log base 10", {
+  pkg <- function(q) { a <- studyforge_ask(q, provider = "local"); s <- a$spec; s$design$reps <- s$design$reps %||% 3
+    d <- file.path(tempdir(), paste0("g2", sample.int(1e6, 1))); write_design_package(layout_from_spec(s, 1), s, d)
+    jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE) }
+  a <- pkg("Arabidopsis seedlings treated with 0, 1, 10 and 100 uM ABA, dose-response RNA-seq, 3 replicates.")
+  expect_null(a$analysis$goal_effect$trend$size)
+  expect_match(a$assumptions[["analysis.goal_effect.trend.size"]], "over the factor's range")
+  dose <- Filter(function(f) f$name == "dose", a$factors)[[1]]
+  expect_equal(dose$unit, "uM"); expect_equal(dose$log_base, 10); expect_equal(dose$log_offset, 1)
+  b <- pkg("Arabidopsis seedlings treated with 0, 1, 10 and 100 uM ABA, dose-response RNA-seq, 3 replicates; we expect a 0.5 log2 change per 10-fold dose.")
+  expect_equal(b$analysis$goal_effect$trend$size, 0.5)
+  m <- pkg("Mice infected or mock, blood from the same mice at 0, 6, 24 and 72 h, peak response expected at 24 h then return to baseline, 5 mice per group.")
+  expect_equal(m$analysis$primary_goal, "time_course")
+  expect_equal(m$analysis$goal_effect$time_course$shape, "transient"); expect_equal(m$analysis$goal_effect$time_course$peak$value, 24)
+  w <- pkg("Time-course RNA-seq of wild-type and mutant roots at 0, 6, 24 and 48 h, 3 replicates; genes change over time only in the mutant.")
+  expect_equal(w$analysis$goal_effect$time_course$group, "mutant"); expect_equal(w$analysis$goal_effect$time_course$group_factor, "genotype")
+})

@@ -37,7 +37,16 @@
     g <- regmatches(t, regexec(tryCatch(.sf_cue(cues[[nm]]), error = function(e) "(?!)"), t, perl = TRUE))[[1]]
     if (length(g) >= 3) out[[nm]] <- list(value = as.numeric(g[2]), unit = .sf_unit_name(g[3]))
   }
-  out$scope <- if (.sf_has(t, tryCatch(.sf_cue("time_scope_within"), error = function(e) "(?!)"))) "within_group" else NULL
+  # scope: the time pattern is expected in one group only; the group word ("infected") and the factor it names
+  sg <- regmatches(t, regexec(tryCatch(.sf_cue("time_scope_within"), error = function(e) "(?!)"), t, perl = TRUE))[[1]]
+  if (length(sg)) {
+    out$scope <- "within_group"
+    if (length(sg) >= 2 && nzchar(sg[2])) {
+      out$group <- sg[2]
+      f <- setdiff(.sf_find_all(sg[2], "factor"), "treatment")
+      out$group_factor <- if (length(f)) f[1] else "treatment"
+    }
+  }
   out
 }
 
@@ -71,6 +80,12 @@
 # a log-scaled numeric factor with a zero level (an untreated control) is fitted as log(x + offset); the offset is
 # the smallest positive level, written into the spec so Simitall and Bioana use the same one
 .sf_log_offset <- function(v) { v <- v[is.finite(v)]; if (any(v == 0) && any(v > 0)) min(v[v > 0]) else NULL }
+
+# a stated change per unit of a numeric factor ("a 5% increase per 10-fold dose"; cue per_unit_effect) -> its number
+.sf_per_unit_effect <- function(text) {
+  g <- regmatches(tolower(text), regexec(tryCatch(.sf_cue("per_unit_effect"), error = function(e) "(?!)"), tolower(text), perl = TRUE))[[1]]
+  if (length(g) >= 2) as.numeric(g[2]) else NULL
+}
 
 # numeric levels: linear or log spacing (equal ratios of at least 2 between successive positive values)
 .sf_level_scale <- function(v) {
@@ -156,14 +171,19 @@
   spec$analysis$primary_goal <- goals[1]
   spec$analysis$goal_terms <- gt[intersect(goals, names(gt))]
   # goal_effect for each goal: size from the stated minimum detectable difference, else listed as an assumption
-  mdd <- spec$power$minimum_detectable_difference
+  # size from the registry's size_from: a difference between levels (power.minimum_detectable_difference) or a
+  # stated change per unit (spec$analysis$per_unit_effect, cue per_unit_effect) for a slope
+  src <- list(minimum_detectable_difference = spec$power$minimum_detectable_difference, per_unit_effect = spec$analysis$per_unit_effect)
   ge <- list()
   for (g in goals) {
-    e <- list(size = mdd, scale = .sf_effect_scale(spec), definition = reg[[g]]$effect_definition)
+    sf <- reg[[g]]$size_from %||% "minimum_detectable_difference"
+    e <- list(size = src[[sf]], scale = .sf_effect_scale(spec), definition = reg[[g]]$effect_definition)
     if (identical(g, "time_course")) e <- c(e, spec$analysis$time_course %||% list())
     ge[[g]] <- e[!vapply(e, is.null, logical(1))]
-    if (is.null(mdd)) spec$assumptions[[paste0("analysis.goal_effect.", g, ".size")]] <- "not stated: use power.minimum_detectable_difference default"
+    if (is.null(src[[sf]])) spec$assumptions[[paste0("analysis.goal_effect.", g, ".size")]] <-
+      if (sf == "per_unit_effect") "not stated: use the treatment effect over the factor's range" else "not stated: use power.minimum_detectable_difference default"
   }
+  spec$analysis$per_unit_effect <- NULL
   spec$analysis$goal_effect <- ge
   spec$analysis$time_course <- NULL
   # replicate sweep sized for the primary goal

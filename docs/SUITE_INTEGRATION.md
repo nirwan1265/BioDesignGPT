@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.1`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.2`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -139,7 +139,11 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   a note.
 - Numeric levels of any factor: `values`, `unit` (time units, or rules.tsv `level_unit_name`: mg/kg, uM, %, Gy,
   ...) and `scale` (linear | log). A log-scaled factor with a zero level carries `log_offset` (the smallest positive
-  level): fit log(x + log_offset).
+  level) and `log_base` 10: fit log10(x + log_offset). A trend's `goal_effect.size` is a change per unit (per log10
+  unit when log-scaled) and is set only when the question states one; otherwise it is absent and listed in
+  `assumptions` ("use the treatment effect over the factor's range").
+- `time_course` with `scope = "within_group"` also gives `group` (the word, e.g. "infected") and `group_factor`.
+  A stated peak or return to baseline makes `time_course` a goal.
 - `goal_effect.scale` (schema 0.6.1) is the model scale for the data type (rules.tsv `effect_scale`): identity
   (continuous outcome), log2 (counts and intensities), M (methylation), logit (binary, ordinal), log (count outcome),
   log_hazard (survival). Truth and tests use that scale; an interaction is a difference of differences on it.

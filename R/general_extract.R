@@ -252,7 +252,10 @@
         fx[[j]]$values <- vv$values
         if (!is.null(vv$unit)) fx[[j]]$unit <- vv$unit
         fx[[j]]$scale <- .sf_level_scale(vv$values)   # linear, or log for equal ratios (1, 10, 100)
-        if (identical(fx[[j]]$scale, "log")) fx[[j]]$log_offset <- .sf_log_offset(vv$values)   # log(x + offset) when 0 is a level
+        if (identical(fx[[j]]$scale, "log")) {   # log10(x + offset) when 0 is a level; base written so all heads agree
+          fx[[j]]$log_base <- 10
+          fx[[j]]$log_offset <- .sf_log_offset(vv$values)
+        }
         fx[[j]]$levels <- trimws(paste(format(vv$values, trim = TRUE, drop0trailing = TRUE), vv$unit %||% ""))
       }
     }
