@@ -545,7 +545,12 @@ extract_spec_local <- function(question) {
   subj <- regmatches(ts, regexpr(.sf_cue("living_subject"), ts, perl = TRUE))
   if (!length(subj)) subj <- regmatches(ts, regexpr(.sf_cue("repeatable_unit"), ts, perl = TRUE))
   same_hits <- regmatches(t, gregexpr(.sf_cue("same_units_over_occasions"), t, perl = TRUE))[[1]]
+  perennial <- .sf_has(t, tryCatch(.sf_cue("perennial_plant"), error = function(e) "(?!)"))
   same_ok <- vapply(same_hits, function(h) {
+    # "sampled repeatedly" says the same units only for subjects that survive sampling (animals, people, vessels,
+    # trees); for annual plants and organs it may be new plants each time, so it is asked (cue weak_repeat_phrase)
+    if (grepl(tryCatch(.sf_cue("weak_repeat_phrase"), error = function(e) "(?!)"), h, perl = TRUE))
+      return(length(subj) > 0 || perennial)
     if (!grepl("\\bsame\\b", h)) return(TRUE)
     x <- utils::tail(strsplit(trimws(h), "\\s+")[[1]], 1)
     !length(subj) || grepl(.sf_cue("generic_individual"), x, perl = TRUE) || !grepl(.sf_cue("living_subject"), x, perl = TRUE) ||

@@ -183,3 +183,12 @@ test_that("same X must be the measured subject; before/after on living subjects 
   expect_equal(rp("RNA-seq of HeLa cells transfected with a siRNA or scrambled control, before and after serum starvation."), "absent")
   expect_equal(rp("RNA-seq of tomato plants in pots under low or high nitrogen, sampled before and after flowering from roots and leaves."), "absent")
 })
+
+test_that("'sampled repeatedly' counts for subjects that survive sampling, not for annual plants", {
+  rp <- function(q) { v <- .sf_repeated_on_unit(list(factors = list(list(name = "time", n_levels = 3))), q)$repeated_factors
+    if (is.null(v)) "absent" else paste(unlist(v), collapse = ",") }
+  expect_equal(rp("Leaf RNA-seq of barley at heading in a growth chamber, sampled repeatedly, 3 replicates."), "absent")
+  expect_equal(rp("Leaf RNA-seq of field apple trees sampled repeatedly over a season."), "time")
+  expect_equal(rp("Plasma proteomics of sheep sampled repeatedly after vaccination."), "time")
+  expect_equal(rp("Meat RNA-seq sampled repeatedly post mortem from the same carcasses."), "time")
+})
