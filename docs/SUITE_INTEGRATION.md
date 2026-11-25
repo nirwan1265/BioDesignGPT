@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.1`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.2`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -87,6 +87,21 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   `population.derived_generation` from notation such as BC3F2, F2:3, BC1F3:5, RIL F6. Rules: rules.tsv
   `generation_notation`. A count after the colon (F2:3) is never read as a level count.
 - WGS and GBS panels are panels (`panel_assay`), so they get a `genotype` factor like GWAS.
+
+### Stage, and the same units at every occasion (schema 0.5.2)
+
+- Named physiological states (gestation and lactation, anthesis and grain filling, before/at/after puberty) are a
+  `stage` factor; numbered points (day 10 and day 70, 24/48/72 h) are `time`. Both, and `age`, are occasion factors
+  (rules.tsv `occasion_factor`): the generic model term `time` maps to the first one present (time, then stage, then
+  age) in `analysis.terms.time`.
+- `repeated_factors`: the occasion factors measured on the same units at every level. Read from the text (cues
+  `same_units_over_occasions`, e.g. "from the same 7 boars at puberty and at maturity", and
+  `different_units_per_occasion`, e.g. "sacrificed at each time"); `[]` means destructive sampling; absent means not
+  stated, and Biodes asks "Are the same {unit}s sampled at every stage, or different {unit}s at each stage?" (rules.tsv
+  `occasion_question`). Listed factors are within-unit in `layout_from_spec()` (each unit repeats across their
+  levels), appear in `analysis.terms.repeated_factors`, and `analysis.note` says "add (1 | unit)" when the catalog
+  model lacks it.
+- `cell_type` and `fraction` are within-unit factors, like `tissue` (rules.tsv `within_unit_factor`).
 
 On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
 3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you

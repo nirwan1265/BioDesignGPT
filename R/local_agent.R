@@ -356,6 +356,7 @@ extract_spec_local <- function(question) {
   spec <- .sf_panel_genotype(spec)
   spec <- .sf_genetics(spec, text)
   kinds <- .sf_assay_kinds(text); if (length(kinds)) spec$assay_kinds <- as.list(kinds)
+  spec <- .sf_repeated_on_unit(spec, text)
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -506,7 +507,26 @@ extract_spec_local <- function(question) {
 # list within_unit_factor in rules.tsv) are not
 .sf_randomized_factors <- function(spec) {
   nm <- vapply(spec$factors %||% list(), function(x) x$name %||% "", "")
-  setdiff(nm[nzchar(nm)], .sf_list("within_unit_factor"))
+  setdiff(nm[nzchar(nm)], .sf_within_factors(spec))
+}
+
+# factors measured within one experimental unit, not randomized to units: rules.tsv within_unit_factor (tissue, cell
+# type, fraction) always; an occasion factor (rules.tsv occasion_factor: time, stage, age) when the same units are
+# measured at every level (spec$repeated_factors, read from the text or answered by the user)
+.sf_within_factors <- function(spec) {
+  nm <- vapply(spec$factors %||% list(), function(x) x$name %||% "", "")
+  intersect(nm, c(.sf_list("within_unit_factor"), unlist(spec$repeated_factors)))
+}
+
+# same units at every time / stage / age? TRUE (the text says so: cue same_units_over_occasions), FALSE (destructive:
+# cue different_units_per_occasion), NULL (not stated: asked, rules.tsv occasion_question)
+.sf_repeated_on_unit <- function(spec, text) {
+  occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))
+  if (!length(occ)) return(spec)
+  t <- tolower(text)
+  if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
+  else if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(occ)
+  spec
 }
 
 .sf_recipe <- function(spec, candidates) {
@@ -611,6 +631,15 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
       gsub("{F}", nm, q[1], fixed = TRUE) }, "")
     questions <- unique(c(ask_lv, questions))
     v$missing <- unique(c(v$missing, paste0("factors.", open_lv, ".n_levels")))
+  }
+  # an occasion factor (time, stage, age) without "same units at every level?" answered: ask it (rules.tsv
+  # occasion_question; {F} factor, {U} experimental unit)
+  occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))
+  if (length(occ) && is.null(spec$repeated_factors)) {
+    oq <- .sf_rules_rows("occasion_question")
+    ask_oc <- vapply(occ, function(nm) { q <- oq$pattern[oq$term == nm]; if (!length(q)) q <- oq$pattern[oq$term == "*"]
+      gsub("{U}", spec$experimental_unit %||% "unit", gsub("{F}", nm, q[1], fixed = TRUE), fixed = TRUE) }, "")
+    questions <- unique(c(questions, ask_oc))
   }
   if (!length(spec$factors)) {
     q0 <- .sf_rules_rows("level_question"); q0 <- q0$pattern[q0$term == "_none"]
@@ -856,7 +885,7 @@ mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
     if (startsWith(path, "factor:")) {
       nm <- sub("^factor:", "", path)
       f <- Filter(function(x) identical(x$name, nm), spec$factors %||% list())
-      return(length(f) > 0 && (nm %in% c("time", "age", "stage") || !is.null(f[[1]]$n_levels)))
+      return(length(f) > 0 && (nm %in% .sf_list("occasion_factor") || !is.null(f[[1]]$n_levels)))
     }
     !is.null(spec_get(spec, path)) && is.null(spec$assumptions[[path]])
   }

@@ -128,6 +128,11 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   if (length(cat_d)) {
     spec$analysis$model <- cat_d[[1]]$model
     if (!is.null(cat_d[[1]]$analysis_note)) spec$analysis$note <- cat_d[[1]]$analysis_note
+    # the same units measured at every level of an occasion factor: the unit is a random effect, whatever the layout
+    rep_f <- unlist(spec$repeated_factors)
+    if (length(rep_f) && !grepl("(1 | unit)", cat_d[[1]]$model, fixed = TRUE))
+      spec$analysis$note <- paste(c(spec$analysis$note, sprintf("the same %s is measured at every %s level: add (1 | unit)",
+        spec$experimental_unit %||% "unit", paste(rep_f, collapse = "/"))), collapse = "; ")
     spec$analysis$terms <- .sf_model_terms(spec, book, cat_d[[1]]$model)
     if (length(attr(book, "layout_notes"))) spec$design$layout_notes <- as.list(attr(book, "layout_notes"))
   }
@@ -160,15 +165,18 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   rf <- .sf_randomized_factors(spec)
   allf <- vapply(spec$factors %||% list(), function(x) x$name %||% "", "")
   mv <- if (!is.null(model)) all.vars(stats::as.formula(model)) else character()
-  out <- list(treatment = rf[1], treatment2 = rf[2], time = if ("time" %in% allf) "time", unit = spec$experimental_unit,
+  # the generic term "time" is the first occasion factor present (rules.tsv occasion_factor: time, then stage, age)
+  occ <- utils::head(intersect(.sf_list("occasion_factor"), allf), 1)
+  out <- list(treatment = rf[1], treatment2 = rf[2], time = if (length(occ)) occ, unit = spec$experimental_unit,
               block = unlist(spec$blocking_factors)[1] %||% (if (!is.null(book) && "block" %in% names(book)) "block"))
-  if ("time" %in% mv && identical(out$treatment, "time")) out$treatment <- setdiff(rf, "time")[1]
-  if ("time" %in% mv && identical(out$treatment2, "time")) out$treatment2 <- setdiff(rf, c("time", out$treatment))[1]
+  if (length(occ) && "time" %in% mv && identical(out$treatment, occ)) out$treatment <- setdiff(rf, occ)[1]
+  if (length(occ) && "time" %in% mv && identical(out$treatment2, occ)) out$treatment2 <- setdiff(rf, c(occ, out$treatment))[1]
   out <- Filter(function(v) length(v) && !is.na(v), out)
   if (length(mv)) out <- out[intersect(names(out), c(mv, "unit"))]
   # model terms that are layout columns themselves (rep, block, row, col, period, sequence, check) map to that column
   if (!is.null(book)) for (v in setdiff(intersect(mv, names(book)), c("y", names(out)))) out[[v]] <- v
   if (!is.null(spec$genetics$unit)) out$genetic_unit <- spec$genetics$unit
+  if (!is.null(spec$repeated_factors)) out$repeated_factors <- as.list(unlist(spec$repeated_factors))
   envc <- if (!is.null(book)) intersect(c("location", "season"), names(book)) else character()
   if (length(envc) && "env" %in% mv) out$env <- paste(envc, collapse = ":")
   if (!is.null(book)) {
@@ -224,7 +232,7 @@ layout_from_spec <- function(spec, seed = 42) {
     stop(sprintf("layout_from_spec: no level count for %s (missing: factors.n_levels).",
                  paste(names(lv)[vapply(lv, is.null, logical(1))], collapse = ", ")), call. = FALSE)
   reps <- spec$design$reps
-  within <- intersect(names(lv), .sf_list("within_unit_factor"))
+  within <- intersect(names(lv), .sf_within_factors(spec))
   rand <- setdiff(names(lv), within)
   if (!length(rand)) { rand <- within[1]; within <- within[-1]; notes <- c(notes, sprintf("%s is the only factor, so it is randomized to units", rand)) }
   buildable <- eval(formals(make_design)$design)

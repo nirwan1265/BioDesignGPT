@@ -1,5 +1,5 @@
 {
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -46,7 +46,8 @@
     "assay_kinds",
     "population.backcross_generations",
     "population.self_generations",
-    "population.derived_generation"
+    "population.derived_generation",
+    "repeated_factors"
   ],
   "enums": {
     "system": [
@@ -91,6 +92,7 @@
     "assay_kinds": "finer assay names read from the text (rules.tsv assay_kind), e.g. dnase_seq, faire_seq, amplicon_16s, crispr_screen, proteomics, mpra; assays keeps the coarse labels",
     "population.backcross_generations": "backcross generations from breeding notation (BC3F2 -> 3)",
     "population.self_generations": "selfing generations after the F1 (F6 -> 5)",
-    "population.derived_generation": "generation the lines were derived from (F2:3 -> 2)"
+    "population.derived_generation": "generation the lines were derived from (F2:3 -> 2)",
+    "repeated_factors": "occasion factors (time, stage, age) measured on the same units at every level: [] = different units at each level (destructive), absent = not stated (asked). Listed factors are within-unit in the layout and the unit is a random effect, (1 | unit); also in analysis.terms.repeated_factors"
   }
 }

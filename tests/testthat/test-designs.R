@@ -117,3 +117,17 @@ test_that("cell types and fractions are measured within the unit, not randomized
   expect_equal(nrow(b), 2 * 4 * 3)
   expect_true(all(table(b$plot) == 3))
 })
+
+test_that("same units at every stage: within-unit layout, (1 | unit) note; destructive: crossed; unstated: asked", {
+  a <- studyforge_ask("Sperm RNA-seq from the same 7 Duroc boars at puberty and at maturity, fed diet A vs B, 3 boars per diet.", provider = "local")
+  expect_equal(unlist(a$spec$repeated_factors), "stage")
+  b <- layout_from_spec(a$spec, 1)
+  expect_true(all(table(b[[setdiff(names(b), c("stage", "diet", "block", "plots", "plot", "unit", "rep"))[1]]] %||% 1) >= 1))
+  expect_equal(nrow(b), 2 * 3 * 2)
+  expect_equal(.sf_model_terms(a$spec, b, "y ~ treatment * time + (1 | unit)")$time, "stage")
+  d <- studyforge_ask("Liver RNA-seq of rats on two diets, 3 rats sacrificed at each of days 7, 14 and 28.", provider = "local")
+  expect_length(d$spec$repeated_factors, 0); expect_false(is.null(d$spec$repeated_factors))
+  u <- studyforge_ask("Faecal 16S of sows on two diets sampled in late gestation and lactation, 6 sows per diet.", provider = "local")
+  expect_null(u$spec$repeated_factors)
+  expect_true(any(grepl("same .* every stage", u$all_questions)))
+})
