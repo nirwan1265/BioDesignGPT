@@ -177,6 +177,9 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   if (!is.null(book)) for (v in setdiff(intersect(mv, names(book)), c("y", names(out)))) out[[v]] <- v
   if (!is.null(spec$genetics$unit)) out$genetic_unit <- spec$genetics$unit
   if (!is.null(spec$repeated_factors)) out$repeated_factors <- as.list(unlist(spec$repeated_factors))
+  if ("subject" %in% mv && is.null(out$subject)) out$subject <- spec$experimental_unit %||% "unit"
+  # the layout column that identifies one experimental unit (its rows repeat across within-unit levels)
+  if (!is.null(book)) out$unit_column <- intersect(c("plot", "unit", "pot", "cage"), names(book))[1]
   envc <- if (!is.null(book)) intersect(c("location", "season"), names(book)) else character()
   if (length(envc) && "env" %in% mv) out$env <- paste(envc, collapse = ":")
   if (!is.null(book)) {
@@ -290,6 +293,15 @@ layout_from_spec <- function(spec, seed = 42) {
     rownames(book2) <- NULL
     attr(book2, "design") <- attr(book, "design"); attr(book2, "seed") <- attr(book, "seed")
     notes <- c(notes, sprintf("%s measured within each unit: one row per unit and level", paste(within, collapse = " x ")))
+    # the same units at every time/stage level: the design is the repeated-measures form of the layout built
+    # (rules.tsv repeated_variant: rcbd -> randomized_complete_block_repeated, crd -> repeated_measures, ...)
+    rep_f <- intersect(within, unlist(spec$repeated_factors))
+    rv <- tryCatch(.sf_rules_rows("repeated_variant"), error = function(e) NULL)
+    if (length(rep_f) && NROW(rv) && attr(book, "design") %in% rv$term) {
+      v <- rv$pattern[rv$term == attr(book, "design")][1]
+      notes <- c(notes, sprintf("%s repeated on the same units: %s model (%s randomized to units)", paste(rep_f, collapse = ", "), v, paste(rand, collapse = " x ")))
+      attr(book2, "design") <- v
+    }
     book <- book2
   }
   attr(book, "layout_notes") <- notes

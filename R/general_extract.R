@@ -197,6 +197,26 @@
     # an arm list already read as another factor (infection vs mock, diet vs chow, dose vs vehicle) is not a treatment
     owned <- .sf_list("arm_factor")
     if ("treatment" %in% names(lv) && any(have %in% owned)) lv$treatment <- NULL
+    # a treatment read from arms that name another factor already in the spec ("drought vs control" is water) is
+    # that factor, not a second one: the count goes to it
+    # (only a two-arm contrast, one arm a control, the other naming exactly one factor already in the spec; a list of
+    # several stresses "control, drought, heat or both" stays a treatment)
+    ar <- attr(lv, "arms")$treatment
+    if ("treatment" %in% names(lv) && length(ar) == 2) {
+      cv <- .sf_list("treatment_control")
+      isc <- vapply(ar, function(x) any(strsplit(x, "\\s+")[[1]] %in% cv) || grepl("^(?:no|without)\\s", x, perl = TRUE), logical(1))
+      if (sum(isc) == 1) {
+        # the arm's own words: what follows its setting preposition ("maize lines under drought" -> "drought"; cue arm_head)
+        head <- sub(tryCatch(.sf_cue("arm_head"), error = function(e) "(?!)"), "", ar[!isc], perl = TRUE)
+        fw <- setdiff(.sf_find_all(head, "factor"), "treatment")
+        if (length(fw) == 1 && fw %in% have) {
+          k <- match(fw, have)
+          if (is.null(fx[[k]]$n_levels) && !is.na(lv$treatment)) fx[[k]]$n_levels <- lv$treatment
+          lv$treatment <- NULL
+        }
+      }
+    }
+    vals <- attr(lv, "values")
     # disease and phenotype_group are one group factor: the group_by_* cues pick the name, as for the reader
     for (g in intersect(names(lv), c("disease", "phenotype_group"))) {
       nm2 <- .sf_group_factor(g, text); if (!identical(nm2, g)) { lv[[nm2]] <- lv[[g]]; lv[[g]] <- NULL }
@@ -210,6 +230,13 @@
       else if (!is.na(n) && identical(as.numeric(fx[[i]]$n_levels), 2) && n > 2) fx[[i]]$n_levels <- n
       # a summed list of groups beats the first count alone ("four cultivars and two hybrids": 6, not 4)
       else if (!is.na(n) && nm %in% summed && n > as.numeric(fx[[i]]$n_levels)) fx[[i]]$n_levels <- n
+      # numeric levels read with their unit: values, unit and level labels ("24 h", "48 h", "72 h")
+      j <- match(nm, have); vv <- vals[[nm]]
+      if (!is.na(j) && !is.null(vv) && identical(as.numeric(fx[[j]]$n_levels), as.numeric(length(vv$values))) && is.null(fx[[j]]$levels)) {
+        fx[[j]]$values <- vv$values
+        if (!is.null(vv$unit)) fx[[j]]$unit <- vv$unit
+        fx[[j]]$levels <- trimws(paste(format(vv$values, trim = TRUE, drop0trailing = TRUE), vv$unit %||% ""))
+      }
     }
     spec$factors <- fx
   }
@@ -310,6 +337,7 @@ studyforge_fix <- function(answer, ...) {
 # level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
 # factor is there, its levels unknown ("sampled over time").
 .sf_level_factors <- function(text) {
+  spans <- list(); vals <- list(); arms <- list()   # text each count was read from; numeric levels; contrast arms
   r <- .sf_rules_rows("factor_levels")
   out <- list()
   how <- sub("^[^/]*/", "", r$term); r$term <- sub("/.*$", "", r$term); r$match <- how
@@ -382,7 +410,7 @@ studyforge_fix <- function(answer, ...) {
         if (length(items) >= 2 && any(vapply(items, ctrl, logical(1)))) {
           # a trailing when-phrase belongs to time, not to the arm ("salt vs control at several times")
           heads <- sub("\\s+(?:at|over|during|across|throughout|sampled)\\b.*$", "", items, perl = TRUE)
-          out[[nm]] <- if (any(grepl(oq, heads, perl = TRUE))) NA else length(items); break }
+          out[[nm]] <- if (any(grepl(oq, heads, perl = TRUE))) NA else length(items); spans[[nm]] <- run; arms[[nm]] <- items; break }
       }
       next
     }
@@ -417,7 +445,7 @@ studyforge_fix <- function(answer, ...) {
       items <- items[nzchar(items)]
       # an item naming several groups at once ("several doses", "different strains") leaves the count open
       openw <- tryCatch(.sf_cue("open_group_item"), error = function(e) "(?!)")
-      if (length(items) >= 2 && !any(grepl(openw, items, perl = TRUE))) out[[nm]] <- length(items)
+      if (length(items) >= 2 && !any(grepl(openw, items, perl = TRUE))) { out[[nm]] <- length(items); spans[[nm]] <- g[1] }
       next
     }
     if (identical(r$match[i], "wordlist")) {   # every listed run in the text; the first with two or more table words
@@ -446,13 +474,15 @@ studyforge_fix <- function(answer, ...) {
       # a phrase that says when a treatment ran ("fed low protein during gestation and lactation") is the exposure
       # window, not groups: it is taken out before the lists are read (cue exposure_period)
       wtext <- gsub(period, " , ", text, perl = TRUE)
+      # "late gestation and again in early lactation": filler between list items (cue list_filler) is dropped
+      wtext <- gsub(tryCatch(.sf_cue("list_filler"), error = function(e) "(?!)"), "", wtext, perl = TRUE)
       runs <- regmatches(wtext, gregexpr(re, wtext, perl = TRUE))[[1]]
       for (run in runs) {
         items <- trimws(strsplit(run, "\\s*,\\s*(?:and\\s+|or\\s+)?|\\s+and\\s+|\\s+or\\s+|\\s+vs\\.?\\s+|\\s+versus\\s+|\\s*/\\s*", perl = TRUE)[[1]])
         ok <- vapply(items, named, logical(1))
         for (j in which(!ok)) if (j < length(items)) ok[j] <- shares_head(items[j], items[(j + 1):length(items)])
         k <- sum(ok)
-        if (k >= 2) { out[[nm]] <- k; break }
+        if (k >= 2) { out[[nm]] <- k; spans[[nm]] <- run; break }
       }
       next
     }
@@ -497,10 +527,30 @@ studyforge_fix <- function(answer, ...) {
       },
       if (grepl("^\\d+$", r$match[i])) as.numeric(r$match[i]) else NA)   # a fixed count: "a hybrid and its two parents" = 3
     if (!is.na(n) && n < 2) next
-    out[[nm]] <- n
+    out[[nm]] <- n; spans[[nm]] <- g[1]
     if (r$match[i] %in% c("sum", "range")) attr(out, "summed") <- c(attr(out, "summed"), nm)
+    # a list of numbers keeps its values and unit ("at 24, 48 and 72 h": 24 48 72, h; units: rules.tsv time_unit_name)
+    if (identical(r$match[i], "list") && !extra) {
+      v <- as.numeric(regmatches(g[2], gregexpr("(?<![\\d.-])\\d+(?:\\.\\d+)?(?![\\d.]*-)", g[2], perl = TRUE))[[1]])
+      if (length(v) == n) {
+        mm <- regexpr(re, text, perl = TRUE)
+        ctx <- substr(text, mm, mm + attr(mm, "match.length") + 15)
+        un <- .sf_unit_name(regmatches(ctx, gregexpr("[a-z]+", ctx))[[1]])
+        vals[[nm]] <- list(values = v, unit = un)
+      }
+    }
   }
+  attr(out, "spans") <- spans; attr(out, "values") <- vals; attr(out, "arms") <- arms
   out
+}
+
+# the first word that names a time unit (rules.tsv time_unit_name: canonical name, word pattern), else NULL
+.sf_unit_name <- function(words) {
+  u <- tryCatch(.sf_rules_rows("time_unit_name"), error = function(e) NULL)
+  if (is.null(u)) return(NULL)
+  for (w in words) { k <- which(vapply(u$pattern, function(p) grepl(p, w, perl = TRUE), logical(1)))
+    if (length(k)) return(u$term[k[1]]) }
+  NULL
 }
 
 # {vocab:category} in a rule pattern stands for that rules.tsv category's words, as literal alternatives (longest first)

@@ -524,8 +524,9 @@ extract_spec_local <- function(question) {
   occ <- intersect(vapply(spec$factors %||% list(), function(x) x$name %||% "", ""), .sf_list("occasion_factor"))
   if (!length(occ)) return(spec)
   t <- tolower(text)
-  if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
-  else if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(occ)
+  # an explicit "same / again / repeatedly" wins over a kill word ("bled weekly, sacrificed at the end")
+  if (.sf_has(t, .sf_cue("same_units_over_occasions"))) spec$repeated_factors <- as.list(occ)
+  else if (.sf_has(t, .sf_cue("different_units_per_occasion"))) spec$repeated_factors <- list()
   spec
 }
 

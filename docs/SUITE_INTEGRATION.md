@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.2`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.5.3`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -102,6 +102,12 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   levels), appear in `analysis.terms.repeated_factors`, and `analysis.note` says "add (1 | unit)" when the catalog
   model lacks it.
 - `cell_type` and `fraction` are within-unit factors, like `tissue` (rules.tsv `within_unit_factor`).
+- When an occasion factor is repeated, the layout's design is the repeated-measures form of what was built (rules.tsv
+  `repeated_variant`: rcbd -> `randomized_complete_block_repeated` `y ~ treatment * time + (1 | block) + (1 | unit)`,
+  crd -> `repeated_measures`, factorial -> `factorial_longitudinal`). `analysis.terms.unit_column` names the layout
+  column that identifies one unit (`plot`), whose rows repeat across the occasion levels.
+- Numeric levels (schema 0.5.3): "at 24, 48 and 72 h" gives `levels` ["24 h","48 h","72 h"], `values` [24,48,72],
+  `unit` "h" (rules.tsv `time_unit_name`); the layout uses the labels.
 
 On Biodes' dev, dev2 and train specs (3,379 questions), with defaults applied and the low end of the replicate range,
 3,336 (99%) get a layout that keeps every factor; the other 43 have no factor at all and are asked "what do you

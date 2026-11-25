@@ -131,3 +131,19 @@ test_that("same units at every stage: within-unit layout, (1 | unit) note; destr
   expect_null(u$spec$repeated_factors)
   expect_true(any(grepl("same .* every stage", u$all_questions)))
 })
+
+test_that("Simitall repeated-measures cases: same animals across stages/times; time values; no double count", {
+  a <- studyforge_ask("Liver biopsies from the same cows in late gestation and again in early lactation, 6 cows per diet, two diets.", provider = "local")
+  expect_setequal(vapply(a$spec$factors, `[[`, "", "name"), c("diet", "stage"))
+  expect_equal(unlist(a$spec$repeated_factors), "stage")
+  b <- layout_from_spec(a$spec, 1)
+  expect_equal(nrow(b), 2 * 6 * 2); expect_true(all(table(b$plot) == 2))
+  expect_equal(attr(b, "design"), "randomized_complete_block_repeated")
+  m <- studyforge_ask("Blood from the same mice at 24, 48 and 72 h, infected vs mock, 5 mice per group.", provider = "local")
+  tf <- Filter(function(f) f$name == "time", m$spec$factors)[[1]]
+  expect_equal(tf$values, c(24, 48, 72)); expect_equal(tf$unit, "h"); expect_equal(tf$levels, c("24 h", "48 h", "72 h"))
+  bm <- layout_from_spec(m$spec, 1)
+  expect_equal(nrow(bm), 2 * 5 * 3); expect_setequal(unique(bm$time), c("24 h", "48 h", "72 h"))
+  z <- extract_spec_local("Maize lines under drought vs control, leaves at anthesis and grain filling, 4 plots each.")
+  expect_setequal(vapply(z$factors, `[[`, "", "name"), c("water", "stage"))
+})

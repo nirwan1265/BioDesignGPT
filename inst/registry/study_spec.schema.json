@@ -1,5 +1,5 @@
 {
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -47,7 +47,9 @@
     "population.backcross_generations",
     "population.self_generations",
     "population.derived_generation",
-    "repeated_factors"
+    "repeated_factors",
+    "factors[].values",
+    "factors[].unit"
   ],
   "enums": {
     "system": [
@@ -93,6 +95,8 @@
     "population.backcross_generations": "backcross generations from breeding notation (BC3F2 -> 3)",
     "population.self_generations": "selfing generations after the F1 (F6 -> 5)",
     "population.derived_generation": "generation the lines were derived from (F2:3 -> 2)",
-    "repeated_factors": "occasion factors (time, stage, age) measured on the same units at every level: [] = different units at each level (destructive), absent = not stated (asked). Listed factors are within-unit in the layout and the unit is a random effect, (1 | unit); also in analysis.terms.repeated_factors"
+    "repeated_factors": "occasion factors (time, stage, age) measured on the same units at every level: [] = different units at each level (destructive), absent = not stated (asked). Listed factors are within-unit in the layout and the unit is a random effect, (1 | unit); also in analysis.terms.repeated_factors",
+    "factors[].values": "numeric level values read from the text (\"at 24, 48 and 72 h\": [24, 48, 72]); levels then carry the labels (\"24 h\", ...)",
+    "factors[].unit": "unit of factors[].values (rules.tsv time_unit_name: min, h, d, wk, mo, yr)"
   }
 }
