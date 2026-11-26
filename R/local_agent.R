@@ -383,6 +383,7 @@ extract_spec_local <- function(question) {
   }
   spec <- .sf_apply_categorical(spec, text)   # categories, expected ratio, correlation, agreement
   spec <- .sf_apply_regression(spec, text)    # covariates, regression goal and options, robust tests
+  spec <- .sf_apply_known_levels(spec, text)  # sex: female, male
   spec <- .sf_apply_survival(spec, text)   # endpoint, competing events, analysis.survival, event-based power
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL

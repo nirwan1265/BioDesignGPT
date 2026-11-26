@@ -44,3 +44,13 @@ test_that("covariate mean and SD from brackets or a following clause; brackets s
   b <- cv("Pigs on two diets, 10 per group, final weight adjusting for starting weight, which averages 30 kg with an SD of 3.")
   expect_length(b, 1); expect_equal(b[[1]]$mean, 30); expect_equal(b[[1]]$sd, 3); expect_equal(b[[1]]$unit, "kg")
 })
+
+test_that("ANCOVA without stated blocks is completely randomized; 'adjusting for sex' is additive with two levels", {
+  a <- pkg_reg("Hamsters on two diets, 20 per diet, final body weight adjusting for baseline body weight.")
+  expect_equal(a$j$design$chosen, "crd"); expect_equal(a$j$analysis$model, "y ~ treatment + covariate")
+  s <- pkg_reg("Rabbits on two diets, 10 per group, final weight adjusting for sex and baseline weight.")
+  expect_equal(s$j$analysis$model, "y ~ treatment + treatment2 + covariate")
+  sx <- Filter(function(f) f$name == "sex", s$j$factors)[[1]]; expect_equal(unlist(sx$levels), c("female", "male"))
+  b <- pkg_reg("Pigs on two diets in 6 blocks, final weight adjusting for baseline weight.")
+  expect_equal(b$j$analysis$model, "y ~ treatment + block + covariate")
+})

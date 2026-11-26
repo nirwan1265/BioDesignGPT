@@ -56,6 +56,8 @@
   # categorical predictors stay factors ("adjusting for sex"): drop items that are factor words
   fw <- tolower(.sf_list("categorical_predictor"))
   keep <- vapply(out$covariates, function(c) !(c$name %in% fw), logical(1))
+  # categorical words after "adjusting for" are adjustment factors: additive in the model, not crossed
+  out$adjust <- unique(vapply(out$covariates[!keep], `[[`, "", "name"))
   out$covariates <- out$covariates[keep]
   # same covariate named twice: keep the first
   out$covariates <- out$covariates[!duplicated(vapply(out$covariates, `[[`, "", "column"))]
@@ -72,7 +74,16 @@
   r <- .sf_rules_rows("stat_test_id"); ids <- r$term[vapply(r$pattern, grepl, logical(1), x = t, perl = TRUE)]
   if (!length(ids) && length(.sf_grab(t, "robust_test"))) ids <- "robust"
   if (length(ids)) spec$analysis$stat_tests <- unique(c(unlist(spec$analysis$stat_tests), ids))
+  if (length(x$adjust)) {
+    fn <- unique(unlist(lapply(x$adjust, function(w) c(.sf_find_all(w, "factor"), sub("s$", "", w)))))
+    spec$analysis$sf_adjust_factors <- intersect(fn, vapply(spec$factors %||% list(), function(f) f$name %||% "", ""))
+  }
   if (!length(x$covariates)) return(spec)
+  # covariates and no stated blocks: completely randomized (as for survival); replicate "blocks" of two units are not blocks
+  if (!grepl(.sf_cue("blocks_stated"), t, perl = TRUE) && is.null(spec$design$type) && is.null(spec$design$chosen)) {
+    spec$design$candidates <- unique(c("crd", unlist(spec$design$candidates)))
+    spec$assumptions[["design.candidates"]] <- "crd first: covariates (ANCOVA/regression) with no stated blocks"
+  }
   cv <- lapply(seq_along(x$covariates), function(i) {
     c <- x$covariates[[i]]; c$term <- if (i == 1) "covariate" else paste0("covariate", i)
     k <- c("term", "name", "column", "unit", "transform", "mean", "sd")
@@ -114,6 +125,15 @@
 .sf_fill_regression <- function(spec, ge, pu = NULL) {
   cv <- spec$analysis$covariates
   inter <- isTRUE(spec$analysis$sf_cov_interaction); spec$analysis$sf_cov_interaction <- NULL
+  # adjustment factors ("adjusting for sex") enter additively: "a * b" -> "a + b" for their terms
+  adj <- unlist(spec$analysis$sf_adjust_factors); spec$analysis$sf_adjust_factors <- NULL
+  terms <- spec$analysis$terms %||% list()
+  for (a in adj) {
+    tm <- names(terms)[vapply(terms, function(v) identical(unlist(v), a), logical(1))]
+    for (t1 in tm) spec$analysis$model <- gsub(sprintf("\\b(\\w+)\\s*\\*\\s*%s\\b|\\b%s\\s*\\*\\s*(\\w+)\\b", t1, t1),
+      sprintf("\\1\\2 + %s", t1), spec$analysis$model, perl = TRUE)
+    if (length(tm)) spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", sprintf("%s is an adjustment factor (additive, not crossed).", a)))
+  }
   if (!length(cv)) return(list(spec = spec, ge = ge))
   tm <- vapply(cv, `[[`, "", "term")
   model <- spec$analysis$model %||% "y ~ 1"

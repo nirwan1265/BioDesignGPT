@@ -101,3 +101,22 @@
   }
   spec
 }
+
+# a factor whose levels are known (rules.tsv known_levels: sex = female | male), named without them as an adjustment
+# factor ("adjusting for sex") or with every level named ("6 male, 6 female"); a mere mention ("sex-matched") gets nothing
+.sf_apply_known_levels <- function(spec, text = "") {
+  r <- .sf_rules_rows("known_levels")
+  adj <- unlist(spec$analysis$sf_adjust_factors)   # only where the question uses it as a factor ("adjusting for sex")
+  for (i in seq_along(spec$factors %||% list())) {
+    f <- spec$factors[[i]]; k <- which(r$term == f$name)
+    if (!length(k) || length(f$levels)) next
+    lv <- strsplit(r$pattern[k[1]], "|", fixed = TRUE)[[1]]
+    # evidence: an adjustment factor, or every level named in the question ("6 male, 6 female", "males and females")
+    named <- all(vapply(lv, function(l) grepl(sprintf("\\b%ss?\\b", l), tolower(text), perl = TRUE), logical(1)))
+    if (!(f$name %in% adj) && !named) next
+    if (!is.null(f$n_levels) && f$n_levels != length(lv)) next
+    spec$factors[[i]]$levels <- lv; spec$factors[[i]]$n_levels <- length(lv)
+    spec$assumptions[[paste0("factors.", f$name, ".levels")]] <- sprintf("named without levels: %s (rules.tsv known_levels)", paste(lv, collapse = ", "))
+  }
+  spec
+}
