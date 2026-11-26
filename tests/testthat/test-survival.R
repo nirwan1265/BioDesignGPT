@@ -59,3 +59,14 @@ test_that("a stated delayed effect marks the survival goal non-proportional and 
   e <- jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE)$analysis$goal_effect$survival
   expect_false(e$proportional_hazards); expect_equal(e$test, "logrank_fh_0_1"); expect_equal(e$size, 0.6)
 })
+
+test_that("survival with no stated blocks is completely randomized; stated few blocks are strata, not a model term", {
+  pkg <- function(q) { s <- studyforge_ask(q, provider = "local")$spec; d <- file.path(tempdir(), paste0("cr", sample.int(1e6, 1)))
+    write_design_package(layout_from_spec(s, 1), s, d); jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE) }
+  a <- pkg("Time to flowering of 2 oat lines, 20 plants per line, followed for 80 days; hazard ratio 0.7.")
+  expect_equal(a$design$chosen, "crd"); expect_equal(a$analysis$model, "y ~ treatment")
+  b <- pkg("Time to flowering of 2 oat lines under drought or well-watered, 15 plants per group, followed for 80 days; hazard ratio 0.7.")
+  expect_equal(b$design$chosen, "factorial_crd"); expect_equal(b$analysis$model, "y ~ treatment * treatment2")
+  c <- pkg("Days to heading of 3 oat lines in 4 blocks, followed for 120 days, hazard ratio 0.7.")
+  expect_equal(c$analysis$model, "y ~ treatment"); expect_equal(unlist(c$analysis$survival$strata), "block")
+})

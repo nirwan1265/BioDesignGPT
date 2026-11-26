@@ -15,7 +15,7 @@
 #' @param checks Check entries (augmented only).
 #' @param seed Randomization seed (recorded in the output).
 #' @export
-make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial", "augmented"),
+make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial", "factorial_crd", "augmented"),
                         treatments = NULL, reps, block_size = NULL, treatments2 = NULL,
                         factor_levels = NULL, checks = NULL, seed = 42) {
   design <- match.arg(design)
@@ -59,6 +59,15 @@ make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial",
                  main = b[[4]], sub = b[[5]],
                  treatment = paste(b[[4]], b[[5]], sep = ":"),
                  treatment_combination = paste(b[[4]], b[[5]], sep = ":"))
+    },
+    factorial_crd = {
+      if (is.null(factor_levels) || is.null(names(factor_levels))) stop("factorial design needs a named list factor_levels.", call. = FALSE)
+      b <- agricolae::design.ab(lengths(factor_levels), r = reps, design = "crd", seed = seed)$book
+      out <- data.frame(plot = b$plots, rep = b$r)
+      for (i in seq_along(factor_levels)) out[[names(factor_levels)[i]]] <- factor_levels[[i]][as.integer(b[[2 + i]])]
+      out$treatment_combination <- do.call(paste, c(out[names(factor_levels)], sep = ":"))
+      if (!"treatment" %in% names(factor_levels)) out$treatment <- out$treatment_combination
+      out
     },
     factorial = {
       if (is.null(factor_levels) || is.null(names(factor_levels))) {
@@ -255,13 +264,15 @@ layout_from_spec <- function(spec, seed = 42) {
   cand <- intersect(cand, buildable)
   applied <- setNames(lapply(f, function(x) x$applied_to %||% ""), names(lv))
   design <- if (length(rand) >= 2) {
-    if (any(unlist(applied[rand]) %in% "main_plot") && "split" %in% c(cand, "split")) "split" else "factorial"
+    if (any(unlist(applied[rand]) %in% "main_plot") && "split" %in% c(cand, "split")) "split"
+    else if (length(cand) && cand[1] %in% c("crd", "factorial_crd")) "factorial_crd" else "factorial"
   } else (utils::head(setdiff(cand, c("split", "factorial")), 1) %||% "rcbd")
   if (!length(design) || is.na(design)) design <- "rcbd"
   if (is.null(reps) && design != "augmented") stop("layout_from_spec: no replicate count (missing: design.reps).", call. = FALSE)
   if (length(rand) >= 2 && !design %in% cand[1]) notes <- c(notes, sprintf("%d randomized factors (%s): %s design keeps them all", length(rand), paste(rand, collapse = ", "), design))
   book <- switch(design,
     factorial = make_design("factorial", factor_levels = lv[rand], reps = reps, seed = seed),
+    factorial_crd = make_design("factorial_crd", factor_levels = lv[rand], reps = reps, seed = seed),
     split = {
       mp <- rand[unlist(applied[rand]) %in% "main_plot"][1]; sp <- setdiff(rand, mp)
       if (length(sp) > 1) notes <- c(notes, sprintf("split plot holds two factors; %s crossed into the subplot", paste(sp, collapse = " x ")))

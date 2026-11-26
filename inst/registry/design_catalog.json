@@ -113,6 +113,28 @@
       "analysis_note": "treatment = factor A, treatment2 = factor B. Original model text: y ~ A * B + block"
     },
     {
+      "id": "factorial_crd",
+      "name": "Factorial treatment structure, completely randomized",
+      "engine": "agricolae::design.ab (design = \"crd\")",
+      "requires": [
+        "factor_levels",
+        "reps"
+      ],
+      "use_when": "All combinations of two or more factors randomized to units with no blocks: no stated blocking, or an analysis (Cox model for survival) that cannot fit a fixed effect for small replicate blocks.",
+      "strength": "Tests main effects and interactions with no block parameters to estimate.",
+      "tradeoff": "No control of spatial or batch variation; use the blocked factorial when blocks exist.",
+      "model": "y ~ treatment * treatment2",
+      "systems": [
+        "greenhouse",
+        "growth_chamber",
+        "mouse",
+        "cell_culture",
+        "drosophila",
+        "livestock"
+      ],
+      "analysis_note": "treatment = factor A, treatment2 = factor B; completely randomized, no block term"
+    },
+    {
       "id": "augmented",
       "name": "Augmented block design",
       "engine": "agricolae::design.dau",

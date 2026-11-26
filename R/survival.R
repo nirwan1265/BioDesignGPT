@@ -94,7 +94,14 @@
     spec$factors[[tf[1]]] <- NULL
     spec$assumptions[["factors.time"]] <- "removed: the stated time is the follow-up of a survival study"
   }
-  if (grepl(.sf_cue("blocks_stated"), tolower(text), perl = TRUE)) spec$analysis$sf_blocks_stated <- TRUE
+  if (grepl(.sf_cue("blocks_stated"), tolower(text), perl = TRUE)) {
+    spec$analysis$sf_blocks_stated <- TRUE
+  } else if (is.null(spec$design$type) && is.null(spec$design$chosen)) {
+    # no stated blocks: completely randomized; replicate "blocks" of a few units would each be a fixed effect a Cox
+    # model cannot estimate
+    spec$design$candidates <- unique(c("crd", unlist(spec$design$candidates)))
+    spec$assumptions[["design.candidates"]] <- "crd first: survival outcome with no stated blocks (no block fixed effects in a Cox model)"
+  }
   if (length(s$survival)) spec$analysis$survival <- utils::modifyList(spec$analysis$survival %||% list(), s$survival)
   for (k in names(s$power)) spec$power[[k]] <- s$power[[k]]
   spec
@@ -134,7 +141,8 @@
     nb <- spec$design$blocks %||% spec$design$reps
     if (!is.null(nb) && nb < 10) {
       spec$analysis$survival$strata <- unique(c(unlist(sv$strata), terms$block))
-      spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", sprintf("Survival: %s blocks are strata (fewer than 10 for a frailty).", nb)))
+      spec$analysis$model <- trimws(sub("\\s*\\+\\s*block\\b(?!\\))", "", spec$analysis$model, perl = TRUE))   # strata, not a block effect
+      spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", sprintf("Survival: %s blocks are strata in the Cox model (fewer than 10 for a frailty), not a fixed block term.", nb)))
     } else if (!is.null(nb)) {
       spec$analysis$model <- sub("\\+\\s*block\\b(?!\\))", "+ (1 | block)", spec$analysis$model, perl = TRUE)
       spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", "Survival: (1 | block) is a shared frailty."))
