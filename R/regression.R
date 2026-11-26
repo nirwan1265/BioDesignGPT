@@ -78,12 +78,14 @@
     fn <- unique(unlist(lapply(x$adjust, function(w) c(.sf_find_all(w, "factor"), sub("s$", "", w)))))
     spec$analysis$sf_adjust_factors <- intersect(fn, vapply(spec$factors %||% list(), function(f) f$name %||% "", ""))
   }
-  if (!length(x$covariates)) return(spec)
-  # covariates and no stated blocks: completely randomized (as for survival); replicate "blocks" of two units are not blocks
-  if (!grepl(.sf_cue("blocks_stated"), t, perl = TRUE) && is.null(spec$design$type) && is.null(spec$design$chosen)) {
+  # covariates or adjustment factors and no stated blocks: completely randomized (as for survival); replicate
+  # "blocks" of a few units are not blocks
+  if ((length(x$covariates) || length(spec$analysis$sf_adjust_factors)) && !grepl(.sf_cue("blocks_stated"), t, perl = TRUE) &&
+      is.null(spec$design$type) && is.null(spec$design$chosen)) {
     spec$design$candidates <- unique(c("crd", unlist(spec$design$candidates)))
-    spec$assumptions[["design.candidates"]] <- "crd first: covariates (ANCOVA/regression) with no stated blocks"
+    spec$assumptions[["design.candidates"]] <- "crd first: covariates or adjustment factors with no stated blocks"
   }
+  if (!length(x$covariates)) return(spec)
   cv <- lapply(seq_along(x$covariates), function(i) {
     c <- x$covariates[[i]]; c$term <- if (i == 1) "covariate" else paste0("covariate", i)
     k <- c("term", "name", "column", "unit", "transform", "mean", "sd")

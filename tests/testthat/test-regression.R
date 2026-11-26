@@ -64,3 +64,11 @@ test_that("adjustment factors: kept out of the goal, marked, replicates split ac
   b <- pkg_reg("Gerbils on two diets, 9 per diet and sex, final weight adjusting for sex and baseline weight.")
   expect_equal(b$j$design$reps, 9); expect_equal(nrow(b$m), 36)
 })
+
+test_that("an adjustment factor alone (no covariate, no stated blocks) is completely randomized and additive", {
+  a <- pkg_reg("Voles on two diets, 12 per group, final weight adjusting for sex.")
+  expect_equal(a$j$design$chosen, "factorial_crd"); expect_equal(a$j$analysis$model, "y ~ treatment + treatment2")
+  expect_equal(unlist(a$j$analysis$goal_terms$treatment_effect), "treatment"); expect_equal(nrow(a$m), 24)
+  b <- pkg_reg("Voles on two diets in 4 blocks, final weight adjusting for sex.")
+  expect_match(b$j$analysis$model, "block")
+})
