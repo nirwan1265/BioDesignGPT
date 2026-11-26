@@ -1,0 +1,73 @@
+{
+  "status": "needs_clarification",
+  "assumptions": {
+    "analysis.goal_effect.association.size": "not stated: use power.minimum_detectable_difference default"
+  },
+  "system": "field",
+  "organism": "Sorghum bicolor",
+  "primary_outcome": {
+    "name": "plant_height",
+    "type": "continuous",
+    "unit": "cm"
+  },
+  "factors": [
+    {
+      "name": "genotype",
+      "n_levels": 300
+    }
+  ],
+  "design": {
+    "reps": 2,
+    "type": "alpha",
+    "locations": 1,
+    "seasons": 1,
+    "candidates": [
+      "alpha",
+      "row_column",
+      "spatial_analysis"
+    ],
+    "randomization_seed": 2026,
+    "chosen": "alpha",
+    "layout_notes": [
+      "block size 15 for 300 entries (spec has no usable design.block_size)"
+    ]
+  },
+  "experimental_unit": "plot",
+  "assays": "gwas",
+  "goal": "design",
+  "tissue": "plant",
+  "genetics": {
+    "unit": "line"
+  },
+  "analysis": {
+    "goals": [
+      "association"
+    ],
+    "model": "y ~ treatment + rep + (1 | rep:block)",
+    "note": "treatment = genotype/entry; block = incomplete block within rep. Original model text: y ~ genotype + rep + (1 | rep:block)",
+    "terms": {
+      "treatment": "genotype",
+      "unit": "plot",
+      "block": "block",
+      "rep": "rep",
+      "genetic_unit": "line",
+      "unit_column": "plot",
+      "uncovered_factors": [],
+      "layout_columns": ["genotype", "block", "rep", "plot"]
+    },
+    "primary_goal": "association",
+    "goal_terms": [],
+    "goal_effect": {
+      "association": {
+        "scale": "identity",
+        "definition": "marker effect (allele substitution) on goal_effect.scale"
+      }
+    }
+  },
+  "question": "GWAS of plant height in 300 sorghum accessions grown in an alpha lattice with 2 replicates at one location in one season.",
+  "power": {
+    "residual_sd": 15,
+    "goal": "association"
+  },
+  "handoff_version": "0.6.8"
+}

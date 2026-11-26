@@ -1,0 +1,7 @@
+# What Biodes asked before designing
+Plot size, seed per entry, maximum plots per location?
+Expected difference to detect and residual SD (pilot data or literature)?
+Where are irrigation laterals, mains or sprinkler lines, and which way does water flow?
+
+# Answers given in this example
+plant height in cm; plot-to-plot SD about 15 cm from earlier trials

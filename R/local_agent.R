@@ -988,6 +988,13 @@ mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
 # row names is stated in the spec by the user, not filled in as an assumption. factor:NAME means a factor called NAME
 # with levels (for time, the factor itself).
 .sf_question_answered <- function(q, spec) {
+  # a question about "the treatment" when nothing but a genotype panel is compared does not apply
+  # (rules.tsv question_needs_treatment)
+  nt <- .sf_rules_rows("question_needs_treatment")
+  if (NROW(nt) && any(vapply(nt$pattern, grepl, logical(1), x = tolower(q), perl = TRUE))) {
+    other <- setdiff(vapply(spec$factors %||% list(), function(f) f$name %||% "", ""), c("genotype", ""))
+    if (!length(other)) return(TRUE)
+  }
   r <- .sf_rules_rows("answered_by")
   if (!NROW(r)) return(FALSE)
   hit <- which(vapply(r$pattern, function(p) grepl(p, tolower(q), perl = TRUE), logical(1)))

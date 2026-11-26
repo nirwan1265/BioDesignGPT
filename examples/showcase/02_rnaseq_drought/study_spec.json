@@ -1,0 +1,65 @@
+{
+  "status": "needs_clarification",
+  "assumptions": {
+    "analysis.goal_effect.interaction.size": "not stated: use power.minimum_detectable_difference default"
+  },
+  "organism": "Arabidopsis thaliana",
+  "factors": [
+    {
+      "name": "water",
+      "n_levels": 2,
+      "levels": ["well-watered", "drought"]
+    },
+    {
+      "name": "genotype",
+      "n_levels": 2,
+      "levels": ["wild type", "mutant"]
+    }
+  ],
+  "design": {
+    "reps": 4,
+    "candidates": [
+      "factorial",
+      "rcbd",
+      "crd"
+    ],
+    "randomization_seed": 2026,
+    "chosen": "factorial"
+  },
+  "assays": "rnaseq",
+  "goal": "design",
+  "tissue": "leaf",
+  "analysis": {
+    "goals": [
+      "interaction"
+    ],
+    "model": "y ~ treatment * treatment2 + block",
+    "note": "treatment = factor A, treatment2 = factor B. Original model text: y ~ A * B + block",
+    "terms": {
+      "treatment": "water",
+      "treatment2": "genotype",
+      "unit": "plant",
+      "block": "block",
+      "unit_column": "plot",
+      "uncovered_factors": [],
+      "layout_columns": ["water", "genotype", "block", "plot"]
+    },
+    "primary_goal": "interaction",
+    "goal_terms": {
+      "interaction": ["treatment", "treatment2"]
+    },
+    "goal_effect": {
+      "interaction": {
+        "scale": "log2",
+        "definition": "difference of differences on goal_effect.scale"
+      }
+    }
+  },
+  "question": "RNA-seq of leaves from wild type and mutant Arabidopsis under drought and well-watered conditions, 4 plants per genotype per treatment; we want genes whose drought response differs between genotypes.",
+  "experimental_unit": "plant",
+  "power": {
+    "goal": "interaction",
+    "reps_note": "interaction needs about 4x the replicates of a main effect of the same size; 4 replicates were stated"
+  },
+  "handoff_version": "0.6.8"
+}

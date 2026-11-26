@@ -8,6 +8,21 @@
   <img src="docs/bio_suite.svg" alt="BioCore at the center, shared by four heads: Biodes designs the experiment, Simitall simulates the data, Bioana analyzes the results, Biopaint makes the figures" width="860">
 </p>
 
+## See it work: three examples
+
+Each example starts from one plain-language question and ends with a randomized layout, a sample sheet and a
+StudySpec that the next tool reads. The same three examples continue in Simitall and Bioana.
+
+| Question (as typed) | Biodes chose | Shows |
+|---|---|---|
+| [*"GWAS of plant height in 300 sorghum accessions grown in an alpha lattice with 2 replicates at one location in one season."*](examples/showcase/01_gwas_sorghum) | alpha lattice, 600 plots, `y ~ treatment + rep + (1 \| rep:block)` | incomplete blocks for a large panel; association goal |
+| [*"RNA-seq of leaves from wild type and mutant Arabidopsis under drought and well-watered conditions, 4 plants per genotype per treatment; we want genes whose drought response differs between genotypes."*](examples/showcase/02_rnaseq_drought) | 2 x 2 factorial, 16 plants, goal `interaction` | reads the goal from the question; keeps level names, control first |
+| [*"Seeds of 2 sorghum lines primed or not in 12 trays in a growth chamber, 10 seeds per treatment per tray, … seed rot can occur before germination; the priming effect is delayed; hazard ratio 0.6 …"*](examples/showcase/03_germination_survival) | blocked factorial, 480 seeds, survival with a tray frailty | censoring, a competing event, weighted log-rank, 121 events needed |
+
+<p align="center"><img src="examples/showcase/01_gwas_sorghum/layout_map.png" alt="Alpha-lattice layout for 300 sorghum accessions" width="640"></p>
+
+All three are rebuilt by [`examples/showcase/make_showcase.R`](examples/showcase/make_showcase.R).
+
 ## The suite
 
 One shared core, four heads. Each head reads the same StudySpec and cites the same rules, so the design, the simulation, the analysis and the figures can't contradict each other.
@@ -16,13 +31,13 @@ One shared core, four heads. Each head reads the same StudySpec and cites the sa
 |---|---|---|
 | **BioCore** | Plain-language agent, the rules registry (the "truths", each with a source), published-practice evidence, and the StudySpec every head shares | Rules and evidence layer in progress |
 | **Biodes** (this repo) | Design: unit audit, candidate designs, power, randomization, field/tray/cage/vial layouts | Available |
-| **Simitall** | Simulate data under the planned design: effects, noise, batches | From SimItAll's simulation module; integration planned |
-| **Bioana** | Analyze with the model that matches the design: QC, DE, mixed models, GWAS | From SimItAll's analysis module; integration planned |
-| **Biopaint** | Figures: layout maps, power curves, publication-ready plots | Planned |
+| **[Simitall](https://github.com/nirwan1265/simitall)** | Simulate data under the planned design with known truth: effects, noise, batches, genotypes, counts, survival times | Available; reads every Biodes StudySpec |
+| **[Bioana](https://github.com/nirwan1265/Bioana)** | Analyze with the model that matches the design (mixed models, DESeq2, GWAS, survival, regression, robust tests) and score it against Simitall's truth | Available |
+| **Biopaint** | Figures: layout maps, power curves, publication-ready plots | In progress |
 
 The flow follows a real project: **Biodes** hands a StudySpec and layout to **Simitall**, simulated data goes to **Bioana**, fitted results go to **Biopaint**, and what you learn feeds the next design.
 
-**How the heads connect:** see [`docs/SUITE_INTEGRATION.md`](docs/SUITE_INTEGRATION.md). Biodes writes `study_spec.json` (now with the matching `analysis.model` and `handoff_version`), `field_layout.csv` and `sample_metadata_template.tsv`; Simitall and Bioana read only those files.
+**How the heads connect:** see [`docs/SUITE_INTEGRATION.md`](docs/SUITE_INTEGRATION.md). Biodes writes `study_spec.json` (with the matching `analysis.model`, goals, power and `handoff_version`), `field_layout.csv` and `sample_metadata_template.tsv`; Simitall and Bioana read only those files. To run a question through all three, see [`examples/suite/`](examples/suite).
 
 > The R package is still named `studyforge` (and its functions `studyforge_*`) while the rename to Biodes is in progress.
 

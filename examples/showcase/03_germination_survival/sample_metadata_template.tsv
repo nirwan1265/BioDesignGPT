@@ -1,0 +1,481 @@
+plot	rep	block	genotype	treatment	treatment_combination	subsample	sample_id	date_measured	primary_outcome	notes
+101	1	1	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0001			
+101	1	1	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0002			
+101	1	1	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0003			
+101	1	1	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0004			
+101	1	1	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0005			
+101	1	1	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0006			
+101	1	1	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0007			
+101	1	1	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0008			
+101	1	1	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0009			
+101	1	1	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0010			
+102	1	1	genotype_1	primed	genotype_1:primed	1	SF_factorial_0011			
+102	1	1	genotype_1	primed	genotype_1:primed	2	SF_factorial_0012			
+102	1	1	genotype_1	primed	genotype_1:primed	3	SF_factorial_0013			
+102	1	1	genotype_1	primed	genotype_1:primed	4	SF_factorial_0014			
+102	1	1	genotype_1	primed	genotype_1:primed	5	SF_factorial_0015			
+102	1	1	genotype_1	primed	genotype_1:primed	6	SF_factorial_0016			
+102	1	1	genotype_1	primed	genotype_1:primed	7	SF_factorial_0017			
+102	1	1	genotype_1	primed	genotype_1:primed	8	SF_factorial_0018			
+102	1	1	genotype_1	primed	genotype_1:primed	9	SF_factorial_0019			
+102	1	1	genotype_1	primed	genotype_1:primed	10	SF_factorial_0020			
+103	1	1	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0021			
+103	1	1	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0022			
+103	1	1	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0023			
+103	1	1	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0024			
+103	1	1	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0025			
+103	1	1	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0026			
+103	1	1	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0027			
+103	1	1	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0028			
+103	1	1	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0029			
+103	1	1	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0030			
+104	1	1	genotype_2	primed	genotype_2:primed	1	SF_factorial_0031			
+104	1	1	genotype_2	primed	genotype_2:primed	2	SF_factorial_0032			
+104	1	1	genotype_2	primed	genotype_2:primed	3	SF_factorial_0033			
+104	1	1	genotype_2	primed	genotype_2:primed	4	SF_factorial_0034			
+104	1	1	genotype_2	primed	genotype_2:primed	5	SF_factorial_0035			
+104	1	1	genotype_2	primed	genotype_2:primed	6	SF_factorial_0036			
+104	1	1	genotype_2	primed	genotype_2:primed	7	SF_factorial_0037			
+104	1	1	genotype_2	primed	genotype_2:primed	8	SF_factorial_0038			
+104	1	1	genotype_2	primed	genotype_2:primed	9	SF_factorial_0039			
+104	1	1	genotype_2	primed	genotype_2:primed	10	SF_factorial_0040			
+105	2	2	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0041			
+105	2	2	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0042			
+105	2	2	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0043			
+105	2	2	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0044			
+105	2	2	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0045			
+105	2	2	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0046			
+105	2	2	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0047			
+105	2	2	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0048			
+105	2	2	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0049			
+105	2	2	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0050			
+106	2	2	genotype_2	primed	genotype_2:primed	1	SF_factorial_0051			
+106	2	2	genotype_2	primed	genotype_2:primed	2	SF_factorial_0052			
+106	2	2	genotype_2	primed	genotype_2:primed	3	SF_factorial_0053			
+106	2	2	genotype_2	primed	genotype_2:primed	4	SF_factorial_0054			
+106	2	2	genotype_2	primed	genotype_2:primed	5	SF_factorial_0055			
+106	2	2	genotype_2	primed	genotype_2:primed	6	SF_factorial_0056			
+106	2	2	genotype_2	primed	genotype_2:primed	7	SF_factorial_0057			
+106	2	2	genotype_2	primed	genotype_2:primed	8	SF_factorial_0058			
+106	2	2	genotype_2	primed	genotype_2:primed	9	SF_factorial_0059			
+106	2	2	genotype_2	primed	genotype_2:primed	10	SF_factorial_0060			
+107	2	2	genotype_1	primed	genotype_1:primed	1	SF_factorial_0061			
+107	2	2	genotype_1	primed	genotype_1:primed	2	SF_factorial_0062			
+107	2	2	genotype_1	primed	genotype_1:primed	3	SF_factorial_0063			
+107	2	2	genotype_1	primed	genotype_1:primed	4	SF_factorial_0064			
+107	2	2	genotype_1	primed	genotype_1:primed	5	SF_factorial_0065			
+107	2	2	genotype_1	primed	genotype_1:primed	6	SF_factorial_0066			
+107	2	2	genotype_1	primed	genotype_1:primed	7	SF_factorial_0067			
+107	2	2	genotype_1	primed	genotype_1:primed	8	SF_factorial_0068			
+107	2	2	genotype_1	primed	genotype_1:primed	9	SF_factorial_0069			
+107	2	2	genotype_1	primed	genotype_1:primed	10	SF_factorial_0070			
+108	2	2	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0071			
+108	2	2	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0072			
+108	2	2	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0073			
+108	2	2	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0074			
+108	2	2	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0075			
+108	2	2	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0076			
+108	2	2	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0077			
+108	2	2	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0078			
+108	2	2	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0079			
+108	2	2	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0080			
+109	3	3	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0081			
+109	3	3	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0082			
+109	3	3	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0083			
+109	3	3	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0084			
+109	3	3	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0085			
+109	3	3	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0086			
+109	3	3	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0087			
+109	3	3	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0088			
+109	3	3	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0089			
+109	3	3	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0090			
+110	3	3	genotype_2	primed	genotype_2:primed	1	SF_factorial_0091			
+110	3	3	genotype_2	primed	genotype_2:primed	2	SF_factorial_0092			
+110	3	3	genotype_2	primed	genotype_2:primed	3	SF_factorial_0093			
+110	3	3	genotype_2	primed	genotype_2:primed	4	SF_factorial_0094			
+110	3	3	genotype_2	primed	genotype_2:primed	5	SF_factorial_0095			
+110	3	3	genotype_2	primed	genotype_2:primed	6	SF_factorial_0096			
+110	3	3	genotype_2	primed	genotype_2:primed	7	SF_factorial_0097			
+110	3	3	genotype_2	primed	genotype_2:primed	8	SF_factorial_0098			
+110	3	3	genotype_2	primed	genotype_2:primed	9	SF_factorial_0099			
+110	3	3	genotype_2	primed	genotype_2:primed	10	SF_factorial_0100			
+111	3	3	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0101			
+111	3	3	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0102			
+111	3	3	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0103			
+111	3	3	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0104			
+111	3	3	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0105			
+111	3	3	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0106			
+111	3	3	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0107			
+111	3	3	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0108			
+111	3	3	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0109			
+111	3	3	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0110			
+112	3	3	genotype_1	primed	genotype_1:primed	1	SF_factorial_0111			
+112	3	3	genotype_1	primed	genotype_1:primed	2	SF_factorial_0112			
+112	3	3	genotype_1	primed	genotype_1:primed	3	SF_factorial_0113			
+112	3	3	genotype_1	primed	genotype_1:primed	4	SF_factorial_0114			
+112	3	3	genotype_1	primed	genotype_1:primed	5	SF_factorial_0115			
+112	3	3	genotype_1	primed	genotype_1:primed	6	SF_factorial_0116			
+112	3	3	genotype_1	primed	genotype_1:primed	7	SF_factorial_0117			
+112	3	3	genotype_1	primed	genotype_1:primed	8	SF_factorial_0118			
+112	3	3	genotype_1	primed	genotype_1:primed	9	SF_factorial_0119			
+112	3	3	genotype_1	primed	genotype_1:primed	10	SF_factorial_0120			
+113	4	4	genotype_2	primed	genotype_2:primed	1	SF_factorial_0121			
+113	4	4	genotype_2	primed	genotype_2:primed	2	SF_factorial_0122			
+113	4	4	genotype_2	primed	genotype_2:primed	3	SF_factorial_0123			
+113	4	4	genotype_2	primed	genotype_2:primed	4	SF_factorial_0124			
+113	4	4	genotype_2	primed	genotype_2:primed	5	SF_factorial_0125			
+113	4	4	genotype_2	primed	genotype_2:primed	6	SF_factorial_0126			
+113	4	4	genotype_2	primed	genotype_2:primed	7	SF_factorial_0127			
+113	4	4	genotype_2	primed	genotype_2:primed	8	SF_factorial_0128			
+113	4	4	genotype_2	primed	genotype_2:primed	9	SF_factorial_0129			
+113	4	4	genotype_2	primed	genotype_2:primed	10	SF_factorial_0130			
+114	4	4	genotype_1	primed	genotype_1:primed	1	SF_factorial_0131			
+114	4	4	genotype_1	primed	genotype_1:primed	2	SF_factorial_0132			
+114	4	4	genotype_1	primed	genotype_1:primed	3	SF_factorial_0133			
+114	4	4	genotype_1	primed	genotype_1:primed	4	SF_factorial_0134			
+114	4	4	genotype_1	primed	genotype_1:primed	5	SF_factorial_0135			
+114	4	4	genotype_1	primed	genotype_1:primed	6	SF_factorial_0136			
+114	4	4	genotype_1	primed	genotype_1:primed	7	SF_factorial_0137			
+114	4	4	genotype_1	primed	genotype_1:primed	8	SF_factorial_0138			
+114	4	4	genotype_1	primed	genotype_1:primed	9	SF_factorial_0139			
+114	4	4	genotype_1	primed	genotype_1:primed	10	SF_factorial_0140			
+115	4	4	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0141			
+115	4	4	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0142			
+115	4	4	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0143			
+115	4	4	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0144			
+115	4	4	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0145			
+115	4	4	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0146			
+115	4	4	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0147			
+115	4	4	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0148			
+115	4	4	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0149			
+115	4	4	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0150			
+116	4	4	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0151			
+116	4	4	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0152			
+116	4	4	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0153			
+116	4	4	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0154			
+116	4	4	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0155			
+116	4	4	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0156			
+116	4	4	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0157			
+116	4	4	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0158			
+116	4	4	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0159			
+116	4	4	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0160			
+117	5	5	genotype_1	primed	genotype_1:primed	1	SF_factorial_0161			
+117	5	5	genotype_1	primed	genotype_1:primed	2	SF_factorial_0162			
+117	5	5	genotype_1	primed	genotype_1:primed	3	SF_factorial_0163			
+117	5	5	genotype_1	primed	genotype_1:primed	4	SF_factorial_0164			
+117	5	5	genotype_1	primed	genotype_1:primed	5	SF_factorial_0165			
+117	5	5	genotype_1	primed	genotype_1:primed	6	SF_factorial_0166			
+117	5	5	genotype_1	primed	genotype_1:primed	7	SF_factorial_0167			
+117	5	5	genotype_1	primed	genotype_1:primed	8	SF_factorial_0168			
+117	5	5	genotype_1	primed	genotype_1:primed	9	SF_factorial_0169			
+117	5	5	genotype_1	primed	genotype_1:primed	10	SF_factorial_0170			
+118	5	5	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0171			
+118	5	5	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0172			
+118	5	5	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0173			
+118	5	5	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0174			
+118	5	5	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0175			
+118	5	5	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0176			
+118	5	5	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0177			
+118	5	5	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0178			
+118	5	5	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0179			
+118	5	5	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0180			
+119	5	5	genotype_2	primed	genotype_2:primed	1	SF_factorial_0181			
+119	5	5	genotype_2	primed	genotype_2:primed	2	SF_factorial_0182			
+119	5	5	genotype_2	primed	genotype_2:primed	3	SF_factorial_0183			
+119	5	5	genotype_2	primed	genotype_2:primed	4	SF_factorial_0184			
+119	5	5	genotype_2	primed	genotype_2:primed	5	SF_factorial_0185			
+119	5	5	genotype_2	primed	genotype_2:primed	6	SF_factorial_0186			
+119	5	5	genotype_2	primed	genotype_2:primed	7	SF_factorial_0187			
+119	5	5	genotype_2	primed	genotype_2:primed	8	SF_factorial_0188			
+119	5	5	genotype_2	primed	genotype_2:primed	9	SF_factorial_0189			
+119	5	5	genotype_2	primed	genotype_2:primed	10	SF_factorial_0190			
+120	5	5	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0191			
+120	5	5	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0192			
+120	5	5	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0193			
+120	5	5	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0194			
+120	5	5	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0195			
+120	5	5	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0196			
+120	5	5	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0197			
+120	5	5	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0198			
+120	5	5	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0199			
+120	5	5	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0200			
+121	6	6	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0201			
+121	6	6	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0202			
+121	6	6	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0203			
+121	6	6	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0204			
+121	6	6	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0205			
+121	6	6	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0206			
+121	6	6	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0207			
+121	6	6	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0208			
+121	6	6	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0209			
+121	6	6	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0210			
+122	6	6	genotype_2	primed	genotype_2:primed	1	SF_factorial_0211			
+122	6	6	genotype_2	primed	genotype_2:primed	2	SF_factorial_0212			
+122	6	6	genotype_2	primed	genotype_2:primed	3	SF_factorial_0213			
+122	6	6	genotype_2	primed	genotype_2:primed	4	SF_factorial_0214			
+122	6	6	genotype_2	primed	genotype_2:primed	5	SF_factorial_0215			
+122	6	6	genotype_2	primed	genotype_2:primed	6	SF_factorial_0216			
+122	6	6	genotype_2	primed	genotype_2:primed	7	SF_factorial_0217			
+122	6	6	genotype_2	primed	genotype_2:primed	8	SF_factorial_0218			
+122	6	6	genotype_2	primed	genotype_2:primed	9	SF_factorial_0219			
+122	6	6	genotype_2	primed	genotype_2:primed	10	SF_factorial_0220			
+123	6	6	genotype_1	primed	genotype_1:primed	1	SF_factorial_0221			
+123	6	6	genotype_1	primed	genotype_1:primed	2	SF_factorial_0222			
+123	6	6	genotype_1	primed	genotype_1:primed	3	SF_factorial_0223			
+123	6	6	genotype_1	primed	genotype_1:primed	4	SF_factorial_0224			
+123	6	6	genotype_1	primed	genotype_1:primed	5	SF_factorial_0225			
+123	6	6	genotype_1	primed	genotype_1:primed	6	SF_factorial_0226			
+123	6	6	genotype_1	primed	genotype_1:primed	7	SF_factorial_0227			
+123	6	6	genotype_1	primed	genotype_1:primed	8	SF_factorial_0228			
+123	6	6	genotype_1	primed	genotype_1:primed	9	SF_factorial_0229			
+123	6	6	genotype_1	primed	genotype_1:primed	10	SF_factorial_0230			
+124	6	6	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0231			
+124	6	6	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0232			
+124	6	6	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0233			
+124	6	6	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0234			
+124	6	6	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0235			
+124	6	6	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0236			
+124	6	6	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0237			
+124	6	6	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0238			
+124	6	6	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0239			
+124	6	6	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0240			
+125	7	7	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0241			
+125	7	7	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0242			
+125	7	7	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0243			
+125	7	7	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0244			
+125	7	7	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0245			
+125	7	7	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0246			
+125	7	7	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0247			
+125	7	7	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0248			
+125	7	7	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0249			
+125	7	7	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0250			
+126	7	7	genotype_1	primed	genotype_1:primed	1	SF_factorial_0251			
+126	7	7	genotype_1	primed	genotype_1:primed	2	SF_factorial_0252			
+126	7	7	genotype_1	primed	genotype_1:primed	3	SF_factorial_0253			
+126	7	7	genotype_1	primed	genotype_1:primed	4	SF_factorial_0254			
+126	7	7	genotype_1	primed	genotype_1:primed	5	SF_factorial_0255			
+126	7	7	genotype_1	primed	genotype_1:primed	6	SF_factorial_0256			
+126	7	7	genotype_1	primed	genotype_1:primed	7	SF_factorial_0257			
+126	7	7	genotype_1	primed	genotype_1:primed	8	SF_factorial_0258			
+126	7	7	genotype_1	primed	genotype_1:primed	9	SF_factorial_0259			
+126	7	7	genotype_1	primed	genotype_1:primed	10	SF_factorial_0260			
+127	7	7	genotype_2	primed	genotype_2:primed	1	SF_factorial_0261			
+127	7	7	genotype_2	primed	genotype_2:primed	2	SF_factorial_0262			
+127	7	7	genotype_2	primed	genotype_2:primed	3	SF_factorial_0263			
+127	7	7	genotype_2	primed	genotype_2:primed	4	SF_factorial_0264			
+127	7	7	genotype_2	primed	genotype_2:primed	5	SF_factorial_0265			
+127	7	7	genotype_2	primed	genotype_2:primed	6	SF_factorial_0266			
+127	7	7	genotype_2	primed	genotype_2:primed	7	SF_factorial_0267			
+127	7	7	genotype_2	primed	genotype_2:primed	8	SF_factorial_0268			
+127	7	7	genotype_2	primed	genotype_2:primed	9	SF_factorial_0269			
+127	7	7	genotype_2	primed	genotype_2:primed	10	SF_factorial_0270			
+128	7	7	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0271			
+128	7	7	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0272			
+128	7	7	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0273			
+128	7	7	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0274			
+128	7	7	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0275			
+128	7	7	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0276			
+128	7	7	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0277			
+128	7	7	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0278			
+128	7	7	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0279			
+128	7	7	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0280			
+129	8	8	genotype_1	primed	genotype_1:primed	1	SF_factorial_0281			
+129	8	8	genotype_1	primed	genotype_1:primed	2	SF_factorial_0282			
+129	8	8	genotype_1	primed	genotype_1:primed	3	SF_factorial_0283			
+129	8	8	genotype_1	primed	genotype_1:primed	4	SF_factorial_0284			
+129	8	8	genotype_1	primed	genotype_1:primed	5	SF_factorial_0285			
+129	8	8	genotype_1	primed	genotype_1:primed	6	SF_factorial_0286			
+129	8	8	genotype_1	primed	genotype_1:primed	7	SF_factorial_0287			
+129	8	8	genotype_1	primed	genotype_1:primed	8	SF_factorial_0288			
+129	8	8	genotype_1	primed	genotype_1:primed	9	SF_factorial_0289			
+129	8	8	genotype_1	primed	genotype_1:primed	10	SF_factorial_0290			
+130	8	8	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0291			
+130	8	8	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0292			
+130	8	8	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0293			
+130	8	8	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0294			
+130	8	8	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0295			
+130	8	8	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0296			
+130	8	8	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0297			
+130	8	8	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0298			
+130	8	8	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0299			
+130	8	8	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0300			
+131	8	8	genotype_2	primed	genotype_2:primed	1	SF_factorial_0301			
+131	8	8	genotype_2	primed	genotype_2:primed	2	SF_factorial_0302			
+131	8	8	genotype_2	primed	genotype_2:primed	3	SF_factorial_0303			
+131	8	8	genotype_2	primed	genotype_2:primed	4	SF_factorial_0304			
+131	8	8	genotype_2	primed	genotype_2:primed	5	SF_factorial_0305			
+131	8	8	genotype_2	primed	genotype_2:primed	6	SF_factorial_0306			
+131	8	8	genotype_2	primed	genotype_2:primed	7	SF_factorial_0307			
+131	8	8	genotype_2	primed	genotype_2:primed	8	SF_factorial_0308			
+131	8	8	genotype_2	primed	genotype_2:primed	9	SF_factorial_0309			
+131	8	8	genotype_2	primed	genotype_2:primed	10	SF_factorial_0310			
+132	8	8	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0311			
+132	8	8	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0312			
+132	8	8	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0313			
+132	8	8	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0314			
+132	8	8	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0315			
+132	8	8	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0316			
+132	8	8	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0317			
+132	8	8	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0318			
+132	8	8	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0319			
+132	8	8	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0320			
+133	9	9	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0321			
+133	9	9	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0322			
+133	9	9	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0323			
+133	9	9	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0324			
+133	9	9	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0325			
+133	9	9	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0326			
+133	9	9	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0327			
+133	9	9	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0328			
+133	9	9	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0329			
+133	9	9	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0330			
+134	9	9	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0331			
+134	9	9	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0332			
+134	9	9	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0333			
+134	9	9	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0334			
+134	9	9	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0335			
+134	9	9	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0336			
+134	9	9	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0337			
+134	9	9	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0338			
+134	9	9	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0339			
+134	9	9	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0340			
+135	9	9	genotype_1	primed	genotype_1:primed	1	SF_factorial_0341			
+135	9	9	genotype_1	primed	genotype_1:primed	2	SF_factorial_0342			
+135	9	9	genotype_1	primed	genotype_1:primed	3	SF_factorial_0343			
+135	9	9	genotype_1	primed	genotype_1:primed	4	SF_factorial_0344			
+135	9	9	genotype_1	primed	genotype_1:primed	5	SF_factorial_0345			
+135	9	9	genotype_1	primed	genotype_1:primed	6	SF_factorial_0346			
+135	9	9	genotype_1	primed	genotype_1:primed	7	SF_factorial_0347			
+135	9	9	genotype_1	primed	genotype_1:primed	8	SF_factorial_0348			
+135	9	9	genotype_1	primed	genotype_1:primed	9	SF_factorial_0349			
+135	9	9	genotype_1	primed	genotype_1:primed	10	SF_factorial_0350			
+136	9	9	genotype_2	primed	genotype_2:primed	1	SF_factorial_0351			
+136	9	9	genotype_2	primed	genotype_2:primed	2	SF_factorial_0352			
+136	9	9	genotype_2	primed	genotype_2:primed	3	SF_factorial_0353			
+136	9	9	genotype_2	primed	genotype_2:primed	4	SF_factorial_0354			
+136	9	9	genotype_2	primed	genotype_2:primed	5	SF_factorial_0355			
+136	9	9	genotype_2	primed	genotype_2:primed	6	SF_factorial_0356			
+136	9	9	genotype_2	primed	genotype_2:primed	7	SF_factorial_0357			
+136	9	9	genotype_2	primed	genotype_2:primed	8	SF_factorial_0358			
+136	9	9	genotype_2	primed	genotype_2:primed	9	SF_factorial_0359			
+136	9	9	genotype_2	primed	genotype_2:primed	10	SF_factorial_0360			
+137	10	10	genotype_2	primed	genotype_2:primed	1	SF_factorial_0361			
+137	10	10	genotype_2	primed	genotype_2:primed	2	SF_factorial_0362			
+137	10	10	genotype_2	primed	genotype_2:primed	3	SF_factorial_0363			
+137	10	10	genotype_2	primed	genotype_2:primed	4	SF_factorial_0364			
+137	10	10	genotype_2	primed	genotype_2:primed	5	SF_factorial_0365			
+137	10	10	genotype_2	primed	genotype_2:primed	6	SF_factorial_0366			
+137	10	10	genotype_2	primed	genotype_2:primed	7	SF_factorial_0367			
+137	10	10	genotype_2	primed	genotype_2:primed	8	SF_factorial_0368			
+137	10	10	genotype_2	primed	genotype_2:primed	9	SF_factorial_0369			
+137	10	10	genotype_2	primed	genotype_2:primed	10	SF_factorial_0370			
+138	10	10	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0371			
+138	10	10	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0372			
+138	10	10	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0373			
+138	10	10	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0374			
+138	10	10	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0375			
+138	10	10	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0376			
+138	10	10	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0377			
+138	10	10	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0378			
+138	10	10	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0379			
+138	10	10	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0380			
+139	10	10	genotype_1	primed	genotype_1:primed	1	SF_factorial_0381			
+139	10	10	genotype_1	primed	genotype_1:primed	2	SF_factorial_0382			
+139	10	10	genotype_1	primed	genotype_1:primed	3	SF_factorial_0383			
+139	10	10	genotype_1	primed	genotype_1:primed	4	SF_factorial_0384			
+139	10	10	genotype_1	primed	genotype_1:primed	5	SF_factorial_0385			
+139	10	10	genotype_1	primed	genotype_1:primed	6	SF_factorial_0386			
+139	10	10	genotype_1	primed	genotype_1:primed	7	SF_factorial_0387			
+139	10	10	genotype_1	primed	genotype_1:primed	8	SF_factorial_0388			
+139	10	10	genotype_1	primed	genotype_1:primed	9	SF_factorial_0389			
+139	10	10	genotype_1	primed	genotype_1:primed	10	SF_factorial_0390			
+140	10	10	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0391			
+140	10	10	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0392			
+140	10	10	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0393			
+140	10	10	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0394			
+140	10	10	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0395			
+140	10	10	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0396			
+140	10	10	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0397			
+140	10	10	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0398			
+140	10	10	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0399			
+140	10	10	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0400			
+141	11	11	genotype_2	primed	genotype_2:primed	1	SF_factorial_0401			
+141	11	11	genotype_2	primed	genotype_2:primed	2	SF_factorial_0402			
+141	11	11	genotype_2	primed	genotype_2:primed	3	SF_factorial_0403			
+141	11	11	genotype_2	primed	genotype_2:primed	4	SF_factorial_0404			
+141	11	11	genotype_2	primed	genotype_2:primed	5	SF_factorial_0405			
+141	11	11	genotype_2	primed	genotype_2:primed	6	SF_factorial_0406			
+141	11	11	genotype_2	primed	genotype_2:primed	7	SF_factorial_0407			
+141	11	11	genotype_2	primed	genotype_2:primed	8	SF_factorial_0408			
+141	11	11	genotype_2	primed	genotype_2:primed	9	SF_factorial_0409			
+141	11	11	genotype_2	primed	genotype_2:primed	10	SF_factorial_0410			
+142	11	11	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0411			
+142	11	11	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0412			
+142	11	11	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0413			
+142	11	11	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0414			
+142	11	11	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0415			
+142	11	11	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0416			
+142	11	11	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0417			
+142	11	11	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0418			
+142	11	11	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0419			
+142	11	11	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0420			
+143	11	11	genotype_1	primed	genotype_1:primed	1	SF_factorial_0421			
+143	11	11	genotype_1	primed	genotype_1:primed	2	SF_factorial_0422			
+143	11	11	genotype_1	primed	genotype_1:primed	3	SF_factorial_0423			
+143	11	11	genotype_1	primed	genotype_1:primed	4	SF_factorial_0424			
+143	11	11	genotype_1	primed	genotype_1:primed	5	SF_factorial_0425			
+143	11	11	genotype_1	primed	genotype_1:primed	6	SF_factorial_0426			
+143	11	11	genotype_1	primed	genotype_1:primed	7	SF_factorial_0427			
+143	11	11	genotype_1	primed	genotype_1:primed	8	SF_factorial_0428			
+143	11	11	genotype_1	primed	genotype_1:primed	9	SF_factorial_0429			
+143	11	11	genotype_1	primed	genotype_1:primed	10	SF_factorial_0430			
+144	11	11	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0431			
+144	11	11	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0432			
+144	11	11	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0433			
+144	11	11	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0434			
+144	11	11	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0435			
+144	11	11	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0436			
+144	11	11	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0437			
+144	11	11	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0438			
+144	11	11	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0439			
+144	11	11	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0440			
+145	12	12	genotype_1	primed	genotype_1:primed	1	SF_factorial_0441			
+145	12	12	genotype_1	primed	genotype_1:primed	2	SF_factorial_0442			
+145	12	12	genotype_1	primed	genotype_1:primed	3	SF_factorial_0443			
+145	12	12	genotype_1	primed	genotype_1:primed	4	SF_factorial_0444			
+145	12	12	genotype_1	primed	genotype_1:primed	5	SF_factorial_0445			
+145	12	12	genotype_1	primed	genotype_1:primed	6	SF_factorial_0446			
+145	12	12	genotype_1	primed	genotype_1:primed	7	SF_factorial_0447			
+145	12	12	genotype_1	primed	genotype_1:primed	8	SF_factorial_0448			
+145	12	12	genotype_1	primed	genotype_1:primed	9	SF_factorial_0449			
+145	12	12	genotype_1	primed	genotype_1:primed	10	SF_factorial_0450			
+146	12	12	genotype_1	not primed	genotype_1:not primed	1	SF_factorial_0451			
+146	12	12	genotype_1	not primed	genotype_1:not primed	2	SF_factorial_0452			
+146	12	12	genotype_1	not primed	genotype_1:not primed	3	SF_factorial_0453			
+146	12	12	genotype_1	not primed	genotype_1:not primed	4	SF_factorial_0454			
+146	12	12	genotype_1	not primed	genotype_1:not primed	5	SF_factorial_0455			
+146	12	12	genotype_1	not primed	genotype_1:not primed	6	SF_factorial_0456			
+146	12	12	genotype_1	not primed	genotype_1:not primed	7	SF_factorial_0457			
+146	12	12	genotype_1	not primed	genotype_1:not primed	8	SF_factorial_0458			
+146	12	12	genotype_1	not primed	genotype_1:not primed	9	SF_factorial_0459			
+146	12	12	genotype_1	not primed	genotype_1:not primed	10	SF_factorial_0460			
+147	12	12	genotype_2	primed	genotype_2:primed	1	SF_factorial_0461			
+147	12	12	genotype_2	primed	genotype_2:primed	2	SF_factorial_0462			
+147	12	12	genotype_2	primed	genotype_2:primed	3	SF_factorial_0463			
+147	12	12	genotype_2	primed	genotype_2:primed	4	SF_factorial_0464			
+147	12	12	genotype_2	primed	genotype_2:primed	5	SF_factorial_0465			
+147	12	12	genotype_2	primed	genotype_2:primed	6	SF_factorial_0466			
+147	12	12	genotype_2	primed	genotype_2:primed	7	SF_factorial_0467			
+147	12	12	genotype_2	primed	genotype_2:primed	8	SF_factorial_0468			
+147	12	12	genotype_2	primed	genotype_2:primed	9	SF_factorial_0469			
+147	12	12	genotype_2	primed	genotype_2:primed	10	SF_factorial_0470			
+148	12	12	genotype_2	not primed	genotype_2:not primed	1	SF_factorial_0471			
+148	12	12	genotype_2	not primed	genotype_2:not primed	2	SF_factorial_0472			
+148	12	12	genotype_2	not primed	genotype_2:not primed	3	SF_factorial_0473			
+148	12	12	genotype_2	not primed	genotype_2:not primed	4	SF_factorial_0474			
+148	12	12	genotype_2	not primed	genotype_2:not primed	5	SF_factorial_0475			
+148	12	12	genotype_2	not primed	genotype_2:not primed	6	SF_factorial_0476			
+148	12	12	genotype_2	not primed	genotype_2:not primed	7	SF_factorial_0477			
+148	12	12	genotype_2	not primed	genotype_2:not primed	8	SF_factorial_0478			
+148	12	12	genotype_2	not primed	genotype_2:not primed	9	SF_factorial_0479			
+148	12	12	genotype_2	not primed	genotype_2:not primed	10	SF_factorial_0480			

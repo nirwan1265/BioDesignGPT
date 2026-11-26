@@ -1,0 +1,7 @@
+# What Biodes asked before designing
+How many chambers, and is the treatment a chamber setting (temperature, CO2, photoperiod)?
+Can runs be repeated with treatments swapped between chambers?
+Shelf/position effects inside each chamber?
+
+# Answers given in this example
+none needed for the design: one chamber, no repeated runs, trays are the blocks

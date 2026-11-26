@@ -1,0 +1,7 @@
+# What Biodes asked before designing
+What is a biological replicate (plant, pool of plants, animal, culture)?
+Conditions and time points; is sampling destructive?
+Expected fold change of interest and sequencing depth?
+
+# Answers given in this example
+one plant is one biological replicate

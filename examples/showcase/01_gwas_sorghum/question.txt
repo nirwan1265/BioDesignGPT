@@ -1,0 +1,1 @@
+GWAS of plant height in 300 sorghum accessions grown in an alpha lattice with 2 replicates at one location in one season.

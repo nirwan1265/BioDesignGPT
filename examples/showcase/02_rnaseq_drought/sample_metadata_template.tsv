@@ -1,0 +1,17 @@
+plot	rep	block	water	genotype	treatment_combination	treatment	sample_id	date_measured	primary_outcome	notes
+101	1	1	well-watered	wild type	well-watered:wild type	well-watered:wild type	SF_factorial_0001			
+102	1	1	well-watered	mutant	well-watered:mutant	well-watered:mutant	SF_factorial_0002			
+103	1	1	drought	wild type	drought:wild type	drought:wild type	SF_factorial_0003			
+104	1	1	drought	mutant	drought:mutant	drought:mutant	SF_factorial_0004			
+105	2	2	drought	wild type	drought:wild type	drought:wild type	SF_factorial_0005			
+106	2	2	drought	mutant	drought:mutant	drought:mutant	SF_factorial_0006			
+107	2	2	well-watered	mutant	well-watered:mutant	well-watered:mutant	SF_factorial_0007			
+108	2	2	well-watered	wild type	well-watered:wild type	well-watered:wild type	SF_factorial_0008			
+109	3	3	well-watered	wild type	well-watered:wild type	well-watered:wild type	SF_factorial_0009			
+110	3	3	drought	mutant	drought:mutant	drought:mutant	SF_factorial_0010			
+111	3	3	drought	wild type	drought:wild type	drought:wild type	SF_factorial_0011			
+112	3	3	well-watered	mutant	well-watered:mutant	well-watered:mutant	SF_factorial_0012			
+113	4	4	drought	mutant	drought:mutant	drought:mutant	SF_factorial_0013			
+114	4	4	well-watered	mutant	well-watered:mutant	well-watered:mutant	SF_factorial_0014			
+115	4	4	drought	wild type	drought:wild type	drought:wild type	SF_factorial_0015			
+116	4	4	well-watered	wild type	well-watered:wild type	well-watered:wild type	SF_factorial_0016			

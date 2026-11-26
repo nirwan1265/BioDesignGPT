@@ -1,0 +1,86 @@
+{
+  "status": "needs_clarification",
+  "assumptions": {
+    "factors.time": "removed: time is the outcome of a survival study; stated times are landmarks"
+  },
+  "system": "growth_chamber",
+  "organism": "Sorghum bicolor",
+  "primary_outcome": {
+    "type": "survival",
+    "event": "germination",
+    "unit": "days",
+    "censoring": "administrative at 21 days (end of follow-up)",
+    "event_column": "event",
+    "event_codes": {
+      "0": "censored",
+      "1": "germination",
+      "2": "seed rot before germination"
+    }
+  },
+  "factors": [
+    {
+      "name": "genotype",
+      "n_levels": 2
+    },
+    {
+      "name": "treatment",
+      "n_levels": 2,
+      "levels": ["not primed", "primed"]
+    }
+  ],
+  "design": {
+    "reps": 12,
+    "candidates": [
+      "factorial",
+      "augmented_tray",
+      "prep",
+      "rcbd"
+    ],
+    "randomization_seed": 2026,
+    "chosen": "factorial"
+  },
+  "subsamples_per_unit": 10,
+  "experimental_unit": "cell",
+  "goal": "design",
+  "tissue": "seed",
+  "analysis": {
+    "goals": [
+      "survival"
+    ],
+    "survival": {
+      "landmarks": [7, 14],
+      "logrank_weight": "fh_0_1",
+      "life_table": 2,
+      "cluster": "plot"
+    },
+    "model": "y ~ treatment * treatment2 + (1 | block)",
+    "note": "treatment = factor A, treatment2 = factor B. Original model text: y ~ A * B + block Survival: 10 subsamples per plot, one row each (column subsample); plot is their cluster (robust SE or frailty). Survival: (1 | block) is a shared frailty.",
+    "terms": {
+      "treatment": "genotype",
+      "treatment2": "treatment",
+      "unit": "cell",
+      "block": "block",
+      "unit_column": "plot",
+      "uncovered_factors": [],
+      "layout_columns": ["genotype", "treatment", "block", "plot"]
+    },
+    "primary_goal": "survival",
+    "goal_terms": [],
+    "goal_effect": {
+      "survival": {
+        "scale": "hazard_ratio",
+        "definition": "hazard ratio of a level vs the reference (Cox)",
+        "size": 0.6,
+        "proportional_hazards": false,
+        "test": "logrank_fh_0_1"
+      }
+    }
+  },
+  "power": {
+    "target_hazard_ratio": 0.6,
+    "events_required": 121,
+    "goal": "survival"
+  },
+  "question": "Seeds of 2 sorghum lines primed or not in 12 trays in a growth chamber, 10 seeds per treatment per tray, days to germination checked every 2 days, followed for 21 days; seed rot can occur before germination; the priming effect is delayed; hazard ratio 0.6; germination by day 7 and 14.",
+  "handoff_version": "0.6.8"
+}

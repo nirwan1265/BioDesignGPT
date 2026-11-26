@@ -181,6 +181,8 @@
 .sf_apriori_power <- function(spec, text = NULL) {
   if (!requireNamespace("pwr", quietly = TRUE)) return(spec)
   if (identical(spec$primary_outcome$type, "survival")) return(spec)   # events (Schoenfeld) instead
+  # genotype panels (GWAS, QTL mapping, genomic prediction): power is about marker effects, not group means
+  if (length(intersect(unlist(spec$assays), .sf_list("panel_assay")))) return(spec)
   ytype <- spec$primary_outcome$type %||% "continuous"
   t <- tolower(text %||% spec$sf_question %||% "")
   pw <- spec$power %||% list()
