@@ -168,7 +168,7 @@
     "secondary_outcomes": "[{name, column}] traits measured besides the primary outcome; each has its own column in sample_metadata_template.tsv",
     "analysis.agreement": "{rater_column: \"rater\", score_column: \"primary_outcome\", unit_column, scale: nominal | ordinal | continuous, levels}: raters or methods scoring the same units; rater is a within-unit factor (one template row per unit and rater)",
     "analysis.survival.cluster": "survival with subsamples per unit (seeds per tray cell): the unit column is their cluster; the template has one row per subsample (column subsample)",
-    "analysis.covariates": "[{term: covariate|covariate2|..., name, column, unit, transform: log|log10|log2|sqrt}]: measured numeric predictors, one value per unit, blank columns in sample_metadata_template.tsv (not the layout)",
+    "analysis.covariates": "[{term: covariate|covariate2|..., name, column, unit, transform: log|log10|log2|sqrt, mean, sd}] (mean and sd only when stated): measured numeric predictors, one value per unit, blank columns in sample_metadata_template.tsv (not the layout)",
     "analysis.regression": "{predict_at: [{name: value}], robust: \"mm\"} only when the question says so",
     "analysis.stat_tests": "robust tests asked: \"robust\" (trimmed means) or a WRS2 id (yuen, yuen_paired, t1way, t2way, rmanova_trimmed, bwtrim)",
     "power.method": "a-priori (pwr): pwr.t.test (2 groups), pwr.anova.test (k groups), pwr.r.test (correlation), pwr.2p.test (2 proportions, ES.h), pwr.chisq.test (expected ratio, w), pwr.f2.test (regression, u covariates, n_total = v + u + 1); none for logistic regression or survival (events)",

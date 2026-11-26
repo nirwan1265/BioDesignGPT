@@ -152,7 +152,7 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
-- (0.6.8) Regression (Bioana 0.13.0 `docs/contracts/regression.md`). `analysis.covariates` [{term covariate|covariate2|..,
+- (0.6.8) Regression (Bioana 0.13.0 `docs/contracts/regression.md`). `analysis.covariates` [{term covariate|covariate2|.., mean, sd (when stated, in brackets or a following clause),
   name, column, unit, transform}] from "does X predict Y", "regress Y on X and Z", "Y as a function of X", "adjusting /
   controlling for X", "baseline X as covariate"; categorical words (sex, genotype, diet; rules.tsv
   `categorical_predictor`) stay factors, and a factor named only inside a covariate ("soil nitrogen") is that covariate.

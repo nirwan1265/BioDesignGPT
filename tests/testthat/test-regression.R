@@ -36,3 +36,11 @@ test_that("a-priori power with pwr: method, effect size, source, n per group or 
   cr <- p("Across 40 barley lines in 3 replicates, how do plant height and grain weight relate? Expect a correlation of 0.4.")
   expect_equal(cr$method, "pwr.r.test"); expect_equal(cr$effect_size, 0.4)
 })
+
+test_that("covariate mean and SD from brackets or a following clause; brackets stay one item", {
+  cv <- function(q) studyforge_ask(q, provider = "local")$spec$analysis$covariates
+  a <- cv("In 80 patients, does fasting insulin (mean 12, SD 4 uU/mL) predict blood pressure?")
+  expect_length(a, 1); expect_equal(a[[1]]$mean, 12); expect_equal(a[[1]]$sd, 4); expect_equal(a[[1]]$name, "fasting insulin")
+  b <- cv("Pigs on two diets, 10 per group, final weight adjusting for starting weight, which averages 30 kg with an SD of 3.")
+  expect_length(b, 1); expect_equal(b[[1]]$mean, 30); expect_equal(b[[1]]$sd, 3); expect_equal(b[[1]]$unit, "kg")
+})

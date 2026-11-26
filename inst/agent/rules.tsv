@@ -6066,3 +6066,5 @@ categorical_predictor	group	word	group	a categorical predictor: stays a factor (
 categorical_predictor	groups	word	groups	a categorical predictor: stays a factor (treatment-type term), never a covariate	Bioana 2026-11-26 (0.13.0 regression contract)
 categorical_predictor	family	word	family	a categorical predictor: stays a factor (treatment-type term), never a covariate	Bioana 2026-11-26 (0.13.0 regression contract)
 categorical_predictor	families	word	families	a categorical predictor: stays a factor (treatment-type term), never a covariate	Bioana 2026-11-26 (0.13.0 regression contract)
+cue	cov_mean	regex	\b(?:mean|average|averages|averaging|averaged|around|about|typically|~)\s*(?:of\s+|=\s*|is\s+|at\s+)?(-?\d+(?:\.\d+)?)\s*([a-z]+/[a-z]+|[a-z]{1,4}|%)?(?![a-z])	a stated mean of a covariate (written with it): analysis.covariates[].mean	Simitall 2026-11-26 (covariate mean and SD)
+cue	cov_sd	regex	\b(?:sd|s\.d\.|standard\s+deviation)\s*(?:of|=|is|:)?\s*(\d+(?:\.\d+)?)\s*([a-z]+/[a-z]+|[a-z]{1,4}|%)?(?![a-z])	a stated SD of a covariate (written with it): analysis.covariates[].sd	Simitall 2026-11-26 (covariate mean and SD)

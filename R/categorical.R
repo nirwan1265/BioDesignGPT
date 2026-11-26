@@ -5,7 +5,11 @@
 .sf_snake <- function(x) gsub("^_+|_+$", "", gsub("[^a-z0-9]+", "_", tolower(trimws(x))))
 
 .sf_split_list <- function(x) {
+  # commas and "and" inside brackets belong to one item ("glucose (mean 100, SD 15 mg/dL)")
+  br <- regmatches(x, gregexpr("\\([^)]*\\)", x))[[1]]
+  for (i in seq_along(br)) x <- sub(br[i], sprintf("<<%d>>", i), x, fixed = TRUE)
   p <- trimws(strsplit(x, "\\s*,\\s*|\\s+(?:and|or|vs\\.?|versus)\\s+", perl = TRUE)[[1]])
+  for (i in seq_along(br)) p <- sub(sprintf("<<%d>>", i), tolower(br[i]), p, fixed = TRUE)
   p <- sub("^(?:and|or)\\s+", "", p, perl = TRUE)
   p[nzchar(p)]
 }

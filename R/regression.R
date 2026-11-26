@@ -8,7 +8,13 @@
 
 .sf_covariate_item <- function(x) {
   x <- .sf_trim_name(trimws(sub("^(?:the|their|its|a|an)\\s+", "", tolower(x), perl = TRUE)))
-  unit <- NULL; tr <- NULL
+  unit <- NULL; tr <- NULL; st <- list()
+  # summary values in brackets ("(mean 100, SD 15 mg/dL)") are not a unit: read them, keep any unit after them
+  m <- regmatches(x, regexec("\\(([^)]*)\\)", x))[[1]]
+  if (length(m) && length(.sf_grab(m[2], "cov_mean")) + length(.sf_grab(m[2], "cov_sd")) > 0) {
+    st <- .sf_cov_stats(m[2]); x <- trimws(sub("\\([^)]*\\)", "", x))
+    if (!is.null(st$unit)) unit <- st$unit
+  }
   # a transform written as a function, log(plant age): the brackets hold the name, not a unit
   r <- .sf_rules_rows("covariate_transform")
   m <- regmatches(x, regexec("^([a-z0-9]+)\\s*\\(([^)]+)\\)(.*)$", x, perl = TRUE))[[1]]
@@ -21,12 +27,27 @@
   if (is.null(tr)) for (i in seq_len(NROW(r))) if (grepl(r$pattern[i], x, perl = TRUE)) { tr <- r$term[i]; x <- trimws(gsub(r$pattern[i], "", x, perl = TRUE)); break }
   x <- trimws(gsub("[()]", "", x))
   if (!nzchar(x)) return(NULL)
-  list(name = x, column = .sf_snake(x), unit = unit, transform = tr)
+  list(name = x, column = .sf_snake(x), unit = unit, transform = tr, mean = st$mean, sd = st$sd)
+}
+
+# a stated mean and SD of a covariate (cues cov_mean, cov_sd), and a unit written with them
+.sf_cov_stats <- function(x) {
+  out <- list()
+  g <- .sf_grab(x, "cov_mean"); if (length(g)) { out$mean <- as.numeric(g[2]); if (length(g) >= 3 && nzchar(g[3])) out$unit <- g[3] }
+  g <- .sf_grab(x, "cov_sd"); if (length(g)) { out$sd <- as.numeric(g[2]); if (is.null(out$unit) && length(g) >= 3 && nzchar(g[3])) out$unit <- g[3] }
+  out
 }
 
 .sf_regression_from_text <- function(text) {
   t <- tolower(text); out <- list(covariates = list())
-  add <- function(items) for (it in .sf_split_list(items)) { c <- .sf_covariate_item(it); if (!is.null(c)) out$covariates[[length(out$covariates) + 1]] <<- c }
+  add <- function(items) for (it in .sf_split_list(items)) {
+    # a relative clause ("which averages 250 g with an SD of 20") describes the item before it
+    if (grepl("^(?:which|that|who|whose|with)\\b", trimws(it), perl = TRUE)) {
+      k <- length(out$covariates)
+      if (k) { st <- .sf_cov_stats(it); for (nm in names(st)) if (is.null(out$covariates[[k]][[if (nm == "unit") "unit" else nm]])) out$covariates[[k]][[nm]] <<- st[[nm]] }
+      next
+    }
+    c <- .sf_covariate_item(it); if (!is.null(c)) out$covariates[[length(out$covariates) + 1]] <<- c }
   g <- .sf_grab(t, "cov_regress"); if (length(g)) { out$outcome <- g[2]; add(g[3]); out$asked <- TRUE }
   g <- .sf_grab(t, "cov_predict"); if (length(g)) { add(g[2]); out$outcome <- out$outcome %||% g[3]; out$asked <- TRUE }
   g <- .sf_grab(t, "cov_function_of"); if (length(g)) { out$outcome <- out$outcome %||% g[2]; add(g[3]); out$asked <- TRUE }
@@ -54,7 +75,8 @@
   if (!length(x$covariates)) return(spec)
   cv <- lapply(seq_along(x$covariates), function(i) {
     c <- x$covariates[[i]]; c$term <- if (i == 1) "covariate" else paste0("covariate", i)
-    c[c("term", "name", "column", "unit", "transform")][!vapply(c[c("term", "name", "column", "unit", "transform")], is.null, logical(1))]
+    k <- c("term", "name", "column", "unit", "transform", "mean", "sd")
+    c[k][!vapply(c[k], is.null, logical(1))]
   })
   spec$analysis$covariates <- cv
   # a factor named only inside a covariate ("soil nitrogen" -> nitrogen) is that measured covariate, not a factor
