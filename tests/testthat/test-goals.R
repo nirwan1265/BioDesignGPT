@@ -91,3 +91,17 @@ test_that("the outcome's unit, usual level and spread are read, or asked for whe
   d <- studyforge_ask("We want to detect a 2-fold change in expression between treated and control mice.", provider = "local")
   expect_null(d$spec$power$minimum_detectable_difference)
 })
+
+test_that("post-hoc comparisons: vs a control level label, pairwise, none; none for two levels", {
+  ph <- function(q) studyforge_ask(q, provider = "local")$spec$analysis$posthoc
+  a <- ph("Barley treated with 0, 25, 75 and 150 mM NaCl, 4 replicates; each dose compared with the untreated control.")
+  expect_equal(a$type, "vs_control"); expect_equal(a$control, "0 mM"); expect_equal(a$factor, "salt")
+  b <- ph("Four oat genotypes under drought, each compared with the wild type, 3 blocks.")
+  expect_equal(b$control, "wild type"); expect_equal(b$factor, "genotype")
+  s <- studyforge_ask("Four oat genotypes under drought, each compared with the wild type, 3 blocks.", provider = "local")$spec
+  expect_equal(unlist(Filter(function(f) f$name == "genotype", s$factors)[[1]]$levels)[1], "wild type")
+  expect_equal(ph("Seven barley genotypes in 3 blocks; which genotypes differ in grain weight?"), list(type = "pairwise", factor = "genotype"))
+  expect_equal(ph("Three phosphorus rates in 5 blocks, only the overall effect, no post-hoc tests.")$type, "none")
+  expect_null(ph("Two oat cultivars in 4 blocks compared with the check cultivar."))
+  expect_null(ph("Two oat cultivars in 4 blocks, grain yield."))
+})

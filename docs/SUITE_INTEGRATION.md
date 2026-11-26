@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.4`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.5`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -152,6 +152,13 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
+- (0.6.5) `analysis.posthoc` = {type, control, factor[, adjust]} when the question asks for it (rules.tsv cues
+  `posthoc_vs_control`: "compared with/to", "relative to", "each X vs" a control word; `posthoc_pairwise`: "which
+  genotypes differ", "pairwise", "all pairs"; `posthoc_none`: "no post-hoc", "only the overall effect"). `control` is an
+  exact level label of `factor` ("untreated" with numeric levels is the 0 level, "0 mM"). With unnamed levels, the
+  factor's first level is named for the control in the spec and the layout. Absent when not stated and for two-level
+  factors. `adjust` is left out (Bioana defaults: Holm; Dunnett for vs_control). Repeated designs keep `(1 | unit)` /
+  `(1 | subject)` and `repeated_factors`.
 - (0.6.4) The outcome's scale: `primary_outcome.unit` (the unit an effect, SD or usual level is stated in; rules.tsv
   `outcome_unit_name`), `primary_outcome.baseline_mean`, `power.residual_sd`, `power.cv` (CV with a mean gives the SD),
   and `power.minimum_detectable_difference` from "detect a 5 cm difference" (never from a fold change). When an effect

@@ -122,6 +122,64 @@
   out
 }
 
+# post-hoc comparisons the question asks for (cues posthoc_vs_control, posthoc_pairwise, posthoc_none): the type and
+# the words that name the control level or the factor; resolved to a level label in .sf_resolve_posthoc
+.sf_posthoc_from_text <- function(text) {
+  t <- tolower(text)
+  grab <- function(cue) { re <- .sf_expand_vocab(tryCatch(.sf_cue(cue), error = function(e) "(?!)"))
+    regmatches(t, regexec(re, t, perl = TRUE))[[1]] }
+  g <- grab("posthoc_vs_control"); if (length(g)) return(list(type = "vs_control", word = trimws(g[2])))
+  g <- grab("posthoc_pairwise"); if (length(g)) return(list(type = "pairwise", word = if (length(g) >= 2 && nzchar(g[2]) && g[2] != "pairwise") g[2]))
+  if (length(grab("posthoc_none"))) return(list(type = "none"))
+  NULL
+}
+
+# the control word as an exact level label: a level equal to it or inside it ("untreated control" -> "control"), or
+# containing it; a control word with a numeric zero level means that level ("untreated" -> "0 uM"). Pairwise: the
+# factor its word names, else the treatment term's factor.
+.sf_resolve_posthoc <- function(spec, ph) {
+  fx <- spec$factors %||% list(); out <- list(type = ph$type)
+  if (identical(ph$type, "vs_control")) {
+    w <- tolower(ph$word)
+    ctl <- tolower(c(.sf_list("treatment_control"), .sf_list("reference_level"), "control", "untreated", "vehicle", "placebo", "sham"))
+    hit <- NULL
+    for (f in fx) { lv <- unlist(f$levels); if (!length(lv)) next; l <- tolower(lv)
+      k <- which(l == w); if (!length(k)) k <- which(vapply(l, function(x) grepl(paste0("\\b", x, "\\b"), w, perl = TRUE), logical(1)))
+      if (!length(k)) k <- which(grepl(paste0("\\b", w, "\\b"), l, perl = TRUE))
+      if (!length(k) && any(strsplit(w, " ")[[1]] %in% ctl) && length(f$values)) k <- which(unlist(f$values) == 0)
+      if (length(k)) { hit <- list(control = lv[k[1]], factor = f$name); break } }
+    # no level matches but the control word belongs to a counted factor with unnamed levels ("five genotypes ... the
+    # wild type"): that factor's first level is the control, named for it; the others keep the layout's labels
+    if (is.null(hit)) {
+      fn <- setdiff(.sf_find_all(w, "factor"), "treatment")
+      k <- which(vapply(fx, function(f) (f$name %in% fn) && !length(f$levels) && !is.null(f$n_levels), logical(1)))[1]
+      if (!is.na(k) && fx[[k]]$n_levels >= 2) {
+        n <- as.integer(fx[[k]]$n_levels); nm <- fx[[k]]$name
+        spec$factors[[k]]$levels <- c(ph$word, paste0(nm, "_", seq_len(n)[-1]))
+        spec$assumptions[[paste0("factors.", nm, ".levels")]] <- sprintf("first level named '%s' (the stated control); the others are unnamed", ph$word)
+        hit <- list(control = ph$word, factor = nm)
+      }
+    }
+    if (is.null(hit) && length(fx) == 1) out$factor <- fx[[1]]$name   # one factor: the comparison is within it
+    if (is.null(hit)) {
+      spec$assumptions[["analysis.posthoc.control"]] <- sprintf("not matched: '%s' is not a level label; Bioana's default control", ph$word)
+    } else out <- c(out, hit)
+  } else if (identical(ph$type, "pairwise")) {
+    have <- vapply(fx, function(f) f$name %||% "", "")
+    f <- if (!is.null(ph$word)) intersect(c(sub("s$", "", ph$word), .sf_find_all(ph$word, "factor")), have)
+    if (!length(f)) f <- intersect(spec$analysis$terms$treatment %||% character(), have)
+    if (length(f)) out$factor <- f[1]
+  }
+  # a two-level factor has one comparison, which the main test already is: no post-hoc
+  ff <- Filter(function(f) identical(f$name, out$factor), fx)
+  if (length(ff) && identical(as.numeric(ff[[1]]$n_levels %||% length(ff[[1]]$levels)), 2) && !identical(out$type, "none")) {
+    spec$assumptions[["analysis.posthoc.control"]] <- NULL
+    return(spec)
+  }
+  spec$analysis$posthoc <- out
+  spec
+}
+
 # numeric levels: linear or log spacing (equal ratios of at least 2 between successive positive values)
 .sf_level_scale <- function(v) {
   v <- sort(unique(v[is.finite(v) & v > 0]))   # a zero control does not decide the spacing (0, 1, 10, 100 is log)
@@ -236,6 +294,7 @@
       if (sf == "per_unit_effect") "not stated: use the treatment effect over the factor's range" else "not stated: use power.minimum_detectable_difference default"
   }
   spec$analysis$per_unit_effect <- NULL
+  if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   spec$analysis$goal_effect <- ge
   spec$analysis$time_course <- NULL
   # replicate sweep sized for the primary goal

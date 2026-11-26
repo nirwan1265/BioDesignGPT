@@ -1,5 +1,5 @@
 {
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -61,7 +61,8 @@
     "factors[].log_base",
     "primary_outcome.unit",
     "primary_outcome.baseline_mean",
-    "power.cv"
+    "power.cv",
+    "analysis.posthoc"
   ],
   "enums": {
     "system": [
@@ -123,6 +124,7 @@
     "primary_outcome.unit": "unit the outcome and its effects are stated in (rules.tsv outcome_unit_name: t/ha, cm, mg/dL, %, ...)",
     "primary_outcome.baseline_mean": "stated usual level of the outcome, in primary_outcome.unit",
     "power.cv": "stated coefficient of variation (percent); with baseline_mean it gives power.residual_sd",
-    "power.residual_sd": "in primary_outcome.unit when that is set; when an effect has a unit and no SD or CV is stated, residual_sd is absent, assumptions says \"not stated: asked\", and the scale question is asked"
+    "power.residual_sd": "in primary_outcome.unit when that is set; when an effect has a unit and no SD or CV is stated, residual_sd is absent, assumptions says \"not stated: asked\", and the scale question is asked",
+    "analysis.posthoc": "post-hoc comparisons the question asks for: {type: vs_control | pairwise | none, control: exact level label (vs_control), factor: the factor compared, adjust: emmeans method (absent = Bioana default: Holm; Dunnett for vs_control)}. Absent when not stated, and never for a two-level factor (its one comparison is the main test). A control word with no matching label names the first level of a counted factor with unnamed levels (\"wild type\", \"genotype_2\", ...), recorded in assumptions"
   }
 }

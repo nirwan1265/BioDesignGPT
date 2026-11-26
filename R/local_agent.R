@@ -361,6 +361,7 @@ extract_spec_local <- function(question) {
   g <- .sf_goals_from_text(text); if (length(g)) spec$analysis$goals <- as.list(g)
   tc <- .sf_time_course_detail(text); if (length(tc)) spec$analysis$time_course <- tc
   pu <- .sf_per_unit_effect(text); if (!is.null(pu)) spec$analysis$per_unit_effect <- pu
+  ph <- .sf_posthoc_from_text(text); if (!is.null(ph)) spec$analysis$posthoc_text <- ph
   # the outcome's scale: unit, usual level, residual SD (a CV with a usual level gives the SD)
   os <- .sf_outcome_scale(text)
   if (!is.null(os$unit)) spec$primary_outcome$unit <- os$unit
@@ -647,6 +648,8 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     }
   }
   spec <- .sf_apply_fix(spec, fix)
+  # the post-hoc control as a level label, before any layout is built from this spec (the layout uses the labels)
+  if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   v <- validate_spec(spec)
   system <- spec$system %||% NA_character_
 

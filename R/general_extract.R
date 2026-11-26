@@ -257,9 +257,11 @@
         }
       }
     }
+    renamed_generic <- character()
     # a generic numeric factor (rules.tsv generic_level_factor: dose) whose list names another factor already in
     # the spec ("0, 100 or 150 mM NaCl" is salt) gives that factor its levels and values instead
     for (gn in intersect(.sf_list("generic_level_factor"), names(lv))) {
+      renamed_generic <- c(renamed_generic, gn)
       fw <- setdiff(.sf_find_all(attr(lv, "spans")[[gn]] %||% "", "factor"), c(gn, "treatment"))
       # no factor word in the list: its unit may name the factor (rules.tsv unit_factor: kg N/ha is nitrogen)
       un <- attr(lv, "values")[[gn]]$unit
@@ -328,6 +330,13 @@
     spec_words <- union(spec_words, "treatment")
   }
   for (w in setdiff(spec_words, have)) fx[[length(fx) + 1]] <- list(name = w)
+  # a generic list read under the factor it names ("0, 10 mM NaCl" is salt): the bare generic word ("each dose") is
+  # that factor, not another one
+  if (exists("renamed_generic", inherits = FALSE) && length(renamed_generic) && length(fx) > 1) {
+    named_list <- vapply(fx, function(f) !(f$name %in% renamed_generic) && length(f$values) > 0, logical(1))
+    gone <- vapply(fx, function(f) f$name %in% renamed_generic && is.null(f$n_levels) && !length(f$levels), logical(1))
+    if (any(named_list)) fx <- fx[!gone]
+  }
   if (length(fx)) spec$factors <- fx
   if (length(fx)) spec$factors <- .sf_name_two_levels(text, spec$factors)
   if (is.null(spec$goal)) set("goal", .sf_goal(text))
