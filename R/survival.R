@@ -44,6 +44,13 @@
   if (length(.sf_grab(t, "surv_aft"))) sv$aft <- TRUE
   if (length(iv)) sv$life_table <- if (nzchar(iv[2])) as.numeric(iv[2]) else 1
   g <- .sf_grab(t, "surv_hr"); if (length(g)) pw$target_hazard_ratio <- as.numeric(g[2])
+  # in words: "halve the hazard" (rules.tsv hazard_phrase), "reduce the hazard by 30%" (cue surv_hr_reduction)
+  if (is.null(pw$target_hazard_ratio)) {
+    hp <- .sf_rules_rows("hazard_phrase"); k <- which(vapply(hp$pattern, grepl, logical(1), x = t, perl = TRUE))
+    if (length(k)) pw$target_hazard_ratio <- as.numeric(hp$term[k[1]])
+    g <- .sf_grab(t, "surv_hr_reduction"); if (length(g)) pw$target_hazard_ratio <- 1 - as.numeric(g[2]) / 100
+    g <- .sf_grab(t, "surv_hr_increase"); if (length(g)) pw$target_hazard_ratio <- 1 + as.numeric(g[2]) / 100
+  }
   g <- .sf_grab(t, "surv_event_prob"); if (length(g)) pw$event_probability <- as.numeric(g[2]) / 100
   if (length(loss)) pw$loss_fraction <- as.numeric(loss[2]) / 100
   list(endpoint = ep, survival = sv, power = pw)
@@ -96,7 +103,7 @@
 # at write time: the estimand (hazard ratio, time ratio, RMST difference), events needed (Schoenfeld), units needed,
 # and clusters as a shared frailty (1 | block) or, with fewer than 10, strata
 .sf_fill_survival <- function(spec, ge) {
-  if (!identical(spec$primary_outcome$type, "survival")) return(list(spec = spec, ge = ge))
+  if (!identical(spec$primary_outcome$type, "survival") && !("survival" %in% names(ge))) return(list(spec = spec, ge = ge))
   sv <- spec$analysis$survival %||% list(); pw <- spec$power %||% list()
   if ("survival" %in% names(ge)) {
     e <- ge$survival

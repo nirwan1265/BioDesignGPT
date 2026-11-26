@@ -160,7 +160,7 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   named only by the endpoint ("first lesion", "after inoculation") is dropped. Stated blocks: (1 | block) frailty with
   10 or more, `strata` below 10. Power: `target_hazard_ratio`, `events_required` (Schoenfeld, 1:1), `event_probability`,
   `loss_fraction`, `units_required`; with no hazard ratio Biodes asks for it first. `goal_effect.survival.scale`:
-  hazard_ratio | time_ratio | rmst_difference (+ tau). Rules: rules.tsv `survival_event`, `time_unit_long`, `surv_*` cues.
+  hazard_ratio | time_ratio | rmst_difference (+ tau); size only from a stated hazard ratio ("HR 0.7", "halve the hazard", "reduce the risk by 30%"), never from minimum_detectable_difference. Rules: rules.tsv `survival_event`, `time_unit_long`, `surv_*` cues.
 - (0.6.5) `analysis.posthoc` = {type, control, factor[, adjust]} when the question asks for it (rules.tsv cues
   `posthoc_vs_control`: "compared with/to", "relative to", "each X vs" a control word; `posthoc_pairwise`: "which
   genotypes differ", "pairwise", "all pairs"; `posthoc_none`: "no post-hoc", "only the overall effect"). `control` is an

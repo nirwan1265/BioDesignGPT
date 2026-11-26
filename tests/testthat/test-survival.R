@@ -20,3 +20,13 @@ test_that("survival: endpoint, competing event, options, event-based power, esti
   m <- pkg("Rats infected with a virus, treated or vehicle, 10 per group, survival followed for 21 days after infection; hazard ratio 0.4.")$j
   expect_equal(vapply(m$factors, `[[`, "", "name"), "treatment"); expect_equal(m$factors[[1]]$n_levels, 2)
 })
+
+test_that("survival size only from a stated hazard ratio, in numbers or words; never from the outcome-unit difference", {
+  ge <- function(q, fix = list()) { a <- studyforge_ask(q, provider = "local"); if (length(fix)) a <- do.call(studyforge_fix, c(list(a), fix))
+    s <- fill_layout_defaults(a$spec); s$design$reps <- s$design$reps %||% 4; d <- file.path(tempdir(), paste0("hr", sample.int(1e6, 1)))
+    write_design_package(layout_from_spec(s, 1), s, d); jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE)$analysis$goal_effect$survival }
+  expect_equal(ge("Lifespan of worms on two diets, 6 plates per diet; the drug should halve the hazard of death.")$size, 0.5)
+  expect_equal(ge("Rats infected with a virus, drug or vehicle, 10 per group, survival over 21 days; the drug should reduce the risk of death by 30%.")$size, 0.7)
+  x <- ge("Rats infected with a virus, drug or vehicle, 10 per group, survival over 21 days.", list(power.minimum_detectable_difference = 10))
+  expect_equal(x$scale, "hazard_ratio"); expect_null(x$size)
+})

@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "owner": "Biodes (studyforge)",
   "contract": "Bioana docs/contracts/analysis_goals.md (2026-11-25)",
   "fields": {
@@ -11,7 +11,7 @@
     "replicate_multiplier": "replicates needed relative to a main effect of the same size (interaction about 4x); Biodes widens power.reps_range by it",
     "effect_definition": "what analysis.goal_effect.size measures, on analysis.goal_effect.scale (Simitall plants it, Bioana tests it)",
     "simulated": "Simitall can plant truth for it today",
-    "size_from": "where goal_effect.size comes from: minimum_detectable_difference (a difference between levels), or per_unit_effect (a stated change per unit of the numeric factor; trend). Not stated: size is absent and listed in assumptions"
+    "size_from": "where goal_effect.size comes from: minimum_detectable_difference (a difference between levels), or per_unit_effect (a stated change per unit of the numeric factor; trend). Not stated: size is absent and listed in assumptions; target_hazard_ratio (survival: power.target_hazard_ratio, set only when stated, e.g. \"halve the hazard\" = 0.5)"
   },
   "goals": [
     {
@@ -239,9 +239,9 @@
       ],
       "description": "Does time to an event differ between groups?",
       "replicate_multiplier": 1,
-      "effect_definition": "hazard ratio",
+      "effect_definition": "hazard ratio (scale hazard_ratio), time ratio (time_ratio, AFT) or RMST difference up to tau (rmst_difference); size only when the question states one",
       "simulated": true,
-      "size_from": "minimum_detectable_difference"
+      "size_from": "target_hazard_ratio"
     },
     {
       "id": "biomarker_classification",
