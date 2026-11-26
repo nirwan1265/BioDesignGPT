@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.7`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.8`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -152,6 +152,18 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
+- (0.6.8) Regression (Bioana 0.13.0 `docs/contracts/regression.md`). `analysis.covariates` [{term covariate|covariate2|..,
+  name, column, unit, transform}] from "does X predict Y", "regress Y on X and Z", "Y as a function of X", "adjusting /
+  controlling for X", "baseline X as covariate"; categorical words (sex, genotype, diet; rules.tsv
+  `categorical_predictor`) stay factors, and a factor named only inside a covariate ("soil nitrogen") is that covariate.
+  Nothing randomized: catalog design `regression` (`y ~ covariate + covariate2`, one row per unit); with a randomized
+  factor the covariates are added (ANCOVA; `ancova_baseline` is now `y ~ treatment + covariate`); "depends on" gives
+  `treatment * covariate` or `covariate * covariate2`. Goal `regression` (asked by predict/regress/function-of wording):
+  `goal_terms.regression` = covariates, `goal_effect.regression.scale` per_unit or odds_ratio_per_unit (yes/no).
+  `analysis.regression` {predict_at, robust: "mm"}; `analysis.stat_tests` robust or WRS2 ids; correlation methods
+  percentage_bend / winsorized. A-priori power with `pwr` written into `power`: {method, effect_size_name, effect_size,
+  alpha, power, n_per_group | n_total, source (pilot, literature, stated, Cohen's convention)}; none for logistic
+  regression (by simulation) or survival (events).
 - (0.6.7) Categorical, correlation, agreement (Bioana 0.11.0). Also read: "expected 3:1 red to yellow" (labels after the ratio), "is X related to Y", "two people scored from 1 to 9"; a ratio outcome is nominal whatever the number of classes; each correlated trait has its own type (secondary_outcomes[].type). `primary_outcome.categories` (order named, reference
   first) with `type` nominal (3+) or binary (2); `analysis.expected_ratio` {label: weight} from a stated ratio, labels
   the categories in order (else class_1.. and asked). One-group studies (a ratio, a correlation or agreement with no

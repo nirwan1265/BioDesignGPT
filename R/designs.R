@@ -18,6 +18,15 @@
 make_design <- function(design = c("crd", "rcbd", "alpha", "split", "factorial", "factorial_crd", "augmented"),
                         treatments = NULL, reps, block_size = NULL, treatments2 = NULL,
                         factor_levels = NULL, checks = NULL, seed = 42) {
+  # agricolae's design functions set the session to the Super-Duper generator; put the caller's generator and
+  # stream back afterwards so later draws (simulations, resampling) are not changed by building a layout
+  old_kind <- RNGkind()
+  old_seed <- if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) get(".Random.seed", envir = globalenv()) else NULL
+  on.exit({
+    RNGkind(old_kind[1], old_kind[2], old_kind[3])
+    if (is.null(old_seed)) { if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) rm(".Random.seed", envir = globalenv()) }
+    else assign(".Random.seed", old_seed, envir = globalenv())
+  }, add = TRUE)
   design <- match.arg(design)
   quiet <- function(expr) {
     out <- NULL
@@ -133,6 +142,8 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   meta$primary_outcome <- NA
   # secondary outcomes (correlation): one column each, named in secondary_outcomes[].column
   for (so in spec$secondary_outcomes %||% list()) if (nzchar(so$column %||% "")) meta[[so$column]] <- NA
+  # covariates: one blank column each (measured per unit; not part of the randomized layout)
+  for (cv in spec$analysis$covariates %||% list()) if (nzchar(cv$column %||% "") && is.null(meta[[cv$column]])) meta[[cv$column]] <- NA
   meta$notes <- NA
   mpath <- file.path(outdir, "sample_metadata_template.tsv")
   utils::write.table(meta, mpath, sep = "\t", row.names = FALSE, quote = FALSE, na = "")
@@ -255,11 +266,13 @@ layout_from_spec <- function(spec, seed = 42) {
   notes <- character()
   f <- Filter(function(x) nzchar(x$name %||% ""), spec$factors %||% list())
   # one group: no treatment compared (a ratio, a correlation, agreement between raters): the units in order
-  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement)
+  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement) ||
+    length(spec$analysis$covariates) > 0
   if (!length(f) && one_group) {
     if (is.null(spec$design$reps)) stop("layout_from_spec: no unit count (missing: design.reps).", call. = FALSE)
     book <- data.frame(plot = seq_len(as.integer(spec$design$reps)), rep = 1L, block = 1L)
-    attr(book, "design") <- "single_group"; attr(book, "seed") <- seed
+    # measured predictors and nothing randomized: a regression design (catalog regression)
+    attr(book, "design") <- if (length(spec$analysis$covariates)) "regression" else "single_group"; attr(book, "seed") <- seed
     attr(book, "layout_notes") <- sprintf("one group of %d units (no treatment)", nrow(book))
     return(book)
   }

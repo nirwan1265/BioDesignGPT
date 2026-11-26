@@ -23,6 +23,27 @@
       "analysis_note": "one group: goodness of fit (analysis.expected_ratio), correlation (analysis.correlation) or agreement (analysis.agreement)"
     },
     {
+      "id": "regression",
+      "name": "Regression on measured predictors",
+      "engine": "none (units listed in order; covariates are measured, not randomized)",
+      "requires": [
+        "reps"
+      ],
+      "use_when": "Nothing is randomized: the question asks how measured predictors (covariates) relate to or predict the outcome.",
+      "strength": "Estimates slopes per unit of each predictor, with predictions at chosen values.",
+      "tradeoff": "Observational: slopes are associations, not causal effects; correlated predictors inflate variance (VIF).",
+      "model": "y ~ covariate + covariate2",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "lab",
+        "mouse",
+        "livestock"
+      ],
+      "analysis_note": "covariates are columns of the sample metadata (analysis.covariates); the model lists one term per covariate"
+    },
+    {
       "id": "crd",
       "name": "Completely randomized design",
       "engine": "agricolae::design.crd",
@@ -764,8 +785,8 @@
       "use_when": "Use when pretreatment body weight, initial plant size, or initial assay activity predicts the final response.",
       "strength": "Baseline adjustment can improve precision and correct chance initial imbalances.",
       "tradeoff": "Requires reliable baseline measurements and assessment of the baseline-response relationship.",
-      "model": "y ~ treatment",
-      "analysis_note": "The allowed schema excludes a baseline covariate, so this is only the unadjusted fallback model; true ANCOVA requires adding a baseline variable and fitting y ~ treatment + baseline.",
+      "model": "y ~ treatment + covariate",
+      "analysis_note": "covariate = the baseline measurement (analysis.covariates); slope per unit of the covariate",
       "systems": [
         "field",
         "greenhouse",
@@ -1701,7 +1722,7 @@
     }
   ],
   "model_terms": {
-    "description": "Every model is an R formula lm()/lme4::lmer() can fit as written, using only these generic terms; study_spec.json analysis.terms says what each stands for in a given study.",
+    "description": "Every model is an R formula lm()/lme4::lmer() can fit as written, using only these generic terms; study_spec.json analysis.terms says what each stands for in a given study. covariate, covariate2, ... are measured numeric predictors (analysis.covariates gives name, column, unit, transform).",
     "terms": [
       "y",
       "treatment",
@@ -1716,7 +1737,10 @@
       "env",
       "period",
       "sequence",
-      "check"
+      "check",
+      "covariate",
+      "covariate2",
+      "covariate3"
     ]
   }
 }

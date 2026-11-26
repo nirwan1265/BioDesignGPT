@@ -193,7 +193,13 @@ extract_spec_local <- function(question) {
 
   # units: "<n> <meas> per <exp>"; take the first match that names real units
   per_re <- .sf_cue("n_units_per_unit")
-  pers <- regmatches(text, gregexpr(per_re, text, perl = TRUE))[[1]]
+  mpos <- gregexpr(per_re, text, perl = TRUE)[[1]]
+  pers <- regmatches(text, list(mpos))[[1]]
+  # a number that ends a range ("scored from 1 to 9 on each of 80 plots", "1-9") is a scale value, not a count
+  if (length(pers) && mpos[1] > 0) {
+    ends_range <- vapply(as.integer(mpos), function(p) grepl("\\d\\s*(?:-|–|to)\\s*$", substr(text, max(1, p - 12), p - 1), perl = TRUE), logical(1))
+    pers <- pers[!ends_range]
+  }
   for (per in pers) {
     parts <- regmatches(per, regexec(per_re, per, perl = TRUE))[[1]]
     meas <- sub("(?<!s)s$", "", sub("ies$", "y", sub("aves$", "af", parts[3])), perl = TRUE)   # flies -> fly
@@ -376,6 +382,7 @@ extract_spec_local <- function(question) {
     }
   }
   spec <- .sf_apply_categorical(spec, text)   # categories, expected ratio, correlation, agreement
+  spec <- .sf_apply_regression(spec, text)    # covariates, regression goal and options, robust tests
   spec <- .sf_apply_survival(spec, text)   # endpoint, competing events, analysis.survival, event-based power
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
@@ -654,6 +661,8 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   # from the question too; the answers still win
   if (identical(fix[["primary_outcome.type"]], "survival") && is.null(spec$primary_outcome$event))
     spec <- .sf_apply_fix(.sf_apply_survival(spec, .sf_words_to_digits(tolower(question))), fix)
+  # a-priori power (pwr): method from the design, effect size stated or Cohen's convention
+  spec <- .sf_apriori_power(spec, .sf_words_to_digits(tolower(question)))
   # the post-hoc control as a level label, before any layout is built from this spec (the layout uses the labels)
   if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   v <- validate_spec(spec)
@@ -735,7 +744,7 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
       gsub("{U}", spec$experimental_unit %||% "unit", gsub("{F}", nm, q[1], fixed = TRUE), fixed = TRUE) }, "")
     questions <- unique(c(questions, ask_oc))
   }
-  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement)
+  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement) || length(spec$analysis$covariates) > 0
   # a ratio with no class names: ask which classes, in order (rules.tsv question_rule ratio_labels)
   if (!is.null(spec$analysis$expected_ratio) && !is.null(spec$assumptions[["primary_outcome.categories"]])) {
     qr <- .sf_rules_rows("question_rule"); qr <- qr$note[qr$term == "ratio_labels"][1]

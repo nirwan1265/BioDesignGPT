@@ -23,6 +23,7 @@ Suggests:
     shiny,
     ellmer (>= 0.3.0),
     lme4,
+    pwr,
     simr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

@@ -4,7 +4,7 @@ test_that("goal registry and rules agree", {
                     "biomarker_classification", "coexpression_network") %in% names(reg)))
   expect_true(all(vapply(reg, function(g) g$test %in% c("wald", "lrt", "wald_or_lrt", "other"), logical(1))))
   slots <- unique(unlist(lapply(reg, `[[`, "required_terms")))
-  expect_true(all(slots %in% c("factor_a", "factor_b", "time", "numeric")))
+  expect_true(all(slots %in% c("factor_a", "factor_b", "time", "numeric", "covariate")))
   for (cat in c("analysis_goal", "goal_default")) expect_true(all(.sf_rules_rows(cat)$term %in% names(reg)))
 })
 

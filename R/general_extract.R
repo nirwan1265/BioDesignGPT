@@ -431,6 +431,8 @@ studyforge_fix <- function(answer, ...) {
 # level per listed item in group 1 that is a word of the table named in the note column's first word; open = the
 # factor is there, its levels unknown ("sampled over time").
 .sf_level_factors <- function(text) {
+  # a yes/no outcome ("germination yes or no") names the outcome's two values, not groups (cue outcome_yes_no)
+  text <- gsub(tryCatch(.sf_cue("outcome_yes_no"), error = function(e) "(?!)"), " ", text, perl = TRUE)
   spans <- list(); vals <- list(); arms <- list(); pair_names <- list()   # text each count was read from; numeric levels; contrast arms; named pair levels
   r <- .sf_rules_rows("factor_levels")
   out <- list()

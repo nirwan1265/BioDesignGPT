@@ -192,3 +192,11 @@ test_that("'sampled repeatedly' counts for subjects that survive sampling, not f
   expect_equal(rp("Plasma proteomics of sheep sampled repeatedly after vaccination."), "time")
   expect_equal(rp("Meat RNA-seq sampled repeatedly post mortem from the same carcasses."), "time")
 })
+
+test_that("building a layout leaves the session's random generator and stream as they were", {
+  RNGkind("Mersenne-Twister"); set.seed(11); before <- .Random.seed
+  b <- make_design("rcbd", treatments = c("A", "B", "C"), reps = 3, seed = 5)
+  expect_equal(RNGkind()[1], "Mersenne-Twister"); expect_identical(.Random.seed, before)
+  s <- studyforge_ask("Two people scored rust from 1 to 9 on each of 80 wheat plots; how well do they agree?", provider = "local")$spec
+  expect_null(s$subsamples_per_unit)
+})

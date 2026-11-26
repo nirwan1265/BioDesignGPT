@@ -1,5 +1,5 @@
 {
-  "version": "0.3.1",
+  "version": "0.4.0",
   "owner": "Biodes (studyforge)",
   "contract": "Bioana docs/contracts/analysis_goals.md (2026-11-25)",
   "fields": {
@@ -272,6 +272,21 @@
       "effect_definition": "module-trait correlation",
       "simulated": false,
       "size_from": "minimum_detectable_difference"
+    },
+    {
+      "id": "regression",
+      "test": "wald",
+      "required_terms": [
+        "covariate"
+      ],
+      "data_types": [
+        "outcome"
+      ],
+      "description": "slopes of measured predictors (covariates): how the outcome changes per unit of each",
+      "replicate_multiplier": 1,
+      "effect_definition": "slope per unit of the (transformed) covariate (scale per_unit), or odds ratio per unit for a yes/no outcome (odds_ratio_per_unit)",
+      "simulated": true,
+      "size_from": "per_unit_effect"
     }
   ]
 }

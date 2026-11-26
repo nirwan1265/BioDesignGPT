@@ -1,5 +1,5 @@
 {
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -79,7 +79,15 @@
     "analysis.correlation",
     "secondary_outcomes",
     "analysis.agreement",
-    "analysis.survival.cluster"
+    "analysis.survival.cluster",
+    "analysis.covariates",
+    "analysis.regression",
+    "analysis.stat_tests",
+    "power.method",
+    "power.effect_size",
+    "power.source",
+    "power.n_per_group",
+    "power.n_total"
   ],
   "enums": {
     "system": [
@@ -159,6 +167,14 @@
     "analysis.correlation": "{variables, method}: traits whose relationship is asked; variables[0] is primary_outcome.name (column primary_outcome), the rest are secondary_outcomes; method stated or pearson (assumption)",
     "secondary_outcomes": "[{name, column}] traits measured besides the primary outcome; each has its own column in sample_metadata_template.tsv",
     "analysis.agreement": "{rater_column: \"rater\", score_column: \"primary_outcome\", unit_column, scale: nominal | ordinal | continuous, levels}: raters or methods scoring the same units; rater is a within-unit factor (one template row per unit and rater)",
-    "analysis.survival.cluster": "survival with subsamples per unit (seeds per tray cell): the unit column is their cluster; the template has one row per subsample (column subsample)"
+    "analysis.survival.cluster": "survival with subsamples per unit (seeds per tray cell): the unit column is their cluster; the template has one row per subsample (column subsample)",
+    "analysis.covariates": "[{term: covariate|covariate2|..., name, column, unit, transform: log|log10|log2|sqrt}]: measured numeric predictors, one value per unit, blank columns in sample_metadata_template.tsv (not the layout)",
+    "analysis.regression": "{predict_at: [{name: value}], robust: \"mm\"} only when the question says so",
+    "analysis.stat_tests": "robust tests asked: \"robust\" (trimmed means) or a WRS2 id (yuen, yuen_paired, t1way, t2way, rmanova_trimmed, bwtrim)",
+    "power.method": "a-priori (pwr): pwr.t.test (2 groups), pwr.anova.test (k groups), pwr.r.test (correlation), pwr.2p.test (2 proportions, ES.h), pwr.chisq.test (expected ratio, w), pwr.f2.test (regression, u covariates, n_total = v + u + 1); none for logistic regression or survival (events)",
+    "power.effect_size": "with power.effect_size_name (d, f, r, h, w, f2): stated, or Cohen's medium value",
+    "power.source": "pilot | literature | stated | Cohen's convention",
+    "power.n_per_group": "a-priori n per group (t, anova, 2p)",
+    "power.n_total": "a-priori total n (r, chisq, f2)"
   }
 }
