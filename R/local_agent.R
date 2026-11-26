@@ -597,6 +597,10 @@ extract_spec_local <- function(question) {
 
 .sf_recipe <- function(spec, candidates) {
   f <- spec$factors %||% list()
+  # a spec with factors: the real next step is this spec's own layout and files, not a generic example
+  if (length(f) && !is.null(spec$design$reps) && all(vapply(f, function(x) !is.null(x$n_levels) || length(x$levels) > 0, logical(1))))
+    return(paste0('book <- layout_from_spec(a$spec, seed = 2026)   # randomized layout for this design\n',
+                  'write_design_package(book, a$spec, "my_design")   # study_spec.json, field_layout.csv, sample sheet'))
   geno <- Filter(function(x) x$name == "genotype", f)
   # an open genotype count (a panel whose size the user has not given yet) uses the stated layout default
   n <- if (length(geno) && !is.null(geno[[1]]$n_levels)) geno[[1]]$n_levels else
@@ -813,7 +817,7 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
     cat0("\n---- deterministic plan ----")
   }
   s <- x$spec
-  cat0("StudyForge (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger",
+  cat0("Biodes (", x$provider, if (identical(x$engine, "hybrid")) " + trained tagger",
        if (identical(x$engine, "llm")) " + LLM reader", ", free)\n")
   cat0("Here's what I understood (fix anything wrong: studyforge_fix(answer, organism = \"...\", factors = \"name:levels\")):")
   for (l in .sf_skeleton_lines(s, x$fixes %||% list())) cat0(l)
@@ -822,16 +826,18 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
          " this data implies, which fixes the model it should be analysed with.")
   }
   cat0("")
-  cat0("System: ", s$system %||% "unknown", if (!is.null(s$study_type)) paste0(" | Study: ", s$study_type),
-       if (!is.null(s$organism)) paste0(" | Organism: ", s$organism))
-  if (length(s$factors)) {
+  # the block above already lists organism and factors: repeat only what it does not show
+  if (!is.null(s$system)) cat0("System: ", s$system, if (!is.null(s$study_type)) paste0(" | Study: ", s$study_type))
+  if (FALSE && length(s$factors)) {
     fx <- vapply(s$factors, function(f) paste0(f$name, if (!is.null(f$n_levels)) paste0(" (", f$n_levels, ")"),
                                                if (!is.null(f$applied_to)) paste0(" on ", f$applied_to)), "")
     cat0("Factors: ", paste(fx, collapse = "; "))
   }
   if (!is.null(s$primary_outcome$name)) cat0("Primary outcome: ", s$primary_outcome$name)
   if (!is.null(s$experimental_unit)) cat0("Experimental unit: ", s$experimental_unit)
-  if (!is.null(s$design)) cat0("Design facts: ", paste(names(s$design), unlist(s$design), sep = " = ", collapse = ", "))
+  dd <- s$design[intersect(names(s$design), c("type", "reps", "blocks", "locations", "seasons"))]
+  dd <- dd[vapply(dd, function(v) length(v) == 1 && !is.list(v), logical(1))]
+  if (length(dd)) cat0("Design facts: ", paste(names(dd), unlist(dd), sep = " = ", collapse = ", "))
   if (!is.null(x$audit)) {
     cat0("\nUnit audit: risk ", toupper(x$audit$pseudoreplication_risk))
     cat0("  ", x$audit$resolution)
@@ -884,7 +890,7 @@ print.studyforge_answer <- function(x, llm = TRUE, ...) {
   }
   cat0("\nStarter code:\n", x$recipe)
   cat0("\nPower: give a minimum detectable difference and residual SD (pilot data or literature); ",
-       "StudyForge never assumes them. Then run power_rcbd(), power_split_plot() or power_alpha_lattice().")
+       "Biodes never assumes them. Then run power_rcbd(), power_split_plot() or power_alpha_lattice().")
   if (!is.null(x$disclaimer)) cat0("\n", x$disclaimer)
   invisible(x)
 }

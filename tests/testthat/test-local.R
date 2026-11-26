@@ -49,7 +49,10 @@ test_that("starter recipes run", {
                "Three irrigation levels and five cultivars, linear-move irrigation, 4 replications")
   for (p in prompts) {
     env <- new.env()
-    expect_no_error(eval(parse(text = studyforge_ask(p)$recipe), envir = env))
+    a <- studyforge_ask(p); env$a <- a   # the recipe refers to the ask result as `a`
+    old <- setwd(tempdir()); on.exit(setwd(old), add = TRUE)
+    expect_no_error(eval(parse(text = a$recipe), envir = env))
+    setwd(old)
   }
 })
 
