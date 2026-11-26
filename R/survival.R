@@ -110,6 +110,9 @@
     e$scale <- if (isTRUE(sv$aft)) "time_ratio" else if (!is.null(sv$rmst_tau)) "rmst_difference" else "hazard_ratio"
     e$size <- if (identical(e$scale, "hazard_ratio")) pw$target_hazard_ratio else NULL
     if (identical(e$scale, "rmst_difference")) e$tau <- sv$rmst_tau
+    # a stated early or delayed effect: hazards are not proportional, and the goal is tested with that weighted
+    # log-rank, not one Cox hazard ratio (which averages the phases)
+    if (!is.null(sv$logrank_weight)) { e$proportional_hazards <- FALSE; e$test <- paste0("logrank_", sv$logrank_weight) }
     e$definition <- switch(e$scale, hazard_ratio = "hazard ratio of a level vs the reference (Cox)",
       time_ratio = "ratio of survival times of a level vs the reference (AFT)",
       rmst_difference = "difference in restricted mean time to the event up to tau")

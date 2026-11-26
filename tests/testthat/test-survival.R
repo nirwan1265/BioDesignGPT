@@ -51,3 +51,11 @@ test_that("survival wording sets the type; plain 'days to X' is asked; an answer
   d <- studyforge_fix(a, primary_outcome.type = "survival")$spec
   expect_equal(d$primary_outcome$event, "germination"); expect_equal(d$primary_outcome$type, "survival")
 })
+
+test_that("a stated delayed effect marks the survival goal non-proportional and names the weighted log-rank", {
+  s <- studyforge_ask("Seeds of 2 oat lines primed or not in 5 trays, days to germination checked every 2 days, followed for 18 days, the priming effect is delayed, hazard ratio 0.6.", provider = "local")$spec
+  s$design$reps <- s$design$reps %||% 5; d <- file.path(tempdir(), paste0("ph", sample.int(1e6, 1)))
+  write_design_package(layout_from_spec(s, 1), s, d)
+  e <- jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE)$analysis$goal_effect$survival
+  expect_false(e$proportional_hazards); expect_equal(e$test, "logrank_fh_0_1"); expect_equal(e$size, 0.6)
+})
