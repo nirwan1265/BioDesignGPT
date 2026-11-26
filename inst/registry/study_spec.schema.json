@@ -87,7 +87,9 @@
     "power.effect_size",
     "power.source",
     "power.n_per_group",
-    "power.n_total"
+    "power.n_total",
+    "factors[].role",
+    "analysis.adjust_for"
   ],
   "enums": {
     "system": [
@@ -175,6 +177,8 @@
     "power.effect_size": "with power.effect_size_name (d, f, r, h, w, f2): stated, or Cohen's medium value",
     "power.source": "pilot | literature | stated | Cohen's convention",
     "power.n_per_group": "a-priori n per group (t, anova, 2p)",
-    "power.n_total": "a-priori total n (r, chisq, f2)"
+    "power.n_total": "a-priori total n (r, chisq, f2)",
+    "factors[].role": "\"adjustment\" for a factor only adjusted for (additive, not part of the goal)",
+    "analysis.adjust_for": "names of adjustment factors (\"adjusting for sex\"); goal_terms leave them out"
   }
 }

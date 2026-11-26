@@ -54,3 +54,13 @@ test_that("ANCOVA without stated blocks is completely randomized; 'adjusting for
   b <- pkg_reg("Pigs on two diets in 6 blocks, final weight adjusting for baseline weight.")
   expect_equal(b$j$analysis$model, "y ~ treatment + block + covariate")
 })
+
+test_that("adjustment factors: kept out of the goal, marked, replicates split across them unless given per cell", {
+  a <- pkg_reg("Gerbils on two diets, 16 per group, final weight adjusting for sex and baseline weight.")
+  expect_equal(unlist(a$j$analysis$goal_terms$treatment_effect), "treatment"); expect_equal(unlist(a$j$analysis$adjust_for), "sex")
+  expect_equal(Filter(function(f) f$name == "sex", a$j$factors)[[1]]$role, "adjustment")
+  expect_equal(a$j$design$reps, 8); expect_equal(nrow(a$m), 32)
+  expect_equal(a$j$power$method, "pwr.t.test")
+  b <- pkg_reg("Gerbils on two diets, 9 per diet and sex, final weight adjusting for sex and baseline weight.")
+  expect_equal(b$j$design$reps, 9); expect_equal(nrow(b$m), 36)
+})

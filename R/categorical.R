@@ -118,5 +118,17 @@
     spec$factors[[i]]$levels <- lv; spec$factors[[i]]$n_levels <- length(lv)
     spec$assumptions[[paste0("factors.", f$name, ".levels")]] <- sprintf("named without levels: %s (rules.tsv known_levels)", paste(lv, collapse = ", "))
   }
+  # "12 per diet" with sex only adjusted for: 12 per diet split evenly across the sexes (6 per cell), unless the
+  # question gives the count per cell (cue per_cell_stated)
+  if (length(adj) && !is.null(spec$design$reps) && !grepl(.sf_cue("per_cell_stated"), tolower(text), perl = TRUE)) {
+    k <- prod(vapply(Filter(function(f) f$name %in% adj, spec$factors), function(f) as.numeric(f$n_levels %||% 1), numeric(1)))
+    r <- as.numeric(spec$design$reps)
+    if (k > 1 && r %% k == 0) {
+      spec$design$reps <- r / k
+      spec$assumptions[["design.reps"]] <- sprintf("%g per group split evenly across %s: %g per cell", r, paste(adj, collapse = " x "), r / k)
+    } else if (k > 1) {
+      spec$assumptions[["design.reps"]] <- sprintf("%g per group does not split evenly across %s; read as %g per cell (asked)", r, paste(adj, collapse = " x "), r)
+    }
+  }
   spec
 }

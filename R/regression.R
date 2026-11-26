@@ -134,6 +134,15 @@
       sprintf("\\1\\2 + %s", t1), spec$analysis$model, perl = TRUE)
     if (length(tm)) spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", sprintf("%s is an adjustment factor (additive, not crossed).", a)))
   }
+  # the goal is about the other factors: adjustment factors are marked and kept out of the goal's terms
+  if (length(adj)) {
+    spec$analysis$adjust_for <- as.list(adj)
+    for (i in seq_along(spec$factors)) if (spec$factors[[i]]$name %in% adj) spec$factors[[i]]$role <- "adjustment"
+    adj_terms <- names(terms)[vapply(terms, function(v) length(unlist(v)) == 1 && unlist(v) %in% adj, logical(1))]
+    tr_terms <- intersect(c("treatment", "treatment2", "treatment3"), setdiff(names(terms), adj_terms))
+    tr_terms <- tr_terms[vapply(tr_terms, function(x) grepl(paste0("\\b", x, "\\b"), spec$analysis$model, perl = TRUE), logical(1))]
+    if ("treatment_effect" %in% unlist(spec$analysis$goals) && length(tr_terms)) spec$analysis$goal_terms$treatment_effect <- as.list(tr_terms)
+  }
   if (!length(cv)) return(list(spec = spec, ge = ge))
   tm <- vapply(cv, `[[`, "", "term")
   model <- spec$analysis$model %||% "y ~ 1"
@@ -181,7 +190,7 @@
     if (length(k)) r$term[k[1]] else "stated"
   }
   out <- NULL
-  k_levels <- function() { f <- Filter(function(f) !(f$name %in% .sf_within_factors(spec)), spec$factors %||% list())
+  k_levels <- function() { f <- Filter(function(f) !(f$name %in% c(.sf_within_factors(spec), unlist(spec$analysis$sf_adjust_factors))), spec$factors %||% list())
     if (length(f) == 1) as.numeric(f[[1]]$n_levels %||% length(f[[1]]$levels)) else NA }
   if (!is.null(spec$analysis$correlation)) {
     r <- .sf_pwr_effect(t, "r"); es <- r %||% 0.3
