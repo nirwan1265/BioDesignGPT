@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.6`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.7`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -152,6 +152,15 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
+- (0.6.7) Categorical, correlation, agreement (Bioana 0.11.0). `primary_outcome.categories` (order named, reference
+  first) with `type` nominal (3+) or binary (2); `analysis.expected_ratio` {label: weight} from a stated ratio, labels
+  the categories in order (else class_1.. and asked). One-group studies (a ratio, a correlation or agreement with no
+  treatment) use the new catalog design `single_group` (model `y ~ 1`, one row per unit, no goals). `analysis.correlation`
+  {variables, method}: the first trait is `primary_outcome.name`, the others `secondary_outcomes` [{name, column}] with
+  their own template columns. `analysis.agreement` {rater_column "rater", score_column "primary_outcome", unit_column,
+  scale, levels}: "rater" is a within-unit factor (each unit once per rater). Survival with subsamples per unit ("10
+  seeds per treatment per tray"): one template row per subsample (column `subsample`), `analysis.survival.cluster` = the
+  unit column.
 - (0.6.6) Survival (Bioana `docs/contracts/survival.md`). `primary_outcome.type = survival` also for timed events
   checked over a follow-up ("germination scored every 2 days") and times to an event that can be pre-empted ("plants
   that die before flowering"). `primary_outcome`: `event`, `origin`, `unit`, `censoring`, `event_column`, and

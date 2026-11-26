@@ -195,6 +195,12 @@
   terms <- spec$analysis$terms %||% list()
   model <- spec$analysis$model %||% ""
   goals <- unlist(spec$analysis$goals)
+  # one group (single_group: a ratio, a correlation, agreement): the analysis field says what to run; no comparison goal
+  if (identical(spec$design$chosen, "single_group")) {
+    spec$analysis$goals <- list()
+    if (!is.null(spec$analysis$agreement)) spec$analysis$agreement$unit_column <- spec$analysis$agreement$unit_column %||% "plot"
+    return(spec)
+  }
   if (!length(goals)) {
     goals <- .sf_goals_by_default(spec)
     if (!length(goals)) goals <- "treatment_effect"
@@ -294,6 +300,7 @@
       if (sf == "per_unit_effect") "not stated: use the treatment effect over the factor's range" else "not stated: use power.minimum_detectable_difference default"
   }
   fs <- .sf_fill_survival(spec, ge); spec <- fs$spec; ge <- fs$ge
+  if (!is.null(spec$analysis$agreement)) spec$analysis$agreement$unit_column <- spec$analysis$agreement$unit_column %||% terms$unit_column %||% "plot"
   spec$analysis$per_unit_effect <- NULL
   if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   spec$analysis$goal_effect <- ge

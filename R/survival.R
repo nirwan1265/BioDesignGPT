@@ -134,6 +134,13 @@
     if (!is.null(pw$event_probability) && pw$event_probability > 0)
       spec$power$units_required <- ceiling(d / pw$event_probability / (1 - (pw$loss_fraction %||% 0)))
   }
+  # subsamples in a unit each have their own time (seeds in a tray cell): the unit is their cluster
+  nsub <- suppressWarnings(as.integer(spec$subsamples_per_unit %||% 1))
+  if (!is.na(nsub) && nsub > 1) {
+    spec$analysis$survival$cluster <- spec$analysis$terms$unit_column %||% "plot"
+    spec$analysis$note <- trimws(paste(spec$analysis$note %||% "", sprintf("Survival: %d subsamples per %s, one row each (column subsample); %s is their cluster (robust SE or frailty).",
+      nsub, spec$analysis$survival$cluster, spec$analysis$survival$cluster)))
+  }
   # clusters: blocks as a shared frailty (1 | block), or strata when there are few
   terms <- spec$analysis$terms %||% list()
   stated <- isTRUE(spec$analysis$sf_blocks_stated); spec$analysis$sf_blocks_stated <- NULL

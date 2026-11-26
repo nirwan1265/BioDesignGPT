@@ -121,9 +121,18 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
   paths <- c(paths, layout)
 
   meta <- book
-  meta$sample_id <- sprintf("SF_%s_%04d", attr(book, "design") %||% "x", seq_len(nrow(book)))
+  # a time to event is recorded on every subsample (each seed has its own germination time): one row per subsample,
+  # numbered within its unit; the unit is the cluster (analysis.survival.cluster)
+  nsub <- suppressWarnings(as.integer(spec$subsamples_per_unit %||% 1))
+  if (identical(spec$primary_outcome$type, "survival") && !is.na(nsub) && nsub > 1) {
+    meta <- meta[rep(seq_len(nrow(meta)), each = nsub), , drop = FALSE]
+    meta$subsample <- rep(seq_len(nsub), times = nrow(book)); rownames(meta) <- NULL
+  }
+  meta$sample_id <- sprintf("SF_%s_%04d", attr(book, "design") %||% "x", seq_len(nrow(meta)))
   meta$date_measured <- NA
   meta$primary_outcome <- NA
+  # secondary outcomes (correlation): one column each, named in secondary_outcomes[].column
+  for (so in spec$secondary_outcomes %||% list()) if (nzchar(so$column %||% "")) meta[[so$column]] <- NA
   meta$notes <- NA
   mpath <- file.path(outdir, "sample_metadata_template.tsv")
   utils::write.table(meta, mpath, sep = "\t", row.names = FALSE, quote = FALSE, na = "")
@@ -245,6 +254,15 @@ layout_from_spec <- function(spec, seed = 42) {
   }
   notes <- character()
   f <- Filter(function(x) nzchar(x$name %||% ""), spec$factors %||% list())
+  # one group: no treatment compared (a ratio, a correlation, agreement between raters): the units in order
+  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement)
+  if (!length(f) && one_group) {
+    if (is.null(spec$design$reps)) stop("layout_from_spec: no unit count (missing: design.reps).", call. = FALSE)
+    book <- data.frame(plot = seq_len(as.integer(spec$design$reps)), rep = 1L, block = 1L)
+    attr(book, "design") <- "single_group"; attr(book, "seed") <- seed
+    attr(book, "layout_notes") <- sprintf("one group of %d units (no treatment)", nrow(book))
+    return(book)
+  }
   if (!length(f)) stop("layout_from_spec: the spec has no factors (missing: factors).", call. = FALSE)
   lv <- lapply(f, function(x) {
     if (length(x$levels)) return(as.character(unlist(x$levels)))
@@ -258,7 +276,14 @@ layout_from_spec <- function(spec, seed = 42) {
   reps <- spec$design$reps
   within <- intersect(names(lv), .sf_within_factors(spec))
   rand <- setdiff(names(lv), within)
-  if (!length(rand)) { rand <- within[1]; within <- within[-1]; notes <- c(notes, sprintf("%s is the only factor, so it is randomized to units", rand)) }
+  if (!length(rand) && one_group) {
+    # only factors within the unit (raters): one group of units, each repeated per level
+    book <- data.frame(plot = seq_len(as.integer(reps %||% stop("layout_from_spec: no unit count (missing: design.reps).", call. = FALSE))), rep = 1L, block = 1L)
+    attr(book, "design") <- "single_group"; attr(book, "seed") <- seed
+    notes <- c(notes, sprintf("one group of %d units (no treatment)", nrow(book)))
+    rand <- character()
+  } else if (!length(rand)) { rand <- within[1]; within <- within[-1]; notes <- c(notes, sprintf("%s is the only factor, so it is randomized to units", rand)) }
+  if (length(rand)) {
   buildable <- eval(formals(make_design)$design)
   cand <- unlist(c(spec$design$chosen, spec$design$type, spec$design$candidates, .sf_candidates(spec)))
   cand <- intersect(cand, buildable)
@@ -308,6 +333,7 @@ layout_from_spec <- function(spec, seed = 42) {
       b <- make_design("augmented", treatments = lv[[rand]], checks = ck, reps = nb, seed = seed); b[[rand]] <- b$treatment; b
     },
     { b <- make_design(design, treatments = lv[[rand]], reps = reps, seed = seed); b[[rand]] <- b$treatment; b })
+  }
   if (length(within)) {
     grid <- expand.grid(lv[within], stringsAsFactors = FALSE)
     idx <- rep(seq_len(nrow(book)), each = nrow(grid))

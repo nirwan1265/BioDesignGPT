@@ -2,6 +2,27 @@
   "version": "0.4.0",
   "designs": [
     {
+      "id": "single_group",
+      "name": "One group (no treatment)",
+      "engine": "none (units listed in order)",
+      "requires": [
+        "reps"
+      ],
+      "use_when": "No treatment is compared: a segregating population tested against an expected ratio, traits correlated across units, or raters scoring the same units.",
+      "strength": "No allocation to randomize; the analysis is about the units themselves.",
+      "tradeoff": "No treatment comparison; any grouping must be added as a factor.",
+      "model": "y ~ 1",
+      "systems": [
+        "field",
+        "greenhouse",
+        "growth_chamber",
+        "lab",
+        "mouse",
+        "livestock"
+      ],
+      "analysis_note": "one group: goodness of fit (analysis.expected_ratio), correlation (analysis.correlation) or agreement (analysis.agreement)"
+    },
+    {
       "id": "crd",
       "name": "Completely randomized design",
       "engine": "agricolae::design.crd",

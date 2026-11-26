@@ -1,5 +1,5 @@
 {
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -73,7 +73,13 @@
     "power.events_required",
     "power.event_probability",
     "power.loss_fraction",
-    "power.units_required"
+    "power.units_required",
+    "primary_outcome.categories",
+    "analysis.expected_ratio",
+    "analysis.correlation",
+    "secondary_outcomes",
+    "analysis.agreement",
+    "analysis.survival.cluster"
   ],
   "enums": {
     "system": [
@@ -147,6 +153,12 @@
     "power.events_required": "survival: Schoenfeld events, 1:1, from target_hazard_ratio, alpha 0.05, power 0.8",
     "power.event_probability": "survival: stated share of units with the event by the end of follow-up",
     "power.loss_fraction": "survival: stated share lost",
-    "power.units_required": "survival: events_required / event_probability / (1 - loss_fraction), when event_probability is stated"
+    "power.units_required": "survival: events_required / event_probability / (1 - loss_fraction), when event_probability is stated",
+    "primary_outcome.categories": "class labels in the order named, reference first; nominal (3+ unordered classes) or binary (2); from \"classified as A, B or C\" or an expected ratio",
+    "analysis.expected_ratio": "{label: weight} from a stated ratio (3:1, 9:3:3:1, 1:2:1); labels are the categories in order, else class_1.. (asked); a one-group study (design single_group, model y ~ 1)",
+    "analysis.correlation": "{variables, method}: traits whose relationship is asked; variables[0] is primary_outcome.name (column primary_outcome), the rest are secondary_outcomes; method stated or pearson (assumption)",
+    "secondary_outcomes": "[{name, column}] traits measured besides the primary outcome; each has its own column in sample_metadata_template.tsv",
+    "analysis.agreement": "{rater_column: \"rater\", score_column: \"primary_outcome\", unit_column, scale: nominal | ordinal | continuous, levels}: raters or methods scoring the same units; rater is a within-unit factor (one template row per unit and rater)",
+    "analysis.survival.cluster": "survival with subsamples per unit (seeds per tray cell): the unit column is their cluster; the template has one row per subsample (column subsample)"
   }
 }

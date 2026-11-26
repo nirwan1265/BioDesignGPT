@@ -375,6 +375,7 @@ extract_spec_local <- function(question) {
       spec$assumptions[["power.residual_sd"]] <- "from the stated CV x baseline mean"
     }
   }
+  spec <- .sf_apply_categorical(spec, text)   # categories, expected ratio, correlation, agreement
   spec <- .sf_apply_survival(spec, text)   # endpoint, competing events, analysis.survival, event-based power
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
@@ -734,7 +735,13 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
       gsub("{U}", spec$experimental_unit %||% "unit", gsub("{F}", nm, q[1], fixed = TRUE), fixed = TRUE) }, "")
     questions <- unique(c(questions, ask_oc))
   }
-  if (!length(spec$factors)) {
+  one_group <- !is.null(spec$analysis$expected_ratio) || !is.null(spec$analysis$correlation) || !is.null(spec$analysis$agreement)
+  # a ratio with no class names: ask which classes, in order (rules.tsv question_rule ratio_labels)
+  if (!is.null(spec$analysis$expected_ratio) && !is.null(spec$assumptions[["primary_outcome.categories"]])) {
+    qr <- .sf_rules_rows("question_rule"); qr <- qr$note[qr$term == "ratio_labels"][1]
+    if (!is.na(qr)) questions <- unique(c(gsub("{R}", paste(unlist(spec$analysis$expected_ratio), collapse = ":"), qr, fixed = TRUE), questions))
+  }
+  if (!length(spec$factors) && !one_group) {   # one group (a ratio, a correlation, raters) compares nothing
     q0 <- .sf_rules_rows("level_question"); q0 <- q0$pattern[q0$term == "_none"]
     if (length(q0)) questions <- unique(c(q0[1], questions))
   }
