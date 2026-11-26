@@ -30,3 +30,12 @@ test_that("survival size only from a stated hazard ratio, in numbers or words; n
   x <- ge("Rats infected with a virus, drug or vehicle, 10 per group, survival over 21 days.", list(power.minimum_detectable_difference = 10))
   expect_equal(x$scale, "hazard_ratio"); expect_null(x$size)
 })
+
+test_that("loss, competing event, delayed effect, trays as blocks and 'X or not' levels in looser wording", {
+  s <- studyforge_ask("Seeds of 3 wheat lines primed or not in 5 trays, days to germination checked every 2 days, followed for 18 days, 15% of seeds may be lost, seed rot can occur before germination, the priming effect is delayed, hazard ratio 0.7.", provider = "local")$spec
+  expect_equal(s$power$loss_fraction, 0.15)
+  expect_equal(s$primary_outcome$event_codes[["2"]], "seed rot before germination")
+  expect_equal(s$analysis$survival$logrank_weight, "fh_0_1")
+  expect_equal(s$design$reps, 5)
+  expect_equal(unlist(Filter(function(f) f$name == "treatment", s$factors)[[1]]$levels), c("not primed", "primed"))
+})

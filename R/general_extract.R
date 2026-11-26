@@ -60,6 +60,14 @@
 .sf_name_two_levels <- function(text, fx) {
   need <- which(vapply(fx, function(f) identical(as.numeric(f$n_levels), 2) && !length(f$levels), logical(1)))
   if (!length(need)) return(fx)
+  # "primed or not" (cue or_not_levels): the factor its participle names, else the generic treatment
+  g <- regmatches(tolower(text), regexec(tryCatch(.sf_cue("or_not_levels"), error = function(e) "(?!)"), tolower(text), perl = TRUE))[[1]]
+  if (length(g)) {
+    nm <- vapply(fx[need], `[[`, "", "name")
+    k <- need[match(intersect(c(.sf_find_all(g[2], "factor"), "treatment"), nm)[1], nm)]
+    if (!is.na(k)) { fx[[k]]$levels <- c(paste("not", g[2]), g[2]); need <- setdiff(need, k) }
+    if (!length(need)) return(fx)
+  }
   fr <- .sf_rules_rows("factor"); fr <- fr[fr$match == "word", , drop = FALSE]
   word_of <- stats::setNames(fr$term, tolower(trimws(fr$pattern)))
   ref <- tolower(c(.sf_list("treatment_control"), .sf_list("reference_level"), .sf_list("reference_genotype")))

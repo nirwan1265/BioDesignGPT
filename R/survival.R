@@ -36,7 +36,7 @@
     if (length(loss)) "; loss to follow-up" else "")
   ep$event_column <- "event"
   g <- .sf_grab(t, "surv_competing")
-  if (length(g)) ep$event_codes <- list(`0` = "censored", `1` = ep$event %||% "event", `2` = trimws(gsub("\\s+", " ", g[2])))
+  if (length(g)) ep$event_codes <- list(`0` = "censored", `1` = ep$event %||% "event", `2` = trimws(gsub("\\s+(?:can|may|might|could|will|often)\\s+(?:occur|happen|set\\s+in)", "", gsub("\\s+", " ", g[2]), perl = TRUE)))
   if (length(lm)) sv$landmarks <- .sf_nums(paste(lm[-1], collapse = " "))
   g <- .sf_grab(t, "surv_rmst"); if (length(g)) sv$rmst_tau <- .sf_nums(paste(g[-1], collapse = " "))[1]
   if (length(.sf_grab(t, "surv_early_effect"))) sv$logrank_weight <- "fh_1_0"
