@@ -329,6 +329,9 @@
   } else if (grepl(.sf_cue("placebo_control"), text, perl = TRUE)) {
     spec_words <- union(spec_words, "treatment")
   }
+  # every unit infected ("mice infected with influenza ...") and no mock or uninfected group: infection is a constant
+  if (grepl(.sf_cue("all_units_infected"), text, perl = TRUE) && !grepl(.sf_cue("mock_control"), text, perl = TRUE))
+    spec_words <- setdiff(spec_words, "infection")
   for (w in setdiff(spec_words, have)) fx[[length(fx) + 1]] <- list(name = w)
   # a generic list read under the factor it names ("0, 10 mM NaCl" is salt): the bare generic word ("each dose") is
   # that factor, not another one
@@ -455,6 +458,12 @@ studyforge_fix <- function(answer, ...) {
           rest <- substring(run, bm + attr(bm, "match.length"))
           other <- sub("^.*?(?:^|\\s)(?:or|vs\\.?|versus)\\s+", "", rest, perl = TRUE)
           if (!grepl("^(?:or|vs\\.?|versus)\\s", rest, perl = TRUE) && !grepl("^(?:left|kept|not)\\b|^[a-z-]+ed\\b", other, perl = TRUE)) run <- rest
+          # the verb's object ends at a comma when a new participle phrase follows ("infected with influenza, treated
+          # or vehicle"): the arms start after it; a comma list of nouns ("exposed to heat, cold or control") stays
+          rs <- strsplit(rest, "\\s*,\\s*", perl = TRUE)[[1]]
+          if (length(rs) >= 2 && grepl("^(?:[a-z]+ed|given|fed|kept|left)(?:\\s+(?:or|and|with|by|in|at|to|on|for|vs\\.?|versus)\\b|\\s*$)", rs[2], perl = TRUE) &&
+              grepl("(?:^|\\s)(?:or|vs\\.?|versus)\\s", paste(rs[-1], collapse = ", "), perl = TRUE))
+            run <- paste(rs[-1], collapse = ", ")
         }
         # comma segments after the last vs/or segment start a new clause (", pigs allocated in blocks"), unless they
         # add a control arm (cue extra_control_arm)

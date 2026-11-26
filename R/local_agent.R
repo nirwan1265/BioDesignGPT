@@ -375,6 +375,7 @@ extract_spec_local <- function(question) {
       spec$assumptions[["power.residual_sd"]] <- "from the stated CV x baseline mean"
     }
   }
+  spec <- .sf_apply_survival(spec, text)   # endpoint, competing events, analysis.survival, event-based power
   spec$system_context <- NULL
   if (.sf_reps_open(question)) spec$design$reps <- NULL
   spec <- .sf_clear_asked(spec, question)   # what the user asks about stays open (questions.tsv)
@@ -692,7 +693,14 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   # an effect with a real unit but no SD or CV: a simulator's default noise would be on an arbitrary scale, so ask
   # for the usual level and its spread in that unit (rules.tsv scale_question)
-  if (!is.null(spec$primary_outcome$unit) && is.null(spec$power$residual_sd)) {
+  # survival: power is sized on events; ask for the hazard ratio and the share with the event (rules.tsv
+  # survival_question)
+  if (identical(spec$primary_outcome$type, "survival") && is.null(spec$power$target_hazard_ratio)) {
+    sq <- .sf_rules_rows("survival_question"); sq <- sq$pattern[sq$term == "*"][1]
+    if (!is.na(sq)) { eu <- .sf_str1(spec$experimental_unit); if (!nzchar(eu)) eu <- "unit"
+      questions <- unique(c(gsub("{U}", eu, gsub("{event}", spec$primary_outcome$event %||% "the event", sq, fixed = TRUE), fixed = TRUE), questions)) }
+  }
+  if (!identical(spec$primary_outcome$type, "survival") && !is.null(spec$primary_outcome$unit) && is.null(spec$power$residual_sd)) {
     sq <- .sf_rules_rows("scale_question"); sq <- sq$pattern[sq$term == "*"][1]
     if (!is.na(sq)) {
       y <- gsub("_", " ", .sf_str1(spec$primary_outcome$name) %||% "outcome")

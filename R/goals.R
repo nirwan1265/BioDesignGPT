@@ -293,6 +293,7 @@
     if (is.null(src[[sf]])) spec$assumptions[[paste0("analysis.goal_effect.", g, ".size")]] <-
       if (sf == "per_unit_effect") "not stated: use the treatment effect over the factor's range" else "not stated: use power.minimum_detectable_difference default"
   }
+  fs <- .sf_fill_survival(spec, ge); spec <- fs$spec; ge <- fs$ge
   spec$analysis$per_unit_effect <- NULL
   if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   spec$analysis$goal_effect <- ge

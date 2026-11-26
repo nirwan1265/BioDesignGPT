@@ -6,7 +6,7 @@ Bioana are built in another. Each head only needs this file and the files Biodes
 ## The one rule
 
 **The StudySpec is the contract.** Biodes writes it; Simitall and Bioana read it and never re-ask what it already
-answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.5`), and every
+answers. The schema lives in this repo at `inst/registry/study_spec.schema.json` (version `0.6.6`), and every
 hand-off spec carries `handoff_version`. A head that needs a new field asks for it here (in Biodes), never adds its
 own private copy of the design.
 
@@ -152,6 +152,15 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
+- (0.6.6) Survival (Bioana `docs/contracts/survival.md`). `primary_outcome.type = survival` also for timed events
+  checked over a follow-up ("germination scored every 2 days") and times to an event that can be pre-empted ("plants
+  that die before flowering"). `primary_outcome`: `event`, `origin`, `unit`, `censoring`, `event_column`, and
+  `event_codes` for a competing event. `analysis.survival`: `landmarks`, `rmst_tau`, `logrank_weight`, `aft`,
+  `life_table`, `strata`. Time is the outcome, so a time factor read from stated times becomes landmarks, and a factor
+  named only by the endpoint ("first lesion", "after inoculation") is dropped. Stated blocks: (1 | block) frailty with
+  10 or more, `strata` below 10. Power: `target_hazard_ratio`, `events_required` (Schoenfeld, 1:1), `event_probability`,
+  `loss_fraction`, `units_required`; with no hazard ratio Biodes asks for it first. `goal_effect.survival.scale`:
+  hazard_ratio | time_ratio | rmst_difference (+ tau). Rules: rules.tsv `survival_event`, `time_unit_long`, `surv_*` cues.
 - (0.6.5) `analysis.posthoc` = {type, control, factor[, adjust]} when the question asks for it (rules.tsv cues
   `posthoc_vs_control`: "compared with/to", "relative to", "each X vs" a control word; `posthoc_pairwise`: "which
   genotypes differ", "pairwise", "all pairs"; `posthoc_none`: "no post-hoc", "only the overall effect"). `control` is an

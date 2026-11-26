@@ -1,5 +1,5 @@
 {
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Minimal StudySpec contract. Fields under 'consequential' must be set (or explicitly marked as an assumption) before a design is final. system is the setting the experimental units live in; study_type the kind of study; assays the measurements.",
   "consequential": [
     "system",
@@ -62,7 +62,18 @@
     "primary_outcome.unit",
     "primary_outcome.baseline_mean",
     "power.cv",
-    "analysis.posthoc"
+    "analysis.posthoc",
+    "primary_outcome.event",
+    "primary_outcome.origin",
+    "primary_outcome.censoring",
+    "primary_outcome.event_column",
+    "primary_outcome.event_codes",
+    "analysis.survival",
+    "power.target_hazard_ratio",
+    "power.events_required",
+    "power.event_probability",
+    "power.loss_fraction",
+    "power.units_required"
   ],
   "enums": {
     "system": [
@@ -114,7 +125,7 @@
     "analysis.goals": "analysis goals this study answers, most important first (ids from inst/registry/analysis_goals.json); read from the question, else defaults by data type (rules.tsv goal_default), else treatment_effect; an assumed goal is listed in assumptions[\"analysis.goals\"]",
     "analysis.primary_goal": "the first goal: Biodes sizes the replicate sweep for it (power.goal, power.reps_range widened by the registry replicate_multiplier), Simitall plants truth for it",
     "analysis.goal_terms": "per goal id, the generic model terms the goal tests: interaction two terms (time allowed; \"env\" for several locations/seasons), time_course the time term, trend the numeric term. The model is extended with the interaction/time/numeric term when the catalog model lacks it (noted in analysis.note)",
-    "analysis.goal_effect": "per goal id {size, scale, definition}; scale is the model scale for the data type (rules.tsv effect_scale): identity (continuous outcome), log2 (counts: RNA-seq, peaks, amplicons, intensities), M (methylation), logit (binary, ordinal), log (count outcome), log_hazard (survival); an interaction is a difference of differences on that scale; size = power.minimum_detectable_difference when stated, else listed in assumptions; time_course also {shape: monotone|saturating|transient|delayed, peak {value, unit}, half_time {value, unit}, scope: within_group} when stated; trend size is a change per unit of log10(x + log_offset) or x, set only when the question states one (else assumptions: use the treatment effect over the factor's range); time_course scope within_group adds group (the word, e.g. \"infected\") and group_factor (the factor it belongs to); trend adds per_unit (the unit the size is per: \"kg N/ha\", or \"log10 uM\" for a log-scaled factor); a change stated per a linear amount (\"per 50 kg N\") makes the factor linear (assumptions[\"factors.<name>.scale\"]); time_course group is a level of group_factor when one matches",
+    "analysis.goal_effect": "per goal id {size, scale, definition}; scale is the model scale for the data type (rules.tsv effect_scale): identity (continuous outcome), log2 (counts: RNA-seq, peaks, amplicons, intensities), M (methylation), logit (binary, ordinal), log (count outcome), log_hazard (survival); an interaction is a difference of differences on that scale; size = power.minimum_detectable_difference when stated, else listed in assumptions; time_course also {shape: monotone|saturating|transient|delayed, peak {value, unit}, half_time {value, unit}, scope: within_group} when stated; trend size is a change per unit of log10(x + log_offset) or x, set only when the question states one (else assumptions: use the treatment effect over the factor's range); time_course scope within_group adds group (the word, e.g. \"infected\") and group_factor (the factor it belongs to); trend adds per_unit (the unit the size is per: \"kg N/ha\", or \"log10 uM\" for a log-scaled factor); a change stated per a linear amount (\"per 50 kg N\") makes the factor linear (assumptions[\"factors.<name>.scale\"]); time_course group is a level of group_factor when one matches; survival: scale hazard_ratio (size = target_hazard_ratio), time_ratio (aft) or rmst_difference (with tau)",
     "power.goal": "the goal the replicate sweep is sized for (= analysis.primary_goal)",
     "power.reps_note": "why the replicate range was widened, or that stated replicates may be few for the goal",
     "factors[].scale": "linear, or log when the positive numeric values are equally spaced on a log scale (1, 10, 100; 6, 12, 24, 48)",
@@ -125,6 +136,17 @@
     "primary_outcome.baseline_mean": "stated usual level of the outcome, in primary_outcome.unit",
     "power.cv": "stated coefficient of variation (percent); with baseline_mean it gives power.residual_sd",
     "power.residual_sd": "in primary_outcome.unit when that is set; when an effect has a unit and no SD or CV is stated, residual_sd is absent, assumptions says \"not stated: asked\", and the scale question is asked",
-    "analysis.posthoc": "post-hoc comparisons the question asks for: {type: vs_control | pairwise | none, control: exact level label (vs_control), factor: the factor compared, adjust: emmeans method (absent = Bioana default: Holm; Dunnett for vs_control)}. Absent when not stated, and never for a two-level factor (its one comparison is the main test). A control word with no matching label names the first level of a counted factor with unnamed levels (\"wild type\", \"genotype_2\", ...), recorded in assumptions"
+    "analysis.posthoc": "post-hoc comparisons the question asks for: {type: vs_control | pairwise | none, control: exact level label (vs_control), factor: the factor compared, adjust: emmeans method (absent = Bioana default: Holm; Dunnett for vs_control)}. Absent when not stated, and never for a two-level factor (its one comparison is the main test). A control word with no matching label names the first level of a counted factor with unnamed levels (\"wild type\", \"genotype_2\", ...), recorded in assumptions",
+    "primary_outcome.event": "survival: what counts as the event (germination, flowering, death, first lesion)",
+    "primary_outcome.origin": "survival: time zero (sowing, inoculation, infection, transplant)",
+    "primary_outcome.censoring": "survival: administrative at the end of follow-up (time stated when known); \"; loss to follow-up\" when losses are stated",
+    "primary_outcome.event_column": "survival: the event column (\"event\": 1 event, 0 censored, 2+ competing codes)",
+    "primary_outcome.event_codes": "survival: {\"0\": \"censored\", \"1\": event, \"2\": competing event} when something else can end observation (rot before germinating, death before flowering)",
+    "analysis.survival": "survival options, only what the question says: landmarks (times named), rmst_tau (\"within the first N days\"), logrank_weight (fh_1_0 early, fh_0_1 delayed), aft (how much longer/faster), life_table (scoring interval), strata (stated blocks when fewer than 10)",
+    "power.target_hazard_ratio": "survival: stated hazard ratio",
+    "power.events_required": "survival: Schoenfeld events, 1:1, from target_hazard_ratio, alpha 0.05, power 0.8",
+    "power.event_probability": "survival: stated share of units with the event by the end of follow-up",
+    "power.loss_fraction": "survival: stated share lost",
+    "power.units_required": "survival: events_required / event_probability / (1 - loss_fraction), when event_probability is stated"
   }
 }
