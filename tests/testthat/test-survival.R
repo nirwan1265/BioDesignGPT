@@ -39,3 +39,15 @@ test_that("loss, competing event, delayed effect, trays as blocks and 'X or not'
   expect_equal(s$design$reps, 5)
   expect_equal(unlist(Filter(function(f) f$name == "treatment", s$factors)[[1]]$levels), c("not primed", "primed"))
 })
+
+test_that("survival wording sets the type; plain 'days to X' is asked; an answer of survival fills the endpoint", {
+  a <- studyforge_ask("Seeds of two oat lines, 40 seeds per line, days to germination.", provider = "local")
+  expect_null(a$spec$primary_outcome$type); expect_true(any(grepl("not reach germination", a$all_questions)))
+  b <- studyforge_ask("Seeds of two oat lines, 40 seeds per line, days to germination; the second line should halve the hazard.", provider = "local")$spec
+  expect_equal(b$primary_outcome$type, "survival"); expect_equal(b$power$target_hazard_ratio, 0.5)
+  c <- studyforge_ask("Time to flowering of 2 oat lines, 25 plants per line, followed for 80 days; hazard ratio 0.75.", provider = "local")$spec
+  expect_equal(c$primary_outcome$type, "survival"); expect_false(any(vapply(c$factors, function(f) f$name == "time", logical(1))))
+  expect_silent(layout_from_spec(c, 1))
+  d <- studyforge_fix(a, primary_outcome.type = "survival")$spec
+  expect_equal(d$primary_outcome$event, "germination"); expect_equal(d$primary_outcome$type, "survival")
+})

@@ -649,6 +649,10 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
     }
   }
   spec <- .sf_apply_fix(spec, fix)
+  # an answer that makes the outcome a time to event ("primary_outcome.type = survival") reads the survival fields
+  # from the question too; the answers still win
+  if (identical(fix[["primary_outcome.type"]], "survival") && is.null(spec$primary_outcome$event))
+    spec <- .sf_apply_fix(.sf_apply_survival(spec, .sf_words_to_digits(tolower(question))), fix)
   # the post-hoc control as a level label, before any layout is built from this spec (the layout uses the labels)
   if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   v <- validate_spec(spec)
@@ -693,6 +697,14 @@ studyforge_ask <- function(question, provider = c("local", "ollama"), engine = c
   }
   # an effect with a real unit but no SD or CV: a simulator's default noise would be on an arbitrary scale, so ask
   # for the usual level and its spread in that unit (rules.tsv scale_question)
+  # "days to germination" with no survival wording stays a measured trait; ask whether some units never get there
+  # (rules.tsv question_rule time_to_event_or_trait)
+  if (!identical(spec$primary_outcome$type, "survival")) {
+    qr <- .sf_rules_rows("question_rule"); qr <- qr[qr$term == "time_to_event_or_trait", , drop = FALSE]
+    if (NROW(qr)) { g <- regmatches(tolower(question), regexec(qr$pattern[1], tolower(question), perl = TRUE))[[1]]
+      if (length(g)) { eu <- .sf_str1(spec$experimental_unit); if (!nzchar(eu)) eu <- "unit"
+        questions <- unique(c(questions, gsub("{U}", eu, gsub("{event}", g[2], qr$note[1], fixed = TRUE), fixed = TRUE))) } }
+  }
   # survival: power is sized on events; ask for the hazard ratio and the share with the event (rules.tsv
   # survival_question)
   if (identical(spec$primary_outcome$type, "survival") && is.null(spec$power$target_hazard_ratio)) {
