@@ -152,7 +152,7 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
   reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
   well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
   The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
-- (0.6.7) Categorical, correlation, agreement (Bioana 0.11.0). `primary_outcome.categories` (order named, reference
+- (0.6.7) Categorical, correlation, agreement (Bioana 0.11.0). Also read: "expected 3:1 red to yellow" (labels after the ratio), "is X related to Y", "two people scored from 1 to 9"; a ratio outcome is nominal whatever the number of classes; each correlated trait has its own type (secondary_outcomes[].type). `primary_outcome.categories` (order named, reference
   first) with `type` nominal (3+) or binary (2); `analysis.expected_ratio` {label: weight} from a stated ratio, labels
   the categories in order (else class_1.. and asked). One-group studies (a ratio, a correlation or agreement with no
   treatment) use the new catalog design `single_group` (model `y ~ 1`, one row per unit, no goals). `analysis.correlation`

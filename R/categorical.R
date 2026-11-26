@@ -13,12 +13,13 @@
 .sf_categorical_from_text <- function(text) {
   t <- tolower(text); out <- list()
   g <- .sf_grab(t, "category_list"); if (length(g)) out$categories <- .sf_split_list(g[2])
+  g <- .sf_grab(t, "ratio_labels"); if (length(g)) out$ratio_labels <- trimws(strsplit(g[2], "\\s+(?:to|:)\\s+|\\s*:\\s*", perl = TRUE)[[1]])
   g <- .sf_grab(t, "ratio_stated")
   if (length(g)) { r <- g[-1][nzchar(g[-1])][1]; out$ratio <- as.numeric(strsplit(gsub("\\s", "", r), ":", fixed = TRUE)[[1]]) }
   g <- .sf_grab(t, "scale_range"); if (length(g)) out$scale_levels <- seq(as.numeric(g[2]), as.numeric(g[3]))
   g <- .sf_grab(t, "correlation_vars")
   if (length(g)) {
-    v <- .sf_split_list(g[-1][nzchar(g[-1])][1])
+    v <- .sf_split_list(paste(g[-1][nzchar(g[-1])], collapse = " and "))   # "is X related to Y": both groups
     v <- sub("^(?:the|their|plant's|seed)\\s+", "", v, perl = TRUE)
     bad <- tolower(.sf_list("not_a_correlation_variable"))
     if (length(v) >= 2 && !any(vapply(v, function(x) any(strsplit(x, "\\s+")[[1]] %in% bad), logical(1)))) out$correlation <- v
@@ -30,7 +31,10 @@
   g <- .sf_grab(t, "rater_count")
   if (length(.sf_grab(t, "agreement_question")) && (length(g) || grepl("inter[- ]?(?:rater|observer)", t, perl = TRUE))) {
     # the count pattern ({N}) has groups of its own: the noun is the last group, the count the first number
-    out$agreement <- list(n = if (length(g)) .sf_num(g[2]) else NA, noun = if (length(g)) sub("s$", "", g[length(g)]) else "rater")
+    noun <- if (length(g)) g[length(g)] else "rater"
+    rl <- .sf_rules_rows("rater_label"); k <- which(vapply(rl$pattern, grepl, logical(1), x = noun, perl = TRUE))
+    noun <- if (length(k)) rl$term[k[1]] else sub("s$", "", noun)
+    out$agreement <- list(n = if (length(g)) .sf_num(g[2]) else NA, noun = noun)
   }
   out
 }
@@ -46,21 +50,25 @@
   }
   # a stated ratio (3:1, 9:3:3:1, 1:2:1): weights labelled by the categories in order, else class_1, class_2, ...
   if (length(x$ratio) >= 2) {
+    if (length(x$ratio_labels) == length(x$ratio)) po$categories <- x$ratio_labels
     lab <- if (length(po$categories) == length(x$ratio)) unlist(po$categories) else paste0("class_", seq_along(x$ratio))
     if (!identical(lab, unlist(po$categories))) {
       po$categories <- lab
       spec$assumptions[["primary_outcome.categories"]] <- "not stated: class_1, class_2, ... in the order of the ratio; asked"
     }
-    if (is.null(po$type) || po$type %in% c("continuous", "binary", "nominal"))
-      po$type <- if (length(x$ratio) >= 3) "nominal" else "binary"
+    if (is.null(po$type) || po$type %in% c("continuous", "binary", "nominal")) po$type <- "nominal"   # classes vs a ratio
     spec$analysis$expected_ratio <- stats::setNames(as.list(x$ratio), lab)
   }
   # correlation: the first trait is the primary outcome, the others secondary outcomes with their own columns
   if (length(x$correlation) >= 2) {
     v <- x$correlation
     if (is.null(po$name)) po$name <- .sf_snake(v[1])
-    spec$secondary_outcomes <- lapply(v[-1], function(s) list(name = .sf_snake(s), column = .sf_snake(s)))
-    spec$analysis$correlation <- list(variables = c(po$name, vapply(v[-1], .sf_snake, "")), method = x$method %||% "pearson")
+    # each trait's type from its own name (rules.tsv outcome_type; no match = continuous): "tiller number" is a count,
+    # "plant height" is not, whatever else the question says
+    ty <- function(nm) .sf_outcome_type("", gsub("_", " ", nm)) %||% "continuous"
+    if (is.null(po$type) || !identical(po$type, ty(po$name))) po$type <- ty(po$name)
+    spec$secondary_outcomes <- lapply(v[-1], function(s) list(name = .sf_snake(s), type = ty(.sf_snake(s)), column = .sf_snake(s)))
+    spec$analysis$correlation <- list(variables = unname(c(po$name, vapply(v[-1], .sf_snake, ""))), method = x$method %||% "pearson")
     if (is.null(x$method)) spec$assumptions[["analysis.correlation.method"]] <- "not stated: pearson (spearman for ranks or skewed traits)"
   }
   # agreement: the raters (or methods) score every unit, so the rater is a factor within the unit

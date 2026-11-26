@@ -33,3 +33,15 @@ test_that("survival subsamples: one template row per seed, the unit as cluster",
   s <- pkg_cat("Seeds primed or not in 11 trays, 8 seeds per treatment per tray, days to germination, followed for 21 days, hazard ratio 0.6.")
   expect_equal(nrow(s$m), 11 * 2 * 8); expect_true("subsample" %in% names(s$m)); expect_equal(s$j$analysis$survival$cluster, "plot")
 })
+
+test_that("looser wordings: 'expected 3:1 A to B', 'is X related to Y', 'two people scored from 1 to 9', per-trait types", {
+  r <- pkg_cat("An F2 population of 180 pepper plants scored for fruit colour, expected 3:1 red to orange.")
+  expect_equal(r$j$analysis$expected_ratio, list(red = 3, orange = 1)); expect_equal(r$j$primary_outcome$type, "nominal")
+  expect_equal(r$j$design$chosen, "single_group"); expect_equal(nrow(r$m), 180)
+  c <- studyforge_ask("50 oat lines in 3 blocks: is plant height related to grain yield?", provider = "local")$spec
+  expect_equal(unlist(c$analysis$correlation$variables), c("plant_height", "grain_yield")); expect_equal(c$primary_outcome$type, "continuous")
+  a <- pkg_cat("Two people scored blotch from 1 to 9 on each of 70 barley plots; how well do they agree?")
+  expect_equal(unlist(a$j$analysis$agreement$levels), 1:9); expect_equal(sort(unique(a$m$rater)), c("rater_1", "rater_2")); expect_equal(nrow(a$m), 140)
+  t <- studyforge_ask("Across 30 rye lines in 2 replicates, how do plant height, tiller number and grain weight relate?", provider = "local")$spec
+  expect_equal(t$primary_outcome$type, "continuous"); expect_equal(t$secondary_outcomes[[1]]$type, "count")
+})
