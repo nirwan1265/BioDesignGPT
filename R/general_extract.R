@@ -51,6 +51,47 @@
 }
 
 # canonical name of a factor phrase: alias table first, else the phrase itself (free text)
+# a level name holds no preposition: "leaves from wild type" -> "wild type"
+.sf_after_preposition <- function(x) trimws(sub("^.*\\b(?:from|of|in|for|with|under|on|at)\\s+", "", x, perl = TRUE))
+
+# a two-level factor read without names: an "X and/vs/or Y" whose two sides are exact words of that factor (rules.tsv
+# factor rows), or one side a reference word (rules.tsv treatment_control, reference_level), names its levels; the
+# reference level goes first, so it is the model's baseline
+.sf_name_two_levels <- function(text, fx) {
+  need <- which(vapply(fx, function(f) identical(as.numeric(f$n_levels), 2) && !length(f$levels), logical(1)))
+  if (!length(need)) return(fx)
+  fr <- .sf_rules_rows("factor"); fr <- fr[fr$match == "word", , drop = FALSE]
+  word_of <- stats::setNames(fr$term, tolower(trimws(fr$pattern)))
+  ref <- tolower(c(.sf_list("treatment_control"), .sf_list("reference_level"), .sf_list("reference_genotype")))
+  tok <- strsplit(gsub("[,;:()]", " , ", tolower(text)), "\\s+")[[1]]; tok <- tok[nzchar(tok)]
+  conj <- which(tok %in% c("and", "vs", "vs.", "versus", "or"))
+  # never a level: the factor's own name ("temperature"), counting nouns ("lines", "plants"), rules.tsv not_level_word
+  nouns <- tolower(c(.sf_list("genotype_count_noun"), .sf_rules_rows("count_noun")$pattern, .sf_list("not_level_word")))
+  side <- function(words, f) {   # longest phrase that is a word of factor f or a reference word
+    for (k in rev(seq_along(words))) { p <- paste(words[seq_len(k)], collapse = " ")
+      if (p %in% c(f, paste0(f, "s"), nouns)) next
+      if (identical(unname(word_of[p]), f) || p %in% ref) return(p) }
+    NULL
+  }
+  for (i in need) {
+    f <- fx[[i]]$name
+    for (c in conj) {
+      if (c < 2 || c >= length(tok)) next
+      lw <- rev(tok[max(1, c - 3):(c - 1)]); rw <- tok[(c + 1):min(length(tok), c + 3)]
+      if (any(c(lw[1], rw[1]) == ",")) next
+      l <- side(lw, f); r <- side(rw, f)
+      # side() read the left words backwards: put them back in order
+      if (!is.null(l)) l <- paste(rev(strsplit(l, " ")[[1]]), collapse = " ")
+      is_ref <- function(p) p %in% ref || strsplit(p, " ")[[1]][1] %in% ref
+      if (is.null(l) || is.null(r) || (is_ref(l) && is_ref(r))) next
+      if (!identical(unname(word_of[l]), f) && !identical(unname(word_of[r]), f) ) next
+      fx[[i]]$levels <- if (is_ref(r) && !is_ref(l)) c(r, l) else c(l, r)
+      break
+    }
+  }
+  fx
+}
+
 .sf_factor_name <- function(phrase) {
   p <- trimws(tolower(phrase))
   if (!nzchar(p)) return(NA_character_)
@@ -264,7 +305,11 @@
       }
       # a pair that names its two levels ("wild type and mutant")
       nn <- attr(lv, "named")[[nm]]
-      if (!is.na(j) && length(nn) == 2 && identical(as.numeric(fx[[j]]$n_levels), 2) && is.null(fx[[j]]$levels)) fx[[j]]$levels <- nn
+      if (!is.na(j) && length(nn) == 2 && identical(as.numeric(fx[[j]]$n_levels), 2) && is.null(fx[[j]]$levels)) {
+        ref <- tolower(c(.sf_list("treatment_control"), .sf_list("reference_level"), .sf_list("reference_genotype")))
+        is_ref <- function(p) p %in% ref || strsplit(p, " ")[[1]][1] %in% ref || grepl("\\bwild[- ]type$", p)
+        fx[[j]]$levels <- if (is_ref(nn[2]) && !is_ref(nn[1])) rev(nn) else nn   # reference level first
+      }
     }
     spec$factors <- fx
   }
@@ -284,6 +329,7 @@
   }
   for (w in setdiff(spec_words, have)) fx[[length(fx) + 1]] <- list(name = w)
   if (length(fx)) spec$factors <- fx
+  if (length(fx)) spec$factors <- .sf_name_two_levels(text, spec$factors)
   if (is.null(spec$goal)) set("goal", .sf_goal(text))
   if (is.null(spec$primary_outcome$name)) set("outcome_text", .sf_outcome_text(text))
   if (is.null(spec$tissue)) set("tissue", .sf_tissue_text(text))
@@ -465,7 +511,7 @@ studyforge_fix <- function(answer, ...) {
         if (!is.na(k) && k >= 2) { out[[nm]] <- k; attr(out, "summed") <- c(attr(out, "summed"), nm)
           # two unnumbered conjuncts name the two levels ("wild type and mutant")
           if (k == 2 && length(items) == 2 && !any(grepl(num, items, perl = TRUE)))
-            pair_names[[nm]] <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", items, perl = TRUE))
+            pair_names[[nm]] <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", .sf_after_preposition(items), perl = TRUE))
           break }
       }
       next
@@ -562,7 +608,7 @@ studyforge_fix <- function(answer, ...) {
     out[[nm]] <- n; spans[[nm]] <- g[1]
     # a pair written "X and Y" / "X vs Y" names its two levels ("wild type and mutant")
     if (r$match[i] %in% c("pair", "coord") && identical(as.numeric(n), 2)) {
-      pp <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", strsplit(trimws(g[1]), "\\s+(?:and|vs\\.?|versus)\\s+", perl = TRUE)[[1]], perl = TRUE))
+      pp <- trimws(sub("^(?:the|a|an|its|their)\\s+", "", .sf_after_preposition(strsplit(trimws(g[1]), "\\s+(?:and|vs\\.?|versus)\\s+", perl = TRUE)[[1]]), perl = TRUE))
       if (length(pp) == 2 && all(nzchar(pp)) && all(lengths(strsplit(pp, "\\s+")) <= 3)) pair_names[[nm]] <- pp
     }
     if (r$match[i] %in% c("sum", "range")) attr(out, "summed") <- c(attr(out, "summed"), nm)

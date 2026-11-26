@@ -148,6 +148,10 @@ environment, with `location` / `season` columns (listed in `analysis.terms.uncov
 - (0.6.3) A trend's `goal_effect` adds `per_unit` ("kg N/ha", or "log10 uM" when log-scaled). "0.5 t/ha per 50 kg N"
   gives size 0.01 per kg N/ha; a change stated per a linear amount makes the factor `scale: linear` even when its
   levels double (recorded in `assumptions["factors.<name>.scale"]`). A stated change per unit makes `trend` a goal.
+- Level names (0.6.4+, 2026-11-25): a two-level factor read from "X and Y" / "X vs Y" carries its names, the
+  reference level first (rules.tsv `treatment_control`, `reference_level`, `reference_genotype`): "drought and
+  well-watered" gives water ["well-watered","drought"], "wild type and mutant" gives genotype ["wild type","mutant"].
+  The first level is the model's baseline, so coefficients read `treatmentdrought`, not `treatmentwater_2`.
 - (0.6.4) The outcome's scale: `primary_outcome.unit` (the unit an effect, SD or usual level is stated in; rules.tsv
   `outcome_unit_name`), `primary_outcome.baseline_mean`, `power.residual_sd`, `power.cv` (CV with a mean gives the SD),
   and `power.minimum_detectable_difference` from "detect a 5 cm difference" (never from a fold change). When an effect

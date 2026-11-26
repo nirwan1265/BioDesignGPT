@@ -5871,3 +5871,45 @@ outcome_unit_name	bu/ac	regex	^(?:bu/ac|bu/a)$	outcome unit name	Simitall 2026-1
 scale_question	*	regex	What is the usual {Y} (mean, in {unit}) and how much does it vary between {U}s (SD in {unit}, or CV %)? The effect is stated in {unit}, so the power calculation needs both on that scale.	asked when an effect has a unit but the residual SD (or CV) is not stated	Simitall 2026-11-25 (outcome scale)
 cue	mdd_stated	regex	\bdetect\s+(?:a\s+|an\s+)?(?:(?:difference|change|effect|increase|decrease)\s+of\s+)?(\d+(?:\.\d+)?)(?!\s*-?\s*fold|\.?\d)\s*([a-z]+/[a-z]+(?:/[a-z]+)?|%|[a-z]{1,5})?(?:\s+(?:difference|change|effect|increase|decrease|gain|loss))?\b	a stated smallest difference to detect ("detect a 5 cm difference"): power.minimum_detectable_difference (not a fold change)	Simitall 2026-11-25 (outcome scale)
 outcome_unit_name	%	regex	^%$	outcome unit name (percent)	Simitall 2026-11-25 (outcome scale)
+reference_level	well-watered	word	well-watered	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	well watered	word	well watered	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	watered	word	watered	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	ambient	word	ambient	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	normal	word	normal	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	optimal	word	optimal	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	sufficient	word	sufficient	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	full	word	full	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	mock	word	mock	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	uninfected	word	uninfected	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	non-inoculated	word	non-inoculated	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	uninoculated	word	uninoculated	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	wild type	word	wild type	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	wild-type	word	wild-type	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	wt	word	wt	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	low	word	low	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	unstressed	word	unstressed	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+reference_level	non-stressed	word	non-stressed	names the reference (control) level of a two-level factor; listed first so it is the baseline	end-to-end run 2026-11-25
+not_level_word	age	word	age	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	experiment	word	experiment	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	experiments	word	experiments	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	farm	word	farm	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	farms	word	farms	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	treatment	word	treatment	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	treatments	word	treatments	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	condition	word	condition	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	conditions	word	conditions	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	group	word	group	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	groups	word	groups	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	line	word	line	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	lines	word	lines	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	dose	word	dose	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	doses	word	doses	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	diet	word	diet	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	diets	word	diets	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	stress	word	stress	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	time	word	time	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+not_level_word	times	word	times	a word that names a factor or a grouping, never one of its levels	end-to-end run 2026-11-25
+generation_notation	f	regex	\b(?:selfed|selfing|inbred|advanced|single[- ]seed descent)\s+(?:\w+\s+){0,2}?(?:to|until|through)\s+(?:the\s+)?f(\d+)\b	breeding generation notation; term names the captured numbers in order: bc backcrosses, f filial generation ("selfed to F6")	end-to-end run 2026-11-25
+answered_by	population.mating	regex	^what population: inbred panel	the population (RIL, F2, NAM, ...) is stated; a system checklist question (experimental_systems.json) is skipped when every field named is stated	end-to-end run 2026-11-25
+answered_by	population.mating population.filial_generation	regex	^how many parents/founders, and how many generations	the mating scheme fixes the founders (a RIL cross has two) and the generation is stated	end-to-end run 2026-11-25
+answered_by	analysis.goals	regex	^goal: estimate additive vs dominance variance	the goal (map QTL, GCA/SCA, ...) is stated in the question	end-to-end run 2026-11-25

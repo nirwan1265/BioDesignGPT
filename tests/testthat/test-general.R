@@ -169,3 +169,10 @@ test_that("shared heads, stage nouns, exposure windows and with-or-without arms"
   expect_null(lv("Prostate RNA-seq of offspring of dams fed normal vs low protein during gestation and lactation.", "stage"))
   expect_equal(.sf_level_factors("embryo rna-seq from rats on a high-fat diet, with or without induced diabetes, vs chow controls.")$treatment, 3)
 })
+
+test_that("a two-level factor read from 'X and Y' carries its names, reference level first", {
+  s <- extract_spec_local("RNA-seq of roots from wild type and mutant tomato under drought and well-watered conditions, 3 plants per group.")
+  lv <- function(n) unlist(Filter(function(f) f$name == n, s$factors)[[1]]$levels)
+  expect_equal(lv("water"), c("well-watered", "drought"))
+  expect_equal(lv("genotype"), c("wild type", "mutant"))
+})
