@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Try Biodes in your browser</title>
+<style>
+  :root { --ink: #1d2433; --muted: #5b6577; --line: #d9dee7; --accent: #2f6f4f; --bg: #f7f8fa; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  label { font-weight: 600; display: block; margin-bottom: 6px; }
+  textarea { width: 100%; min-height: 120px; padding: 12px; font: inherit; border: 1px solid var(--line); border-radius: 8px; background: #fff; resize: vertical; }
+  .row { display: flex; gap: 12px; align-items: center; margin: 12px 0 8px; flex-wrap: wrap; }
+  button { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 10px 20px; font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  button.ghost { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+  #status { color: var(--muted); font-size: 14px; }
+  pre { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; min-height: 60px; }
+  .examples { font-size: 14px; color: var(--muted); }
+  .examples a { color: var(--accent); cursor: pointer; text-decoration: underline; margin-right: 12px; }
+  footer { margin-top: 28px; font-size: 14px; color: var(--muted); }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Try Biodes</h1>
+  <p class="sub">Describe an experiment in plain English. R runs here in your browser (webR): nothing to install, nothing sent to a server.</p>
+
+  <label for="q">Your experiment</label>
+  <textarea id="q">Field trial of 24 sorghum hybrids under two nitrogen rates (0 and 120 kg N/ha) and two irrigation regimes (full and deficit) at 3 locations over 2 seasons with 3 replicates; irrigation can only be applied to whole main plots; we measure grain yield and want to know whether the nitrogen response differs between hybrids.</textarea>
+  <div class="examples">Other examples:
+    <a data-q="RNA-seq of leaves from wild type and mutant Arabidopsis under drought and well-watered conditions, 4 plants per genotype per treatment; we want genes whose drought response differs between genotypes.">RNA-seq, genotype x drought</a>
+    <a data-q="GWAS of plant height in 300 sorghum accessions grown in an alpha lattice with 2 replicates at one location in one season.">GWAS panel</a>
+    <a data-q="Seeds of 2 sorghum lines primed or not in 12 trays in a growth chamber, 10 seeds per treatment per tray, days to germination checked every 2 days, followed for 21 days; seed rot can occur before germination; the priming effect is delayed; hazard ratio 0.6.">Germination (survival)</a>
+    <a data-q="Mice on two diets, 12 per group, final body weight adjusting for sex and baseline body weight.">Mice, ANCOVA</a>
+  </div>
+  <div class="row">
+    <button id="run" disabled>Design it</button>
+    <span id="status">Starting R in your browser (about 20-40 seconds the first time)...</span>
+  </div>
+  <pre id="out"></pre>
+
+  <footer>
+    Biodes is part of a suite: Biodes designs the experiment, <a href="https://github.com/nirwan1265/simitall">Simitall</a> simulates the data,
+    <a href="https://github.com/nirwan1265/Bioana">Bioana</a> analyzes it. Source: <a href="https://github.com/nirwan1265/BioDesignGPT">github.com/nirwan1265/BioDesignGPT</a>.
+  </footer>
+</main>
+
+<script type="module">
+  import { WebR } from "https://webr.r-wasm.org/latest/webr.mjs";
+  const out = document.getElementById("out");
+  const status = document.getElementById("status");
+  const run = document.getElementById("run");
+  const q = document.getElementById("q");
+  document.querySelectorAll(".examples a").forEach(a => a.addEventListener("click", () => { q.value = a.dataset.q; }));
+
+  const show = (res) => {
+    out.textContent = res.output.filter(o => o.type === "stdout" || o.type === "stderr").map(o => o.data).join("\n");
+  };
+
+  const webR = new WebR();
+  try {
+    await webR.init();
+    status.textContent = "Installing the design engine (agricolae, jsonlite, Biodes)...";
+    await webR.evalRVoid('webr::install(c("agricolae", "jsonlite"), quiet = TRUE)');
+    const pkg = new URL("studyforge.tar.gz", window.location.href).href;
+    await webR.evalRVoid(`download.file(${JSON.stringify(pkg)}, "studyforge.tar.gz", quiet = TRUE)
+      untar("studyforge.tar.gz", exdir = .libPaths()[1])
+      suppressMessages(library(studyforge))
+      options(width = 100)`);
+    status.textContent = "Ready.";
+    run.disabled = false;
+  } catch (e) {
+    status.textContent = "Could not start R in this browser: " + e.message;
+  }
+
+  run.addEventListener("click", async () => {
+    run.disabled = true; status.textContent = "Designing..."; out.textContent = "";
+    const shelter = await new webR.Shelter();
+    try {
+      const code = `
+        question <- ${JSON.stringify(q.value)}
+        a <- studyforge_ask(question)
+        print(a)
+        s <- fill_layout_defaults(a$spec)
+        if (!is.null(s$design$reps)) {
+          book <- layout_from_spec(s, seed = 2026)
+          d <- tempfile(); invisible(write_design_package(book, s, d))
+          spec <- jsonlite::fromJSON(file.path(d, "study_spec.json"))
+          cat("\\n================ The design Biodes wrote ================\\n")
+          cat("Design: ", spec$design$chosen, "\\n", sep = "")
+          cat("Units:  ", nrow(book), "\\n", sep = "")
+          cat("Model:  ", spec$analysis$model, "\\n", sep = "")
+          cat("Goal:   ", spec$analysis$primary_goal, "\\n", sep = "")
+          cols <- intersect(c("location", "season", "block", "plot", "subplot", vapply(s$factors, function(f) f$name, "")), names(book))
+          cat("\\nFirst rows of the randomized layout (seed 2026):\\n")
+          print(utils::head(book[, cols, drop = FALSE], 10), row.names = FALSE)
+        } else cat("\\n(Biodes needs the number of replicates before it can lay the experiment out: add it to your text.)\\n")
+      `;
+      const res = await shelter.captureR(code, { withAutoprint: false, captureStreams: true });
+      show(res);
+      status.textContent = "Done. Edit the text and run again.";
+    } catch (e) {
+      out.textContent = "Error: " + e.message;
+      status.textContent = "Something went wrong.";
+    } finally {
+      await shelter.purge();
+      run.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

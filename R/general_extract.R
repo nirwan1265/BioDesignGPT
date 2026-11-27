@@ -70,6 +70,8 @@
   }
   fr <- .sf_rules_rows("factor"); fr <- fr[fr$match == "word", , drop = FALSE]
   word_of <- stats::setNames(fr$term, tolower(trimws(fr$pattern)))
+  lw <- .sf_rules_rows("level_word")   # level names that never make a factor on their own ("deficit")
+  if (NROW(lw)) word_of <- c(word_of, stats::setNames(lw$term, tolower(trimws(lw$pattern))))
   ref <- tolower(c(.sf_list("treatment_control"), .sf_list("reference_level"), .sf_list("reference_genotype")))
   tok <- strsplit(gsub("[,;:()]", " , ", tolower(text)), "\\s+")[[1]]; tok <- tok[nzchar(tok)]
   conj <- which(tok %in% c("and", "vs", "vs.", "versus", "or"))
@@ -271,16 +273,16 @@
     for (gn in intersect(.sf_list("generic_level_factor"), names(lv))) {
       renamed_generic <- c(renamed_generic, gn)
       fw <- setdiff(.sf_find_all(attr(lv, "spans")[[gn]] %||% "", "factor"), c(gn, "treatment"))
-      # no factor word in the list: its unit may name the factor (rules.tsv unit_factor: kg N/ha is nitrogen)
+      # a unit that names a factor (rules.tsv unit_factor: kg N/ha is nitrogen) wins over words later in the clause
       un <- attr(lv, "values")[[gn]]$unit
-      if (!length(fw) && !is.null(un)) { uf <- .sf_rules_rows("unit_factor")
+      if (!is.null(un)) { uf <- .sf_rules_rows("unit_factor")
         k <- which(vapply(uf$pattern, grepl, logical(1), x = un, perl = TRUE)); if (length(k)) fw <- uf$term[k[1]] }
       if (length(fw) == 1 && !(fw %in% names(lv))) {
         a_v <- attr(lv, "values"); a_s <- attr(lv, "spans"); a_m <- attr(lv, "summed")
         k <- match(fw, have)
         if (!is.na(k)) {
           if (is.null(fx[[k]]$n_levels) && !is.na(lv[[gn]])) fx[[k]]$n_levels <- lv[[gn]]
-          if (identical(as.numeric(fx[[k]]$n_levels), as.numeric(lv[[gn]]))) a_v[[fw]] <- a_v[[gn]]
+          if (identical(as.numeric(fx[[k]]$n_levels), as.numeric(lv[[gn]]))) { a_v[[fw]] <- a_v[[gn]]; lv[[fw]] <- lv[[gn]] }   # values written below
         } else lv[[fw]] <- lv[[gn]]   # not in the spec yet: the count is read under the factor the list names
         a_v[[fw]] <- a_v[[fw]] %||% a_v[[gn]]; a_v[[gn]] <- NULL
         lv[[gn]] <- NULL

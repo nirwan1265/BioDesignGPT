@@ -1,71 +1,69 @@
 # Biodes
 
-**Describe an experiment in plain English. Biodes asks the questions that change the design, then writes the
-randomized layout, the sample sheet and the statistical model, before a single sample is collected.**
-
 <p align="center">
-  <img src="docs/bio_suite.svg" alt="Biodes designs the experiment, Simitall simulates the data, Bioana analyzes the results, Biopaint makes the figures" width="860">
+  <img src="docs/bio_suite.svg" alt="Biodes suite: design, simulate, analyze, figures" width="860">
 </p>
 
-Biodes is the first of four connected tools. **Biodes** designs the experiment, **[Simitall](https://github.com/nirwan1265/simitall)**
-simulates data from that design with a known answer, **[Bioana](https://github.com/nirwan1265/Bioana)** analyzes it with the
-model the design calls for and checks it recovered the answer, and **Biopaint** (in progress) draws the figures. They
-pass one file between them, so the design, the simulation and the analysis can't disagree.
+<p align="center"><b><a href="https://nirwan1265.github.io/BioDesignGPT/try/">▶ Try it in your browser</a></b> (no install: R runs on the page)</p>
 
-Free, offline, no API key. Every number (layouts, power, models) comes from deterministic R code; vocabulary and
-decisions live in rule tables, not in a language model.
+## Prompt
 
-## One question, start to finish (real R output)
+> Field trial of 24 sorghum hybrids under two nitrogen rates (0 and 120 kg N/ha) and two irrigation regimes (full and deficit) at 3 locations over 2 seasons with 3 replicates; irrigation can only be applied to whole main plots; we measure grain yield and want to know whether the nitrogen response differs between hybrids.
+
+## Output (R)
 
 ```r
 > library(studyforge)
 
-> # 1. Describe the experiment in plain English
-> a <- studyforge_ask("RNA-seq of leaves from wild type and mutant Arabidopsis under drought and well-watered conditions, 4 plants per genotype per treatment; we want genes whose drought response differs between genotypes.")
+> a <- studyforge_ask("Field trial of 24 sorghum hybrids under two nitrogen rates (0 and 120 kg N/ha) and two irrigation regimes (full and deficit) at 3 locations over 2 seasons with 3 replicates; irrigation can only be applied to whole main plots; we measure grain yield and want to know whether the nitrogen response differs between hybrids.")
 
 > a
 Biodes (local, free)
 
 Here's what I understood (fix anything wrong: studyforge_fix(answer, organism = "...", factors = "name:levels")):
   Goal:                design a new study
-  Organism:            Arabidopsis thaliana
-  Setting:             ?
-  Study type:          ?
-  Assay / data:        rnaseq
+  Organism:            Sorghum bicolor
+  Setting:             field
+  Study type:          multi_environment
+  Assay / data:        ?
   Method / resource:   ?
-  Sequencing:          ? (typical: Illumina NovaSeq 6000, ~22.9 M reads per sample)
-  Tissue:              leaf
-  Factors (levels):    water (2); genotype (2)
-  Outcome / phenotype: ?
+  Tissue:              whole
+  Factors (levels):    genotype (24); water (2); nitrogen (2)
+  Outcome / phenotype: grain_yield
   Experimental unit:   ?
-  Replicates:          4
-  Locations / seasons: ? / ?
+  Replicates:          3
+  Locations / seasons: 3 / 2
 
-Design facts: reps = 4
+System: field | Study: multi_environment
+Primary outcome: grain_yield
+Design facts: reps = 3, locations = 3, seasons = 2
 
-Still needed: system, primary_outcome.name, primary_outcome.type, experimental_unit, power.minimum_detectable_difference, power.residual_sd
+Still needed: experimental_unit, power.minimum_detectable_difference, power.residual_sd
 
 Questions that change the design:
-  - What is a biological replicate (plant, pool of plants, animal, culture)?
-  - Conditions and time points; is sampling destructive?
-  - Expected fold change of interest and sequencing depth?
+  - Which environments (locations x years x managements), and are they chosen to represent the target population of environments?
+  - Same entries in every environment, or partially overlapping sets?
+  - Will environmental covariates (weather, soil, water input) be recorded for each environment?
 
 Candidate designs:
-  - Factorial treatment structure in RCBD: Interest in interactions (genotype x treatment, treatment x sex) and all combinations can be randomized at the same unit level. Tradeoff: Number of cells grows multiplicatively; interaction power needs larger n than main effects.
-  - Randomized complete block design: All treatments fit in one reasonably homogeneous block (bench, field strip, batch, day). Tradeoff: Blocks become heterogeneous when they hold many entries (e.g., >20-30 field plots).
-  - Completely randomized design: Units are homogeneous (e.g., one growth chamber shelf with no gradient); few units. Tradeoff: No control of spatial or batch heterogeneity; rarely the best choice in greenhouses or fields.
+  - Split-plot design (whole plots in RCBD): One factor is hard to randomize at small scale (irrigation, temperature chamber, tillage) and is applied to whole plots; the other factor (genotype) is randomized within them. Tradeoff: Whole-plot factor has its own, larger error term and few df; power for it is low unless many blocks.
+  - Multi-environment trial with factor-analytic GxE model: Same entries in several locations/years; interest in stability and GxE. Tradeoff: Needs enough environments (>= 5-6) for FA structures; complex fitting.
+  - Alpha-lattice (resolvable incomplete block) design: Many genotypes (tens to hundreds) so complete blocks would be heterogeneous. Tradeoff: Requires mixed-model analysis; block size must divide the number of entries.
+  - Spatial analysis of a gridded trial (SpATS / AR1xAR1): Any field or bench trial laid out on a row x column grid; especially large or low-input trials. Tradeoff: Needs coordinates for every plot; model checking required.
 
-Published practice (what designed studies in ENA/SRA/GEO did; descriptive, not a recommendation):
-  539 designed Bulk RNA-seq studies of Arabidopsis thaliana (leaf) in public archives (2012-2026).
-  Replicates per condition: median 3 (IQR 2-3, from 313 studies); 11% used 6 or more.
-  Read depth: median 22.9 M reads per run (IQR 18.1-29.6).
-  Recent sequencers: Illumina NovaSeq 6000, Illumina HiSeq 2500, Illumina HiSeq 2000.
-  Kits named in protocols: TRIzol, RNeasy Plant Mini, RNeasy Mini Kit, TruSeq Stranded Total RNA.
-  Examples:
-    PRJNA1087742 (2026; 4 reps; treatment[0.12% DMSO, spore solution (in 0.12% , spore solution with 10 µM]) doi:10.1016/j.plaphy.2025.109570
-    PRJNA1222333 (2026; 5 reps; genotype[wildtype, snrk2.4/snrk2.10] x time[25 DAS, 45 DAS]) doi:10.1093/plphys/kiag502
-    PRJNA1272414 (2026; 3 reps; line[C30-81-as6, Col-0]) doi:10.1007/s10265-026-01712-5
-  For differential expression, 6 or more biological replicates detect far more genes than 3 (Schurch et al. 2016, doi:10.1261/rna.053959.115); base n on power, not on the median.
+Setup checks (12):
+  - Plots on the outside edge of the trial (and next to alleys, roads, tree lines) get more light, water and nutrients and less competition. -> Surround the trial with at least one ring of border (filler) plots that are not measured
+  - Water is not uniform: distance from drip laterals, pipe mains, sprinkler lines or the low end of a furrow creates a gradient. -> Lay out each block so it sits at a constant distance from the water source (blocks parallel to the line, plots within block spread along it)
+  - Plots are lost to poor emergence, lodging, animals, flooding or harvest errors (3-29% missing per trial in large sorghum p-rep trials). -> Plan extra replication of key entries and checks
+  - Patchy soil fertility, texture or nutrient availability (plant-available P varied with CV 39% within one Malian sorghum field). -> Map apparent electrical conductivity (EM38) or a soil grid before or shortly after planting
+  - Large trials (hundreds of plots) almost always have smooth trends and patchiness that blocks miss. -> Plan a rectangular row x column grid and keep coordinates for every plot
+  - Early-generation trials with one plot per entry have no direct error estimate. -> Repeat check varieties throughout the field (augmented, diagonal or p-rep arrangements)
+  ... see answer$hazards for all
+
+What published studies did:
+  - Enyew et al. 2022, Front Plant Sci 13:999692: Block size 27 divides 324 evenly; tagged plants are subsamples averaged per plot.
+  - Velazco et al. 2017, Theor Appl Genet 130:1375-1392: Spatial models reduced residual variance 49% (yield) and 22% (height); one general SpATS model worked for every trial.
+  - Leiser et al. 2012, J Agron Crop Sci: Spatial models raised yield heritability ~10 points over RCB and 6 over lattice; block placement and orientation matter.
 
 Starter code:
 book <- layout_from_spec(a$spec, seed = 2026)   # randomized layout for this design
@@ -73,73 +71,47 @@ write_design_package(book, a$spec, "my_design")   # study_spec.json, field_layou
 
 Power: give a minimum detectable difference and residual SD (pilot data or literature); Biodes never assumes them. Then run power_rcbd(), power_split_plot() or power_alpha_lattice().
 
-> # 2. Answer the questions Biodes asked
-> a <- studyforge_fix(a, experimental_unit = "plant", primary_outcome.name = "gene expression")
-
-> # 3. Randomized layout and the files the next tools read
 > book <- layout_from_spec(a$spec, seed = 2026)
 
-> book[1:8, c("plot", "block", "genotype", "water")]
-  plot block  genotype        water
-1  101     1 wild type well-watered
-2  102     1    mutant well-watered
-3  103     1 wild type      drought
-4  104     1    mutant      drought
-5  105     2 wild type      drought
-6  106     2    mutant      drought
-7  107     2    mutant well-watered
-8  108     2 wild type well-watered
+> write_design_package(book, a$spec, "sorghum_trial")
+[1] "sorghum_trial/field_layout.csv"             "sorghum_trial/sample_metadata_template.tsv"
+[3] "sorghum_trial/study_spec.json"             
 
-> write_design_package(book, a$spec, "rnaseq_design")
-[1] "rnaseq_design/field_layout.csv"             "rnaseq_design/sample_metadata_template.tsv"
-[3] "rnaseq_design/study_spec.json"             
-
-> # 4. The design Biodes wrote
-> spec <- jsonlite::fromJSON("rnaseq_design/study_spec.json")
+> spec <- jsonlite::fromJSON("sorghum_trial/study_spec.json")
 
 > spec$design$chosen
-[1] "factorial"
+[1] "split_plot_factorial"
 
 > spec$analysis$model
-[1] "y ~ treatment * treatment2 + block"
+[1] "y ~ treatment * treatment2 * treatment3 + block + (1 | block:treatment)"
 
-> spec$analysis$primary_goal
-[1] "interaction"
+> unlist(spec$analysis$terms[c("treatment", "treatment2", "treatment3")])
+ treatment treatment2 treatment3 
+   "water" "genotype" "nitrogen" 
 
 > spec$analysis$goal_terms$interaction
-[1] "treatment"  "treatment2"
+[1] "treatment3" "treatment2"
+
+> nrow(book)
+[1] 1728
+
+> head(book[, c("location", "season", "block", "plot", "subplot", "water", "genotype", "nitrogen")], 8)
+    location   season block plot subplot water    genotype    nitrogen
+1 location_1 season_1     1  101       1  full  genotype_2   0 kg N/ha
+2 location_1 season_1     1  101       2  full genotype_19 120 kg N/ha
+3 location_1 season_1     1  101       3  full genotype_19   0 kg N/ha
+4 location_1 season_1     1  101       4  full  genotype_1   0 kg N/ha
+5 location_1 season_1     1  101       5  full genotype_24   0 kg N/ha
+6 location_1 season_1     1  101       6  full genotype_20 120 kg N/ha
+7 location_1 season_1     1  101       7  full  genotype_2 120 kg N/ha
+8 location_1 season_1     1  101       8  full  genotype_8   0 kg N/ha
 ```
-
-What happened:
-
-1. **Biodes read the question**: organism, tissue, RNA-seq, two factors with their levels (*wild type / mutant*,
-   *well-watered / drought*), 4 replicates, and the goal: *genes whose drought response differs between genotypes* is
-   an **interaction**.
-2. **It asked only what changes the design** (what a replicate is, time points, batches), showed the candidate
-   designs, and what 539 published Arabidopsis leaf RNA-seq studies actually did.
-3. **It wrote the files**: a randomized layout, a sample sheet, and `study_spec.json` with the model
-   (`y ~ treatment * treatment2 + block`) and the goal (the treatment x treatment2 interaction), ready for Simitall and
-   Bioana.
-
-## Three worked examples
-
-| Example | Design Biodes chose |
-|---|---|
-| [Sorghum GWAS, 300 accessions](examples/showcase/01_gwas_sorghum) | alpha lattice, 600 plots, mixed model |
-| [RNA-seq, genotype x drought](examples/showcase/02_rnaseq_drought) | 2 x 2 factorial, interaction goal |
-| [Seed priming, time to germination](examples/showcase/03_germination_survival) | survival design: censoring, seed rot as a competing event, 121 events needed |
-
-<p align="center"><img src="examples/showcase/01_gwas_sorghum/layout_map.png" alt="Alpha-lattice field layout for 300 sorghum accessions" width="640"></p>
 
 ## Install
 
 ```r
 remotes::install_github("nirwan1265/BioDesignGPT")
-library(studyforge)          # the package is still named studyforge while the rename to Biodes finishes
-launch_studyforge()          # point-and-click app in your browser, on your own computer
+library(studyforge)
 ```
 
-## More
-
-Everything else (how it was built and trained, the rules, the engines, accuracy, the suite contract) is in the
-[full documentation](docs/README_DETAILED.md) and [docs/SUITE_INTEGRATION.md](docs/SUITE_INTEGRATION.md).
+[Full documentation](docs/README_DETAILED.md) · [Simitall](https://github.com/nirwan1265/simitall) · [Bioana](https://github.com/nirwan1265/Bioana)

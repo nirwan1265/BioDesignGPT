@@ -134,7 +134,7 @@ extract_spec_local <- function(question) {
     n <- .sf_count_before(text, .sf_group("count_noun", "water"))
     if (is.na(n) && .sf_has(text, .sf_cue("water_two_levels"))) n <- 2
     line_src <- .sf_has(text, .sf_cue("line_source"))
-    add_factor("water", n, if (line_src) "distance_from_line" else if (whole_plot_water && spec$system_context %in% "field") "main_plot")
+    add_factor("water", n, if (line_src) "distance_from_line" else if (whole_plot_water && (spec$system_context %in% "field" || identical(spec$system, "field"))) "main_plot")
   }
   if (.sf_has(text, .sf_cue("nitrogen_factor"))) add_factor("nitrogen", .sf_count_before(text, .sf_group("count_noun", "nitrogen")) %|na|% 2)
   if (.sf_has(text, .sf_cue("temperature_factor"))) add_factor("temperature", 2, if (.sf_has(text, .sf_cue("chamber_word"))) "chamber")
@@ -365,6 +365,7 @@ extract_spec_local <- function(question) {
   spec <- .sf_repeated_on_unit(spec, text)
   # analysis goals the question names (R/goals.R; rules.tsv analysis_goal) and time-course details
   g <- .sf_goals_from_text(text); if (length(g)) spec$analysis$goals <- as.list(g)
+  if ("interaction" %in% g) { fi <- .sf_interaction_factors(text); if (length(fi) == 2) spec$analysis$sf_interaction_factors <- as.list(fi) }
   tc <- .sf_time_course_detail(text); if (length(tc)) spec$analysis$time_course <- tc
   pu <- .sf_per_unit_effect(text); if (!is.null(pu)) spec$analysis$per_unit_effect <- pu
   ph <- .sf_posthoc_from_text(text); if (!is.null(ph)) spec$analysis$posthoc_text <- ph
@@ -1001,6 +1002,9 @@ mark_asked <- function(spec, question) .sf_clear_asked(spec, question)
     other <- setdiff(vapply(spec$factors %||% list(), function(f) f$name %||% "", ""), c("genotype", ""))
     if (!length(other)) return(TRUE)
   }
+  # a question about a greenhouse/chamber trait when the user never mentioned one (rules.tsv question_needs_word)
+  qn <- .sf_rules_rows("question_needs_word")
+  for (i in seq_len(NROW(qn))) if (grepl(qn$term[i], tolower(q), fixed = TRUE) && !grepl(qn$pattern[i], tolower(spec$question %||% ""), perl = TRUE)) return(TRUE)
   r <- .sf_rules_rows("answered_by")
   if (!NROW(r)) return(FALSE)
   hit <- which(vapply(r$pattern, function(p) grepl(p, tolower(q), perl = TRUE), logical(1)))

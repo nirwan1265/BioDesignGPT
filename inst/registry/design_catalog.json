@@ -133,6 +133,23 @@
       "analysis_note": "treatment = main-plot factor, treatment2 = subplot factor; (1 | block:treatment) is the main-plot error. Original model text: y ~ main * sub + block + (1 | block:main)"
     },
     {
+      "id": "split_plot_factorial",
+      "name": "Split plot with a factorial in the subplots",
+      "engine": "agricolae::design.split (subplot = crossed factors)",
+      "requires": [
+        "factor_levels",
+        "reps"
+      ],
+      "use_when": "One factor can only be applied to whole main plots (irrigation, tillage) and two others are crossed within them (genotype x nitrogen).",
+      "strength": "Tests every interaction among the three factors with the main-plot error for the main-plot factor.",
+      "tradeoff": "The main-plot factor has few error degrees of freedom; subplot factors and their interactions are tested more precisely.",
+      "model": "y ~ treatment * treatment2 * treatment3 + block + (1 | block:treatment)",
+      "systems": [
+        "field"
+      ],
+      "analysis_note": "treatment = main-plot factor; treatment2, treatment3 = subplot factors; (1 | block:treatment) is the main-plot error"
+    },
+    {
       "id": "factorial",
       "name": "Factorial treatment structure in RCBD",
       "engine": "agricolae::design.ab",
@@ -1727,6 +1744,7 @@
       "y",
       "treatment",
       "treatment2",
+      "treatment3",
       "block",
       "rep",
       "row",

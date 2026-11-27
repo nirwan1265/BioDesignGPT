@@ -6,7 +6,7 @@ test_that("every design-catalog model is a formula lm/lmer can fit, using only t
   f <- function(k) factor(sample(seq_len(k), n, TRUE))
   d <- data.frame(treatment = f(4), treatment2 = f(3), block = f(8), rep = f(4), row = f(10), col = f(12),
                   unit = f(40), subject = f(30), time = f(4), env = f(3), period = f(2), sequence = f(2), check = f(2))
-  d$covariate <- rnorm(n); d$covariate2 <- rnorm(n); d$covariate3 <- rnorm(n)
+  d$treatment3 <- factor(sample(c("p", "q"), n, TRUE)); d$covariate <- rnorm(n); d$covariate2 <- rnorm(n); d$covariate3 <- rnorm(n)
   d$y <- rnorm(n)
   num <- transform(d, treatment = as.numeric(treatment), treatment2 = as.numeric(treatment2))
   ids <- vapply(cat$designs, `[[`, "", "id")

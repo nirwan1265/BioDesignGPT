@@ -197,11 +197,15 @@ write_design_package <- function(book, spec, outdir = "studyforge_run",
 # uncovered_factors so Bioana can add them as fixed effects (e.g. a third factor, or tissue measured within units).
 .sf_model_terms <- function(spec, book = NULL, model = NULL) {
   rf <- .sf_randomized_factors(spec)
+  # a split plot: the main-plot factor is "treatment", the subplot factors follow (treatment2, treatment3)
+  mp <- vapply(spec$factors %||% list(), function(f) identical(f$applied_to, "main_plot"), logical(1))
+  mpn <- vapply(spec$factors %||% list(), function(f) f$name %||% "", "")[mp]
+  if (length(mpn)) rf <- c(intersect(mpn, rf), setdiff(rf, mpn))
   allf <- vapply(spec$factors %||% list(), function(x) x$name %||% "", "")
   mv <- if (!is.null(model)) all.vars(stats::as.formula(model)) else character()
   # the generic term "time" is the first occasion factor present (rules.tsv occasion_factor: time, then stage, age)
   occ <- utils::head(intersect(.sf_list("occasion_factor"), allf), 1)
-  out <- list(treatment = rf[1], treatment2 = rf[2], time = if (length(occ)) occ, unit = spec$experimental_unit,
+  out <- list(treatment = rf[1], treatment2 = rf[2], treatment3 = if ("treatment3" %in% mv) rf[3], time = if (length(occ)) occ, unit = spec$experimental_unit,
               block = unlist(spec$blocking_factors)[1] %||% (if (!is.null(book) && "block" %in% names(book)) "block"))
   if (length(occ) && "time" %in% mv && identical(out$treatment, occ)) out$treatment <- setdiff(rf, occ)[1]
   if (length(occ) && "time" %in% mv && identical(out$treatment2, occ)) out$treatment2 <- setdiff(rf, c(occ, out$treatment))[1]
@@ -318,6 +322,7 @@ layout_from_spec <- function(spec, seed = 42) {
       b <- make_design("split", treatments = lv[[mp]], treatments2 = sub, reps = reps, seed = seed)
       b[[mp]] <- as.character(b$main); parts <- do.call(rbind, strsplit(as.character(b$sub), ":", fixed = TRUE))
       for (i in seq_along(sp)) b[[sp[i]]] <- parts[, i]
+      if (length(sp) > 1) attr(b, "design") <- "split_plot_factorial"   # subplot factors crossed: catalog model with treatment3
       b
     },
     alpha = {

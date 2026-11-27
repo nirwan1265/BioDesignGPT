@@ -18,6 +18,26 @@
   unique(hit[hit %in% names(.sf_goal_registry())])
 }
 
+# the factors an interaction goal names ("whether the nitrogen response differs between hybrids" -> nitrogen,
+# genotype): the factor words in the matched phrase and the words around it
+.sf_interaction_factors <- function(text) {
+  t <- tolower(text); r <- .sf_rules_rows("analysis_goal"); r <- r[r$term == "interaction", , drop = FALSE]
+  for (p in r$pattern) {
+    m <- regexpr(p, t, perl = TRUE)
+    if (m > 0) {
+      before <- sub(".*[.;]\\s*", "", substr(t, max(1, m - 40), m - 1))                       # this clause only
+      after <- sub("[.;].*$", "", substr(t, m, m + attr(m, "match.length") + 40))
+      span <- paste(before, after)
+      f <- setdiff(.sf_find_all(span, "factor"), "treatment")
+      # nouns that count genotypes ("hybrids", "lines", "cultivars") name the genotype factor
+      gn <- paste(.sf_list("genotype_count_noun"), collapse = "|")
+      if (nzchar(gn) && grepl(sprintf("\\b(?:%s)\\b", gn), span, perl = TRUE)) f <- unique(c(f, "genotype"))
+      if (length(f) == 2) return(f)
+    }
+  }
+  NULL
+}
+
 # goals that follow from the data or outcome when the text names none (rules.tsv goal_default: term = goal id,
 # pattern = an assay label, an assay kind, or "outcome:<type>")
 .sf_goals_by_default <- function(spec) {
@@ -209,7 +229,7 @@
   }
   # a goal the design cannot answer is dropped with a note (interaction needs two factors, time_course a time term,
   # trend a numeric factor)
-  rf_terms <- intersect(c("treatment", "treatment2"), names(terms)[!vapply(terms, is.null, logical(1))])
+  rf_terms <- intersect(c("treatment", "treatment2", "treatment3"), names(terms)[!vapply(terms, is.null, logical(1))])
   num_term <- NULL
   for (k in c("treatment", "treatment2", "time")) {
     f <- Filter(function(x) identical(x$name, terms[[k]]), spec$factors %||% list())
@@ -217,8 +237,8 @@
   }
   # the generic model term that holds a layout column (time may be "time" or, in a factorial, "treatment2")
   rhs_has <- function(x) grepl(paste0("(^|[~+*: (|])", x, "($|[ +*:)|])"), model)
-  term_for <- function(col) { for (g in c("time", "treatment", "treatment2")) if (identical(terms[[g]], col) && rhs_has(g)) return(g)
-    for (g in c("time", "treatment", "treatment2")) if (identical(terms[[g]], col)) return(g); NULL }
+  term_for <- function(col) { for (g in c("time", "treatment", "treatment2", "treatment3")) if (identical(terms[[g]], col) && rhs_has(g)) return(g)
+    for (g in c("time", "treatment", "treatment2", "treatment3")) if (identical(terms[[g]], col)) return(g); NULL }
   occ_col <- intersect(.sf_list("occasion_factor"), vapply(spec$factors %||% list(), function(f) f$name %||% "", ""))[1]
   t_time <- if (!is.na(occ_col)) term_for(occ_col)
   # several locations/seasons in the layout are the environment of a G x E interaction ("env"), even when the
@@ -231,7 +251,9 @@
     need <- unlist(reg[[g]]$required_terms)
     if ("factor_a" %in% need) {
       other <- setdiff(rf_terms, t_time)
-      pair <- if (!is.null(t_time) && length(other)) c(other[1], t_time) else if (length(rf_terms) == 2) rf_terms else NULL
+      # the two factors the question names, when it names them
+      named <- unlist(lapply(unlist(spec$analysis$sf_interaction_factors), term_for))
+      pair <- if (length(named) == 2) named else if (!is.null(t_time) && length(other)) c(other[1], t_time) else if (length(rf_terms) == 2) rf_terms else NULL
       if (is.null(pair)) { dropped <- c(dropped, g); next }
       gt[[g]] <- pair
     } else if ("time" %in% need) {
@@ -303,6 +325,7 @@
   fr <- .sf_fill_regression(spec, ge, pu); spec <- fr$spec; ge <- fr$ge
   if (!is.null(spec$analysis$agreement)) spec$analysis$agreement$unit_column <- spec$analysis$agreement$unit_column %||% terms$unit_column %||% "plot"
   spec$analysis$per_unit_effect <- NULL
+  spec$analysis$sf_interaction_factors <- NULL
   if (!is.null(spec$analysis$posthoc_text)) { spec <- .sf_resolve_posthoc(spec, spec$analysis$posthoc_text); spec$analysis$posthoc_text <- NULL }
   spec$analysis$goal_effect <- ge
   spec$analysis$time_course <- NULL

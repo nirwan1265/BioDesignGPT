@@ -1,20 +1,14 @@
 library(studyforge)
 
-# 1. Describe the experiment in plain English
-a <- studyforge_ask("RNA-seq of leaves from wild type and mutant Arabidopsis under drought and well-watered conditions, 4 plants per genotype per treatment; we want genes whose drought response differs between genotypes.")
+a <- studyforge_ask("Field trial of 24 sorghum hybrids under two nitrogen rates (0 and 120 kg N/ha) and two irrigation regimes (full and deficit) at 3 locations over 2 seasons with 3 replicates; irrigation can only be applied to whole main plots; we measure grain yield and want to know whether the nitrogen response differs between hybrids.")
 a
 
-# 2. Answer the questions Biodes asked
-a <- studyforge_fix(a, experimental_unit = "plant", primary_outcome.name = "gene expression")
-
-# 3. Randomized layout and the files the next tools read
 book <- layout_from_spec(a$spec, seed = 2026)
-book[1:8, c("plot", "block", "genotype", "water")]
-write_design_package(book, a$spec, "rnaseq_design")
-
-# 4. The design Biodes wrote
-spec <- jsonlite::fromJSON("rnaseq_design/study_spec.json")
+write_design_package(book, a$spec, "sorghum_trial")
+spec <- jsonlite::fromJSON("sorghum_trial/study_spec.json")
 spec$design$chosen
 spec$analysis$model
-spec$analysis$primary_goal
+unlist(spec$analysis$terms[c("treatment", "treatment2", "treatment3")])
 spec$analysis$goal_terms$interaction
+nrow(book)
+head(book[, c("location", "season", "block", "plot", "subplot", "water", "genotype", "nitrogen")], 8)
