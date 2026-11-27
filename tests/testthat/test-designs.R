@@ -200,3 +200,23 @@ test_that("building a layout leaves the session's random generator and stream as
   s <- studyforge_ask("Two people scored rust from 1 to 9 on each of 80 wheat plots; how well do they agree?", provider = "local")$spec
   expect_null(s$subsamples_per_unit)
 })
+
+test_that("use-defaults path fills replicates from published practice, then rules, and records it", {
+  a <- studyforge_ask("rnaseq arabidopsis in low nitrogen experiment. design it.")
+  expect_null(a$spec$power$n_per_group)                        # feature_assay: no t-test sample size
+  expect_null(fill_layout_defaults(a$spec)$design$reps)        # default path leaves reps alone
+  s <- fill_layout_defaults(a$spec, reps = TRUE, practice = a$practice)
+  expect_equal(s$design$reps, as.integer(ceiling(a$practice$summary$reps_median)))
+  expect_match(s$assumptions[["design.reps"]], "published")
+  b <- studyforge_ask("Drought experiment in maize, 10 hybrids, measure yield.")
+  s2 <- fill_layout_defaults(b$spec, reps = TRUE)
+  expect_true(is.integer(s2$design$reps) && s2$design$reps >= 2)
+  expect_match(s2$assumptions[["design.reps"]], "layout_default")
+  expect_gt(nrow(layout_from_spec(s2, seed = 1)), 0)
+})
+
+test_that("counted_factor rules read 'three fertilizers' as a factor", {
+  f <- function(q) vapply(studyforge_ask(q)$spec$factors, function(x) paste0(x$name, x$n_levels %||% length(x$levels)), "")
+  expect_true("fertilizer3" %in% f("Effect of three fertilizers on tomato fruit weight in a greenhouse."))
+  expect_false(any(startsWith(f("Two nitrogen fertilizer treatments on wheat."), "fertilizer")))
+})

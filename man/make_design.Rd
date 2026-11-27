@@ -5,7 +5,7 @@
 \title{Generate a randomized design layout}
 \usage{
 make_design(
-  design = c("crd", "rcbd", "alpha", "split", "factorial", "augmented"),
+  design = c("crd", "rcbd", "alpha", "split", "factorial", "factorial_crd", "augmented"),
   treatments = NULL,
   reps,
   block_size = NULL,

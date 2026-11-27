@@ -380,8 +380,8 @@ layout_from_spec <- function(spec, seed = 42) {
 .sf_layout_default <- function(field, spec = NULL) {
   r <- .sf_rules_rows("layout_default")
   if (!NROW(r)) return(NULL)
-  keys <- field
-  if (startsWith(field, "factor:")) keys <- c(paste0(field, "@", unlist(spec$assays)), field, "factor:*")
+  keys <- c(paste0(field, "@", unlist(spec$assays)), field)
+  if (startsWith(field, "factor:")) keys <- c(keys, "factor:*")
   hit <- r$pattern[match(keys, r$term)]
   hit <- hit[!is.na(hit)]
   if (length(hit)) hit[1] else NULL
@@ -392,12 +392,30 @@ layout_from_spec <- function(spec, seed = 42) {
 #' Only for fields the user left open after being asked: a factor without a level count, and the check entries of
 #' an augmented design. Values come from rules.tsv `layout_default`; each one is written to `spec$assumptions` as
 #' "assumed default (rules.tsv layout_default)" so it is never mistaken for something the user said. Replicates are
-#' not defaulted: a "how many per group?" question is a power sweep (`power.solve_for`).
+#' not defaulted unless `reps = TRUE` (the "use defaults" path of an app): then a missing replicate count is the
+#' published-practice median for the organism and assay when `practice` has one, else rules.tsv
+#' `layout_default design.reps[@ASSAY]`, recorded in `spec$assumptions` with its source.
 #' @param spec A StudySpec.
+#' @param reps `TRUE` also fills a missing replicate count.
+#' @param practice Optional published-practice object (`studyforge_ask()`'s `$practice`).
 #' @return The spec with defaults filled.
 #' @export
-fill_layout_defaults <- function(spec) {
+fill_layout_defaults <- function(spec, reps = FALSE, practice = NULL) {
   tag <- "assumed default (rules.tsv layout_default)"
+  if (isTRUE(reps) && is.null(spec$design$reps) && is.null(spec$power$n_per_group) && is.null(spec$power$n_total)) {
+    med <- suppressWarnings(as.numeric(practice$summary$reps_median))
+    if (length(med) == 1 && !is.na(med) && med >= 2) {
+      spec$design$reps <- as.integer(ceiling(med))
+      spec$assumptions[["design.reps"]] <- sprintf("assumed default: median replicates of %s published %s studies of %s",
+                                                   practice$summary$n_with_reps %||% "", practice$technique %||% "", practice$organism %||% "")
+    } else {
+      v <- .sf_layout_default("design.reps", spec)
+      if (!is.null(v)) {
+        spec$design$reps <- as.integer(v)
+        spec$assumptions[["design.reps"]] <- tag
+      }
+    }
+  }
   for (i in seq_along(spec$factors)) {
     f <- spec$factors[[i]]
     if (nzchar(f$name %||% "") && is.null(f$n_levels) && !length(f$levels)) {

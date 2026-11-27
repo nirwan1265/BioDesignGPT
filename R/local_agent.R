@@ -150,6 +150,12 @@ extract_spec_local <- function(question) {
   if (.sf_has(text, .sf_cue("dose_factor"))) add_factor("dose", .sf_count_before(text, .sf_group("count_noun", "dose")) %|na|% NA)
   if (.sf_has(text, .sf_cue("sex_factor"))) add_factor("sex", 2)
   if (.sf_has(text, .sf_cue("injury_factor"))) add_factor("injury", 2)
+  # generic counted factors (rules.tsv counted_factor): "three fertilizers" -> fertilizer with 3 levels
+  cf <- .sf_rules_rows("counted_factor")
+  for (nm in setdiff(unique(cf$term), vapply(factors, `[[`, "", "name"))) {
+    n <- .sf_count_before(text, cf$pattern[cf$term == nm])
+    if (!is.na(n) && n >= 2) add_factor(nm, n)
+  }
   n_trt_groups <- .sf_count_before(text, .sf_group("count_noun", "treatment"))
   if (!is.na(n_trt_groups)) {
     add_factor("treatment", n_trt_groups)

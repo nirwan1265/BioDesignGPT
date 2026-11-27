@@ -183,6 +183,8 @@
   if (identical(spec$primary_outcome$type, "survival")) return(spec)   # events (Schoenfeld) instead
   # genotype panels (GWAS, QTL mapping, genomic prediction): power is about marker effects, not group means
   if (length(intersect(unlist(spec$assays), .sf_list("panel_assay")))) return(spec)
+  # feature-by-feature omics (rules.tsv feature_assay) with no separate trait as the primary outcome
+  if (length(intersect(unlist(spec$assays), .sf_list("feature_assay"))) && !nzchar(spec$primary_outcome$name %||% "")) return(spec)
   ytype <- spec$primary_outcome$type %||% "continuous"
   t <- tolower(text %||% spec$sf_question %||% "")
   pw <- spec$power %||% list()
