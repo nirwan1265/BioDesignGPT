@@ -69,7 +69,7 @@
     await webR.evalRVoid('webr::install(c("agricolae", "jsonlite"), quiet = TRUE)');
     const pkg = new URL("studyforge.tar.gz", window.location.href).href;
     await webR.evalRVoid(`download.file(${JSON.stringify(pkg)}, "studyforge.tar.gz", quiet = TRUE)
-      untar("studyforge.tar.gz", exdir = .libPaths()[1])
+      untar("studyforge.tar.gz", exdir = .libPaths()[1], tar = "internal")   # webR has no system tar
       suppressMessages(library(studyforge))
       options(width = 100)`);
     status.textContent = "Ready.";
