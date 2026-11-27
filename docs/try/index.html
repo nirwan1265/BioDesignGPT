@@ -21,6 +21,7 @@
   pre { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; min-height: 60px; }
   .examples { font-size: 14px; color: var(--muted); }
   .examples a { color: var(--accent); cursor: pointer; text-decoration: underline; margin-right: 12px; }
+  #plots canvas { max-width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-top: 12px; }
   footer { margin-top: 28px; font-size: 14px; color: var(--muted); }
   footer a { color: var(--accent); }
 </style>
@@ -28,7 +29,7 @@
 <body>
 <main>
   <h1>Try Biodes</h1>
-  <p class="sub">Describe an experiment in plain English. R runs here in your browser (webR): nothing to install, nothing sent to a server.</p>
+  <p class="sub">Describe an experiment in plain English: Biodes designs it, Simitall simulates data for it. R runs here in your browser (webR): nothing to install, nothing sent to a server.</p>
 
   <label for="q">Your experiment</label>
   <textarea id="q">Field trial of 24 sorghum hybrids under two nitrogen rates (0 and 120 kg N/ha) and two irrigation regimes (full and deficit) at 3 locations over 2 seasons with 3 replicates; irrigation can only be applied to whole main plots; we measure grain yield and want to know whether the nitrogen response differs between hybrids.</textarea>
@@ -40,9 +41,11 @@
   </div>
   <div class="row">
     <button id="run" disabled>Design it</button>
+    <button id="sim" class="ghost" disabled title="Simulate data for this design with Simitall">Simulate data (Simitall)</button>
     <span id="status">Starting R in your browser (about 20-40 seconds the first time)...</span>
   </div>
   <pre id="out"></pre>
+  <div id="plots"></div>
 
   <footer>
     Biodes is part of a suite: Biodes designs the experiment, <a href="https://github.com/nirwan1265/simitall">Simitall</a> simulates the data,
@@ -56,6 +59,9 @@
   const status = document.getElementById("status");
   const run = document.getElementById("run");
   const q = document.getElementById("q");
+  const sim = document.getElementById("sim");
+  const plots = document.getElementById("plots");
+  let simReady = false;
   document.querySelectorAll(".examples a").forEach(a => a.addEventListener("click", () => { q.value = a.dataset.q; }));
 
   const show = (res) => {
@@ -90,6 +96,7 @@
         if (!is.null(s$design$reps)) {
           book <- layout_from_spec(s, seed = 2026)
           d <- tempfile(); invisible(write_design_package(book, s, d))
+          .biodes_dir <<- d
           spec <- jsonlite::fromJSON(file.path(d, "study_spec.json"))
           cat("\\n================ The design Biodes wrote ================\\n")
           cat("Design: ", spec$design$chosen, "\\n", sep = "")
@@ -99,17 +106,115 @@
           cols <- intersect(c("location", "season", "block", "plot", "subplot", vapply(s$factors, function(f) f$name, "")), names(book))
           cat("\\nFirst rows of the randomized layout (seed 2026):\\n")
           print(utils::head(book[, cols, drop = FALSE], 10), row.names = FALSE)
-        } else cat("\\n(Biodes needs the number of replicates before it can lay the experiment out: add it to your text.)\\n")
+        } else { .biodes_dir <<- NULL; cat("\\n(Biodes needs the number of replicates before it can lay the experiment out: add it to your text.)\\n") }
       `;
+      plots.innerHTML = "";
       const res = await shelter.captureR(code, { withAutoprint: false, captureStreams: true });
       show(res);
-      status.textContent = "Done. Edit the text and run again.";
+      const has = await webR.evalRBoolean('!is.null(get0(".biodes_dir", envir = globalenv()))');
+      sim.disabled = !has;
+      status.textContent = has ? "Done. Simulate data for this design, or edit the text and run again." : "Done. Edit the text and run again.";
     } catch (e) {
       out.textContent = "Error: " + e.message;
       status.textContent = "Something went wrong.";
     } finally {
       await shelter.purge();
       run.disabled = false;
+    }
+  });
+
+  const drawImages = (images) => {
+    for (const img of images || []) {
+      const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+      c.getContext("2d").drawImage(img, 0, 0); plots.appendChild(c);
+    }
+  };
+
+  sim.addEventListener("click", async () => {
+    sim.disabled = true; run.disabled = true; plots.innerHTML = "";
+    const shelter = await new webR.Shelter();
+    try {
+      if (!simReady) {
+        status.textContent = "Installing Simitall (first time only)...";
+        await webR.evalRVoid('try(webr::install("Matrix", quiet = TRUE), silent = TRUE)');
+        const spkg = new URL("simitall.tar.gz", window.location.href).href;
+        await webR.evalRVoid(`download.file(${JSON.stringify(spkg)}, "simitall.tar.gz", quiet = TRUE)
+          untar("simitall.tar.gz", exdir = .libPaths()[1], tar = "internal")
+          suppressMessages(library(simitall))`);
+        simReady = true;
+      }
+      status.textContent = "Simulating...";
+      const code = `
+        d <- .biodes_dir
+        out <- simitall_from_biodes(d, seed = 2026, n_genes = 1000)
+        m <- utils::read.delim(file.path(d, "sample_metadata_template.tsv"), check.names = FALSE)
+        spec <- jsonlite::fromJSON(file.path(d, "study_spec.json"), simplifyVector = FALSE)
+        fac <- vapply(spec$factors, function(f) f$name, "")
+        cat("\\n================ Simulated data (first rows) ================\\n")
+        cnt <- file.path(d, "counts.tsv")
+        if (file.exists(cnt)) {
+          k <- utils::read.delim(cnt, check.names = FALSE, row.names = 1)
+          cat(nrow(k), "genes x", ncol(k), "samples (counts.tsv)\\n")
+          print(k[1:6, 1:min(4, ncol(k)), drop = FALSE])
+        }
+        if (any(!is.na(m$primary_outcome))) {
+          cols <- intersect(c("block", "plot", fac, "subsample", "primary_outcome", "event", grep("^covariate|baseline", names(m), value = TRUE)), names(m))
+          print(utils::head(m[, cols, drop = FALSE], 8), row.names = FALSE)
+        }
+        if (file.exists(file.path(d, "genotypes.vcf"))) cat("\\nGenotypes: genotypes.vcf (lines x markers, with planted QTNs)\\n")
+        tr <- jsonlite::fromJSON(file.path(d, "sim_truth.json"), simplifyVector = TRUE)
+        nm <- unlist(tr$columns)
+        lab <- function(t) { t <- unlist(t); if (!length(t)) return(""); x <- nm[t]; x[is.na(x)] <- t[is.na(x)]; paste(x, collapse = " x ") }
+        cut1 <- function(x, n = 110) ifelse(nchar(x) > n, paste0(substr(x, 1, n - 3), "..."), x)
+        num <- function(v) format(round(as.numeric(v), 2), trim = TRUE)
+        cat("\\n================ What Simitall planted (Bioana must recover this) ================\\n")
+        g <- tr$goal_truth
+        if (!is.null(g)) {
+          cat("Goal:      ", g$goal, if (nzchar(lab(g$terms))) paste0(" of ", lab(g$terms)), "  (", g$definition, ")\\n", sep = "")
+          if (identical(tr$outcome_type, "survival")) {
+            om <- tr$outcome_model
+            cat("Planted:   hazard ratio ", om$hazard_ratio, if (!is.null(om$change_time)) paste0(" starting at time ", round(om$change_time, 1)), "; median time ", round(om$median_time, 1), ", follow-up ", om$follow_up, "\\n", sep = "")
+          } else cat("Planted:   size ", g$size, " on the ", g$scale, " scale\\n", sep = "")
+        }
+        if (!identical(tr$outcome_type, "survival")) cat("Outcome:   ", tr$outcome, "  mean ", tr$intercept, ", residual SD ", tr$residual_sd, "\\n", sep = "")
+        te <- tr$treatment_effects; for (ak in setdiff(names(tr$adjustment_effects), names(te))) te[[ak]] <- tr$adjustment_effects[[ak]]
+        for (t in names(te)) {
+          v <- unlist(te[[t]]); if (!length(v)) next
+          cat("  ", formatC(lab(t), width = -28), if (length(v) <= 4) paste0(names(v), " ", ifelse(v > 0, "+", ""), num(v), collapse = ", ")
+              else paste0(length(v), " levels, effects ", num(min(v)), " to +", num(max(v))), "\\n", sep = "")
+        }
+        for (t in names(tr$interaction_effects)) { ie <- tr$interaction_effects[[t]]
+          cat("  ", formatC(lab(strsplit(t, ":")[[1]]), width = -28), gsub("_", "-", ie$pattern), ", size ", ie$size, "\\n", sep = "") }
+        q <- file.path(d, "genetic_truth", "qtn_truth.tsv")
+        if (file.exists(q)) { qt <- utils::read.delim(q); cat("Planted QTNs (", nrow(qt), "), first rows:\\n", sep = ""); print(utils::head(qt, 5), row.names = FALSE) }
+        a <- unlist(tr$assumptions); if (length(a)) { cat("Defaults Simitall had to assume (state them in your text to change them):\\n"); cat(paste0("  - ", cut1(a)), sep = "\\n") }
+        # one picture of the simulated data
+        rand <- intersect(unique(c(unlist(tr$columns), fac)), names(m)); rand <- setdiff(rand, c("block", "rep", "plot")); few <- rand[vapply(rand, function(f) length(unique(m[[f]])) <= 6, logical(1))]
+        if (file.exists(cnt)) {
+          graphics::boxplot(log2(as.matrix(k) + 1), las = 2, main = "Simulated RNA-seq counts per sample", ylab = "log2(count + 1)", col = "#cfe3d8")
+        } else if (identical(tr$outcome_type, "survival") && "event" %in% names(m)) {
+          g <- if (length(few)) interaction(m[few], sep = " / ") else factor("all")
+          tt <- sort(unique(m$primary_outcome))
+          plot(NA, xlim = range(0, tt), ylim = c(0, 1), xlab = "time", ylab = "cumulative share with the event", main = "Simulated time to event")
+          for (i in seq_along(levels(g))) { x <- m[g == levels(g)[i], ]; y <- vapply(tt, function(v) mean(x$event == 1 & x$primary_outcome <= v), 0); lines(tt, y, type = "s", col = i, lwd = 2) }
+          legend("topleft", levels(g), col = seq_along(levels(g)), lwd = 2, bty = "n", cex = 0.8)
+        } else if (is.numeric(m$primary_outcome) && length(few)) {
+          f <- stats::as.formula(paste("primary_outcome ~", paste(utils::head(few, 2), collapse = " + ")))
+          graphics::boxplot(f, data = m, col = "#cfe3d8", las = 1, main = "Simulated outcome by group", ylab = tr$outcome)
+        } else if (is.numeric(m$primary_outcome)) {
+          graphics::hist(m$primary_outcome, col = "#cfe3d8", border = "white", main = "Simulated outcome", xlab = tr$outcome)
+        }
+      `;
+      const res = await shelter.captureR(code, { withAutoprint: false, captureStreams: true, captureGraphics: { width: 900, height: 420 } });
+      out.textContent += "\n" + res.output.filter(o => o.type === "stdout" || o.type === "stderr").map(o => o.data).join("\n");
+      drawImages(res.images);
+      status.textContent = "Simulated. Same seed, same data.";
+    } catch (e) {
+      out.textContent += "\nError: " + e.message;
+      status.textContent = "Simulation failed.";
+    } finally {
+      await shelter.purge();
+      sim.disabled = false; run.disabled = false;
     }
   });
 </script>

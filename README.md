@@ -4,7 +4,7 @@
   <img src="docs/bio_suite.svg" alt="Biodes suite: design, simulate, analyze, figures" width="860">
 </p>
 
-<p align="center"><b><a href="https://nirwan1265.github.io/BioDesignGPT/try/">▶ Try it in your browser</a></b> (no install: R runs on the page)</p>
+<p align="center"><b><a href="https://nirwan1265.github.io/BioDesignGPT/try/">▶ Try it in your browser</a></b> (design an experiment, then simulate data for it; no install, R runs on the page)</p>
 
 ## Prompt
 
