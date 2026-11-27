@@ -7,7 +7,7 @@
   writes the design folder.
 - **Simulate data (Simitall)**: installs Matrix, unpacks `simitall.tar.gz`, runs
   `simitall_from_biodes()` on that folder (seed 2026), and prints the simulated data, the planted truth and
-  one plot. The Python (simuPOP) breeding path of Simitall is not available in the browser.
+  one plot. The Python (simuPOP) breeding path of Simitall is not available in the browser; reticulate is only in Suggests.
 
 Served by GitHub Pages from `main` / `docs` at https://nirwan1265.github.io/BioDesignGPT/try/.
 
