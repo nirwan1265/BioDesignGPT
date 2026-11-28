@@ -393,7 +393,8 @@ layout_from_spec <- function(spec, seed = 42) {
 #' an augmented design. Values come from rules.tsv `layout_default`; each one is written to `spec$assumptions` as
 #' "assumed default (rules.tsv layout_default)" so it is never mistaken for something the user said. Replicates are
 #' not defaulted unless `reps = TRUE` (the "use defaults" path of an app): then a missing replicate count is the
-#' published-practice median for the organism and assay when `practice` has one, else rules.tsv
+#' a-priori power answer (`power.n_per_group`) when there is one, else the published-practice median for the
+#' organism and assay when `practice` has one, else rules.tsv
 #' `layout_default design.reps[@ASSAY]`, recorded in `spec$assumptions` with its source.
 #' @param spec A StudySpec.
 #' @param reps `TRUE` also fills a missing replicate count.
@@ -402,9 +403,15 @@ layout_from_spec <- function(spec, seed = 42) {
 #' @export
 fill_layout_defaults <- function(spec, reps = FALSE, practice = NULL) {
   tag <- "assumed default (rules.tsv layout_default)"
-  if (isTRUE(reps) && is.null(spec$design$reps) && is.null(spec$power$n_per_group) && is.null(spec$power$n_total)) {
+  if (isTRUE(reps) && is.null(spec$design$reps)) {
     med <- suppressWarnings(as.numeric(practice$summary$reps_median))
-    if (length(med) == 1 && !is.na(med) && med >= 2) {
+    npg <- suppressWarnings(as.numeric(spec$power$n_per_group))
+    if (length(npg) == 1 && !is.na(npg) && npg >= 2) {
+      spec$design$reps <- as.integer(ceiling(npg))
+      spec$assumptions[["design.reps"]] <- sprintf("assumed default: n per group from a-priori power (%s, %s %s = %s, power %s)",
+                                                   spec$power$method %||% "", spec$power$source %||% "", spec$power$effect_size_name %||% "",
+                                                   spec$power$effect_size %||% "", spec$power$power %||% "")
+    } else if (length(med) == 1 && !is.na(med) && med >= 2) {
       spec$design$reps <- as.integer(ceiling(med))
       spec$assumptions[["design.reps"]] <- sprintf("assumed default: median replicates of %s published %s studies of %s",
                                                    practice$summary$n_with_reps %||% "", practice$technique %||% "", practice$organism %||% "")
